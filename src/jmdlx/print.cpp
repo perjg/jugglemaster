@@ -273,10 +273,12 @@ int Print::printImage() {
 		extn = handler->GetExtension();
 		/* Don't append if wx doesn't support writing */
 		if(extn.Len() > 0 &&
-			extn != "iff" &&
-			extn != "ico" &&
-			extn != "gif" &&
-			extn != "ani" ) {
+			extn != "cur" && /* Silly format */
+			extn != "ico" && /* Silly format */
+			extn != "iff" && /* wx Doesn't support writing */
+			extn != "gif" && /* wx Doesn't support writing */
+			extn != "ani" /* wx Doesn't support writing */
+			) {
 			formatchoice->Append(handler->GetExtension(), (void *)handler);
 			if(extn == fileextn) {
 				formatchoice->SetSelection(formatchoice->FindString(handler->GetExtension()));

@@ -29,7 +29,7 @@ public:
 protected:
   void OnApply(wxCommandEvent &event);
   void OnOK(wxCommandEvent &event);
-  void SpinnerChange(wxCommandEvent &event);
+  void SpinnerChange(wxSpinEvent &event);
   void MarkChange(wxCommandEvent &event);
   void ApplySettings();
   JMLib* jmlib;

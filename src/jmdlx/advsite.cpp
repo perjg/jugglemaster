@@ -164,7 +164,7 @@ void AdvancedSiteSwap::MarkChange(wxCommandEvent &event) {
 	haschanged=1;
 }
 
-void AdvancedSiteSwap::SpinnerChange(wxCommandEvent &event) {
+void AdvancedSiteSwap::SpinnerChange(wxSpinEvent &event) {
 	haschanged=1;
 	/* jmlib->setHR((JML_FLOAT)hrspinner->GetValue()/100.0F);
 	jmlib->setDR((JML_FLOAT)drspinner->GetValue()/100.0F); */

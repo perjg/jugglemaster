@@ -175,7 +175,7 @@ JMFrame::~JMFrame() {
   delete semaphores;
 }
 
-void JMFrame::OnAbout() {
+void JMFrame::OnAbout(wxCommandEvent &event) {
 	wxMessageBox("(C) Ken Matsuoka 1995-6, Per Johan Groland 2002, Gary Briggs 2003", "About JMDeluxe", wxOK, this);
 }
 
@@ -265,7 +265,7 @@ void JMFrame::print(wxCommandEvent& WXUNUSED(event))
 	new Print(this, jmlib);
 }
 
-void JMFrame::OnClose() {
+void JMFrame::OnClose(wxCommandEvent &event) {
 	Close(TRUE);
 }
 

@@ -52,7 +52,7 @@ class JMFrame : public wxFrame {
 public:
   JMFrame(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size);
   ~JMFrame();
-  void OnClose();
+  void OnClose(wxCommandEvent &);
   void setSiteSwap(wxString *);
   void setStyle(wxString *);
   void unPause();
@@ -70,7 +70,7 @@ private:
   PatternLoader *semaphores;
   JML_INT32 current_speed;
 
-  void OnAbout();
+  void OnAbout(wxCommandEvent &);
   void changeSiteSwap(wxCommandEvent &);
   void changeStyle(wxCommandEvent &);
   void changeSiteSwapAdvanced(wxCommandEvent &);

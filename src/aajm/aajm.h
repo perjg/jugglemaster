@@ -52,6 +52,6 @@ static char *possible_styles[] = {
 void errorCB(char* msg);
 void draw_juggler(void);
 void resizehandler(aa_context *resized_context);
-void main_loop(void);
+void main_loop(int max_iterations, int delay);
 
 #endif

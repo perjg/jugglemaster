@@ -96,10 +96,11 @@ void resizehandler(aa_context *resized_context) {
 }
 
 #define DEFSPEED 18000
-void main_loop(void) {
+void main_loop(int max_iterations, int delay) {
 	struct timeval starttime, endtime;
 	long sleeptime;
 	long speed = DEFSPEED; /* microseconds between frames */
+	int loop_forever = 0;
 	char c;
 	int i;
 	char newsite[JML_MAX_SITELEN];
@@ -107,6 +108,13 @@ void main_loop(void) {
 	int newstyle_index;
 	int numstyles = sizeof(possible_styles)/sizeof(possible_styles[0]);
 
+	if(delay > 0) {
+		speed = delay * 1000;
+	}
+
+	if(max_iterations <= 0) {
+		loop_forever = 1;
+	}
 	while (1) {
 		gettimeofday(&starttime,NULL);
 		jmlib->doJuggle();
@@ -197,18 +205,28 @@ void main_loop(void) {
 		} else {
 			usleep(1);
 		}
+		if(!loop_forever && max_iterations-- <= 0) {
+			break;
+		}
 	}
 }
 
 int main(int argc, char **argv) {
-	char options[] = "ahs:";
+	char options[] = "ajhd:m:t:s:";
 	int help_flag = 0;
 	int aahelp_flag = 0;
+	int justoutput_flag = 0;
+	int max_iterations = 0;
+	int delay = 0;
 	static struct option long_options[] =
         {
 		{"help", no_argument, &help_flag, 1},
 		{"aahelp", no_argument, &aahelp_flag, 1},
+		{"justoutput", no_argument, &justoutput_flag, 1},
+		{"maxiterations", required_argument, 0, 'm'},
+		{"delay", required_argument, 0, 'd'},
 		{"siteswap", required_argument, 0, 's'},
+		{"style", required_argument, 0, 't'}
 	};
 
 	char optch;
@@ -227,13 +245,24 @@ int main(int argc, char **argv) {
 			case 's':
 				jmlib->setPattern("Something",optarg,
 					HR_DEF, DR_DEF);
-				jmlib->startJuggle();
+				break;
+			case 't':
+				jmlib->setStyle(optarg);
 				break;
 			case 'h':
 				help_flag=1;
 				break;
 			case 'a':
 				aahelp_flag=1;
+				break;
+			case 'j':
+				justoutput_flag=1;
+				break;
+			case 'm':
+				max_iterations = atoi(optarg);
+				break;
+			case 'd':
+				delay = atoi(optarg);
 				break;
 		}
 
@@ -243,9 +272,13 @@ int main(int argc, char **argv) {
 	}
 	if(help_flag) {
 		printf("Jugglemaster Options:\n");
-		printf("  -s, --siteswap=XX  show siteswap XX\n");
-		printf("  -h, --help         get help\n");
-		printf("  -a, --aahelp       get help on AA options\n\n");
+		printf("  -s, --siteswap=XX          show siteswap XX\n");
+		printf("  -t, --style=XX             use style XX\n");
+		printf("  -d, --delay=XX             delay XX ms between frames\n");
+		printf("  -m, --maxiterations=XX     do at most XX iterations\n");
+		printf("  -j, --justoutput           only output [don't init kb or mouse]\n");
+		printf("  -h, --help                 get help\n");
+		printf("  -a, --aahelp               get help on AA options\n\n");
 	}
 	if(aahelp_flag) {
 		printf("AALib Options:\n%s\n\n",aa_help);
@@ -260,14 +293,17 @@ int main(int argc, char **argv) {
 		printf("Failed to initialize aalib\n");
 		exit(1);
 	}
-	aa_autoinitkbd(context, 0);
+	if(!justoutput_flag) {
+		aa_autoinitkbd(context, 0);
+		aa_hidecursor(context);
+	}
 	params = aa_getrenderparams();
-	aa_hidecursor(context);
 	jmlib->setWindowSize(AAWIDTH(context),AAHEIGHT(context));
+	jmlib->startJuggle();
 
 	aa_resizehandler(context, resizehandler);
 
-	main_loop();
+	main_loop(max_iterations,delay);
 
 	aa_close(context);
 

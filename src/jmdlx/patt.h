@@ -26,7 +26,7 @@
 #include "../jmlib/jmlib.h"
 
 #define DEFAULT_PATTERNFILE "patterns.jm"
-#define WEB_PREFIX "http://icculus.org/~chunky/jmdlx/"
+#define WEB_PREFIX "http://icculus.org/jugglemaster/"
 
 
 struct StyleDefn {

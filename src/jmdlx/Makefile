@@ -29,11 +29,11 @@ jm_lib:
 	$(MAKE) -C ../jmlib
 
 upload: all
-	rm -f jmdlx.bz2 jmdlx-static.bz2
+	rm -f jmdlx.bz2
 	strip jmdlx
 	bzip2 -c ./jmdlx > jmdlx.bz2
-	scp ../TODO ../../data/patterns.jm ../../data/semaphore.jm jmdlx.bz2 icculus.org:web/jmdlx/
-	scp jmdlx icculus.org:web/jmdlx/jmdlx.bin
+	scp ../../TODO ../../data/patterns.jm ../../data/semaphore.jm jmdlx.bz2 icculus.org:/webspace/projects/jugglemaster/
+	scp jmdlx icculus.org:/webspace/projects/jugglemaster/jmdlx.bin
 	rm -f jmdlx.bz2
 
 patt:

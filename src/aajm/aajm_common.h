@@ -16,16 +16,6 @@
 #ifndef AAJM_COMMON_H
 #define AAJM_COMMON_H
 
-static char *possible_styles[] = {
-	"Normal",
-	"Reverse",
-	"Shower",
-	"Mills Mess",
-	"Center",
-	"Windmill"
-};
-
-#define NUMSTYLES (int)(sizeof(possible_styles)/sizeof(possible_styles[0]))
 #define DEFPORT 56001
 #define MAXHOSTNAME 1024
 #define MAX_SOCKET_BUFFER (JML_MAX_SITELEN+40)

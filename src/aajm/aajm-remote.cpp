@@ -62,7 +62,6 @@ int main(int argc, char **argv) {
 	int quit_flag = 0;
 	int option_index = 0;
 	int port_num = DEFPORT;
-	int i;
 	char command[MAX_SOCKET_BUFFER];
 	char data[MAX_SOCKET_BUFFER];
 	char hostname[MAXHOSTNAME];
@@ -136,10 +135,6 @@ int main(int argc, char **argv) {
 		printf("  -o, --hostname=XX     connect to aajm running on host XX\n");
 		printf("  -h, --help            get help [this screen]\n");
 		printf("  -q, --quit            get aajm to gracefully quit\n");
-		printf("\nKnown styles: \n");
-		for(i=0;i<NUMSTYLES;i++) {
-			printf("   %i: %s\n",i+1,possible_styles[i]);
-		}
 	}
 
 	if(quit_flag) {

@@ -44,8 +44,6 @@ struct loadavg {
 	float one, five, fifteen;
 };
 
-#define AAWIDTH(context) aa_imgwidth(context)
-#define AAHEIGHT(context) aa_imgheight(context)
 /* speed is in microseconds-between-frames, because I'm that lazy */
 #define DEFSPEED 18000
 #define DEFLOAD (float)0.2

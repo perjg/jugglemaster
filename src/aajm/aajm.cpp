@@ -36,7 +36,7 @@ void draw_juggler(int show_loadavg) {
 	aa_drawcircle(context,ap->hx, ap->hy,
 			ap->hr, color, -1);
 
-	aa_drawline(context, 0, 0, AAWIDTH(context)/2, AAHEIGHT(context)/2, 1);
+	aa_drawline(context, 0, 0, aa_imgwidth(context)/2, aa_imgheight(context)/2, 1);
 	// draw juggler
 	for (i=0;i<5;i++) {
 		aa_drawline(context, ap->rx[i], ap->ry[i],
@@ -76,7 +76,7 @@ void draw_juggler(int show_loadavg) {
 
 
 	aa_render(context, params, 0, 0,
-		AAWIDTH(context), AAHEIGHT(context));
+		aa_imgwidth(context), aa_imgheight(context));
 
 	aa_printf(context, 0, 0, AA_SPECIAL,
 		"Site: %s    Style: %s    Balls: %i",
@@ -93,7 +93,7 @@ void draw_juggler(int show_loadavg) {
 	}
 	aa_flush(context);
 
-	memset(context->imagebuffer,0,AAWIDTH(context)*AAHEIGHT(context));
+	memset(context->imagebuffer,0,aa_imgwidth(context)*aa_imgheight(context));
 }
 
 /* Just for anyone not aware, /proc/loadavg gives load average over the
@@ -147,8 +147,8 @@ void stoplistening(int fd) {
 }
 
 void resizehandler(aa_context *resized_context) {
-	jmlib->setWindowSize(AAWIDTH(resized_context),
-			AAHEIGHT(resized_context));
+	jmlib->setWindowSize(aa_imgwidth(resized_context),
+			aa_imgheight(resized_context));
 	context = resized_context;
 }
 
@@ -174,8 +174,11 @@ void main_loop(int max_iterations, int delay,
 	fd_set socket_set; /* Used for select() */
 	socklen_t sin_size; /* Used by accept() */
 	struct sockaddr their_addr; /* Used by accept() */
+	JML_CHAR **possible_styles;
 
 	int newstyle_index;
+
+	possible_styles = jmlib->getStyles();
 
 	load.one = -1;
 	load.five = -1;
@@ -233,7 +236,7 @@ void main_loop(int max_iterations, int delay,
 			/* Change Style */
 			aa_puts(context, 3, 4, AA_SPECIAL,
 				"Choose New Style...");
-			for (i=0;i<NUMSTYLES;i++) {
+			for (i=0;i<jmlib->numStyles();i++) {
 				aa_printf(context, 3, 5+i, AA_SPECIAL,
 					"%i: %s",i+1,possible_styles[i]);
 			}
@@ -243,7 +246,7 @@ void main_loop(int max_iterations, int delay,
 			if(newstyle[0]!=0) {
 				newstyle_index=atoi(newstyle)-1;
 				if(newstyle_index>=0
-				  && newstyle_index<NUMSTYLES) {
+				  && newstyle_index<jmlib->numStyles()) {
 					jmlib->setStyle(possible_styles[newstyle_index]);
 				}
 			}
@@ -505,7 +508,7 @@ int main(int argc, char **argv) {
 		aa_hidecursor(context);
 	}
 	params = aa_getrenderparams();
-	jmlib->setWindowSize(AAWIDTH(context),AAHEIGHT(context));
+	jmlib->setWindowSize(aa_imgwidth(context),aa_imgheight(context));
 	jmlib->startJuggle();
 
 	aa_resizehandler(context, resizehandler);

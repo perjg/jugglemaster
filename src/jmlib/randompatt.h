@@ -25,10 +25,11 @@
 /* Use jm_rand to get a random pattern.
 Please free it when you're done.  */
 
-/* Free meeeee */
+/* multiplex is an int describing the maximum possible number of
+additional throws for any given throw */
 JML_CHAR *jm_rand(JML_INT8 numballs, JML_INT8 pattlen,
 		JML_INT8 transformations,
-		JML_BOOL synchronous, JML_BOOL multiplex);
+		JML_BOOL synchronous, JML_INT8 multiplex);
 
 /* For internal use only */
 JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,	

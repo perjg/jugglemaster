@@ -82,7 +82,7 @@ the either other two flavers. Example here is easier than anything else:
 
 JML_CHAR *jm_rand(JML_INT8 numballs, JML_INT8 pattlen,
 		JML_INT8 transformations,
-		JML_BOOL synchronous, JML_BOOL multiplex) {
+		JML_BOOL synchronous, JML_INT8 multiplex) {
 	if(synchronous) {
 		return jm_rand_sync(numballs, (pattlen + 1)/2, transformations);
 	} else {
@@ -169,10 +169,11 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 	if(numballs < 0 || numballs > 35 || pattlen == 0) {
 		/* This is a silly pattern. Let's not generate it */
 		return NULL;
+		
 	}
-	if(numballs & 1) {
-		/* Synchronous patterns always have even balls */
-		return NULL;
+
+	if(numballs & 1 && pattlen & 1) {
+		pattlen++;
 	}
 
 	left = (int *)malloc(sizeof(int) * pattlen);
@@ -180,11 +181,28 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 	leftcross = (int *)malloc(sizeof(int) * pattlen);
 	rightcross = (int *)malloc(sizeof(int) * pattlen);
 
+	/* To seed the pattern:
+		Even numbers of balls go (n,n)<rinse, repeat>
+		Odd numbers of balls go ((2n-2)x,2)(2,(2n-2)x)<rinse, repeat> */
 	for(i = 0; i < pattlen; i++) {
-		left[i] = numballs;
-		right[i] = numballs;
-		leftcross[i] = 0;
-		rightcross[i] = 0;
+		if(0 == (numballs & 1)) {
+			left[i] = numballs;
+			right[i] = numballs;
+			leftcross[i] = 0;
+			rightcross[i] = 0;
+		} else {
+			if(i&1) {
+				left[i] = 2 * (numballs - 1);
+				right[i] = 2;
+				leftcross[i] = 1;
+				rightcross[i] = 0;
+			} else {
+				left[i] = 2;
+				right[i] = 2 * (numballs - 1);
+				leftcross[i] = 0;
+				rightcross[i] = 1;
+			}
+		}
 	}
 
 	i = 0;
@@ -204,10 +222,10 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 
 			pos = rand()%pattlen;
 
-			if(leftcross[pos] > 0) leftcross[pos] = 0;
+			if(leftcross[pos] != 0) leftcross[pos] = 0;
 			else leftcross[pos] = 1;
 
-			if(rightcross[pos] > 0) rightcross[pos] = 0;
+			if(rightcross[pos] != 0) rightcross[pos] = 0;
 			else rightcross[pos] = 1;
 
 			tmp = left[pos];
@@ -264,9 +282,9 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 	}
 
 	totalcrosses = leftcrosses + rightcrosses;
-	returnvalue = (JML_CHAR *)malloc(sizeof(JML_CHAR) * pattlen * 2 + /* Numbers */
-			sizeof(JML_CHAR) * pattlen * 3 + /* Brackets and commas */
-			sizeof(JML_CHAR) * totalcrosses + 1); /* x's */
+	returnvalue = (JML_CHAR *)malloc(sizeof(JML_CHAR) * pattlen * 2 +
+			sizeof(JML_CHAR) * pattlen * 3 +
+			sizeof(JML_CHAR) * totalcrosses + 1);
 	memset(returnvalue, '\0', sizeof(JML_CHAR) * pattlen * 2 + /* Numbers */
 			sizeof(JML_CHAR) * pattlen * 3 + /* Brackets and commas */
 			sizeof(JML_CHAR) * totalcrosses + 1); /* x's */
@@ -376,7 +394,6 @@ int main(int argc, char *argv[]) {
 					}
 				}
 			}
-			if(sync) numballs++; /* Only even numbers in sync pattern */
 		}
 	}
 	return 0;

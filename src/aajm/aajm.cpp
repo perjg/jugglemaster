@@ -40,7 +40,6 @@ void draw_juggler(int show_loadavg, aa_context *c, JMLib *j) {
 	aa_drawcircle(c,ap->hx, ap->hy,
 			ap->hr, color, -1);
 
-	aa_drawline(c, 0, 0, aa_imgwidth(c)/2, aa_imgheight(c)/2, 1);
 	// draw juggler
 	for (i=0;i<5;i++) {
 		aa_drawline(c, ap->rx[i], ap->ry[i],

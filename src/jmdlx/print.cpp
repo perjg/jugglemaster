@@ -14,7 +14,12 @@
  */ 
 
 #include "print.h"
-#include <unistd.h>
+#ifndef __WXMSW__   
+/*
+Not needed under Windows
+*/
+    #include <unistd.h>
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -148,7 +153,7 @@ Print::Print(wxWindow *parent, JMLib *j)
 
 }
 
-void Print::OnOK(wxCommandEvent &event) {
+void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	int oldheight = jmlib->getImageHeight();
 	int oldwidth = jmlib->getImageWidth();
 	int do_change = 0;

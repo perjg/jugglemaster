@@ -106,8 +106,8 @@ int ParsePatterns(FILE *input,
 			currbgred = 0;
 			currbggreen = 0;
 			currbgblue = 0;
-			currga = 9.8;
-			currsp = 1.0;
+			currga = 9.8f;
+			currsp = 1.0f;
 			currbp = 0;
 			currhd = 1;
 			currpd = 1;

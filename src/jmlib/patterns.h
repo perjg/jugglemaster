@@ -92,4 +92,12 @@ struct style_t *Find_Style(styles_t *style_list, const char *name);
 
 /* Checks to see if character is legal first character for pattern */
 int legal_pattern_first_char(char c);
+
+
+/* MSVC++ doesn't have strcasecmp, so add our own version that wraps _stricmp */
+#ifdef WIN32 ///FIX ME - DO THIS RIGHT
+    #define strcasecmp(a, b) _stricmp(a, b)
+#endif
+
+
 #endif

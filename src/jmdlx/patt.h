@@ -45,8 +45,9 @@ class PatternLoader {
 		struct pattern_t *current_pattern;
 
 	public:
-		PatternLoader(wxWindow *p = NULL, int redownload=0);
-		PatternLoader(const char *filename, wxWindow *p = NULL, int redownload=0);
+		//PatternLoader(wxWindow *p = NULL, int redownload=0);
+		//PatternLoader(const char *filename, wxWindow *p = NULL, int redownload=0);
+        PatternLoader(wxWindow *p = NULL, const char *filename = DEFAULT_PATTERNFILE, int redownload=0);
 		~PatternLoader();
 		int Usable();
 		void PrintStyles();

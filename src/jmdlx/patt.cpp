@@ -15,12 +15,15 @@
 
 #include "patt.h"
 #include <wx/progdlg.h>
-#include <unistd.h>
+#ifndef __WXMSW__
+    #include <unistd.h>
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 
 
-PatternLoader::PatternLoader(wxWindow *p, int redownload) {
+/*PatternLoader::PatternLoader(wxWindow *p, int redownload) : 
+ {
 	can_use = 0;
 	parent = p;
 	styles.first = NULL;
@@ -29,9 +32,9 @@ PatternLoader::PatternLoader(wxWindow *p, int redownload) {
 		can_use = ParseFile();
 		CloseFile();
 	}
-}
+}*/
 
-PatternLoader::PatternLoader(const char *filename, wxWindow *p, int redownload) {
+/*PatternLoader::PatternLoader(const char *filename, wxWindow *p, int redownload) {
 	can_use = 0;
 	parent = p;
 	styles.first = NULL;
@@ -40,6 +43,23 @@ PatternLoader::PatternLoader(const char *filename, wxWindow *p, int redownload) 
 		can_use = ParseFile();
 		CloseFile();
 	}
+}*/
+
+//Refactored constructor
+PatternLoader::PatternLoader(wxWindow *p, const char *filename,
+		int redownload) :
+				parent(p),
+				can_use(0),
+				current_group(NULL),
+				current_style(NULL),
+				current_pattern(NULL) {
+    styles.first = NULL;
+    groups.first = NULL;
+    if(OpenFile(filename,redownload)) {
+        can_use = ParseFile();
+        CloseFile();
+    }
+
 }
 
 int PatternLoader::Usable() {

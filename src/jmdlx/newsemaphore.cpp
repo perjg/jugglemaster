@@ -131,11 +131,11 @@ void ChooseSemaphore::ApplySettings() {
 	free(current_style);
 }
 
-void ChooseSemaphore::OnApply(wxCommandEvent &event) {
+void ChooseSemaphore::OnApply(wxCommandEvent &WXUNUSED(event)) {
 	ApplySettings();
 }
 
-void ChooseSemaphore::OnOK(wxCommandEvent &event) {
+void ChooseSemaphore::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	ApplySettings();
 	EndModal(wxID_OK);
 }

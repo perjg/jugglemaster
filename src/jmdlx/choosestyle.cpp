@@ -71,11 +71,11 @@ void ChooseStyle::ApplySettings() {
   jmlib->setStyle(newstyle);
 }
 
-void ChooseStyle::OnApply(wxCommandEvent &event) {
+void ChooseStyle::OnApply(wxCommandEvent &WXUNUSED(event)) {
 	ApplySettings();
 }
 
-void ChooseStyle::OnOK(wxCommandEvent &event) {
+void ChooseStyle::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	ApplySettings();
 	EndModal(wxID_OK);
 }

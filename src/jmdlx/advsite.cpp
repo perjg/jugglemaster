@@ -147,24 +147,24 @@ void AdvancedSiteSwap::ApplySettings() {
   haschanged=0;
 }
 
-void AdvancedSiteSwap::OnApply(wxCommandEvent &event) {
+void AdvancedSiteSwap::OnApply(wxCommandEvent &WXUNUSED(event)) {
 	if(haschanged || newstyle->GetStringSelection()=="Random") {
 		ApplySettings();
 	}
 }
 
-void AdvancedSiteSwap::OnOK(wxCommandEvent &event) {
+void AdvancedSiteSwap::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	if(haschanged) {
 		ApplySettings();
 	}
 	EndModal(wxID_OK);
 }
 
-void AdvancedSiteSwap::MarkChange(wxCommandEvent &event) {
+void AdvancedSiteSwap::MarkChange(wxCommandEvent &WXUNUSED(event)) {
 	haschanged=1;
 }
 
-void AdvancedSiteSwap::SpinnerChange(wxSpinEvent &event) {
+void AdvancedSiteSwap::SpinnerChange(wxSpinEvent &WXUNUSED(event)) {
 	haschanged=1;
 	/* jmlib->setHR((JML_FLOAT)hrspinner->GetValue()/100.0F);
 	jmlib->setDR((JML_FLOAT)drspinner->GetValue()/100.0F); */

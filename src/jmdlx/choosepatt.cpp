@@ -149,31 +149,31 @@ void ChoosePatt::UpdateShownValues() {
 	showSite->SetValue(Patt_GetData(patt));
 }
 
-void ChoosePatt::OnApply(wxCommandEvent &event) {
+void ChoosePatt::OnApply(wxCommandEvent &WXUNUSED(event)) {
 	if(haschanged) {
 		ApplySettings();
 	}
 }
 
-void ChoosePatt::OnOK(wxCommandEvent &event) {
+void ChoosePatt::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	if(haschanged) {
 		ApplySettings();
 	}
 	EndModal(wxID_OK);
 }
 
-void ChoosePatt::PattChange(wxCommandEvent &event) {
+void ChoosePatt::PattChange(wxCommandEvent &WXUNUSED(event)) {
 	UpdateShownValues();
 	haschanged=1;
 }
 
-void ChoosePatt::PattDblClick(wxCommandEvent &event) {
+void ChoosePatt::PattDblClick(wxCommandEvent &WXUNUSED(event)) {
 	if(haschanged) {
 		ApplySettings();
 	}
 }
 
-void ChoosePatt::SectionChange(wxCommandEvent &event) {
+void ChoosePatt::SectionChange(wxCommandEvent &WXUNUSED(event)) {
 	wxString newSection=sectionChoice->GetStringSelection();
 	patterns->SetSection((const char *)newSection);
 	patternListBox->Clear();

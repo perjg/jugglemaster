@@ -14,7 +14,7 @@
  */ 
 
 #include "jmdlx.h"
-
+#include <wx/dcbuffer.h>    //wxBufferedDC
 // JMLib* jmlib;
 
 IMPLEMENT_APP(JMApp)
@@ -25,7 +25,7 @@ bool JMApp::OnInit() {
 
   windowx = min(480,wxGetDisplaySize().x);
   windowy = min(400,wxGetDisplaySize().y);
-	
+
 	frame = new JMFrame(NULL, -1, "JuggleMaster Deluxe", wxDefaultPosition, wxSize(windowx,windowy));
 
   // Set the frame as the top window (this ensures that the application is closed
@@ -35,6 +35,7 @@ bool JMApp::OnInit() {
 
   wxCmdLineParser cmdline(cmdLineDesc, argc, argv);
   cmdline.SetLogo("JuggleMaster Deluxe");
+  
   if(cmdline.Parse() == -1) {
 	exit(0);
   }
@@ -56,8 +57,11 @@ bool JMApp::OnInit() {
 	/* FIXME */
 	printf("Semaphore Requested: %s\n",(const char *)semaphore);
   }
-  if((initialsiteswap = cmdline.GetParam(0)) != wxEmptyString) {
-	frame->setSiteSwap(&initialsiteswap);
+  if (cmdline.GetParamCount() > 0) {
+    initialsiteswap = cmdline.GetParam(0);
+    if(!initialsiteswap.IsEmpty()) {
+	    frame->setSiteSwap(&initialsiteswap);
+    }
   }
 	// Show the frame
 	frame->Show(true);
@@ -164,7 +168,7 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 
   // Initialise Pattern Loader
   patterns = new PatternLoader();
-  semaphores = new PatternLoader(DEFAULT_SEMAPHOREFILE);
+  semaphores = new PatternLoader(NULL, DEFAULT_SEMAPHOREFILE);
 
 }
 
@@ -175,7 +179,7 @@ JMFrame::~JMFrame() {
   delete semaphores;
 }
 
-void JMFrame::OnAbout(wxCommandEvent &event) {
+void JMFrame::OnAbout(wxCommandEvent &WXUNUSED(event)) {
 	wxMessageBox("(C) Ken Matsuoka 1995-6, Per Johan Groland 2002, Gary Briggs 2003", "About JMDeluxe", wxOK, this);
 }
 
@@ -186,8 +190,8 @@ void JMFrame::changeMirror(wxCommandEvent& WXUNUSED(event)) {
 void JMFrame::reDownload(wxCommandEvent& WXUNUSED(event)) {
 	delete patterns;
 	delete semaphores;
-	patterns = new PatternLoader(this,1);
-	semaphores = new PatternLoader(DEFAULT_SEMAPHOREFILE,this,1);
+	patterns = new PatternLoader(this, DEFAULT_PATTERNFILE, 1);
+	semaphores = new PatternLoader(this, DEFAULT_SEMAPHOREFILE, 1);
 }
 
 void JMFrame::unPause() {
@@ -265,7 +269,7 @@ void JMFrame::print(wxCommandEvent& WXUNUSED(event))
 	new Print(this, jmlib);
 }
 
-void JMFrame::OnClose(wxCommandEvent &event) {
+void JMFrame::OnClose(wxCommandEvent &WXUNUSED(event)) {
 	Close(TRUE);
 }
 
@@ -314,19 +318,21 @@ JMCanvas::JMCanvas(JMFrame *p, JMLib *j) :
 	ball_colors[6] = wxGREY_BRUSH;
 	ball_colors[7] = wxLIGHT_GREY_BRUSH;
 }
-
+/*
+    Refactor to use wxBufferedPaintDC
+*/
 wxBitmap* backBuffer = NULL;
-void JMCanvas::OnPaint(wxPaintEvent &event) {
+void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
   if(backBuffer == NULL) {
     backBuffer = new wxBitmap(wxGetDisplaySize().x, wxGetDisplaySize().y);
   }
-
-  wxMemoryDC dc;
+  
+  //wxMemoryDC dc;
   int i;
   // wxPaintDC dc(this);
-  dc.SelectObject(*backBuffer);
-  PrepareDC(dc);
-
+  //dc.SelectObject(*backBuffer);
+  //PrepareDC(dc);
+  wxBufferedPaintDC dc(this);
   arm* ap = &(jmlib->ap);
   ball* rhand = &(jmlib->rhand);
   ball* lhand = &(jmlib->lhand);
@@ -374,14 +380,13 @@ void JMCanvas::OnPaint(wxPaintEvent &event) {
   dc.DrawText(balltext, 10, 10);
 
   // flip
-  wxPaintDC sdc(this);
-  PrepareDC(sdc);
+ // wxPaintDC sdc(this);
+  //PrepareDC(sdc);
 
-  sdc.Blit(0, 0, GetSize().x, GetSize().y, &dc, 0, 0);
-
+  //sdc.Blit(0, 0, GetSize().x, GetSize().y, &dc, 0, 0);
 }
 
-void JMCanvas::OnEraseBackground(wxEraseEvent& event) {
+void JMCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
 
 }
 
@@ -405,7 +410,7 @@ void JMTimer::Notify() {
   jmlib->doJuggle();
   canvas->Refresh();
   wxWakeUpIdle();
-  wxYield();
+  wxYieldIfNeeded();
 }
 
 int JMTimer::SpeedUp() {

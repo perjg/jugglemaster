@@ -42,18 +42,19 @@ platforms.
 
 JMDlx
 
+First, you need wxWidgets for your respective system, available from
+http://www.wxwidgets.org.
+
 To build on Linux or other Unix operating systems, just go into the
 src/jmdlx dir and type "make". It creates a binary "jmdlx". Run it.
-You need wxWidgets, available from http://www.wxwidgets.org.
-
-To build it on Windows using Visual Studio, you need to set up the
-project file yourself. The wxWidgets home page includes instructions.
-If you don't have Visual Studio, either work it out yourself, or
-extract bloodshed.zip and use the excellent DevC++ from
-www.bloodshed.net
 
 To build on OSX, go into src/jmdlx and type "make osx". This will
 create JuggleMaster.app.
+
+To build on Windows using Visual Studio, extract VisualStudio.zip
+where it is, and build.
+To build on Windows using Bloodshed's DevC++, extract bloodshed.zip
+where it is, and build.
 
 If you don't have patterns.jm and semaphore.jm in the current dir when
 you run it, it attempts to download them to a suitable directory (on
@@ -61,7 +62,7 @@ unices including OSX, this is $HOME/.jugglemaster. On windows, it's in
 your user's Documents and Settings, to a dir called ".jugglemaster")
 
 There are some extra features in jmdlx that aren't enabled by default
-[eg mpeg videos, since they need ffmpeg]. To enable them, please see
+[eg mpeg videos, since they need ffmpeg]. To enable them, please edit
 the Makefile in the jmdlx directory.
 
 

@@ -298,7 +298,7 @@ PatternDefn *PatternLoader::GetPattern(wxString *section_name,const wxString *pa
 #ifdef PATT_STANDALONE
 int main() {
 	PatternLoader *p;
-	p = new PatternLoader("semaphore.jm");
+	p = new PatternLoader(DEFAULT_SEMAPHOREFILE);
 	p->PrintStyles();
 	/* wxString *curr_sect;
 	wxString *curr_patt;

@@ -166,7 +166,7 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 
   // Initialise Pattern Loader
   patterns = new PatternLoader();
-  semaphores = new PatternLoader("semaphore.jm");
+  semaphores = new PatternLoader(DEFAULT_SEMAPHOREFILE);
 
 }
 
@@ -188,7 +188,7 @@ void JMFrame::reDownload(wxCommandEvent& WXUNUSED(event)) {
 	delete patterns;
 	delete semaphores;
 	patterns = new PatternLoader(this,1);
-	semaphores = new PatternLoader("semaphore.jm",this,1);
+	semaphores = new PatternLoader(DEFAULT_SEMAPHOREFILE,this,1);
 }
 
 void JMFrame::unPause() {

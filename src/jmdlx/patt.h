@@ -26,6 +26,7 @@
 #include <wx/wfstream.h>
 
 #define DEFAULT_PATTERNFILE "patterns.jm"
+#define DEFAULT_SEMAPHOREFILE "semaphore.jm"
 
 #define WEB_PREFIX "http://icculus.org/jugglemaster/"
 

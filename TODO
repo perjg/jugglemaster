@@ -3,7 +3,6 @@ OS9 - Find a build box
 Fix The Timing/ Speed up/ slow down/ pause [speed in jmlib]
 Command-line named pattern
 Keyboard shortcuts
-Finish mpeg support
 Fix OSX proxy stuff
 Add "bugger up" feature where dude drops all the balls.
 
@@ -16,4 +15,7 @@ AAJM:
 Find more stupid uses and add to webpage
 
 PPC:
+Release it :-)
+
+JMqt:
 Release it :-)

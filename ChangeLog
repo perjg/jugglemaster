@@ -1,4 +1,5 @@
 Version 0.5
+ - jmlib: Added random pattern generation
  - jmlib: Added authors to patterns
  - data: Added more patterns
  - jmlib: Other minor fixes

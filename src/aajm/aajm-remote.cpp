@@ -127,7 +127,10 @@ int main(int argc, char **argv) {
 	}
 
 	if(help_flag) {
-		printf("Jugglemaster-Remote Options:\n");
+		printf("AAJM-Remote, Remote control for AAJM\n");
+		printf("Usage: ./aajm-remote [OPTIONS]\n");
+
+		printf("AAJM-Remote Options:\n");
 		printf("  -s, --siteswap=XX     show siteswap XX\n");
 		printf("  -t, --style=XX        use style XX\n");
 		printf("  -p, --port=XX         use port XX for IPC (%i)\n",DEFPORT);

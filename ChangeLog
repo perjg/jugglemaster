@@ -1,6 +1,7 @@
 Version 0.4
  - jmlib: Added patterns.h and patterns.cpp, which parse pattern files
  - data: Added some style data for completeness
+ - jmdlx: Added printing mpegs. Thanks to luap for the color stuff.
 
 Version 0.3
 2004-03-17

@@ -1,7 +1,8 @@
 CXX=c++
 MAKE=make
 
-CXXFLAGS=-Wall -pedantic -Werror -ansi -fsigned-char `wx-config --cppflags`
+CXXFLAGS=-Wall -Werror -fsigned-char `wx-config --cppflags`
+# -ansi -pedantic cause warnings from some compilers [wx uses long long]
 LDFLAGS=`wx-config --ldflags`
 // STATICFLAGS=-Wl,-Bstatic
 STATICFLAGS=-static

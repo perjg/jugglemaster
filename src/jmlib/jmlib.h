@@ -27,7 +27,7 @@
 //#include <math.h>
 #include <string.h>
 #include <time.h>
-#include <malloc.h>
+//#include <malloc.h>
 #include <stdlib.h>
 
 #include "jmlib_types.h"

@@ -23,6 +23,7 @@ patterns:
 rand: clean validator.o
 	$(CXX) $(CXXFLAGS) -DRAND_STANDALONE -c -o ./rand-standalone.o ./randompatt.cpp
 	$(CXX) $(LDFLAGS) -o ./rand ./rand-standalone.o validator.o $(LIBS)
+	./rand | less
 
 clean:
 	rm -f *.o core jmlib.a patterns rand

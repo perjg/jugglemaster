@@ -42,10 +42,13 @@ if it would decrease below zero.
 Rule 2  the Circular Rule: a throw may be moved from the front to the
 back of a pattern.
 
+Implemenation note: Rule 2 is implied by doing all arithmetic modulo patt_len.
+
 */
 
 JML_CHAR *jm_rand(JML_INT8 numballs, JML_INT8 pattlen,
-        JML_INT8 transformations, JML_BOOL synchronous) {
+		JML_INT8 transformations,
+		JML_BOOL synchronous, JML_BOOL multiplex) {
 	if(synchronous) {
 		return jm_rand_sync(numballs, (pattlen + 1)/2, transformations);
 	} else {
@@ -80,7 +83,7 @@ JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,
 		int tmp;
 
 		first = rand()%pattlen;
-		distance = rand()%pattlen - first;
+		distance = rand()%pattlen;
 
 		if((buf[first] - distance >= 0) &&
 			(buf[(first+distance)%pattlen] + distance >= 0) &&
@@ -91,17 +94,6 @@ JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,
 
 			tmp = buf[first] - distance;
 			buf[first] = buf[(first+distance)%pattlen] + distance;
-			buf[(first+distance)%pattlen] = tmp;
-			i++;
-		} else if((buf[first] + (numballs - distance) >= 0) &&
-			(buf[(first+distance)%pattlen] - (numballs - distance) >= 0) &&
-			(buf[first] + (numballs - distance) <= 35) &&
-			(buf[(first+distance)%pattlen] - (numballs - distance) <= 35)) {
-
-		/* RULE 2 */
-
-			tmp = buf[first] + (numballs - distance);
-			buf[first] = buf[(first+distance)%pattlen] - (numballs - distance);
 			buf[(first+distance)%pattlen] = tmp;
 			i++;
 		} else {
@@ -156,6 +148,10 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 		/* This is a silly pattern. Let's not generate it */
 		return NULL;
 	}
+	if(numballs & 1) {
+		/* Synchronous patterns always have even balls */
+		return NULL;
+	}
 
 	left = (int *)malloc(sizeof(int) * pattlen);
 	right = (int *)malloc(sizeof(int) * pattlen);
@@ -182,11 +178,18 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 			/* RULE 3 */
 
 			int pos;
+			int tmp;
+
 			pos = rand()%pattlen;
+
 			if(leftcross[pos] > 0) leftcross[pos] = 0;
 			else leftcross[pos] = 1;
 			if(rightcross[pos] > 0) rightcross[pos] = 0;
 			else rightcross[pos] = 1;
+
+			tmp = left[pos];
+			left[pos] = right[pos];
+			right[pos] = tmp;
 
 			i++;
 
@@ -223,19 +226,6 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 				switchbuffercross[first] = switchbuffercross[(first+distance)%pattlen];
 				switchbuffercross[(first+distance)%pattlen] = tmp;
 				i++;
-			} else if((switchbuffer[first] + (numballs - distance*2) >= 0) &&
-				(switchbuffer[(first+distance)%pattlen] - (numballs - distance*2) >= 0) &&
-				(switchbuffer[first] + (numballs - distance*2) <= 35) &&
-				(switchbuffer[(first+distance)%pattlen] - (numballs - distance*2) <= 35)) {
-
-				tmp = switchbuffer[first] + (numballs - distance*2);
-				switchbuffer[first] = switchbuffer[(first+distance)%pattlen] - (numballs - distance*2);
-				switchbuffer[(first+distance)%pattlen] = tmp;
-
-				tmp = switchbuffercross[first];
-				switchbuffercross[first] = switchbuffercross[(first+distance)%pattlen];
-				switchbuffercross[(first+distance)%pattlen] = tmp;
-				i++;
 			} else {
 				j++;
 			}
@@ -250,10 +240,12 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 		if(rightcross[i]) totalcrosses++;
 	}
 
-	returnvalue = (JML_CHAR *)malloc(sizeof(JML_CHAR) * pattlen * 2 +
-			pattlen * 3 + totalcrosses + 1);
-	memset(returnvalue, '\0', sizeof(JML_CHAR) * pattlen * 2 +
-			pattlen * 3 + totalcrosses + 1);
+	returnvalue = (JML_CHAR *)malloc(sizeof(JML_CHAR) * pattlen * 2 + /* Numbers */
+			sizeof(JML_CHAR) * pattlen * 3 + /* Brackets and commas */
+			sizeof(JML_CHAR) * totalcrosses + 1); /* x's */
+	memset(returnvalue, '\0', sizeof(JML_CHAR) * pattlen * 2 + /* Numbers */
+			sizeof(JML_CHAR) * pattlen * 3 + /* Brackets and commas */
+			sizeof(JML_CHAR) * totalcrosses + 1); /* x's */
 
 	for(returntmp=returnvalue,i=0;i<pattlen;i++) {
 		*returntmp++ = '(';
@@ -332,11 +324,12 @@ int main(int argc, char *argv[]) {
 		}
 	} */
 	for(sync = 0; sync <= 1; sync++) {
-		for(numballs = 0; numballs<=10; numballs++) {
-			for(pattlen = 1; pattlen < 10; pattlen++) {
+		for(numballs = 0; numballs<=35; numballs++) {
+			for(pattlen = 1; pattlen < 20; pattlen++) {
 				for(transformations = 0; transformations < 10; transformations ++) {
 					int showpat = 0;
-					pattern = jm_rand(numballs, pattlen, transformations, sync);
+					pattern = jm_rand(numballs, pattlen,
+								transformations, sync, 0);
 					if(pattern != NULL) {
 						if(val.validateSite(pattern)) {
 							printf("SUCCESS");
@@ -357,6 +350,7 @@ int main(int argc, char *argv[]) {
 					}
 				}
 			}
+			if(sync) numballs++; /* Only even numbers in sync pattern */
 		}
 	}
 	return 0;

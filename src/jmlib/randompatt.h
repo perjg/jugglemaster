@@ -27,7 +27,8 @@ Please free it when you're done.  */
 
 /* Free meeeee */
 JML_CHAR *jm_rand(JML_INT8 numballs, JML_INT8 pattlen,
-		JML_INT8 transformations, JML_BOOL synchronous);
+		JML_INT8 transformations,
+		JML_BOOL synchronous, JML_BOOL multiplex);
 
 /* For internal use only */
 JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,	

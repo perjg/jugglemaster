@@ -8,6 +8,7 @@ The following are all licenced under the GPL:
 JMDlx    (wxWidgets) src/jmdlx/*
 JMPocket (PocketPC)  src/jmpocket/*
 AAJM     (aalib)     src/aajm/*
+JMQT     (Qt)        src/jmqt/*
 
 The full text of the GPL is available in COPYING
 

@@ -40,20 +40,19 @@ description of how to edit the pattern files).
 Build instructions and requirements vary between the different
 platforms.
 
+
 JMDlx
 
 First, you need wxWidgets for your respective system, available from
 http://www.wxwidgets.org.
 
-To build on Linux or other Unix operating systems, just go into the
-src/jmdlx dir and type "make". It creates a binary "jmdlx". Run it.
+To build on Linux or other Unix operating systems, just type
+"make jmdlx" in the top-level dir. Look in the "bin" directory
 
 To build on OSX, go into src/jmdlx and type "make osx". This will
 create JuggleMaster.app.
 
 To build on Windows using Visual Studio, extract VisualStudio.zip
-where it is, and build.
-To build on Windows using Bloodshed's DevC++, extract bloodshed.zip
 where it is, and build.
 
 If you don't have patterns.jm and semaphore.jm in the current dir when
@@ -68,8 +67,8 @@ Makefile.cfg in the top-level dir
 
 JMPocket
 
-To build JMPocket you need Microsoft eMbedded Visual Tools 3.0 2002
-Edition, available free of charge from Microsofts web page. JMPocket
+To build JMPocket you need Microsoft Embedded Visual Tools 3.0 2002
+Edition, available free of charge from Microsoft's web page. JMPocket
 doesn't run properly in the Pocket PC 2002 emulator, so you will also
 need to download the Pocket PC 2000 SDK. The downloads can all be
 found at http://download.microsoft.com
@@ -83,14 +82,24 @@ must be named either patt_e.jm or patterns.jm.
 
 AAJM
 
-To build, go into src/aajm, and type "make". You'll need aalib,
-available from http://aa-project.sf.net. To build, aajm uses aalib-config,
-so you may need the latest version of aalib on your system [at least 1.4]
+You'll need aalib, available from http://aa-project.sf.net.
+To build, aajm uses aalib-config, so you may need the latest version of
+aalib on your system [at least 1.4]
 
-It should build two binaries, one called "aajm" that's all you really
-need. The other is called "aajm-remote" and can be used to remotely
-control aajm (if you start aajm with suitable command-line options -
-please see the AAJM README for more info on this).
+Just type "make aajm" in the top level dir.
+
+It should build two binaries in the "bin" dir, one called "aajm" that's
+all you really need. The other is called "aajm-remote" and can be used
+to remotely control aajm.
+
+
+JMQt
+
+You'll need Qt, available from http://www.trolltech.com
+
+Just type "make jmqt" in the top level dir. Look in "bin" when you're
+done.
+
 
 
 Chunky Kibbles <chunky@icculus.org>

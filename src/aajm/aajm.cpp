@@ -137,7 +137,7 @@ void main_loop(void) {
 			aa_edit(context, 3, 5+i, 2, newstyle, 2);
 			if(newstyle[0]!=0) {
 				newstyle_index=atoi(newstyle)-1;
-				if(newstyle_index>0
+				if(newstyle_index>=0
 				  && newstyle_index<numstyles) {
 					jmlib->setStyle(possible_styles[newstyle_index]);
 				}

@@ -8,16 +8,13 @@ endif
 DATA=../../data/patterns.jm ../../data/semaphore.jm
 OBJ=jmlib.o prefs.o util.o validator.o patterns.o
 
-all: patt_clean $(OBJ)
+all: $(OBJ)
 	ar -r jmlib.a $(OBJ)
 	ranlib jmlib.a
 
-patterns: patt_clean
-	$(CXX) $(CXXFLAGS) -DPATTERNS_STANDALONE -c -o ./patterns.o ./patterns.cpp
-	$(CXX) $(LDFLAGS) -o ./patterns ./patterns.o $(LIBS)
-
-patt_clean:
-	rm -f patterns.o
+patterns:
+	$(CXX) $(CXXFLAGS) -DPATTERNS_STANDALONE -c -o ./patterns-standalone.o ./patterns.cpp
+	$(CXX) $(LDFLAGS) -o ./patterns ./patterns-standalone.o $(LIBS)
 
 clean:
 	rm -f *.o core jmlib.a patterns

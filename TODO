@@ -1,16 +1,17 @@
 JMDlx:
-OSX & 9 - App Bundles and a build box, respectively
+OS9 - Find a build box
 Fix The Timing/ Speed up/ slow down/ pause [speed in jmlib]
 Command-line named pattern
 Keyboard shortcuts
-Downloads go to someplace more betterer
+Downloads go to someplace more betterer - OSX friendly?
+Rewrite file handling code in "print" function, finish mpeg support
 
 JMLib:
 Speed stuff?
 Stop his arms crossing?
 
 AAJM:
-Extra uses - Progress during sysv-alike startup? [treke's idea, blame him]
+Find more stupid uses and add to webpage
 
 PPC:
 Release it :-)

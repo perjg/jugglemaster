@@ -6,6 +6,9 @@ Version 0.3
  - jmlib: Added "Random" style. Thanks to Barton Chittenden for the
     [ridiculously simple if I'd taken two minutes to think about it]
     pseudocode
+ - jmdlx: Added OSX voodoo to Makefile and created "macosx" dir and guff
+    MASSIVE thanks go to Tom Davie for his OSX guruism, especially the
+    cool icon
  - Added more patterns
  - Miscellaneous small fixes
  - jmlib: Changed License to Modified BSD, with Ken Matsuoka's permission

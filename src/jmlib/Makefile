@@ -1,14 +1,18 @@
-CXXFLAGS=-g -Wall -pedantic -fsigned-char -Werror
+include ../../Makefile.cfg
+
+CXXFLAGS=-Wall -pedantic -fsigned-char
 LIBS+=-lm -ldl
 
 ifeq ($(DEBUG), 1)
-CFLAGS +=-g
+CFLAGS+=-g -Werror
 endif
 
 DATA=../../data/patterns.jm ../../data/semaphore.jm
 OBJ=jmlib.o prefs.o util.o validator.o patterns.o
 
-all: $(OBJ)
+all: jmlib.a
+
+jmlib.a: $(OBJ)
 	ar -r jmlib.a $(OBJ)
 	ranlib jmlib.a
 

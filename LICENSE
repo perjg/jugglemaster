@@ -1,7 +1,7 @@
 In this package:
 
-src/jmlib/* is licensed under the Modified BSD License, please see
-COPYING.jmlib for further details.
+src/jmlib/* and src/jmts/* are licensed under the Modified BSD License,
+please see COPYING.jmlib for further details.
 
 The following are all licenced under the GPL:
 

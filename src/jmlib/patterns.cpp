@@ -122,6 +122,7 @@ int ParsePatterns(FILE *input,
 			group = newgroup;
 			group->name = (char *)malloc(strlen(current_group) + 1);
 			strcpy(group->name, current_group);
+			group->name[strlen(current_group)] = '\0';
 			group->first_patt = NULL;
 			group->next = NULL;
 		} else if(sscanf(buf, "%%%255[^\n]",current_style) == 1) {
@@ -137,6 +138,7 @@ int ParsePatterns(FILE *input,
 			style = newstyle;
 			style->name = (char *)malloc(strlen(current_style) + 1);
 			strncpy(style->name, current_style, strlen(current_style));
+			style->name[strlen(current_style)] = '\0';
 			style->length = 0;
 			style->data = NULL;
 		} else if(buf[0] == '{') {
@@ -187,12 +189,16 @@ int ParsePatterns(FILE *input,
 			patt = newpatt;
 			patt->name = (char *)malloc(strlen(pattern_name) + 1);
 			strncpy(patt->name, pattern_name, strlen(pattern_name));
+			patt->name[strlen(pattern_name)] = '\0';
 
 			patt->data = (char *)malloc(strlen(pattern_data) + 1);
 			strncpy(patt->data, pattern_data, strlen(pattern_data));
+			patt->data[strlen(pattern_data)] = '\0';
 
 			patt->style = (char *)malloc(strlen(current_style) + 1);
 			strncpy(patt->style, current_style, strlen(current_style));
+			patt->style[strlen(current_style)] = '\0';
+
 			patt->hr = currhr;
 			patt->dr = currdr;
 			patt->ga = currga;

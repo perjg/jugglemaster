@@ -21,19 +21,18 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <sys/resource.h>
 #include <getopt.h>
 #include <malloc.h>
 #include "../jmlib/jmlib.h"
+#include "./aa_drawline.h"
+#include "./aa_drawcircle.h"
+
 
 aa_context *context;
 aa_renderparams *params;
 JMLib* jmlib;
 
-/* Now, if only this were part of aalib... */
-extern "C" {
-#include "./aa_drawline.h"
-#include "./aa_drawcircle.h"
-}
 
 static char *possible_styles[] = {
 	"Normal",
@@ -44,14 +43,20 @@ static char *possible_styles[] = {
 	"Windmill"
 };
 
+struct loadavg {
+	float one, five, fifteen;
+};
+
 #define AAWIDTH(context) aa_imgwidth(context)
-#define AAHEIGHT(context) (aa_imgheight(context)-4)
+#define AAHEIGHT(context) aa_imgheight(context)
 #define DEFSPEED 18000
 /* speed is in microseconds-between-frames, because I'm that lazy */
 
 void errorCB(char* msg);
-void draw_juggler(void);
+void draw_juggler(int show_loadavg);
+void loadaverage(struct loadavg *load);
 void resizehandler(aa_context *resized_context);
-void main_loop(int max_iterations, int delay);
+void main_loop(int max_iterations, int delay,
+			int loadavg_flag, int normal_load);
 
 #endif

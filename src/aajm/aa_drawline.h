@@ -18,6 +18,10 @@
 
 #include <aalib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Draws a line in octant 0 or 3 ( |xlen| >= ylen ).
  */
@@ -35,5 +39,9 @@ void octant1(aa_context *context, unsigned int x0, unsigned int y0,
 /* Bresenham's, flagrantly lifted from Abrash's black book */
 void aa_drawline(aa_context *context, int x0, int y0,
                                 int x1, int y1, int color);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

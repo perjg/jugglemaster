@@ -18,5 +18,5 @@ jm_lib:
 	$(MAKE) -C ../jmlib
 
 clean:
-	rm -f *.o core aajm patterns.jm semaphore.jm
+	rm -f *.o core aajm
 	$(MAKE) -C ../jmlib clean

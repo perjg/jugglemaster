@@ -21,9 +21,10 @@ void errorCB(char* msg) {
 	sleep(2);
 }
 
-void draw_juggler(void) {
+void draw_juggler(int show_loadavg) {
 	int color;
 	int i;
+	struct loadavg load;
 
 	arm* ap = &(jmlib->ap);
 	ball* rhand = &(jmlib->rhand);
@@ -81,12 +82,38 @@ void draw_juggler(void) {
 		"Site: %s    Style: %s    Balls: %i",
 		jmlib->getSite(), jmlib->getStyle(), jmlib->balln);
 
+	if(show_loadavg) {
+		loadaverage(&load);
+		aa_printf(context, 0, 1, AA_SPECIAL,
+			"LoadAvg: %2.2f %2.2f %2.2f",
+			load.one, load.five, load.fifteen);
+	}
 	if(jmlib->getStatus() == ST_PAUSE) {
-		aa_puts(context, 0, 1, AA_SPECIAL, "Paused");
+		aa_puts(context, 1, 3, AA_SPECIAL, "Paused");
 	}
 	aa_flush(context);
 
 	memset(context->imagebuffer,0,AAWIDTH(context)*AAHEIGHT(context));
+}
+
+/* Just for anyone not aware, /proc/loadavg gives load average over the
+     last 1, 5, 15 minutes. "Load Average" is defined as the average
+     runnable number of process at any given moment in time.
+   If load average is greater than your number of processors, then your
+     system has more work to do than it's capable of doing. */
+void loadaverage(struct loadavg *load) {
+	FILE *loadf;
+
+	loadf = fopen("/proc/loadavg", "r");
+	load->one = -1;
+	load->five = -1;
+	load->fifteen = -1;
+
+	if (loadf) {
+		fscanf(loadf, "%f %f %f",
+			&load->one, &load->five, &load->fifteen);
+		fclose(loadf);
+	}
 }
 
 void resizehandler(aa_context *resized_context) {
@@ -95,18 +122,25 @@ void resizehandler(aa_context *resized_context) {
 	context = resized_context;
 }
 
-#define DEFSPEED 18000
-void main_loop(int max_iterations, int delay) {
+void main_loop(int max_iterations, int delay,
+		int loadavg_flag, int normal_load) {
 	struct timeval starttime, endtime;
+	struct loadavg load;
 	long sleeptime;
 	long speed = DEFSPEED; /* microseconds between frames */
+	long load_speed_modifier = 0;
 	int loop_forever = 0;
 	char c;
 	int i;
+	int tmp;
 	char newsite[JML_MAX_SITELEN];
 	char newstyle[2];
 	int newstyle_index;
 	int numstyles = sizeof(possible_styles)/sizeof(possible_styles[0]);
+
+	load.one = -1;
+	load.five = -1;
+	load.fifteen = -1;
 
 	if(delay > 0) {
 		speed = delay * 1000;
@@ -115,10 +149,20 @@ void main_loop(int max_iterations, int delay) {
 	if(max_iterations <= 0) {
 		loop_forever = 1;
 	}
+
 	while (1) {
 		gettimeofday(&starttime,NULL);
 		jmlib->doJuggle();
-		draw_juggler();
+		draw_juggler(loadavg_flag);
+
+		if(loadavg_flag) {
+			loadaverage(&load);
+			if(load.one != -1) {
+				tmp = (int)(load.one*100 - normal_load);
+				load_speed_modifier = 5000 * tmp;
+			}
+		}
+
 		c=aa_getkey(context,0);
 		if(c=='s' || c=='S') {
 			/* Change SiteSwap */
@@ -171,12 +215,14 @@ void main_loop(int max_iterations, int delay) {
 			aa_puts(context, 3, 8, AA_SPECIAL,
 				"t - Change Style");
 			aa_puts(context, 3, 9, AA_SPECIAL,
-				"q - Quit");
+				"l - Toggle Load Monitoring");
 			aa_puts(context, 3, 10, AA_SPECIAL,
-				"space - Pause");
+				"q - Quit");
 			aa_puts(context, 3, 11, AA_SPECIAL,
+				"space - Pause");
+			aa_puts(context, 3, 12, AA_SPECIAL,
 				"+, -, enter - Speed up, down, reset");
-			aa_puts(context, 3, 13, AA_SPECIAL,
+			aa_puts(context, 3, 14, AA_SPECIAL,
 				"Press any key to remove this menu");
 			aa_flush(context);
 			aa_getkey(context, 1);
@@ -187,6 +233,14 @@ void main_loop(int max_iterations, int delay) {
 		} else if(c=='-' || c=='j') {
 			/* Speed Down */
 			speed += 1500;
+		} else if(c=='l') {
+			/* Toggle Load Monitoring */
+			if(loadavg_flag == 1) {
+				loadavg_flag = 0;
+				load_speed_modifier = 0;
+			} else {
+				loadavg_flag = 1;
+			}
 		} else if(c==13) {
 			/* Speed Reset */
 			/* 13 == Enter */
@@ -199,7 +253,8 @@ void main_loop(int max_iterations, int delay) {
 			endtime.tv_sec --;
 			endtime.tv_usec += 1000000;
 		}
-		sleeptime = speed - (endtime.tv_usec + endtime.tv_sec*1000000);
+		sleeptime = (speed + load_speed_modifier)
+				- (endtime.tv_usec + endtime.tv_sec*1000000);
 		if(sleeptime > 0) {
 			usleep(sleeptime);
 		} else {
@@ -212,18 +267,23 @@ void main_loop(int max_iterations, int delay) {
 }
 
 int main(int argc, char **argv) {
-	char options[] = "ajhd:m:t:s:";
+	char options[] = "aljhn:d:m:t:s:";
 	int help_flag = 0;
 	int aahelp_flag = 0;
 	int justoutput_flag = 0;
+	int loadavg_flag = 0;
 	int max_iterations = 0;
 	int delay = 0;
+	int normal_load = 20;
+
 	static struct option long_options[] =
         {
 		{"help", no_argument, &help_flag, 1},
 		{"aahelp", no_argument, &aahelp_flag, 1},
 		{"justoutput", no_argument, &justoutput_flag, 1},
+		{"loadavg", no_argument, &loadavg_flag, 1},
 		{"maxiterations", required_argument, 0, 'm'},
+		{"normalload", required_argument, 0, 'n'},
 		{"delay", required_argument, 0, 'd'},
 		{"siteswap", required_argument, 0, 's'},
 		{"style", required_argument, 0, 't'}
@@ -264,6 +324,12 @@ int main(int argc, char **argv) {
 			case 'd':
 				delay = atoi(optarg);
 				break;
+			case 'l':
+				loadavg_flag=1;
+				break;
+			case 'n':
+				normal_load = (int)(100*atof(optarg));
+				break;
 		}
 
 	if(aahelp_flag || help_flag) {
@@ -272,12 +338,14 @@ int main(int argc, char **argv) {
 	}
 	if(help_flag) {
 		printf("Jugglemaster Options:\n");
-		printf("  -s, --siteswap=XX          show siteswap XX\n");
-		printf("  -t, --style=XX             use style XX\n");
-		printf("  -d, --delay=XX             delay XX ms between frames\n");
+		printf("  -s, --siteswap=XX          show siteswap XX (3)\n");
+		printf("  -t, --style=XX             use style XX (\"Normal\")\n");
+		printf("  -d, --delay=XX             delay XX ms between frames (%i)\n", (int)DEFSPEED/1000);
 		printf("  -m, --maxiterations=XX     do at most XX iterations\n");
 		printf("  -j, --justoutput           only output [don't init kb or mouse]\n");
-		printf("  -h, --help                 get help\n");
+		printf("  -l, --loadavg              change speed based on load average\n");
+		printf("  -n, --normalload=XX        a normal load average for your machine (0.2)\n");
+		printf("  -h, --help                 get help [this screen]\n");
 		printf("  -a, --aahelp               get help on AA options\n\n");
 	}
 	if(aahelp_flag) {
@@ -303,7 +371,12 @@ int main(int argc, char **argv) {
 
 	aa_resizehandler(context, resizehandler);
 
-	main_loop(max_iterations,delay);
+	if(loadavg_flag) {
+		/* If we're doing that thing where we care, then this
+			can go down to as-low-as-possible priority */
+		nice(19);
+	}
+	main_loop(max_iterations,delay,loadavg_flag,normal_load);
 
 	aa_close(context);
 

@@ -151,6 +151,7 @@ void Print::OnOK(wxCommandEvent &event) {
 	int oldheight = jmlib->getImageHeight();
 	int oldwidth = jmlib->getImageWidth();
 	int do_change = 0;
+	int print_success = 0;
 	int i;
 	struct stat buf; /* for stat */
 	wxMessageDialog* message;
@@ -189,14 +190,24 @@ void Print::OnOK(wxCommandEvent &event) {
 	}
 
 	if (output_type->GetStringSelection() == "PostScript") {
-		printPS();
+		print_success = printPS();
 	}
 
 #ifdef HAVE_AVCODEC_H
 	if (output_type->GetStringSelection() == "MPEG") {
-		printMPEG();
+		print_success = printMPEG();
 	}
 #endif
+
+	fclose(outputfile);
+	if(print_success != 0) {
+		wxMessageDialog message(this,
+				"Printing Aborted!", "Aborted",
+				wxOK|wxICON_EXCLAMATION);
+		message.ShowModal();
+		wxRemoveFile(filename->GetValue());
+	}
+
 
 	if(do_change) {
 		jmlib->setWindowSize(oldwidth, 
@@ -207,9 +218,6 @@ void Print::OnOK(wxCommandEvent &event) {
 	}
 	/* Just make sure it clears out any guff */
 	for (i=0; i<200; i++) jmlib->doJuggle();
-
-	fclose(outputfile);
-
 	EndModal(wxID_OK);
 }
 
@@ -223,6 +231,9 @@ int Print::printPS(void) {
 	struct ball firstpos[BMAX]; /* We'll rememeber where all the
 				balls were when we started, and check
 				against it */
+
+	wxProgressDialog progress("Progress","Creating PostScript",
+		max_iterations->GetValue(), this, wxPD_APP_MODAL|wxPD_CAN_ABORT);
 
 
 	y_offset=jmlib->imageHeight;
@@ -374,11 +385,17 @@ int Print::printPS(void) {
 
 
 		fprintf(outputfile, "} repeat\n");
+
+		if(current_frames % 10 == 0) {
+			if(FALSE == progress.Update(current_frames)) {
+				return 1;
+			}
+		}
 	}
 
 	fprintf(outputfile, "} repeat\n");
 
-	return 1;
+	return 0;
 
 }
 
@@ -398,6 +415,9 @@ int Print::printMPEG() {
 	wxImage image;
 	wxMemoryDC dc;
 	struct ball firstpos[BMAX];
+
+	wxProgressDialog progress("Progress","Creating MPEG",
+		max_iterations->GetValue(), this, wxPD_APP_MODAL|wxPD_CAN_ABORT);
 
 	int current_frames = 0;
 	int done = 0;
@@ -520,6 +540,11 @@ int Print::printMPEG() {
 		out_size = avcodec_encode_video(c, outbuf, outbuf_size, picture);
 		fwrite(outbuf, 1, out_size, outputfile);
 
+		if(current_frames % 10 == 0) {
+			if(FALSE == progress.Update(current_frames)) {
+				return 1;
+			}
+		}
 	}
 
 	for(; out_size; i++) {

@@ -17,13 +17,13 @@
 #define PATT_H
 
 
+#include "../jmlib/jmlib.h"
 #include <wx/wx.h>
 #include <wx/textfile.h>
 #include <wx/hashmap.h>
 #include <wx/url.h>
 #include <wx/protocol/http.h>
 #include <wx/wfstream.h>
-#include "../jmlib/jmlib.h"
 
 #define DEFAULT_PATTERNFILE "patterns.jm"
 #define WEB_PREFIX "http://icculus.org/jugglemaster/"

@@ -1,0 +1,43 @@
+Application/Coding thanks go to:
+
+Ken Matsuoka
+  Original [dos-based] Jugglemaster
+
+Per Johan Groland (http://me.jugglemaster.net/)
+  C++/PalmOS/WinCE port
+  Supplying me with source I worked from
+
+Barton Chittenden (http://members.iglou.com/tiger/)
+  Coming up with JMPatt [random styles] in the first place
+  Providing basic pseudocode/algorithm
+
+Paul Norton (http://icculus.org/~luap)
+  Lots of general support
+  Fixed MPEG colors
+
+Tim Gradwell (http://myweb.tiscali.co.uk/timgradwell/)
+  All sorts of windows help
+
+Scotch Tom (http://www.livejournal.com/users/beelsebob/)
+  The OSX icon
+  Great advice on OSX best practices and other OSX stuff
+  Generally being annoying and Scotch.
+
+SRE (http://www.simonellistonball.com)
+  .dmg.sit help
+
+Arkanes from #wxwidgets [who wanted nothing more than his handle here]
+  Masses of Windows and wxWidgets support and patches
+
+
+Patterns:
+
+Ken Matsuoka
+Per Johan Groland, http://me.jugglemaster.net/
+JAG, http://www.bogleg.com/
+Isaac Orr, http://www.juggler.net/orr/
+Chunky Kibbles, http://icculus.org/~chunky/
+Toshiyuki Mori, http://www.egroups.co.jp/files/patio-ml/en/jugglemaster.html
+Paul Norton, http://icculus.org/~luap
+Scotch Tom, http://www.livejournal.com/users/beelsebob/
+Tim Andrews, http://ttbomb12.tripod.com

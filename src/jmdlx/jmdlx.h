@@ -31,6 +31,8 @@
 class JMFrame;
 class JMTimer;
 
+#define NUMBALLCOLORS 8
+
 class JMCanvas : public wxScrolledWindow {
 public:
   JMCanvas(JMFrame* parent, JMLib *j);
@@ -39,11 +41,12 @@ public:
   void OnEraseBackground(wxEraseEvent& event);
   void OnSize(wxSizeEvent &event);
 private:
+  JMFrame* parent;
   JMLib* jmlib;
+  wxBrush* ball_colors[NUMBALLCOLORS];
 
   DECLARE_EVENT_TABLE()
 };
-
 
 class JMFrame : public wxFrame {
 public:
@@ -54,15 +57,15 @@ public:
   void setStyle(wxString *);
   void unPause();
 
+  wxMenu* optionsMenu;
+  wxMenu* fileMenu;
+  wxMenu* speedMenu;
+  wxMenu* helpMenu;
 
 private:
   JMLib* jmlib;
   JMCanvas* canvas;
   JMTimer* timer;
-  wxMenu* fileMenu;
-  wxMenu* optionsMenu;
-  wxMenu* speedMenu;
-  wxMenu* helpMenu;
   PatternLoader *patterns;
   PatternLoader *semaphores;
   JML_INT32 current_speed;

@@ -83,6 +83,7 @@ enum {
 	OPTION_MIRROR,
 	OPTION_REDOWNLOAD,
 	OPTION_PAUSE,
+	OPTION_COLORBALLS,
 	SPEED_UP,
 	SPEED_DOWN,
 	SPEED_RESET
@@ -130,6 +131,7 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 
   optionsMenu->AppendCheckItem(OPTION_MIRROR, "&Mirror");
   optionsMenu->AppendCheckItem(OPTION_PAUSE, "&Pause");
+  optionsMenu->AppendCheckItem(OPTION_COLORBALLS, "&Color Balls");
   optionsMenu->Append(OPTION_REDOWNLOAD, "Re&Download Patterns");
 
   speedMenu->Append(SPEED_UP,"&Up");
@@ -297,11 +299,20 @@ BEGIN_EVENT_TABLE(JMCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
 
-JMCanvas::JMCanvas(JMFrame *parent, JMLib *j) : 
-  wxScrolledWindow( parent, -1, wxDefaultPosition, wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE ) {
+JMCanvas::JMCanvas(JMFrame *p, JMLib *j) : 
+  wxScrolledWindow( p, -1, wxDefaultPosition,
+		wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE ) {
 	jmlib = j;
+	parent = p;
+	ball_colors[0] = wxRED_BRUSH;
+	ball_colors[1] = wxGREEN_BRUSH;
+	ball_colors[2] = wxBLUE_BRUSH;
+	ball_colors[3] = wxWHITE_BRUSH;
+	ball_colors[4] = wxBLACK_BRUSH;
+	ball_colors[5] = wxCYAN_BRUSH;
+	ball_colors[6] = wxGREY_BRUSH;
+	ball_colors[7] = wxLIGHT_GREY_BRUSH;
 }
-
 
 wxBitmap* backBuffer = NULL;
 void JMCanvas::OnPaint(wxPaintEvent &event) {
@@ -349,8 +360,11 @@ void JMCanvas::OnPaint(wxPaintEvent &event) {
   dc.SetBrush(*wxRED_BRUSH);
 
   // draw balls
+  int diam = (11*jmlib->dpm/DW)*2;
   for(i=jmlib->balln-1;i>=0;i--) {
-    int diam = (11*jmlib->dpm/DW)*2;
+    if(parent->optionsMenu->IsChecked(OPTION_COLORBALLS)) {
+	dc.SetBrush(*ball_colors[i%NUMBALLCOLORS]);
+    }
 
     dc.DrawEllipse(jmlib->b[i].gx, jmlib->b[i].gy, diam, diam);
   }

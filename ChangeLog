@@ -1,4 +1,6 @@
 Version 0.5
+ - docs: Added how random patterns are created
+ - docs: Added how siteswaps are validated
  - jmdlx: Added Random Pattern support
  - jmdlx: Added flipbook export
  - Makefile: added jmlib target

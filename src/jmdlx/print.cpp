@@ -51,7 +51,7 @@ Print::Print(wxWindow *parent, JMLib *j)
   // Output Type
 	wxBoxSizer *typesizer = new wxBoxSizer(wxHORIZONTAL);
 	output_type = new wxChoice(this,-1);
-	// output_type->Append("Image");
+	output_type->Append("Image");
 	output_type->Append("PostScript");
 	output_type->SetStringSelection("PostScript");
 
@@ -171,18 +171,9 @@ void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 			delete outputfile;
 			return;
 		}
+		wxRemoveFile(filename->GetValue());
 	}
-	outputfile = fopen((const char *)filename->GetValue(),"w");
-	if(outputfile == NULL) {
-		message = new wxMessageDialog(this,
-			"Can't open file!",
-			"Error",
-			wxOK|wxICON_EXCLAMATION);
-		message->ShowModal();
-		delete outputfile;
-		return;
-	}
-		
+
 
 	if (oldheight != output_width->GetValue() ||
 		oldwidth != output_height->GetValue()) do_change=1;
@@ -209,7 +200,6 @@ void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	}
 #endif
 
-	fclose(outputfile);
 	if(print_success != 0) {
 		wxMessageDialog message(this,
 				"Printing Aborted!", "Aborted",
@@ -217,7 +207,6 @@ void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 		message.ShowModal();
 		wxRemoveFile(filename->GetValue());
 	}
-
 
 	if(do_change) {
 		jmlib->setWindowSize(oldwidth, 
@@ -231,33 +220,63 @@ void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	EndModal(wxID_OK);
 }
 
+WX_DECLARE_LIST(wxImageHandler, HandlerList);
+#include <wx/listimpl.cpp>
+WX_DEFINE_LIST(HandlerList);
+
+
 int Print::printImage() {
-	wxChoice formatchoice( this, -1 );
+	wxDialog formatchooser(this, -1, "Choose Format",
+			wxDefaultPosition, wxDefaultSize,
+			wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
+
+	wxChoice *formatchoice = new wxChoice( &formatchooser, -1 );
 	
 	wxInitAllImageHandlers();
+
+	wxImageHandler* handler;
+	HandlerList& handlers = (HandlerList&)wxImage::GetHandlers();
+	// wxList handlers = wxImage::GetHandlers();
+	// ArrayOfIH handlers = (ArrayOfIH&)wxImage::GetHandlers();
+	HandlerList::Node *node = handlers.GetFirst();
+	while(node) {
+		handler = (wxImageHandler *)node->GetData();
+		if(handler->GetExtension().Len() > 0) {
+			formatchoice->Append(handler->GetExtension(), (void *)handler);
+		}
+		node = node->GetNext();
+	}
+
+	int png_pos = formatchoice->FindString("png");
+	if(-1 != png_pos) formatchoice->SetSelection(png_pos);
+	else formatchoice->SetSelection(0);
+
+
+	wxButton *ok = new wxButton(&formatchooser, wxID_OK, "OK");
+	wxButton *cancel = new wxButton(&formatchooser, wxID_CANCEL, "Cancel");
+	wxBoxSizer *buttonsizer = new wxBoxSizer(wxHORIZONTAL);
+	buttonsizer->Add(ok, 1, wxALIGN_CENTRE|wxALL, 5);
+	buttonsizer->Add(cancel, 1, wxALIGN_CENTRE|wxALL, 5);
+
+	wxBoxSizer *toplevel = new wxBoxSizer(wxVERTICAL);
+	toplevel->Add(formatchoice,1,wxALIGN_CENTER|wxEXPAND|wxALL,5);
+	toplevel->Add(buttonsizer,0,wxALIGN_CENTER|wxEXPAND|wxALL,5);
+
+	toplevel->Fit( &formatchooser );
+	toplevel->SetSizeHints( &formatchooser );
+
+	formatchooser.SetSizer(toplevel);
+	formatchooser.SetAutoLayout(TRUE);
+	formatchooser.Layout();
+	formatchooser.CentreOnParent();
+	if(formatchooser.ShowModal() != wxID_OK) {
+		return 1;
+	}
 
 	wxBitmap frame(jmlib->getImageWidth(), jmlib->getImageHeight());
 	wxImage image;
 	wxMemoryDC dc;
 
-	wxImageHandler* handler;
-	printf("Trying to get handlers\n");
-	wxList handlers = wxImage::GetHandlers();
-	printf("Got handlers, trying getfirst\n");
-	wxNode *node = handlers.GetFirst();
-	printf("Got first\n");
-	while(node) {
-		printf("Trying getData\n");
-		handler = (wxImageHandler *)node->GetData();
-		printf("Got Data\n");
-		if(handler->GetExtension().Len() > 0) {
-			formatchoice.Append(handler->GetExtension(), (void *)handler);
-			printf("Handler for mime type %s and extension %s found\n", (const char *)handler->GetMimeType(), (const char *)handler->GetExtension());
-		}
-		printf("Trying getNext\n");
-		node = node->GetNext();
-		printf("Got Next - If it hits this, I'll be pissed\n");
-	}
 
 	dc.SelectObject(frame);
 
@@ -265,7 +284,10 @@ int Print::printImage() {
 
 	image = frame.ConvertToImage();
 
-	if(image.SaveFile(filename->GetValue(), 0) == 0) {
+	const wxString type = ((wxImageHandler *)formatchoice->GetClientData(
+			formatchoice->GetSelection()))->GetMimeType();
+
+	if(image.SaveFile(filename->GetValue(), type ) == TRUE) {
 		return 0;
 	}
 	return 1;
@@ -296,6 +318,8 @@ int Print::printPS(void) {
 	ball* lhand = &(jmlib->lhand);
 	hand* handp = &(jmlib->handpoly);
 
+	outputfile = fopen((const char *)filename->GetValue(),"w");
+	if(outputfile == NULL) return 1;
 
 	/* Some PS guff */
 
@@ -445,6 +469,7 @@ int Print::printPS(void) {
 
 	fprintf(outputfile, "} repeat\n");
 
+	fclose(outputfile);
 	return 0;
 
 }
@@ -471,6 +496,9 @@ int Print::printMPEG() {
 
 	int current_frames = 0;
 	int done = 0;
+
+	outputfile = fopen((const char *)filename->GetValue(),"w");
+	if(outputfile == NULL) return 1;
 
 	avcodec_init();
 	avcodec_register_all();
@@ -575,6 +603,7 @@ int Print::printMPEG() {
 	free(c);
 	free(picture);
 
+	fclose(outputfile);
 	return(0);
 
 }

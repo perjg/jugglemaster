@@ -33,5 +33,8 @@ JML_CHAR *jm_rand(JML_INT8 numballs, JML_INT8 pattlen,
 JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,	
 		JML_INT8 transformations);
 
+JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,	
+		JML_INT8 transformations);
+
 
 #endif

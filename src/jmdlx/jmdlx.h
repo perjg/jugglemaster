@@ -52,7 +52,7 @@ private:
 
 class JMFrame : public wxFrame {
 public:
-  JMFrame(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size);
+  JMFrame(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, JMLib *j);
   ~JMFrame();
   void OnClose(wxCommandEvent &);
   void setSiteSwap(wxString *);
@@ -108,6 +108,7 @@ public:
 	int OnExit();
 
 private:
+	JMLib *jmlib;
 	JMFrame* frame;
 };
 

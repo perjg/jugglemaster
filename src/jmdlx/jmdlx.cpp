@@ -26,12 +26,11 @@ bool JMApp::OnInit() {
   windowx = min(480,wxGetDisplaySize().x);
   windowy = min(400,wxGetDisplaySize().y);
 
-	frame = new JMFrame(NULL, -1, "JuggleMaster Deluxe", wxDefaultPosition, wxSize(windowx,windowy));
-
-  // Set the frame as the top window (this ensures that the application is closed
-  // when the frame is closed
-  SetTopWindow(frame);
-
+  jmlib = new JMLib();
+  jmlib->setWindowSize(windowx, windowy);
+  jmlib->setPatternDefault();
+  jmlib->setStyleDefault();
+  jmlib->startJuggle();
 
   wxCmdLineParser cmdline(cmdLineDesc, argc, argv);
   cmdline.SetLogo("JuggleMaster Deluxe");
@@ -47,7 +46,7 @@ bool JMApp::OnInit() {
 	exit(0);
   }
   if(cmdline.Found("style",&initialstyle)) {
-	frame->setStyle(&initialstyle);
+	jmlib->setStyle((JML_CHAR *)(const char *)initialstyle);
   }
   if(cmdline.Found("pattern",&named_pattern)) {
 	/* FIXME */
@@ -60,9 +59,18 @@ bool JMApp::OnInit() {
   if (cmdline.GetParamCount() > 0) {
     initialsiteswap = cmdline.GetParam(0);
     if(!initialsiteswap.IsEmpty()) {
-	    frame->setSiteSwap(&initialsiteswap);
+  		jmlib->setPattern((JML_CHAR *)(const char *)initialsiteswap,
+				(JML_CHAR *)(const char *)initialsiteswap,HR_DEF, DR_DEF);
     }
   }
+
+	frame = new JMFrame(NULL, -1, "JuggleMaster Deluxe",
+		wxDefaultPosition, wxSize(windowx,windowy), jmlib);
+
+  // Set the frame as the top window (this ensures that the application is closed
+  // when the frame is closed
+  SetTopWindow(frame);
+
 	// Show the frame
 	frame->Show(true);
 
@@ -70,6 +78,7 @@ bool JMApp::OnInit() {
 }
 
 int JMApp::OnExit() {
+	delete jmlib;
 	return 0;
 }
 
@@ -112,7 +121,7 @@ BEGIN_EVENT_TABLE(JMFrame, wxFrame)
 END_EVENT_TABLE()
 
 JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
-                       const wxPoint& pos, const wxSize& size) :
+                       const wxPoint& pos, const wxSize& size, JMLib *j) :
                        wxFrame(parent,id,title,pos,size) {
 	SetIcon(wxIcon("IDI_WIZICON"));
 
@@ -154,12 +163,8 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
   SetMenuBar(menuBar);
 
   // Initialize jmlib
-  jmlib = new JMLib();
+  jmlib = j;
   jmlib->setErrorCallback(this, ErrorCallBack);
-  jmlib->setWindowSize((JML_INT32)GetSize().x,(JML_INT32)GetSize().y);
-  jmlib->setPatternDefault();
-  jmlib->setStyleDefault();
-  jmlib->startJuggle();
 
   // The draw canvas
   canvas = new JMCanvas(this, jmlib);
@@ -174,7 +179,6 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 
 JMFrame::~JMFrame() {
   delete timer;
-  delete jmlib;
   delete patterns;
   delete semaphores;
 }
@@ -208,7 +212,8 @@ void JMFrame::changeSiteSwapAdvanced(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void JMFrame::setSiteSwap(wxString *newsite) {
-  jmlib->setPattern("Something",(JML_CHAR *)(const char *)*newsite,HR_DEF, DR_DEF);
+  jmlib->setPattern((JML_CHAR *)(const char *)*newsite,
+		(JML_CHAR *)(const char *)*newsite,HR_DEF, DR_DEF);
 }
 
 void JMFrame::setStyle(wxString *newstyle) {
@@ -228,7 +233,7 @@ void JMFrame::changeSiteSwap(wxCommandEvent& WXUNUSED(event))
   {
 	newpattern = (JML_CHAR *)(const char *)dialog.GetValue();
         jmlib->stopJuggle();
-	jmlib->setPattern("Something",newpattern,HR_DEF, DR_DEF);
+	jmlib->setPattern(newpattern,newpattern,HR_DEF, DR_DEF);
         jmlib->setStyleDefault();
         jmlib->startJuggle();
 	unPause();

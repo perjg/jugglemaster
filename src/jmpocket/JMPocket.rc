@@ -1,0 +1,561 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "newres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\JMPocket.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "res\\Cmdbar.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR DISCARDABLE  16, 16
+BEGIN
+    BUTTON      ID_FILE_SELECTPATT
+    BUTTON      ID_FILE_ENTERSITE
+    BUTTON      ID_EDIT_PREFERENCES
+    BUTTON      ID_EDIT_TOGGLEPAUSE
+    BUTTON      ID_EDIT_SPEEDUP
+    BUTTON      ID_EDIT_SPEEDDOWN
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menubar
+//
+
+IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Enter Siteswap...",           ID_FILE_ENTERSITE
+        MENUITEM "Select Pattern...",           ID_FILE_SELECTPATT
+        MENUITEM SEPARATOR
+        MENUITEM "About JMPocket...",           ID_APP_ABOUT
+        MENUITEM SEPARATOR
+        MENUITEM "Exit",                        ID_APP_EXIT
+    END
+    POPUP "Edit"
+    BEGIN
+        MENUITEM "Paused",                      ID_EDIT_TOGGLEPAUSE, CHECKED
+        MENUITEM "Globall Mode",                ID_EDIT_GLOBALLMODE, CHECKED
+        MENUITEM "View Quick Browser",          ID_EDIT_PATTBROWSER, CHECKED
+        MENUITEM SEPARATOR
+        MENUITEM "Speed Up",                    ID_EDIT_SPEEDUP
+        MENUITEM "Speed Down",                  ID_EDIT_SPEEDDOWN
+        MENUITEM SEPARATOR
+        MENUITEM "Preferences...",              ID_EDIT_PREFERENCES
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Data
+//
+
+IDR_MAINFRAME SHMENUBAR MOVEABLE PURE 
+BEGIN
+    IDR_MAINFRAME, 2,
+    I_IMAGENONE, ID_FILE, TBSTATE_ENABLED, 
+    TBSTYLE_DROPDOWN | TBSTYLE_AUTOSIZE, IDS_CAP_FILE, 0, 0,
+    I_IMAGENONE, IDR_MAIN_EDIT, TBSTATE_ENABLED, 
+    TBSTYLE_DROPDOWN | TBSTYLE_AUTOSIZE, IDS_EDIT, 0, 1,
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "E",            ID_FILE_ENTERSITE,      VIRTKEY, CONTROL, NOINVERT
+    "Q",            ID_APP_EXIT,            VIRTKEY, CONTROL, NOINVERT
+    "R",            ID_EDIT_PREFERENCES,    VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SELECTPATT,     VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 154, 134
+STYLE WS_POPUP | WS_CAPTION
+EXSTYLE 0x80000000L
+CAPTION "About JMPocket"
+FONT 8, "System"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,5,5,20,20
+    LTEXT           "JMPocket",IDC_STATIC,30,6,115,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2002-2004",IDC_STATIC,30,30,107,9
+    LTEXT           "Per Johan Groland",IDC_STATIC,31,43,106,9
+    LTEXT           "JuggleMaster Version 1.60",IDC_STATIC,31,62,106,9
+    LTEXT           "Copyright (C) 1995-1996",IDC_STATIC,32,76,105,9
+    LTEXT           "Ken Matsuoka",IDC_STATIC,31,90,106,9
+    LTEXT           "Version 1.0.3 (25.06.04)",IDC_STATIC,30,18,115,10
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,1,0
+ PRODUCTVERSION 1,0,1,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x21L
+#else
+ FILEFLAGS 0x20L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "JMPocket - JuggleMaster for Pocket PC\0"
+            VALUE "FileVersion", "1.0.3\0"
+            VALUE "InternalName", "JMPocket\0"
+            VALUE "LegalCopyright", "Copyright (C) 2002-2004 Per Johan Groland\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "JMPocket.exe\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "JMPocket\0"
+            VALUE "ProductVersion", "1.0.3\0"
+            VALUE "SpecialBuild", "Release 2\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 147
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 127
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    IDR_MAINFRAME           "JMPocket\n\nJMPocket\n\n\nJMPocket\nJMPocket"
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_CAPS       "CAP"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CAP_FILE            "File"
+    ID_FILE_ENTERSITE       "Enter a new Siteswap\nEnter Siteswap"
+    ID_FILE_SELECTPATT      "Select among built-in patterns\nSelect Pattern"
+    ID_EDIT_GLOBALLMODE     "Toggle Globall mode"
+    ID_EDIT_PREFERENCES     "Preferences"
+    ID_EDIT_TOGGLEPAUSE     "Toggle Pause"
+    ID_EDIT_SITETOOLBAR     "Toggle visibility of the View Siteswap Toolbar"
+    ID_EDIT_PATTBROWSER     "Toggle visibility of the Pattern Browser"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_SPEEDUP         "Increase animation speed\nIncrease speed"
+    ID_EDIT_SPEEDDOWN       "Decrease animation speed\nDecrease speed"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_FILE                "File"
+    IDS_SELECTPATT          "Select Pattern"
+    IDS_ENTERSITE           "Enter Siteswap"
+    IDS_PREFS               "Preferences"
+    IDS_PAUSE               "Toggle Pause"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SPEEDUP             "Speed Up"
+    IDS_SPEEDDOWN           "Speed Down"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_EDIT                "Edit"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Norwegian (Bokmal) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NOR)
+#ifdef _WIN32
+LANGUAGE LANG_NORWEGIAN, SUBLANG_NORWEGIAN_BOKMAL
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ENTERSITE DIALOG DISCARDABLE  0, 0, 142, 119
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enter Siteswap"
+FONT 8, "System"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,33,92,35,14
+    PUSHBUTTON      "Cancel",IDCANCEL,73,92,35,14
+    LTEXT           "Site:",IDC_STATIC,7,20,17,8
+    PUSHBUTTON      "(",IDC_SHORTCUT1,32,39,14,12
+    PUSHBUTTON      ")",IDC_SHORTCUT2,49,39,14,12
+    PUSHBUTTON      "[",IDC_SHORTCUT3,65,39,14,12
+    PUSHBUTTON      "]",IDC_SHORTCUT4,81,39,14,12
+    PUSHBUTTON      ",",IDC_SHORTCUT5,97,39,14,12
+    PUSHBUTTON      "x",IDC_SHORTCUT6,113,39,14,12
+    LTEXT           "Style:",IDC_STATIC,7,58,21,10
+    COMBOBOX        IDC_STYLE,29,57,102,70,CBS_DROPDOWNLIST | 
+                    CBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "DR:",IDC_STATIC,7,77,13,8
+    EDITTEXT        IDC_DR,22,75,28,12,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_SPIN_DR,"msctls_updown32",UDS_ALIGNRIGHT | 
+                    UDS_AUTOBUDDY | UDS_ARROWKEYS,49,75,12,12
+    LTEXT           "HR:",IDC_STATIC,75,76,12,8
+    EDITTEXT        IDC_HR,90,75,28,12,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_SPIN_HR,"msctls_updown32",UDS_ALIGNRIGHT | 
+                    UDS_AUTOBUDDY | UDS_ARROWKEYS,117,75,12,12
+    COMBOBOX        IDC_SITE,26,21,102,100,CBS_DROPDOWN | CBS_AUTOHSCROLL | 
+                    WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_SELECTPATT DIALOG DISCARDABLE  0, 0, 145, 153
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Select Pattern"
+FONT 8, "System"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,35,124,38,14
+    PUSHBUTTON      "Cancel",IDCANCEL,77,124,37,14
+    LTEXT           "Category:",IDC_STATIC,7,19,34,10
+    COMBOBOX        IDC_CATEGORY,41,19,92,100,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LISTBOX         IDC_PATTERN,7,41,126,77,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Patterns:",IDC_STATIC,7,32,42,9
+END
+
+IDD_PROP_GENERAL DIALOG DISCARDABLE  0, 0, 139, 157
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "General"
+FONT 8, "System"
+BEGIN
+    EDITTEXT        IDC_SPEED,36,88,36,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN_SPEED,"msctls_updown32",UDS_ALIGNRIGHT | 
+                    UDS_AUTOBUDDY | UDS_ARROWKEYS,71,88,11,12
+    DEFPUSHBUTTON   "OK",IDOK,53,118,34,14
+    PUSHBUTTON      "Cancel",IDCANCEL,91,118,33,14
+    CONTROL         "Mirror Pattern",IDC_MIRROR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,23,102,12
+    CONTROL         "Globall Mode (Hide Juggler)",IDC_GLOBALL,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,35,102,11
+    CONTROL         "Beep on Throw",IDC_BEEP,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,47,104,9
+    CONTROL         "Show Quick Browser Toolbar",IDC_SHOWBROWSER,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,59,104,11
+    LTEXT           "Speed:",IDC_STATIC,7,89,26,11
+    CONTROL         "Color Codes in Enter Siteswap",IDC_COLORCODES,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,70,111,14
+    PUSHBUTTON      "Apply",IDAPPLY,15,118,34,14
+END
+
+IDD_PROP_COLOR DIALOG DISCARDABLE  0, 0, 139, 158
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Colors"
+FONT 8, "System"
+BEGIN
+    LTEXT           "1",IDC_STATIC,14,35,10,11
+    LTEXT           "2",IDC_STATIC,14,50,10,11
+    LTEXT           "3",IDC_STATIC,14,65,10,11
+    LTEXT           "4",IDC_STATIC,14,80,10,11
+    LTEXT           "5",IDC_STATIC,14,95,10,11
+    PUSHBUTTON      "",IDC_BALLCOLOR01,25,34,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR02,25,48,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR03,25,63,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR04,25,78,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR05,25,93,18,12
+    LTEXT           "6",IDC_STATIC,53,34,10,11
+    LTEXT           "7",IDC_STATIC,53,49,10,11
+    LTEXT           "8",IDC_STATIC,53,63,10,11
+    LTEXT           "9",IDC_STATIC,53,79,10,11
+    LTEXT           "10",IDC_STATIC,53,94,11,11
+    PUSHBUTTON      "",IDC_BALLCOLOR06,65,33,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR07,65,47,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR08,65,62,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR09,65,76,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR10,65,92,18,12
+    PUSHBUTTON      "",IDC_JUGGLERCOLOR,102,35,24,12
+    PUSHBUTTON      "Reset",IDC_RESET,95,100,32,13
+    GROUPBOX        "Ball colors",IDC_STATIC,7,23,81,88
+    GROUPBOX        "Juggler",IDC_STATIC,96,23,36,33
+    DEFPUSHBUTTON   "OK",IDOK,53,118,34,14
+    PUSHBUTTON      "Cancel",IDCANCEL,91,118,33,14
+    PUSHBUTTON      "Apply",IDAPPLY,15,118,34,14
+    PUSHBUTTON      "",IDC_BGCOLOR,101,73,24,12
+    GROUPBOX        "Background",IDC_STATIC,95,60,36,33
+END
+
+IDD_COLORCHOOSER DIALOG DISCARDABLE  0, 0, 117, 106
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Choose Color"
+FONT 8, "System"
+BEGIN
+    EDITTEXT        IDC_RED,32,19,26,12,ES_NUMBER
+    CONTROL         "Spin1",IDC_SPIN_RED,"msctls_updown32",UDS_ALIGNRIGHT | 
+                    UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,58,19,11,
+                    12
+    EDITTEXT        IDC_GREEN,32,35,26,12,ES_NUMBER
+    CONTROL         "Spin1",IDC_SPIN_GREEN,"msctls_updown32",UDS_ALIGNRIGHT | 
+                    UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,58,35,11,
+                    12
+    EDITTEXT        IDC_BLUE,32,51,26,12,ES_NUMBER
+    CONTROL         "Spin1",IDC_SPIN_BLUE,"msctls_updown32",UDS_ALIGNRIGHT | 
+                    UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,58,51,11,
+                    12
+    DEFPUSHBUTTON   "OK",IDOK,21,70,36,14
+    PUSHBUTTON      "Cancel",IDCANCEL,61,70,35,14
+    LTEXT           "Red:",IDC_STATIC,7,19,18,9
+    LTEXT           "Green:",IDC_STATIC,7,36,23,8
+    LTEXT           "Blue:",IDC_STATIC,7,52,19,8
+END
+
+IDD_QUICKBROWSER DIALOG DISCARDABLE  0, 0, 139, 21
+STYLE WS_CHILD
+FONT 8, "System"
+BEGIN
+    LTEXT           "Category:",IDC_STATIC,1,2,34,9
+    LTEXT           "Pattern:",IDC_STATIC,2,11,28,8
+    CONTROL         "Spin1",IDC_SPIN_CATEGORY,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HORZ,121,1,16,9
+    CONTROL         "Spin1",IDC_SPIN_PATTERN,"msctls_updown32",UDS_ARROWKEYS | 
+                    UDS_HORZ,121,11,16,9
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ENTERSITE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 135
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 111
+    END
+
+    IDD_SELECTPATT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 138
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 146
+    END
+
+    IDD_PROP_GENERAL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 132
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 150
+    END
+
+    IDD_PROP_COLOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 132
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 151
+    END
+
+    IDD_COLORCHOOSER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 110
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 99
+    END
+
+    IDD_QUICKBROWSER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 132
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 14
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""newres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\JMPocket.rc2""  // non-Microsoft eMbedded Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#include ""wceres.rc""         // WCE-specific components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Norwegian (Bokmal) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\JMPocket.rc2"  // non-Microsoft eMbedded Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#include "wceres.rc"         // WCE-specific components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

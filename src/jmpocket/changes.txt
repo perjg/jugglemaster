@@ -1,0 +1,18 @@
+changes.txt
+
+This file contains a list of changes in each version of JMPocket.
+The newest version is listed first.
+
+** 1.0.3 (25.06.04)
+
+- Updated code to work with newest jmlib
+- Changed the license to GPL
+- Added the styles Windmill and Random
+- Fixed pattern file loading bug
+- Updated the pattern library to the newest
+- Updated my name from Per Johan Persson to Per Johan Groland
+  (I changed my name some time ago :)
+
+** 1.0.2 (01.09.02)
+
+- Initial release

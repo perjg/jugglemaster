@@ -1,0 +1,124 @@
+//{{NO_DEPENDENCIES}}
+// Microsoft Developer Studio generated include file.
+// Used by JMPocket.rc
+//
+#define IDCANCEL2                       4
+#define IDD_ABOUTBOX                    100
+#define IDS_EDIT                        102
+#define IDS_TOOL                        103
+#define IDM_MENU                        104
+#define IDR_MAIN_EDIT                   105
+#define IDR_MAIN_TOOL                   106
+#define IDR_MAINFRAME                   128
+#define IDD_ENTERSITE                   130
+#define IDD_SELECTPATT                  131
+#define IDD_PROP_GENERAL                133
+#define IDD_PROP_COLOR                  134
+#define IDD_COLORCHOOSER                135
+#define IDD_QUICKBROWSER                136
+#define IDC_BUTTON1                     1001
+#define IDC_SHORTCUT1                   1001
+#define IDC_JUGGLERCOLOR                1001
+#define IDC_BUTTON2                     1002
+#define IDC_SHORTCUT2                   1002
+#define IDC_BALLCOLOR01                 1002
+#define IDC_BUTTON3                     1003
+#define IDC_SHORTCUT3                   1003
+#define IDC_BALLCOLOR02                 1003
+#define IDC_BUTTON4                     1004
+#define IDC_SHORTCUT4                   1004
+#define IDC_BALLCOLOR03                 1004
+#define IDC_BUTTON5                     1005
+#define IDC_SHORTCUT5                   1005
+#define IDC_BALLCOLOR04                 1005
+#define IDC_BUTTON6                     1006
+#define IDC_SHORTCUT6                   1006
+#define IDC_BALLCOLOR05                 1006
+#define IDC_BUTTON7                     1007
+#define IDC_BALLCOLOR06                 1007
+#define IDC_COMBO1                      1008
+#define IDC_CATEGORY                    1008
+#define IDC_BUTTON8                     1008
+#define IDC_BALLCOLOR07                 1008
+#define IDC_EDIT3                       1009
+#define IDC_DR                          1009
+#define IDC_BUTTON9                     1009
+#define IDC_BALLCOLOR08                 1009
+#define IDC_SPIN1                       1010
+#define IDC_SPIN_DR                     1010
+#define IDC_SPIN_SPEED                  1010
+#define IDC_BUTTON10                    1010
+#define IDC_SPIN_CATEGORY               1010
+#define IDC_BALLCOLOR09                 1010
+#define IDC_EDIT4                       1011
+#define IDC_LIST1                       1011
+#define IDC_HR                          1011
+#define IDC_PATTERN                     1011
+#define IDC_BUTTON11                    1011
+#define IDC_SPIN_PATTERN                1011
+#define IDC_BALLCOLOR10                 1011
+#define IDC_SPIN2                       1012
+#define IDC_SPIN_HR                     1012
+#define IDC_BGCOLOR                     1012
+#define IDC_EDIT1                       1014
+#define IDC_SPEED                       1014
+#define IDC_RED                         1014
+#define IDC_GREEN                       1015
+#define IDC_BLUE                        1016
+#define IDC_CHECK1                      1018
+#define IDC_MIRROR                      1018
+#define IDC_CHECK2                      1019
+#define IDC_COMBO2                      1019
+#define IDC_SITE                        1019
+#define IDC_GLOBALL                     1019
+#define IDC_CHECK3                      1020
+#define IDC_STYLE                       1020
+#define IDC_BEEP                        1020
+#define IDC_CHECK4                      1021
+#define IDC_LIST2                       1021
+#define IDC_SHOWSITE                    1021
+#define IDC_CHECK5                      1022
+#define IDC_SHOWBROWSER                 1022
+#define IDC_RESET                       1024
+#define IDC_CHECK6                      1025
+#define IDC_COLORCODES                  1025
+#define IDAPPLY                         1026
+#define IDC_SPIN_RED                    1027
+#define IDC_SPIN_GREEN                  1028
+#define IDC_SPIN_BLUE                   1029
+#define ID_FILE                         32771
+#define IDS_CAP_FILE                    32773
+#define ID_FILE_ENTERSITE               32774
+#define ID_FILE_SELECTPATT              32775
+#define ID_EDIT_GLOBALLMODE             32776
+#define ID_EDIT_PREFERENCES             32777
+#define ID_EDIT_TOGGLEPAUSE             32778
+#define ID_EDIT_SITETOOLBAR             32779
+#define ID_EDIT_PATTBROWSER             32780
+#define ID_EDIT_SPEEDUP                 32787
+#define ID_EDIT_SPEEDDOWN               32788
+#define IDS_NEW                         65000
+#define IDS_FILE                        65001
+#define IDS_MHELP                       65002
+#define IDS_SAVE                        65003
+#define IDS_CUT                         65004
+#define IDS_SELECTPATT                  65004
+#define IDS_COPY                        65005
+#define IDS_ENTERSITE                   65005
+#define IDS_PASTE                       65006
+#define IDS_PREFS                       65006
+#define IDS_ABOUT                       65007
+#define IDS_PAUSE                       65007
+#define IDS_SPEEDUP                     65008
+#define IDS_SPEEDDOWN                   65009
+
+// Next default values for new objects
+// 
+#ifdef APSTUDIO_INVOKED
+#ifndef APSTUDIO_READONLY_SYMBOLS
+#define _APS_NEXT_RESOURCE_VALUE        137
+#define _APS_NEXT_COMMAND_VALUE         32789
+#define _APS_NEXT_CONTROL_VALUE         1028
+#define _APS_NEXT_SYMED_VALUE           101
+#endif
+#endif

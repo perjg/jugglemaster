@@ -1,5 +1,6 @@
 Version 0.5
  - aajm: Random patterns
+ - aajm: OSX Fixes [aalib is in fink]
  - jmlib: Added random pattern generation
  - jmlib: Added authors to patterns
  - data: Added more patterns

@@ -16,6 +16,7 @@
 #ifndef AAJM_REMOTE_H
 #define AAJM_REMOTE_H
 
+#include "../jmlib/jmlib.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -28,7 +29,6 @@
 #include <netdb.h>
 #include <getopt.h>
 #include "./aajm_common.h"
-#include "../jmlib/jmlib.h"
 
 int do_command(int port, char *host, char *command, char *data);
 

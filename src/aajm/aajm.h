@@ -16,6 +16,7 @@
 #ifndef AAJM_H
 #define AAJM_H
 
+#include "../jmlib/jmlib.h"
 #include <aalib.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -29,15 +30,13 @@
 #include <netdb.h>
 #include <fcntl.h>
 #include <getopt.h>
-#include <malloc.h>
-#include "../jmlib/jmlib.h"
 #include "./aajm_common.h"
 #include "./aa_drawline.h"
 #include "./aa_drawcircle.h"
 #include "./aampeg.h"
 
 
-struct loadavg {
+struct aajm_loadavg {
 	float one, five, fifteen;
 };
 
@@ -48,7 +47,7 @@ struct loadavg {
 
 void errorCB(char* msg);
 void draw_juggler(int show_loadavg, aa_context *c, JMLib *j);
-void loadaverage(struct loadavg *load);
+void loadaverage(struct aajm_loadavg *load);
 int startlistening(int port);
 void stoplistening(int fd);
 void resizehandler(aa_context *resized_context);

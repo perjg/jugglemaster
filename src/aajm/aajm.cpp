@@ -28,7 +28,7 @@ void errorCB(char* msg) {
 void draw_juggler(int show_loadavg, aa_context *c, JMLib *j) {
 	int color;
 	int i;
-	struct loadavg load;
+	struct aajm_loadavg load;
 
 	arm* ap = &(j->ap);
 	ball* rhand = &(j->rhand);
@@ -105,7 +105,7 @@ void draw_juggler(int show_loadavg, aa_context *c, JMLib *j) {
      runnable number of process at any given moment in time.
    If load average is greater than your number of processors, then your
      system has more work to do than it's capable of doing. */
-void loadaverage(struct loadavg *load) {
+void loadaverage(struct aajm_loadavg *load) {
 	FILE *loadf;
 
 	loadf = fopen("/proc/loadavg", "r");
@@ -160,7 +160,7 @@ void resizehandler(aa_context *resized_context) {
 void main_loop(int max_iterations, int delay,
 		int loadavg_flag, int normal_load, int socket_fd) {
 	struct timeval starttime, endtime, selecttime;
-	struct loadavg load;
+	struct aajm_loadavg load;
 	long speed = DEFSPEED; /* microseconds between frames */
 	long load_speed = 0; /* Speed adjustment, based on load */
 	int loop_forever = 0;

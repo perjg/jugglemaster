@@ -83,7 +83,7 @@ Print::Print(wxWindow *parent, JMLib *j)
 				wxDefaultPosition,
 				wxDefaultSize,
 				wxSP_ARROW_KEYS,
-				5,
+				1,
 				1000,
 				30);
 
@@ -176,7 +176,7 @@ void Print::OnOK(wxCommandEvent &event) {
 			output_height->GetValue());
 
 		/* Just make sure it clears out any guff */
-		for (i=0; i<200; i++) jmlib->doJuggle();
+		for (i=0; i<400; i++) jmlib->doJuggle();
 	}
 
 	if (output_type->GetStringSelection() == "PostScript") {

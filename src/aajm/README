@@ -1,0 +1,17 @@
+AAJM README
+
+
+Uhm, Right. If you haven't worked out what this is from the name, you
+should seriously consider that it may not be of any interest to you.
+
+
+Run it. Purty. Other things that may or may not work include:
+AAOPTS="-driver slang -width 240 -height 150" \
+	xterm -fn micro -geometry 240x150 -e ./aajm -s 7
+
+
+This fella: http://homepage.smc.edu/kennedy_john/
+and Abrash supplied the algorithms for the aa_ series of files here.
+
+Gary (-;
+<chunky@icculus.org>

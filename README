@@ -60,6 +60,11 @@ you run it, it attempts to download them to a suitable directory (on
 unices including OSX, this is $HOME/.jugglemaster. On windows, it's in
 your user's Documents and Settings, to a dir called ".jugglemaster")
 
+There are some extra features in jmdlx that aren't enabled by default
+[eg mpeg videos, since they need ffmpeg]. To enable them, please see
+the Makefile in the jmdlx directory.
+
+
 JMPocket
 
 To build JMPocket you need Microsoft eMbedded Visual Tools 3.0 2002
@@ -73,6 +78,7 @@ src/jmpocket/JMPocket.vcw
 
 JMPocket expects to find the pattern libary in My Documents, and it
 must be named either patt_e.jm or patterns.jm.
+
 
 AAJM
 

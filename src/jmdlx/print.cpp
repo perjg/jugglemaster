@@ -274,6 +274,7 @@ int Print::printImage() {
 		/* Don't append if wx doesn't support writing */
 		if(extn.Len() > 0 &&
 			extn != "iff" &&
+			extn != "ico" &&
 			extn != "gif" &&
 			extn != "ani" ) {
 			formatchoice->Append(handler->GetExtension(), (void *)handler);

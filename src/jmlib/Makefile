@@ -1,4 +1,4 @@
-CXXFLAGS=-Wall -pedantic -Werror -ansi -fsigned-char
+CXXFLAGS=-g -Wall -pedantic -Werror -fsigned-char
 LIBS+=-lm -ldl
 
 ifeq ($(DEBUG), 1)
@@ -13,11 +13,11 @@ all: $(OBJ)
 
 patterns:
 	rm -f patterns.o
-	$(CC) -DPATTERNS_STANDALONE -c -o ./patterns.o ./patterns.cpp
-	$(CXX) $(LDFLAGS) -o ./patterns $(CFLAGS) ./patterns.o $(LIBS)
+	$(CXX) $(CXXFLAGS) -DPATTERNS_STANDALONE -c -o ./patterns.o ./patterns.cpp
+	$(CXX) $(LDFLAGS) -o ./patterns ./patterns.o $(LIBS)
 
 clean:
 	rm -f *.o core jmlib.a patterns
 
 p: clean patterns
-	./patterns ../../data/patterns.jm
+	./patterns -q ../../data/patterns.jm

@@ -17,7 +17,9 @@
 #include <stdio.h>
 //#include <math.h>
 #include <string.h>
-//#include <time.h>
+#include <time.h>
+#include <malloc.h>
+#include <stdlib.h>
 
 #include "jmlib_types.h"
 #include "util.h"
@@ -152,6 +154,8 @@ class JMLib {
   JML_CHAR pattname[LMAX]; // The name of the current pattern
   JML_CHAR stylename[JML_MAX_NAMELEN]; // The name of the current style
   JML_INT8 steps[LMAX]; // used to print the site on screen
+  JML_CHAR **possible_styles; // Contains list of all possible styles
+  JML_INT32 num_possible_styles; // Number of possible styles
 
   void (*mCallback)(void *, JML_CHAR *);
   void *mUData;
@@ -190,6 +194,8 @@ class JMLib {
   JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
   JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0);
   JML_BOOL setStyle(JML_CHAR* name);
+  JML_CHAR **getStyles(void);
+  JML_INT32 numStyles();
   void setPatternDefault(void);
   void setStyleDefault(void);
 

@@ -33,6 +33,24 @@ JMLib::~JMLib() {
 }
 
 void JMLib::initialize(void) {
+  JML_CHAR *possible_styles_list[] = {
+	"Normal",
+	"Reverse",
+	"Shower",
+	"Mills Mess",
+	"Center",
+	"Windmill",
+	"Random" };
+
+  int i;
+
+  num_possible_styles = (int)(sizeof(possible_styles_list)/sizeof(possible_styles_list[0]));
+  possible_styles = (JML_CHAR **)malloc((size_t)num_possible_styles*sizeof(JML_CHAR *));
+  for(i=0;i<num_possible_styles;i++) {
+	possible_styles[i]=(JML_CHAR *)malloc(strlen(possible_styles_list[i]));
+	strncpy(possible_styles[i],possible_styles_list[i],strlen(possible_styles_list[i])+1);
+  }
+
   // Set default values
   ga = 9.8F;
   dwell_ratio = 0.5F;
@@ -50,6 +68,7 @@ void JMLib::initialize(void) {
   
   status = ST_NONE;
   
+  srand(time(NULL));
   if (styledata == NULL)
     styledata = new JML_CHAR[STYLEMAX*4];
   
@@ -222,6 +241,8 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name, JML_UINT8 length,
 }
 
 JML_BOOL JMLib::setStyle(JML_CHAR* name) {
+/* After adding a style here, also add to possible_styles_list at line 36 */
+
   if (strcmp(name, "Reverse") == 0 || strcmp(name, "reverse") == 0) {
     JML_INT8 style[] = { 4, 0, 13, 0 };
     setStyle("Reverse", 1, style);
@@ -242,10 +263,29 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name) {
     JML_INT8 style[] = { 10, 0, -8, 0, -8, 0, 10, 0 };
     setStyle("Windmill", 2, style);
   }
+  else if (strcmp(name, "Random") == 0 || strcmp(name, "random") == 0) {
+    int i;
+    JML_INT8 *style;
+    style = (JML_INT8 *)malloc((size_t)(sizeof(JML_INT8)*4*strlen(getSite())));
+    for(i=0;i<(int)strlen(getSite())*4;i+=2) {
+        style[i] = (rand()%30)-15;
+	style[i+1] = (rand()%10);
+    }
+    setStyle("Random", strlen(getSite()), style);
+    startJuggle();
+  }
   else { // anything else is interpreted as "Normal"
     setStyleDefault();
   }
   return true;
+}
+
+JML_CHAR **JMLib::getStyles(void) {
+  return possible_styles;
+}
+
+JML_INT32 JMLib::numStyles(void) {
+  return num_possible_styles;
 }
 
 void JMLib::setPatternDefault(void) {

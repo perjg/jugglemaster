@@ -42,4 +42,27 @@ protected:
   DECLARE_EVENT_TABLE()
 };
 
+class RandomSiteSwap : public wxDialog {
+public:
+  RandomSiteSwap(wxWindow* parent, JMLib* j);
+
+protected:
+  void OnApply(wxCommandEvent &event);
+  void ApplySettings();
+  void OnOK(wxCommandEvent &event);
+  void OnRandom(wxCommandEvent &event);
+  void OnCreate(wxCommandEvent &event);
+  JMLib* jmlib;
+
+  wxTextCtrl *newsiteswap;
+
+  wxSpinCtrl *numballs;
+  wxSpinCtrl *pattlen;
+  wxSpinCtrl *mutations;
+  wxSpinCtrl *multiplex;
+  wxCheckBox *synchronous;
+
+  DECLARE_EVENT_TABLE()
+};
+
 #endif

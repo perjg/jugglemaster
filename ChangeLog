@@ -1,4 +1,5 @@
 Version 0.5
+ - jmdlx: Added Random Pattern support
  - jmdlx: Added flipbook export
  - Makefile: added jmlib target
  - aajm: Random patterns

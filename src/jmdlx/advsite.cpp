@@ -15,6 +15,11 @@
 
 #include "advsite.h"
 
+enum {
+	RANDOM_BUTTON,
+	CREATE_BUTTON
+};
+
 
 BEGIN_EVENT_TABLE(AdvancedSiteSwap, wxDialog)
 	EVT_BUTTON(wxID_APPLY, AdvancedSiteSwap::OnApply)
@@ -171,3 +176,129 @@ void AdvancedSiteSwap::SpinnerChange(wxSpinEvent &WXUNUSED(event)) {
 }
 
 
+BEGIN_EVENT_TABLE(RandomSiteSwap, wxDialog)
+	EVT_BUTTON(wxID_APPLY, RandomSiteSwap::OnApply)
+	EVT_BUTTON(wxID_OK, RandomSiteSwap::OnOK)
+	EVT_BUTTON(RANDOM_BUTTON, RandomSiteSwap::OnRandom)
+	EVT_BUTTON(CREATE_BUTTON, RandomSiteSwap::OnCreate)
+END_EVENT_TABLE()
+
+RandomSiteSwap::RandomSiteSwap(wxWindow *p, JMLib *j)
+	: wxDialog(p, -1, "Random SiteSwap",
+			wxDefaultPosition, wxDefaultSize,
+			wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER) {
+
+  jmlib = j;
+
+  newsiteswap = new wxTextCtrl(this,-1,jmlib->getSite(),
+	wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+
+  numballs = new wxSpinCtrl(this, -1,
+    wxString::Format(_T("%d"), 5),
+    wxDefaultPosition, wxDefaultSize,
+    wxSP_ARROW_KEYS,
+    1, 35, 5);
+  pattlen = new wxSpinCtrl(this, -1,
+    wxString::Format(_T("%d"), 5),
+    wxDefaultPosition, wxDefaultSize,
+    wxSP_ARROW_KEYS,
+    1, 35, 5);
+  mutations = new wxSpinCtrl(this, -1,
+    wxString::Format(_T("%d"), 5),
+    wxDefaultPosition, wxDefaultSize,
+    wxSP_ARROW_KEYS,
+    1, 35, 5);
+  multiplex = new wxSpinCtrl(this, -1,
+    wxString::Format(_T("%d"), 0),
+    wxDefaultPosition, wxDefaultSize,
+    wxSP_ARROW_KEYS,
+    0, 5, 0);
+  synchronous = new wxCheckBox(this, -1, wxEmptyString);
+  synchronous->SetValue(false);
+
+  wxFlexGridSizer *settings = new wxFlexGridSizer(2,5,5);
+
+  settings->Add(new wxStaticText(this, 0, "Num Balls"),
+				1, wxALIGN_CENTRE|wxALL, 5);
+  settings->Add(numballs,
+		1, wxALIGN_CENTRE|wxALL|wxEXPAND, 5);
+  settings->Add(new wxStaticText(this, 0, "Pattern Length"),
+				1, wxALIGN_CENTRE|wxALL, 5);
+  settings->Add(pattlen,
+		1, wxALIGN_CENTRE|wxALL|wxEXPAND, 5);
+  settings->Add(new wxStaticText(this, 0, "Permutations"),
+				1, wxALIGN_CENTRE|wxALL, 5);
+  settings->Add(mutations,
+		1, wxALIGN_CENTRE|wxALL|wxEXPAND, 5);
+  settings->Add(new wxStaticText(this, 0, "Max Multiplex Throws"),
+				1, wxALIGN_CENTRE|wxALL, 5);
+  settings->Add(multiplex,
+		1, wxALIGN_CENTRE|wxALL|wxEXPAND, 5);
+  settings->Add(new wxStaticText(this, 0, "Synchronous Pattern"),
+				1, wxALIGN_CENTRE|wxALL, 5);
+  settings->Add(synchronous,
+		1, wxALIGN_CENTRE|wxALL|wxEXPAND, 5);
+
+  wxButton *create = new wxButton(this, CREATE_BUTTON, "Create");
+  wxButton *totallyrandom = new wxButton(this, RANDOM_BUTTON, "Totally Random");
+  wxBoxSizer *randbuttonsizer = new wxBoxSizer(wxHORIZONTAL);
+  randbuttonsizer->Add(create, 1, wxALIGN_CENTRE|wxALL, 5);
+  randbuttonsizer->Add(totallyrandom, 1, wxALIGN_CENTRE|wxALL, 5);
+
+  wxButton *ok = new wxButton(this, wxID_OK, "OK");
+  wxButton *apply = new wxButton(this, wxID_APPLY, "Apply");
+  wxButton *cancel = new wxButton(this, wxID_CANCEL, "Cancel");
+  wxBoxSizer *buttonsizer = new wxBoxSizer(wxHORIZONTAL);
+  buttonsizer->Add(ok, 1, wxALIGN_CENTRE|wxALL, 5);
+  buttonsizer->Add(apply, 1, wxALIGN_CENTRE|wxALL, 5);
+  buttonsizer->Add(cancel, 1, wxALIGN_CENTRE|wxALL, 5);
+
+  wxBoxSizer *toplevel = new wxBoxSizer(wxVERTICAL);
+  toplevel->Add(settings,0,wxALIGN_CENTER|wxEXPAND|wxALL,5);
+  toplevel->Add(randbuttonsizer,0,wxALIGN_CENTER|wxEXPAND|wxALL,5);
+  toplevel->Add(buttonsizer,0,wxALIGN_CENTER|wxEXPAND|wxALL,5);
+  toplevel->Add(newsiteswap,0,wxALIGN_CENTER|wxEXPAND|wxALL,5);
+
+  toplevel->Fit( this );
+  toplevel->SetSizeHints( this );
+
+  SetSizer(toplevel);
+  SetAutoLayout(TRUE);
+  Layout();
+  CentreOnParent();
+  ShowModal();
+}
+
+void RandomSiteSwap::ApplySettings() {
+  wxString newpattern = newsiteswap->GetValue();
+
+  jmlib->stopJuggle();
+  jmlib->setPattern("Something",(JML_CHAR *)(const char *)newpattern, HR_DEF, DR_DEF);
+  jmlib->setStyle("Normal");
+  jmlib->startJuggle();
+}
+
+void RandomSiteSwap::OnApply(wxCommandEvent &WXUNUSED(event)) {
+	ApplySettings();
+}
+
+void RandomSiteSwap::OnOK(wxCommandEvent &WXUNUSED(event)) {
+	ApplySettings();
+	EndModal(wxID_OK);
+}
+
+void RandomSiteSwap::OnRandom(wxCommandEvent &WXUNUSED(event)) {
+	JML_CHAR *newsite;
+	newsite = jm_randnoparam();
+	newsiteswap->SetValue(newsite);
+	free(newsite);
+}
+
+void RandomSiteSwap::OnCreate(wxCommandEvent &WXUNUSED(event)) {
+	JML_CHAR *newsite;
+	newsite = jm_rand(numballs->GetValue(), pattlen->GetValue(),
+		mutations->GetValue(), synchronous->GetValue(),
+		multiplex->GetValue());
+	newsiteswap->SetValue(newsite);
+	free(newsite);
+}

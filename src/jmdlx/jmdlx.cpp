@@ -89,6 +89,7 @@ enum {
 	ID_ABOUT,
 	CHANGE_SITESWAP_S,
 	CHANGE_SITESWAP_A,
+	CHANGE_SITESWAP_R,
 	CHANGE_STYLE_S,
 	CHOOSE_PATTERN,
 	CHOOSE_SEMAPHORE,
@@ -108,6 +109,7 @@ BEGIN_EVENT_TABLE(JMFrame, wxFrame)
     EVT_MENU(ID_ABOUT, JMFrame::OnAbout)
     EVT_MENU(CHANGE_SITESWAP_S, JMFrame::changeSiteSwap)
     EVT_MENU(CHANGE_SITESWAP_A, JMFrame::changeSiteSwapAdvanced)
+    EVT_MENU(CHANGE_SITESWAP_R, JMFrame::changeSiteSwapRandom)
     EVT_MENU(CHANGE_STYLE_S, JMFrame::changeStyle)
     EVT_MENU(CHOOSE_PATTERN, JMFrame::choosePattern)
     EVT_MENU(CHOOSE_SEMAPHORE, JMFrame::chooseSemaphore)
@@ -132,6 +134,7 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 
   fileMenu->Append(CHANGE_SITESWAP_S, "Change &SiteSwap (Simple)");
   fileMenu->Append(CHANGE_SITESWAP_A, "Change SiteSwap (Advanced)");
+  fileMenu->Append(CHANGE_SITESWAP_R, "Change SiteSwap (Random)");
   fileMenu->AppendSeparator();
   fileMenu->Append(CHANGE_STYLE_S, "Change S&tyle");
   fileMenu->AppendSeparator();
@@ -211,6 +214,9 @@ void JMFrame::changeSiteSwapAdvanced(wxCommandEvent& WXUNUSED(event)) {
   // unPause();
 }
 
+void JMFrame::changeSiteSwapRandom(wxCommandEvent& WXUNUSED(event)) {
+  new RandomSiteSwap(this,jmlib);
+}
 void JMFrame::setSiteSwap(wxString *newsite) {
   jmlib->setPattern((JML_CHAR *)(const char *)*newsite,
 		(JML_CHAR *)(const char *)*newsite,HR_DEF, DR_DEF);

@@ -76,6 +76,7 @@ private:
   void changeSiteSwap(wxCommandEvent &);
   void changeStyle(wxCommandEvent &);
   void changeSiteSwapAdvanced(wxCommandEvent &);
+  void changeSiteSwapRandom(wxCommandEvent &);
   void changeMirror(wxCommandEvent &);
   void changePause(wxCommandEvent &);
   void choosePattern(wxCommandEvent &);

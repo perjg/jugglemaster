@@ -1,6 +1,7 @@
 Version 0.5
  - Makefile: added jmlib target
  - aajm: Random patterns
+ - aajm: Added a README on how to use
  - aajm: OSX Fixes [aalib is in fink]
  - aajm: Small rendering fix [took out some old debugging code]
  - jmlib: Added random pattern generation

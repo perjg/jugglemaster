@@ -31,7 +31,7 @@ OBJ=jmdlx.o patt.o advsite.o choosepatt.o choosestyle.o newsemaphore.o print.o
 all: jmdlx
 
 jmdlx: jm_lib $(OBJ)
-	$(CXX) $(LDFLAGS) -o ./$(BINARY) $(CFLAGS) $(OBJ) $(LIBS)
+	$(CXX) $(LDFLAGS) -o ./$(BINARY) $(OBJ) $(LIBS)
 	cp ../../data/*.jm .
 
 osx: all

@@ -34,6 +34,15 @@ extern "C" {
 #include "./aa_drawcircle.h"
 }
 
+static char *possible_styles[] = {
+	"Normal",
+	"Reverse",
+	"Shower",
+	"Mills Mess",
+	"Center",
+	"Windmill"
+};
+
 #define AAWIDTH(context) aa_imgwidth(context)
 #define AAHEIGHT(context) (aa_imgheight(context)-4)
 

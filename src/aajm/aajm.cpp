@@ -65,8 +65,8 @@ void draw_juggler(void) {
 		lhand->gy + handp->ly[0], color);
 
 	// draw balls
+	int diam = (11*jmlib->dpm/DW);
 	for(i=jmlib->balln-1;i>=0;i--) {
-		int diam = (11*jmlib->dpm/DW);
 		aa_drawcircle(context, jmlib->b[i].gx + diam,
 				jmlib->b[i].gy + diam,
 				diam, color);
@@ -92,12 +92,18 @@ void resizehandler(aa_context *resized_context) {
 
 void main_loop(void) {
 	char c;
+	int i;
 	char newsite[JML_MAX_SITELEN];
+	char newstyle[2];
+	int newstyle_index;
+	int numstyles = sizeof(possible_styles)/sizeof(possible_styles[0]);
+
 	while (1) {
 		jmlib->doJuggle();
 		draw_juggler();
 		c=aa_getkey(context,0);
-		if(c=='s') {
+		if(c=='s' || c=='S') {
+			/* Change SiteSwap */
 			memset(newsite,0,JML_MAX_SITELEN);
 			strncpy(newsite, jmlib->getSite(), JML_MAX_SITELEN);
 			aa_puts(context, 1, 4, AA_SPECIAL,
@@ -107,14 +113,37 @@ void main_loop(void) {
 			if(newsite[0]!=0) {
 				jmlib->setPattern("Something",newsite,
 					HR_DEF, DR_DEF);
+				jmlib->setStyleDefault();
 				jmlib->startJuggle();
 			}
 		} else if(c=='q' || c=='Q' || c==27) {
+			/* Quit */
 			/* 27 == Escape
 			Don't complain. This was a hack before it started */
 			return;
+		} else if(c==' ') {
+			/* Toggle Pause */
+			jmlib->togglePause();
+		} else if(c=='t' || c=='T') {
+			/* Change Style */
+			aa_puts(context, 3, 4, AA_SPECIAL,
+				"Choose New Style...");
+			for (i=0;i<numstyles;i++) {
+				aa_printf(context, 3, 5+i, AA_SPECIAL,
+					"%i: %s",i+1,possible_styles[i]);
+			}
+			aa_flush(context);
+			memset(newstyle,0,JML_MAX_SITELEN);
+			aa_edit(context, 3, 5+i, 2, newstyle, 2);
+			if(newstyle[0]!=0) {
+				newstyle_index=atoi(newstyle)-1;
+				if(newstyle_index>0
+				  && newstyle_index<numstyles) {
+					jmlib->setStyle(possible_styles[newstyle_index]);
+				}
+			}
 		}
-		usleep(20);
+		usleep(35);
 	}
 }
 

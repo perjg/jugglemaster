@@ -24,6 +24,12 @@ and restarting inetd with "kill -HUP `cat /var/run/inetd.pid`"
 then telnetting to that host on port 55001:
 telnet localhost 55001
 
+Once running, you can use the following keys:
+s - change siteswap
+t - change style
+q - quit
+space - pause
+
 
 Gary (-;
 <chunky@icculus.org>

@@ -1,6 +1,7 @@
 include ../../Makefile.cfg
 
-CXXFLAGS=-Wall -pedantic -fsigned-char
+CXXFLAGS+=-Wall -pedantic -fsigned-char
+CFLAGS+=-Wall -pedantic -fsigned-char
 LIBS+=-lm -ldl
 
 ifeq ($(DEBUG), 1)

@@ -1,6 +1,7 @@
 include ../../Makefile.cfg
 
 CXXFLAGS+=-Wall -fsigned-char `wx-config --cppflags` -I../jmlib
+CFLAGS+=-Wall -fsigned-char `wx-config --cppflags` -I../jmlib
 # -ansi -pedantic cause warnings from some compilers [wx uses long long]
 LDFLAGS+=`wx-config --ldflags`
 # STATICFLAGS=-Wl,-Bstatic

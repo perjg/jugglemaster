@@ -1,6 +1,6 @@
 include ../../Makefile.cfg
 
-CXXFLAGS+=-Wall -fsigned-char `aalib-config --cflags`
+CXXFLAGS+=-Wall -fsigned-char `aalib-config --cflags` -I../jmlib
 CFLAGS+=-Wall -fsigned-char `aalib-config --cflags` -I../jmlib
 LIBS+=`aalib-config --libs` -L../jmlib -ljm
 BINARY=aajm

@@ -46,6 +46,8 @@ static char *possible_styles[] = {
 
 #define AAWIDTH(context) aa_imgwidth(context)
 #define AAHEIGHT(context) (aa_imgheight(context)-4)
+#define DEFSPEED 18000
+/* speed is in microseconds-between-frames, because I'm that lazy */
 
 void errorCB(char* msg);
 void draw_juggler(void);

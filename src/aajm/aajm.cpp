@@ -30,10 +30,10 @@ void draw_juggler(void) {
 	ball* lhand = &(jmlib->lhand);
 	hand* handp = &(jmlib->handpoly);
 
-	color = 255;
+	color = 64;
 	// draw head
 	aa_drawcircle(context,ap->hx, ap->hy,
-			ap->hr, color);
+			ap->hr, color, -1);
 
 	aa_drawline(context, 0, 0, AAWIDTH(context)/2, AAHEIGHT(context)/2, 1);
 	// draw juggler
@@ -64,12 +64,13 @@ void draw_juggler(void) {
 		lhand->gx + handp->lx[0],
 		lhand->gy + handp->ly[0], color);
 
+	color = 255;
 	// draw balls
 	int diam = (11*jmlib->dpm/DW);
 	for(i=jmlib->balln-1;i>=0;i--) {
 		aa_drawcircle(context, jmlib->b[i].gx + diam,
 				jmlib->b[i].gy + diam,
-				diam, color);
+				diam, color, color);
 	}
 
 
@@ -94,10 +95,11 @@ void resizehandler(aa_context *resized_context) {
 	context = resized_context;
 }
 
+#define DEFSPEED 18000
 void main_loop(void) {
 	struct timeval starttime, endtime;
 	long sleeptime;
-	long speed = 25000; /* microseconds between frames */
+	long speed = DEFSPEED; /* microseconds between frames */
 	char c;
 	int i;
 	char newsite[JML_MAX_SITELEN];
@@ -151,6 +153,7 @@ void main_loop(void) {
 				}
 			}
 		} else if(c=='h' || c=='H') {
+			/* Help */
 			aa_puts(context, 3, 4, AA_SPECIAL,
 				"Key Help");
 			aa_puts(context, 3, 6, AA_SPECIAL,
@@ -169,14 +172,17 @@ void main_loop(void) {
 				"Press any key to remove this menu");
 			aa_flush(context);
 			aa_getkey(context, 1);
-		} else if(c=='+' || c=='=') {
+		} else if(c=='+' || c=='=' || c=='k') {
+			/* Speed Up */
 			speed -= 1500;
 			if(speed < 0) { speed = 0; }
-		} else if(c=='-') {
+		} else if(c=='-' || c=='j') {
+			/* Speed Down */
 			speed += 1500;
 		} else if(c==13) {
+			/* Speed Reset */
 			/* 13 == Enter */
-			speed = 25000;
+			speed = DEFSPEED;
 		}
 		gettimeofday(&endtime,NULL);
 		endtime.tv_sec -= starttime.tv_sec;

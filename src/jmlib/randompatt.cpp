@@ -120,8 +120,6 @@ JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,
 		distance = rand()%pattlen;
 
 		if((buf[first] - distance >= 0) &&
-			(buf[(first+distance)%pattlen] + distance >= 0) &&
-			(buf[first] - distance <= 35) &&
 			(buf[(first+distance)%pattlen] + distance <= 35)) {
 
 		/* RULE 1 */
@@ -166,10 +164,14 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 	JML_CHAR *returnvalue;
 	JML_CHAR *returntmp;
 
-	if(numballs < 0 || numballs > 35 || pattlen == 0) {
+	/* The async pattern seeder doesn't work for more than 19
+			balls if you're juggling even numbers */
+	if(numballs < 0 ||
+		(numballs & 1 && numballs > 34) ||
+		numballs > 35 ||
+		pattlen == 0) {
 		/* This is a silly pattern. Let's not generate it */
 		return NULL;
-		
 	}
 
 	if(numballs & 1 && pattlen & 1) {
@@ -183,7 +185,9 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 
 	/* To seed the pattern:
 		Even numbers of balls go (n,n)<rinse, repeat>
-		Odd numbers of balls go ((2n-2)x,2)(2,(2n-2)x)<rinse, repeat> */
+		Odd numbers of balls should go ((2n-2)x,2)(2,(2n-2)x)<rinse, repeat>
+		Unfortunately, that breaks down the notation at 18 throws, so:
+		((n+1)x, (n-1))((n-1), (n+1)x)<rinse, repeat> */
 	for(i = 0; i < pattlen; i++) {
 		if(0 == (numballs & 1)) {
 			left[i] = numballs;
@@ -192,13 +196,13 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 			rightcross[i] = 0;
 		} else {
 			if(i&1) {
-				left[i] = 2 * (numballs - 1);
-				right[i] = 2;
+				left[i] = numballs + 1;
+				right[i] = numballs - 1;
 				leftcross[i] = 1;
 				rightcross[i] = 0;
 			} else {
-				left[i] = 2;
-				right[i] = 2 * (numballs - 1);
+				left[i] = numballs - 1;
+				right[i] = numballs + 1;
 				leftcross[i] = 0;
 				rightcross[i] = 1;
 			}
@@ -244,7 +248,7 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 			first = rand()%pattlen;
 			distance = rand()%pattlen;
 
-			if(rand()%1) {
+			if(rand()&1) {
 				switchbuffer = left;
 				switchbuffercross = leftcross;
 			} else {
@@ -253,8 +257,6 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 			}
 
 			if((switchbuffer[first] - distance*2 >= 0) &&
-				(switchbuffer[(first+distance)%pattlen] + distance*2 >= 0) &&
-				(switchbuffer[first] - distance*2 <= 35) &&
 				(switchbuffer[(first+distance)%pattlen] + distance*2 <= 35)) {
 
 				tmp = switchbuffer[first] - distance*2;
@@ -277,6 +279,16 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 	for(i=0;i<pattlen;i++) {
 		if(leftcross[i]) leftcrosses++;
 		if(rightcross[i]) rightcrosses++;
+	}
+
+	if(leftcrosses != rightcrosses) {
+		/* All the balls would end up in the same hand - this
+			shouldn't ever happen */
+		free(left);
+		free(right);
+		free(leftcross);
+		free(rightcross);
+		return NULL;
 	}
 
 	totalcrosses = leftcrosses + rightcrosses;

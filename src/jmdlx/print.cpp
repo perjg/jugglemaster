@@ -606,26 +606,28 @@ int Print::printFlipBook(void) {
 					f_offs_x + frame_width - 1, f_offs_y + frame_height - 1);
 
 
+				current_frames++;
+				jmlib->doJuggle();
+
+				fprintf(outputfile, "%i %i moveto\n"	
+					"( %i ) show\n",
+					(handed->GetStringSelection() == "Right"?
+						f_offs_x + 20:
+						f_offs_x + frame_width - 20),
+					f_offs_y + frame_height/2,
+					current_frames);
+
+
 				if (handed->GetStringSelection() == "Right") {
 					f_offs_x += (jmlib->getImageWidth()/4);
 				}
 
-				current_frames++;
-				jmlib->doJuggle();
 				fprintf(outputfile, "%i %i moveto\n"	
 					"( Site: %s  Style: %s  Balls: %i ) show\n",
 					f_offs_x + 4, f_offs_y + 4,
 					jmlib->getSite(),
 					jmlib->getStyle(),
 					jmlib->balln);
-
-				fprintf(outputfile, "%i %i moveto\n"	
-					"( %i ) show\n",
-					(handed->GetStringSelection() == "Right"?
-						f_offs_x + 30:
-						f_offs_x + frame_width - 30),
-					f_offs_y + frame_height/2,
-					current_frames);
 
 				/* Draw Juggler */
 

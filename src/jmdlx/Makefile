@@ -1,23 +1,22 @@
-# If you have ffmpeg, point this at the directory you built it in,
-#  and set HAVE_FFMPEG to 1. Tested with 0.4.9-pre1
-FFMPEG_PREFIX=/tmp/chunky/ffmpeg
-HAVE_FFMPEG=0
+include ../../Makefile.cfg
 
-
-# Nothing below this should need to be edited
-CXXFLAGS=-Wall -Werror -fsigned-char `wx-config --cppflags`
+CXXFLAGS+=-Wall -fsigned-char `wx-config --cppflags`
 # -ansi -pedantic cause warnings from some compilers [wx uses long long]
-LDFLAGS=`wx-config --ldflags`
+LDFLAGS+=`wx-config --ldflags`
 # STATICFLAGS=-Wl,-Bstatic
 STATICFLAGS=-static
 LIBS+=`wx-config --libs`
 BINARY=jmdlx
-VERSION=0.4
+INSTALL=install
 
 ifeq ($(HAVE_FFMPEG), 1)
 CXXFLAGS+=-DHAVE_AVCODEC_H -I$(FFMPEG_PREFIX)/libavcodec
 LDFLAGS+=-L$(FFMPEG_PREFIX)/libavcodec
 LIBS+=-lavcodec
+endif
+
+ifeq ($(DEBUG), 1)
+CXXFLAGS+=-g -Werror
 endif
 
 
@@ -28,7 +27,9 @@ RSRC=`wx-config --prefix`/lib/*.rsrc
 
 OBJ=jmdlx.o patt.o advsite.o choosepatt.o choosestyle.o newsemaphore.o print.o
 
-all: jm_lib $(OBJ)
+all: jmdlx
+
+jmdlx: jm_lib $(OBJ)
 	$(CXX) $(LDFLAGS) -o ./$(BINARY) $(CFLAGS) $(OBJ) ../jmlib/jmlib.a $(LIBS)
 	cp ../../data/*.jm .
 
@@ -42,6 +43,10 @@ osx: all
 
 jm_lib:
 	$(MAKE) -C ../jmlib
+
+install:
+	mkdir -p $(INSTALLDIR)/bin
+	$(INSTALL) $(BINARY) $(INSTALLDIR)/bin
 
 patt: jm_lib
 	rm -f patt.o

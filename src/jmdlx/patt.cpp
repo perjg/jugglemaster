@@ -100,8 +100,12 @@ int PatternLoader::OpenFile(const char *filename, int redownload) {
 
 		wxURL url(fullurl);
 
-		if(wxGetEnv("http_proxy",&proxy))
+		if(wxGetEnv("http_proxy",&proxy)) {
+			if(proxy.Find("//") > -1) {
+				proxy = proxy.Mid(proxy.Find("//")+2);
+			}
 			url.SetProxy(proxy);
+		}
 
 		wxInputStream *data = url.GetInputStream();
 		// wxHTTP url;

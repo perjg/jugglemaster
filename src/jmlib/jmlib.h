@@ -26,7 +26,16 @@
 #include <stdio.h>
 //#include <math.h>
 #include <string.h>
+
+// time.h is not available for Windows CE / Pocket PC,
+// Use the MFC functions
+#ifdef _WIN32_WCE
+#include <afxwin.h>
+// All other platforms are assumed to support the time.h header
+#else
 #include <time.h>
+#endif
+
 //#include <malloc.h>
 #include <stdlib.h>
 
@@ -59,8 +68,14 @@
 #define KW 0.25
 #define XR 1024L
 #define DW 290               // max of dpm
- // BMAX 35
-#define BMAX 630		     // max number of balls
+
+// max number of balls
+#ifdef BALLS_MAX_35
+#define BMAX 35
+#else
+#define BMAX 630
+#endif
+
 #define LMAX 76		     // max column of a pattern
  // MMAX 11
 #define MMAX 71              // Max multiplex, double+1

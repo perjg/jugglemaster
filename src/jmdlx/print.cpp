@@ -14,6 +14,9 @@
  */ 
 
 #include "print.h"
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 
 BEGIN_EVENT_TABLE(Print, wxDialog)
@@ -143,11 +146,10 @@ void Print::OnOK(wxCommandEvent &event) {
 	int oldwidth = jmlib->getImageWidth();
 	int do_change = 0;
 	int i;
-	outputfile = new wxTextFile(filename->GetValue());
+	struct stat buf; /* for stat */
 	wxMessageDialog* message;
-	if(!outputfile->Exists()) {
-		outputfile->Create();
-	} else {
+
+	if(stat((const char *)filename->GetValue(),&buf) != -1) {
 		message = new wxMessageDialog(this,
 			"File Already Exists! Overwrite?",
 			"Overwrite?",
@@ -157,7 +159,8 @@ void Print::OnOK(wxCommandEvent &event) {
 			return;
 		}
 	}
-	if(!outputfile->Open()) {
+	outputfile = fopen((const char *)filename->GetValue(),"w");
+	if(outputfile == NULL) {
 		message = new wxMessageDialog(this,
 			"Can't open file!",
 			"Error",
@@ -193,10 +196,7 @@ void Print::OnOK(wxCommandEvent &event) {
 	/* Just make sure it clears out any guff */
 	for (i=0; i<200; i++) jmlib->doJuggle();
 
-	outputfile->Write();
-	outputfile->Close();
-
-	delete outputfile;
+	fclose(outputfile);
 
 	EndModal(wxID_OK);
 }
@@ -207,8 +207,6 @@ int Print::printPS(void) {
 	/* Note that postscript's co-ordinate system is upside down,
 		c.f. jmlib and wx */
 
-	wxString *line_buffer = new wxString;
-	wxString *patt_string = new wxString;
 	int y_offset;
 	struct ball firstpos[BMAX]; /* We'll rememeber where all the
 				balls were when we started, and check
@@ -228,41 +226,33 @@ int Print::printPS(void) {
 
 	/* Some PS guff */
 
-	outputfile->AddLine("%!PS-Adobe-3.0");
-	line_buffer->Printf("%%%%BoundingBox: 0 0 %i %i",
+	fprintf(outputfile, "%%!PS-Adobe-3.0\n");
+	fprintf(outputfile, "%%%%BoundingBox: 0 0 %i %i\n",
 				jmlib->getImageWidth(),
 				jmlib->getImageHeight());
-	outputfile->AddLine(*line_buffer);
-	outputfile->AddLine("%%Creator: JuggleMaster And Chunky Kibbles");
-	line_buffer->Printf("%%%%Title: Juggling Pattern %s", jmlib->getSite());
-	outputfile->AddLine(*line_buffer);
-	outputfile->AddLine("%%EndComments");
+	fprintf(outputfile, "%%%%Creator: JuggleMaster And Chunky Kibbles\n");
+	fprintf(outputfile, "%%%%Title: Juggling Pattern %s\n", jmlib->getSite());
+	fprintf(outputfile, "%%EndComments\n");
 
 	/* The start of stuff for dynamically resizing to fit the page
 		instead of using a bounding box */
 
-	outputfile->AddLine("initclip newpath clippath pathbbox");
-	outputfile->AddLine("72 div /pageTop exch def");
-	outputfile->AddLine("72 div /pageRight exch def");
-	outputfile->AddLine("72 div /pageBottom exch def");
-	outputfile->AddLine("72 div /pageLeft exch def");
-	outputfile->AddLine("/pageWidth pageRight pageLeft sub def");
-	outputfile->AddLine("/pageHeight pageTop pageBottom sub def");
-	outputfile->AddLine("72 72 dtransform");
-	outputfile->AddLine("/yResolution exch abs def");
-	outputfile->AddLine("/xResolution exch abs def");
+	fprintf(outputfile,"initclip newpath clippath pathbbox\n");
+	fprintf(outputfile,"72 div /pageTop exch def\n");
+	fprintf(outputfile,"72 div /pageRight exch def\n");
+	fprintf(outputfile,"72 div /pageBottom exch def\n");
+	fprintf(outputfile,"72 div /pageLeft exch def\n");
+	fprintf(outputfile,"/pageWidth pageRight pageLeft sub def\n");
+	fprintf(outputfile,"/pageHeight pageTop pageBottom sub def\n");
+	fprintf(outputfile,"72 72 dtransform\n");
+	fprintf(outputfile,"/yResolution exch abs def\n");
+	fprintf(outputfile,"/xResolution exch abs def\n");
 
-	outputfile->AddLine("/Times-Roman findfont");
-	outputfile->AddLine("15 scalefont");
-	outputfile->AddLine("setfont");
+	fprintf(outputfile,"/Times-Roman findfont\n");
+	fprintf(outputfile,"15 scalefont\n");
+	fprintf(outputfile,"setfont\n");
 
-	patt_string->Printf("2 2 moveto\n( Site: %s  Style: %s  Balls: %i ) show",
-				jmlib->getSite(),
-				jmlib->getStyle(),
-				jmlib->balln);
-
-	line_buffer->Printf("%i {", max_iterations->GetValue());
-	outputfile->AddLine(*line_buffer);
+	fprintf(outputfile, "%i {\n", max_iterations->GetValue());
 
 	for(i=jmlib->balln-1;i>=0;i--) {
 		firstpos[i] = jmlib->b[i];
@@ -279,110 +269,102 @@ int Print::printPS(void) {
 		current_frames++;
 		if(current_frames > max_iterations->GetValue()) done=1;
 
-		outputfile->AddLine("erasepage");
-		outputfile->AddLine(*patt_string);
-		line_buffer->Printf("%i {", delay->GetValue());
-		outputfile->AddLine(*line_buffer);
+		fprintf(outputfile, "erasepage\n");
+		fprintf(outputfile, "2 2 moveto\n"	
+				"( Site: %s  Style: %s  Balls: %i ) show\n",
+				jmlib->getSite(),
+				jmlib->getStyle(),
+				jmlib->balln);
+
+		fprintf(outputfile, "%i {\n", delay->GetValue());
 		/* Draw Juggler */
 
 		/* Head */
 
-		outputfile->AddLine("%Head");
-		outputfile->AddLine("newpath");
-		line_buffer->Printf(" %i %i %i 0 360 arc", ap->hx,
+		fprintf(outputfile,"%%Head\n");
+		fprintf(outputfile,"newpath\n");
+		fprintf(outputfile, " %i %i %i 0 360 arc\n", ap->hx,
 							-ap->hy + y_offset,
 							ap->hr);
-		outputfile->AddLine(*line_buffer);
-		outputfile->AddLine(" closepath");
-		outputfile->AddLine(" stroke");
+		fprintf(outputfile, " closepath\n");
+		fprintf(outputfile, " stroke\n");
 
 
 		/* Right Arm */
 
-		outputfile->AddLine("%Right Arm");
-		outputfile->AddLine("newpath");
-		line_buffer->Printf(" %i %i moveto", ap->rx[0],
+		fprintf(outputfile, "%%Right Arm\n");
+		fprintf(outputfile, "newpath\n");
+		fprintf(outputfile, " %i %i moveto\n", ap->rx[0],
 				-ap->ry[0] + y_offset);
-		outputfile->AddLine(*line_buffer);
 		for(i=1;i<6;i++){
-			line_buffer->Printf("  %i %i lineto", ap->rx[i],
+			fprintf(outputfile, "  %i %i lineto\n", ap->rx[i],
 					-ap->ry[i] + y_offset);
-			outputfile->AddLine(*line_buffer);
 		}
-		outputfile->AddLine(" stroke");
+		fprintf(outputfile, " stroke\n");
 
 
 		/* Left Arm */
 
-		outputfile->AddLine("%Left Arm");
-		outputfile->AddLine("newpath");
-		line_buffer->Printf(" %i %i moveto", ap->lx[0],
+		fprintf(outputfile, "%%Left Arm\n");
+		fprintf(outputfile, "newpath\n");
+		fprintf(outputfile, " %i %i moveto\n", ap->lx[0],
 					-ap->ly[0] + y_offset);
-		outputfile->AddLine(*line_buffer);
 		for(i=1;i<6;i++){
-			line_buffer->Printf("  %i %i lineto", ap->lx[i],
+			fprintf(outputfile, "  %i %i lineto\n", ap->lx[i],
 						-ap->ly[i] + y_offset);
-			outputfile->AddLine(*line_buffer);
 		}
-		outputfile->AddLine(" stroke");
+		fprintf(outputfile, " stroke\n");
 
 
 		/* Right Hand */
 
-		outputfile->AddLine("%Right Hand");
-		outputfile->AddLine("newpath");
-		line_buffer->Printf(" %i %i moveto", rhand->gx + handp->rx[0],
+		fprintf(outputfile, "%%Right Hand\n");
+		fprintf(outputfile, "newpath\n");
+		fprintf(outputfile, " %i %i moveto\n", rhand->gx + handp->rx[0],
 				-(rhand->gy + handp->ry[0])+y_offset);
-		outputfile->AddLine(*line_buffer);
 		for (i=1; i <= 9; i++) {
-			line_buffer->Printf("  %i %i lineto",
+			fprintf(outputfile, "  %i %i lineto\n",
 				rhand->gx + handp->rx[i],
 				-(rhand->gy + handp->ry[i])+y_offset);
-			outputfile->AddLine(*line_buffer);
 		}
-		outputfile->AddLine(" closepath");
-		outputfile->AddLine(" stroke");
+		fprintf(outputfile, " closepath\n");
+		fprintf(outputfile, " stroke\n");
 
 
 		/* Left Hand */
 	
-		outputfile->AddLine("%Left Hand");
-		outputfile->AddLine("newpath");
-		line_buffer->Printf(" %i %i moveto", lhand->gx + handp->lx[0],
+		fprintf(outputfile, "%%Left Hand\n");
+		fprintf(outputfile, "newpath\n");
+		fprintf(outputfile, " %i %i moveto\n", lhand->gx + handp->lx[0],
 				-(lhand->gy + handp->ly[0])+y_offset);
-		outputfile->AddLine(*line_buffer);
-		outputfile->AddLine(*line_buffer);
 		for (i=1; i <= 9; i++) {
-			line_buffer->Printf("  %i %i lineto",
+			fprintf(outputfile, "  %i %i lineto\n",
 				lhand->gx + handp->lx[i],
 				-(lhand->gy + handp->ly[i])+y_offset);
-			outputfile->AddLine(*line_buffer);
 		}
-		outputfile->AddLine(" closepath");
-		outputfile->AddLine(" stroke");
+		fprintf(outputfile, " closepath\n");
+		fprintf(outputfile, " stroke\n");
 
 
 		/* Balls */
 
-		outputfile->AddLine("%Balls");
-		outputfile->AddLine("newpath");
+		fprintf(outputfile, "%%Balls\n");
+		fprintf(outputfile, "newpath\n");
 		int diam = 11*jmlib->dpm/DW;
 		for(i=jmlib->balln-1;i>=0;i--) {
-			line_buffer->Printf(" %i %i %i 0 360 arc",
+			fprintf(outputfile, " %i %i %i 0 360 arc\n",
 				jmlib->b[i].gx+diam,
 				-jmlib->b[i].gy-diam + y_offset,
 				diam);
-			outputfile->AddLine(*line_buffer);
-			outputfile->AddLine(" fill");
+			fprintf(outputfile, " fill\n");
 		}
-		outputfile->AddLine(" stroke");
+		fprintf(outputfile, " stroke\n");
 
 
-		outputfile->AddLine("} repeat");
+		fprintf(outputfile, "} repeat\n");
 	}
 
-	outputfile->AddLine("} repeat");
-	delete line_buffer;
+	fprintf(outputfile, "} repeat\n");
 
 	return 1;
 

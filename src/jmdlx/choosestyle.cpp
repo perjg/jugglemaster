@@ -27,8 +27,18 @@ ChooseStyle::ChooseStyle(wxWindow *parent, JMLib *j)
 			wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER) {
 
   jmlib = j;
+  JML_CHAR **style_list;
+  int i;
 
-  stylechoice = new wxChoice ( this,-1,wxDefaultPosition, wxDefaultSize,sizeof(possible_styles)/sizeof(possible_styles[0]),possible_styles,0, wxDefaultValidator,"Normal");
+  style_list = jmlib->getStyles();
+
+  stylechoice = new wxChoice ( this,-1,wxDefaultPosition, wxDefaultSize);
+
+  for(i=0;i<jmlib->numStyles();i++) {
+	stylechoice->Append(style_list[i]);
+  }
+
+  stylechoice->SetSelection(0);
 
  // Buttons
 

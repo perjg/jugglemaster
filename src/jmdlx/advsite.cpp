@@ -31,6 +31,8 @@ AdvancedSiteSwap::AdvancedSiteSwap(wxWindow *p, JMLib *j)
 
   jmlib = j;
   haschanged=0;
+  JML_CHAR **style_list;
+  int i;
  // SiteSwap
   wxBoxSizer *siteswapsizer = new wxBoxSizer(wxHORIZONTAL);
   newsiteswap = new wxTextCtrl(this,-1,jmlib->getSite());
@@ -45,14 +47,17 @@ AdvancedSiteSwap::AdvancedSiteSwap(wxWindow *p, JMLib *j)
 
  // Style
   wxBoxSizer *stylesizer = new wxBoxSizer(wxHORIZONTAL);
-  newstyle = new wxChoice(this,
-				-1,
-				wxDefaultPosition,
-				wxDefaultSize,
-				sizeof(possible_styles)/sizeof(possible_styles[0]),
-				possible_styles,
-				0, wxDefaultValidator,
-				"Normal");
+
+  style_list = jmlib->getStyles();
+
+  newstyle = new wxChoice ( this,-1,wxDefaultPosition, wxDefaultSize);
+
+  for(i=0;i<jmlib->numStyles();i++) {
+        newstyle->Append(style_list[i]);
+  }
+  
+  newstyle->SetSelection(0);
+
   stylesizer->Add(new wxStaticText(this, 0, "Style"),
 					0,
 					wxALIGN_CENTER_VERTICAL|wxALL,
@@ -143,7 +148,7 @@ void AdvancedSiteSwap::ApplySettings() {
 }
 
 void AdvancedSiteSwap::OnApply(wxCommandEvent &event) {
-	if(haschanged) {
+	if(haschanged || newstyle->GetStringSelection()=="Random") {
 		ApplySettings();
 	}
 }

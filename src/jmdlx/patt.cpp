@@ -242,11 +242,13 @@ const char *PatternLoader::GetNextSection() {
 }
 
 int PatternLoader::SetSection(const char *section_name) {
+	if(section_name == NULL || *section_name == '\0') return 0;
 	current_group = FirstGroup(&groups);
 	while(current_group) {
-		if(strcmp((const char *)section_name,Group_GetName(current_group)) == 0 ) {
+		if(Group_GetName(current_group) == NULL || *(const char *)Group_GetName(current_group) == '\0') continue;
+		if(strcmp(section_name,(const char *)Group_GetName(current_group)) == 0 ) {
 			current_pattern = NULL;
-			return(1);
+			return 1;
 		}
 		current_group = NextGroup(current_group);
 	}

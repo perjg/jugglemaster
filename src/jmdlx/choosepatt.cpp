@@ -19,7 +19,7 @@
 BEGIN_EVENT_TABLE(ChoosePatt, wxDialog)
 	EVT_BUTTON(wxID_APPLY, ChoosePatt::OnApply)
 	EVT_BUTTON(wxID_OK, ChoosePatt::OnOK)
-	EVT_CHOICE(-1, ChoosePatt::SectionChange)
+	EVT_CHOICE(-1, ChoosePatt::SectionChangeEvt)
 	EVT_LISTBOX(-1, ChoosePatt::PattChange)
 	EVT_LISTBOX_DCLICK(-1, ChoosePatt::PattDblClick)
 END_EVENT_TABLE()
@@ -35,7 +35,6 @@ ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
 
 
 
-  const char *curr_patt;
   wxBoxSizer *choicesizer = new wxBoxSizer(wxVERTICAL);
 
   sectionChoice = new wxChoice(this,
@@ -53,11 +52,15 @@ ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
                                 wxDefaultPosition,
                                 wxDefaultSize);
 
+  /*
+  const char *curr_patt;
   const char *newSection=(const char *)sectionChoice->GetStringSelection();
-  patterns->SetSection(newSection);
+  if(newSection && *newSection) {
+  	patterns->SetSection(newSection);
+  }
   while((curr_patt = patterns->GetNextPatternName())) {
         patternListBox->Append(curr_patt);
-  }
+  } */
 
   choicesizer->Add(sectionChoice,0,wxALIGN_TOP|wxEXPAND|wxALL,5);
   choicesizer->Add(patternListBox,1,wxALIGN_CENTER|wxEXPAND|wxALL,5);
@@ -110,6 +113,8 @@ ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
   SetSize(-1,parent->GetSize().y - 30);
   Layout();
   CentreOnParent();
+
+  SectionChange();
   ShowModal();
 }
 
@@ -173,7 +178,11 @@ void ChoosePatt::PattDblClick(wxCommandEvent &WXUNUSED(event)) {
 	}
 }
 
-void ChoosePatt::SectionChange(wxCommandEvent &WXUNUSED(event)) {
+void ChoosePatt::SectionChangeEvt(wxCommandEvent &WXUNUSED(event)) {
+	SectionChange();
+}
+
+void ChoosePatt::SectionChange() {
 	wxString newSection=sectionChoice->GetStringSelection();
 	patterns->SetSection((const char *)newSection);
 	patternListBox->Clear();

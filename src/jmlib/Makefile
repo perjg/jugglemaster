@@ -4,7 +4,7 @@ CXXFLAGS=-Wall -pedantic -fsigned-char
 LIBS+=-lm -ldl
 
 ifeq ($(DEBUG), 1)
-CFLAGS+=-g -Werror
+CXXFLAGS+=-g -Werror
 endif
 
 DATA=../../data/patterns.jm ../../data/semaphore.jm

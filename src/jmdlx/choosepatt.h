@@ -29,7 +29,8 @@ public:
 protected:
   void OnApply(wxCommandEvent &event);
   void OnOK(wxCommandEvent &event);
-  void SectionChange(wxCommandEvent &event);
+  void SectionChangeEvt(wxCommandEvent &event);
+  void SectionChange();
   void PattChange(wxCommandEvent &event);
   void PattDblClick(wxCommandEvent &event);
   void ApplySettings();

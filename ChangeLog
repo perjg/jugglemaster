@@ -1,4 +1,5 @@
 Version 0.3
+2004-03-17
  - aajm: Took out pointless macros AAWIDTH and AAHEIGHT
  - jmlib: Provide ability to describe all the builtin styles
  - aajm: modified to take advantage of new jmlib feature

@@ -18,8 +18,11 @@ binary "jmdlx". Run it. You need wxWindows. To build it on windows either
 work it out yourself, or extract bloodshed.zip and use the excellent
 DevC++ from www.bloodshed.net
 
+To build on OSX, go into src/jmdlx and type "make osx". It'll create
+JuggleMaster.app right there.
+
 If you don't have patterns.jm and semaphore.jm in the current dir when
-you run it, it attempts to download them and save them to the current
+you run it, it attempts to download them and save them to a suitable
 dir. You'll find copies in the "data" dir, so you can just copy them
 across if you want.
 

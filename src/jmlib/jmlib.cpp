@@ -236,7 +236,7 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name) {
   }
   else if (strcmp(name, "Center") == 0 || strcmp(name, "center") == 0) {
     JML_INT8 style[] = { 13, 0, 0, 0 };
-    setStyle("Reverse", 1, style);
+    setStyle("Center", 1, style);
   }
   else if (strcmp(name, "Windmill") == 0 || strcmp(name, "windmill") == 0) {
     JML_INT8 style[] = { 10, 0, -8, 0, -8, 0, 10, 0 };

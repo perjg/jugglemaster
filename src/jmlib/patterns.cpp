@@ -114,7 +114,7 @@ int ParsePatterns(FILE *input,
 			currmr = 0;
 
 			newgroup = (struct pattern_group_t *)malloc(sizeof(struct pattern_group_t));
-			if(groups->first == NULL) {
+			if(groups != NULL && groups->first == NULL) {
 				groups->first = newgroup;
 			} else if(group != NULL) {
 				group->next = newgroup;
@@ -130,7 +130,7 @@ int ParsePatterns(FILE *input,
 			if(Find_Style(styles,current_style) != NULL) continue;
 			newstyle = (struct style_t *)malloc(sizeof(struct style_t));
 
-			if(styles->first == NULL) {
+			if(styles != NULL && styles->first == NULL) {
 				styles->first = newstyle;
 			} else if(style != NULL) {
 				style->next = newstyle;
@@ -289,7 +289,7 @@ struct pattern_group_t *NextGroup(struct pattern_group_t *g) {
 	return g->next;
 }
 
-const char *Group_GetName(struct pattern_group_t *g) {
+const JML_CHAR *Group_GetName(struct pattern_group_t *g) {
 	if(g == NULL) return NULL;
 	return g->name;
 }
@@ -305,27 +305,27 @@ struct pattern_t *NextPatt(struct pattern_t *p) {
 	return p->next;
 }
 
-const char *Patt_GetName(struct pattern_t *p) {
+const JML_CHAR *Patt_GetName(struct pattern_t *p) {
 	if(p == NULL) return NULL;
 	return p->name;
 }
 
-const char *Patt_GetData(struct pattern_t *p) {
+const JML_CHAR *Patt_GetData(struct pattern_t *p) {
 	if(p == NULL) return NULL;
 	return p->data;
 }
 
-const char *Patt_GetStyle(struct pattern_t *p) {
+const JML_CHAR *Patt_GetStyle(struct pattern_t *p) {
 	if(p == NULL) return NULL;
 	return p->style;
 }
 
-float Patt_GetHR(struct pattern_t *p) {
+const JML_FLOAT Patt_GetHR(struct pattern_t *p) {
 	if(p == NULL) return 0;
 	return p->hr;
 }
 
-float Patt_GetDR(struct pattern_t *p) {
+const JML_FLOAT Patt_GetDR(struct pattern_t *p) {
 	if(p == NULL) return 0;
 	return p->dr;
 }
@@ -341,17 +341,17 @@ struct style_t *NextStyle(struct style_t *s) {
 	return s->next;
 }
 
-const char *Style_GetName(struct style_t *s) {
+const JML_CHAR *Style_GetName(struct style_t *s) {
 	if(s == NULL) return NULL;
 	return s->name;
 }
 
-JML_INT8 *Style_GetData(struct style_t *s) {
+const JML_INT8 *Style_GetData(struct style_t *s) {
 	if(s == NULL) return NULL;
 	return s->data;
 }
 
-unsigned int Style_GetLength(struct style_t *s) {
+const JML_UINT8 Style_GetLength(struct style_t *s) {
 	if(s == NULL) return 0;
 	return s->length;
 }
@@ -359,7 +359,7 @@ unsigned int Style_GetLength(struct style_t *s) {
 struct style_t *Find_Style(styles_t *style_list, const char *name) {
 	struct style_t *styles;
 	
-	if(style_list == NULL || name == NULL) return NULL;
+	if(style_list == NULL || name == NULL || style_list->first == NULL) return NULL;
 	styles = style_list->first;
 	while(styles) {
 		if(styles->name != NULL) {

@@ -188,6 +188,9 @@ JML_BOOL JMLib::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLO
   /* Set ratios */
   height_ratio = hr;
   dwell_ratio = dr;
+
+  /* Turn off beep */
+  beep = 0;
   
   /* Check ratios */
   if (height_ratio < HR_MIN || height_ratio > HR_MAX)

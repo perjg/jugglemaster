@@ -27,24 +27,24 @@ struct pattern_t;
 struct pattern_group_t;
 
 struct style_t {
-	char *name;
+	JML_CHAR *name;
 	JML_INT8 *data;
-	unsigned int length;
+	JML_UINT8 length;
 	struct style_t *next;
 };
 
 struct pattern_group_t {
-	char *name;
+	JML_CHAR *name;
 	struct pattern_t *first_patt;
 	struct pattern_group_t *next;
 };
 
 struct pattern_t {
-	char *style;
-	char *name;
-	char *data;
-	float hr, dr; /* Height Ratio, Dwell Ratio */
-	float ga, sp; /* Gravity, Speed */
+	JML_CHAR *style;
+	JML_CHAR *name;
+	JML_CHAR *data;
+	JML_FLOAT hr, dr; /* Height Ratio, Dwell Ratio */
+	JML_FLOAT ga, sp; /* Gravity, Speed */
 	int bgred, bggreen, bgblue; /* Background color */
 	int bp, hd, pd, mr; /* Beep, Hand, Pattern, Mirror */
 	struct pattern_t *next;
@@ -71,23 +71,23 @@ void FreeStyles(struct style_t *styles);
 /* Iterate across groups */
 struct pattern_group_t *FirstGroup(struct groups_t *g);
 struct pattern_group_t *NextGroup(struct pattern_group_t *g);
-const char *Group_GetName(struct pattern_group_t *g);
+const JML_CHAR *Group_GetName(struct pattern_group_t *g);
 struct pattern_t *Group_GetPatterns(struct pattern_group_t *g);
 
 /* Iterate across patterns [only makes sense as part of a group] */
 struct pattern_t *NextPatt(struct pattern_t *p);
-const char *Patt_GetName(struct pattern_t *p);
-const char *Patt_GetData(struct pattern_t *p);
-const char *Patt_GetStyle(struct pattern_t *p);
-float Patt_GetDR(struct pattern_t *p);
-float Patt_GetHR(struct pattern_t *p);
+const JML_CHAR *Patt_GetName(struct pattern_t *p);
+const JML_CHAR *Patt_GetData(struct pattern_t *p);
+const JML_CHAR *Patt_GetStyle(struct pattern_t *p);
+const JML_FLOAT Patt_GetDR(struct pattern_t *p);
+const JML_FLOAT Patt_GetHR(struct pattern_t *p);
 
 /* Iterate across styles */
 struct style_t *FirstStyle(struct styles_t *f);
 struct style_t *NextStyle(struct style_t *p);
-const char *Style_GetName(struct style_t *s);
-JML_INT8 *Style_GetData(struct style_t *s);
-unsigned int Style_GetLength(struct style_t *s);
+const JML_CHAR *Style_GetName(struct style_t *s);
+const JML_INT8 *Style_GetData(struct style_t *s);
+const JML_UINT8 Style_GetLength(struct style_t *s);
 struct style_t *Find_Style(styles_t *style_list, const char *name);
 
 /* Checks to see if character is legal first character for pattern */

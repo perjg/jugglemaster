@@ -80,6 +80,10 @@ the either other two flavers. Example here is easier than anything else:
 ( [46x] , [46x] )    ( 10 balls )
 */
 
+JML_CHAR *jm_randnoparam(void) {
+	return jm_rand(1 + rand()%12, 1 + rand()%12, 1 + rand()%12, rand()%2, 0);
+}
+
 JML_CHAR *jm_rand(JML_INT8 numballs, JML_INT8 pattlen,
 		JML_INT8 transformations,
 		JML_BOOL synchronous, JML_INT8 multiplex) {
@@ -339,11 +343,102 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 	return returnvalue;
 }
 
+JML_CHAR *jm_multiplex_combine_async(JML_CHAR *patt1,
+	JML_CHAR *patt2, JML_INT8 pattlen, JML_INT8 plexes) {
+
+	JML_CHAR *p;
+	int curr_throw, curr_plex;
+	int newplexes, totalthrows;
+	JML_CHAR *throws; /* A buffer that's (plexes + 1) * pattlen */
+	int in_plex;
+	int i, j;
+
+	JML_CHAR *returnvalue,*returntmp;
+
+	throws = (JML_CHAR *)malloc(sizeof(JML_CHAR) * (plexes + 1) * pattlen);
+	memset(throws, '\0', sizeof(JML_CHAR) * (plexes + 1) * pattlen);
+
+	curr_throw = 0;
+	in_plex = 0;
+	curr_plex = 0;
+
+	p = patt1;
+
+	/* populate the pattern in memory */
+	while(*p) {
+		if(*p == '[' && in_plex == 0) {
+			in_plex = 1;
+		}
+
+		if(*p == ']' && in_plex) {
+			in_plex = 0;
+			curr_plex = 0;
+			curr_throw++;
+		}
+
+
+		/* a 0 will be a \0 in the buffer, yes it's deliberate */
+		if((*p > '0' && *p <= '9')  || (*p >= 'a' && *p <= 'z')) {
+			curr_plex++;
+			throws[curr_throw * (plexes + 1) + curr_plex] = *p;
+		}
+		p++;
+	}
+
+	/* Append patt2 to the pattern */
+	for(i=0;i<pattlen;i++) {
+		j = i * (plexes + 1);
+		while(throws[j]) j++;
+		if(patt2[i] != '0') throws[j] = patt2[i];
+	}
+
+	newplexes = 0;
+	totalthrows = 0;
+	for(i=0; i<pattlen; i++) {
+		for(j=0; j<plexes + 1; j++) {
+			if(throws[i*(plexes +1) + j] != '\0') {
+				totalthrows++;
+			} else if(j == 0) {
+				totalthrows++;
+				continue;
+			}
+		}
+		if(throws[i*(plexes +1) + 1] != '\0') {
+			newplexes++;
+		}
+	}
+
+	returnvalue = (JML_CHAR *)malloc(sizeof(JML_CHAR) * totalthrows +
+				sizeof(JML_CHAR) * newplexes * 2 + 1);
+	memset(returnvalue, '\0', sizeof(JML_CHAR) * totalthrows +
+				sizeof(JML_CHAR) * newplexes * 2 + 1);
+
+	returntmp = returnvalue;
+	for(i=0; i<pattlen; i++) {
+		if(throws[i*(plexes +1) + 1] != '\0') {
+			*returntmp++ = '[';
+		}
+		for(j=0; j<plexes+1; j++) {
+			if(throws[i*(plexes +1) + j] != '\0') {
+				*returntmp++ = throws[i*(plexes +1) + j];
+			}
+		}
+		if(throws[i*(plexes +1) + 1] != '\0') {
+			*returntmp++ = ']';
+		}
+	}
+
+	free(throws);
+
+	return returnvalue;
+}
+
 #ifdef RAND_STANDALONE
 int main(int argc, char *argv[]) {
 	int numballs, pattlen, transformations, sync;
 	JML_CHAR *pattern;
 	JMSiteValidator val;
+	int quiet = 0;
 
 	/* FILE *inputfile;
 	char line[100];
@@ -375,6 +470,9 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	} */
+	if(argc > 1 && strcmp(argv[1],"-q") == 0) {
+		quiet = 1;
+	}
 
 	for(sync = 0; sync <= 1; sync++) {
 		for(numballs = 0; numballs<=35; numballs++) {
@@ -383,20 +481,22 @@ int main(int argc, char *argv[]) {
 					int showpat = 0;
 					pattern = jm_rand(numballs, pattlen,
 								transformations, sync, 0);
-					if(pattern != NULL) {
-						if(val.validateSite(pattern)) {
-							printf("SUCCESS");
+					if(quiet == 0) {
+						if(pattern != NULL) {
+							if(val.validateSite(pattern)) {
+								printf("SUCCESS");
+							} else {
+								printf("FAIL");
+								showpat++;
+							}
 						} else {
-							printf("FAIL");
-							showpat++;
+							printf("NULL RETURNED ");
 						}
-					} else {
-						printf("NULL RETURNED ");
-					}
-					printf(" - balls: %i len: %i, tran: %i, sync: %i\n",
-						numballs, pattlen, transformations, sync);
-					if(showpat) {
-						printf("     %s\n", pattern);
+						printf(" - balls: %i len: %i, tran: %i, sync: %i\n",
+							numballs, pattlen, transformations, sync);
+						if(showpat) {
+							printf("     %s\n", pattern);
+						}
 					}
 					if(pattern != NULL) {
 						free(pattern);

@@ -22,8 +22,11 @@
 
 #include "jmlib.h"
 
-/* Use jm_rand to get a random pattern.
+/* Use jm_randnoparam to get a random pattern.
+use jm_rand to get a random pattern if some of the parameters matter to you
 Please free it when you're done.  */
+
+JML_CHAR *jm_randnoparam(void);
 
 /* multiplex is an int describing the maximum possible number of
 additional throws for any given throw */
@@ -38,5 +41,15 @@ JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,
 JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,	
 		JML_INT8 transformations);
 
+/* Don't use this */
+
+/* patt1 may contain multiplexes, patt2 is to be added to it.
+   both patts must contain same number of throws
+   plexes is the maximum possible number of throws in any current
+   multiplex. */
+
+/* As I said, don't use this */
+JML_CHAR *jm_multiplex_combine_async(JML_CHAR *patt1,
+			JML_CHAR *patt2, JML_INT8 pattlen, JML_INT8 plexes);
 
 #endif

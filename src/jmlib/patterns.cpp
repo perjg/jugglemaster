@@ -352,82 +352,92 @@ struct style_t *Find_Style(styles_t *style_list, const char *name) {
 
 int main(int argc, char *argv[]) {
 	FILE *f;
-	const char *filename;
 	struct groups_t g;
 	struct styles_t s;
 	struct pattern_group_t *groups;
 	struct style_t *styles;
 	struct pattern_t *patterns;
 	int quiet = 0;
+	int current_arg;
 
 	s.first = NULL;
 	g.first = NULL;
 
-	if((argc == 3 && argv[1][0] != '-') || (argc < 2 || argc > 3)) {
-		printf("Format: %s [-q[uiet]] <filename>\n", argv[0]);
+	if(argc < 2) {
+		printf("Format: %s [-q[uiet]] <filename1> [filename2 ...]\n", argv[0]);
 		return 1;
 	}
 
 	if(strncmp(argv[1],"-q",2) == 0) {
 		quiet = 1;
-		filename = argv[2];
+		current_arg = 2;
 	} else {
-		filename = argv[1];
-	}
-	if((f = fopen(filename,"r")) == NULL) {
-		perror("Couldn't open file");
-		return 1;
+		current_arg = 1;
 	}
 
-	ParsePatterns(f,&g,&s);
-	fclose(f);
+	for(;current_arg<argc;current_arg++) {
 
-	if(!quiet) {
-		groups = FirstGroup(&g);
-		while(groups) {
-			printf("Group Name: %s\n",Group_GetName(groups));
-	
-			patterns = Group_GetPatterns(groups);
-			while(patterns) {
-				printf("  Pattern Name: %s\n",Patt_GetName(patterns));
-				printf("   Style: %s\n",Patt_GetStyle(patterns));
-				printf("   Data: %s\n",Patt_GetData(patterns));
-				patterns = NextPatt(patterns);
-			}
-
-			groups = NextGroup(groups);
-			printf("\n");
-		};
-
-		printf("\n\n\n");
-		styles = FirstStyle(&s);
-		if(styles == NULL) printf("Great Scott!\n");
-		while(styles) {
-			int i;
-			printf("Style Name: %s\n",Style_GetName(styles));
-			printf(" Length: %i\n",Style_GetLength(styles));
-			printf(" Data:\n");
-			for(i=0;i<(int)Style_GetLength(styles);i++) {
-				if((i%4) == 0) {
-					printf("  {");
-				} else if ((i%4) == 2) {
-					printf("}{");
-				}
-				printf(" %i",Style_GetData(styles)[i]);
-	
-				if ((i%4) == 0 || (i%4) == 2) {
-					printf(", ");
-				} else if ((i%4) == 3) {
-					printf("}\n");
-				}
-			}
-			styles = NextStyle(styles);
-			printf("\n");
+		if((f = fopen(argv[current_arg],"r")) == NULL) {
+			perror("Couldn't open file");
+			return 1;
 		}
-	}
 
-	//FreeGroups(&g);
-	FreeStyles(&s);
+		ParsePatterns(f,&g,&s);
+		fclose(f);
+
+		if(!quiet) {
+			printf("File: %s\n", argv[current_arg]);
+
+			groups = FirstGroup(&g);
+			printf("Group Data\n");
+			while(groups) {
+				printf(" Group Name: %s\n",Group_GetName(groups));
+		
+				patterns = Group_GetPatterns(groups);
+				while(patterns) {
+					printf("  Pattern Name: %s\n",Patt_GetName(patterns));
+					printf("   Style: %s\n",Patt_GetStyle(patterns));
+					printf("   Data: %s\n",Patt_GetData(patterns));
+					patterns = NextPatt(patterns);
+				}
+
+				groups = NextGroup(groups);
+				printf("\n");
+			};
+
+			printf("\n\n");
+			printf("Style Data\n");
+			styles = FirstStyle(&s);
+			while(styles) {
+				int i;
+				printf(" Style Name: %s\n",Style_GetName(styles));
+				printf("  Length: %i\n",Style_GetLength(styles));
+				printf("  Data:\n");
+				for(i=0;i<(int)Style_GetLength(styles);i++) {
+					if((i%4) == 0) {
+						printf("   {");
+					} else if ((i%4) == 2) {
+						printf("}{");
+					}
+					printf(" %i",Style_GetData(styles)[i]);
+	
+					if ((i%4) == 0 || (i%4) == 2) {
+						printf(", ");
+					} else if ((i%4) == 3) {
+						printf("}\n");
+					}
+				}
+				styles = NextStyle(styles);
+				printf("\n");
+			}
+
+			printf("\n\n");
+		}
+
+		FreeGroups(&g);
+		FreeStyles(&s);
+
+	}
 
 	return 0;
 }

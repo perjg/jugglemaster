@@ -1,10 +1,11 @@
-CXXFLAGS=-g -Wall -pedantic -Werror -fsigned-char
+CXXFLAGS=-g -Wall -pedantic -fsigned-char -Werror
 LIBS+=-lm -ldl
 
 ifeq ($(DEBUG), 1)
 CFLAGS +=-g
 endif
 
+DATA=../../data/patterns.jm ../../data/semaphore.jm
 OBJ=jmlib.o  prefs.o  util.o  validator.o
 
 all: $(OBJ)
@@ -20,7 +21,7 @@ clean:
 	rm -f *.o core jmlib.a patterns
 
 p: clean patterns
-	./patterns ../../data/patterns.jm
+	./patterns $(DATA)
 
 v: clean patterns
-	valgrind --leak-check=yes ./patterns -q ../../data/patterns.jm
+	valgrind --leak-check=yes ./patterns -q $(DATA)

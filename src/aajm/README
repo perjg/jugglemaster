@@ -13,5 +13,17 @@ AAOPTS="-driver slang -width 240 -height 150" \
 This fella: http://homepage.smc.edu/kennedy_john/
 and Abrash supplied the algorithms for the aa_ series of files here.
 
+
+Other ways of running it may include adding this to /etc/services:
+aajm            55001/tcp # AAJM !
+
+and this to /etc/inetd.conf:
+aajm    stream  tcp     nowait  root    /usr/sbin/tcpd  aajm
+
+and restarting inetd with "kill -HUP `cat /var/run/inetd.pid`"
+then telnetting to that host on port 55001:
+telnet localhost 55001
+
+
 Gary (-;
 <chunky@icculus.org>

@@ -33,6 +33,7 @@ protected:
   wxSpinCtrl* output_height;
   wxSpinCtrl* delay;
   wxSpinCtrl* max_iterations;
+  wxTextFile* outputfile;
 
   void OnOK(wxCommandEvent &event);
   int printPS();

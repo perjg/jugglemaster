@@ -143,6 +143,31 @@ void Print::OnOK(wxCommandEvent &event) {
 	int oldwidth = jmlib->getImageWidth();
 	int do_change = 0;
 	int i;
+	outputfile = new wxTextFile(filename->GetValue());
+	wxMessageDialog* message;
+	if(!outputfile->Exists()) {
+		outputfile->Create();
+	} else {
+		message = new wxMessageDialog(this,
+			"File Already Exists! Overwrite?",
+			"Overwrite?",
+			wxYES_NO|wxICON_EXCLAMATION);
+		if(message->ShowModal() != wxID_YES) {
+			delete outputfile;
+			return;
+		}
+	}
+	if(!outputfile->Open()) {
+		message = new wxMessageDialog(this,
+			"Can't open file!",
+			"Error",
+			wxOK|wxICON_EXCLAMATION);
+		message->ShowModal();
+		delete outputfile;
+		return;
+	}
+		
+
 	if (oldheight != output_width->GetValue() ||
 		oldwidth != output_height->GetValue()) do_change=1;
 
@@ -168,6 +193,11 @@ void Print::OnOK(wxCommandEvent &event) {
 	/* Just make sure it clears out any guff */
 	for (i=0; i<200; i++) jmlib->doJuggle();
 
+	outputfile->Write();
+	outputfile->Close();
+
+	delete outputfile;
+
 	EndModal(wxID_OK);
 }
 
@@ -177,7 +207,6 @@ int Print::printPS(void) {
 	/* Note that postscript's co-ordinate system is upside down,
 		c.f. jmlib and wx */
 
-	wxTextFile *postscriptfile = new wxTextFile(filename->GetValue());
 	wxString *line_buffer = new wxString;
 	wxString *patt_string = new wxString;
 	int y_offset;
@@ -185,8 +214,6 @@ int Print::printPS(void) {
 				balls were when we started, and check
 				against it */
 
-	if(!postscriptfile->Exists()) postscriptfile->Create();
-	if(!postscriptfile->Open()) return 0;
 
 	y_offset=jmlib->imageHeight;
 
@@ -201,33 +228,33 @@ int Print::printPS(void) {
 
 	/* Some PS guff */
 
-	postscriptfile->AddLine("%!PS-Adobe-3.0");
+	outputfile->AddLine("%!PS-Adobe-3.0");
 	line_buffer->Printf("%%%%BoundingBox: 0 0 %i %i",
 				jmlib->getImageWidth(),
 				jmlib->getImageHeight());
-	postscriptfile->AddLine(*line_buffer);
-	postscriptfile->AddLine("%%Creator: JuggleMaster And Chunky Kibbles");
+	outputfile->AddLine(*line_buffer);
+	outputfile->AddLine("%%Creator: JuggleMaster And Chunky Kibbles");
 	line_buffer->Printf("%%%%Title: Juggling Pattern %s", jmlib->getSite());
-	postscriptfile->AddLine(*line_buffer);
-	postscriptfile->AddLine("%%EndComments");
+	outputfile->AddLine(*line_buffer);
+	outputfile->AddLine("%%EndComments");
 
 	/* The start of stuff for dynamically resizing to fit the page
 		instead of using a bounding box */
 
-	postscriptfile->AddLine("initclip newpath clippath pathbbox");
-	postscriptfile->AddLine("72 div /pageTop exch def");
-	postscriptfile->AddLine("72 div /pageRight exch def");
-	postscriptfile->AddLine("72 div /pageBottom exch def");
-	postscriptfile->AddLine("72 div /pageLeft exch def");
-	postscriptfile->AddLine("/pageWidth pageRight pageLeft sub def");
-	postscriptfile->AddLine("/pageHeight pageTop pageBottom sub def");
-	postscriptfile->AddLine("72 72 dtransform");
-	postscriptfile->AddLine("/yResolution exch abs def");
-	postscriptfile->AddLine("/xResolution exch abs def");
+	outputfile->AddLine("initclip newpath clippath pathbbox");
+	outputfile->AddLine("72 div /pageTop exch def");
+	outputfile->AddLine("72 div /pageRight exch def");
+	outputfile->AddLine("72 div /pageBottom exch def");
+	outputfile->AddLine("72 div /pageLeft exch def");
+	outputfile->AddLine("/pageWidth pageRight pageLeft sub def");
+	outputfile->AddLine("/pageHeight pageTop pageBottom sub def");
+	outputfile->AddLine("72 72 dtransform");
+	outputfile->AddLine("/yResolution exch abs def");
+	outputfile->AddLine("/xResolution exch abs def");
 
-	postscriptfile->AddLine("/Times-Roman findfont");
-	postscriptfile->AddLine("15 scalefont");
-	postscriptfile->AddLine("setfont");
+	outputfile->AddLine("/Times-Roman findfont");
+	outputfile->AddLine("15 scalefont");
+	outputfile->AddLine("setfont");
 
 	patt_string->Printf("2 2 moveto\n( Site: %s  Style: %s  Balls: %i ) show",
 				jmlib->getSite(),
@@ -235,7 +262,7 @@ int Print::printPS(void) {
 				jmlib->balln);
 
 	line_buffer->Printf("%i {", max_iterations->GetValue());
-	postscriptfile->AddLine(*line_buffer);
+	outputfile->AddLine(*line_buffer);
 
 	for(i=jmlib->balln-1;i>=0;i--) {
 		firstpos[i] = jmlib->b[i];
@@ -252,113 +279,109 @@ int Print::printPS(void) {
 		current_frames++;
 		if(current_frames > max_iterations->GetValue()) done=1;
 
-		postscriptfile->AddLine("erasepage");
-		postscriptfile->AddLine(*patt_string);
+		outputfile->AddLine("erasepage");
+		outputfile->AddLine(*patt_string);
 		line_buffer->Printf("%i {", delay->GetValue());
-		postscriptfile->AddLine(*line_buffer);
+		outputfile->AddLine(*line_buffer);
 		/* Draw Juggler */
 
 		/* Head */
 
-		postscriptfile->AddLine("%Head");
-		postscriptfile->AddLine("newpath");
+		outputfile->AddLine("%Head");
+		outputfile->AddLine("newpath");
 		line_buffer->Printf(" %i %i %i 0 360 arc", ap->hx,
 							-ap->hy + y_offset,
 							ap->hr);
-		postscriptfile->AddLine(*line_buffer);
-		postscriptfile->AddLine(" closepath");
-		postscriptfile->AddLine(" stroke");
+		outputfile->AddLine(*line_buffer);
+		outputfile->AddLine(" closepath");
+		outputfile->AddLine(" stroke");
 
 
 		/* Right Arm */
 
-		postscriptfile->AddLine("%Right Arm");
-		postscriptfile->AddLine("newpath");
+		outputfile->AddLine("%Right Arm");
+		outputfile->AddLine("newpath");
 		line_buffer->Printf(" %i %i moveto", ap->rx[0],
 				-ap->ry[0] + y_offset);
-		postscriptfile->AddLine(*line_buffer);
+		outputfile->AddLine(*line_buffer);
 		for(i=1;i<6;i++){
 			line_buffer->Printf("  %i %i lineto", ap->rx[i],
 					-ap->ry[i] + y_offset);
-			postscriptfile->AddLine(*line_buffer);
+			outputfile->AddLine(*line_buffer);
 		}
-		postscriptfile->AddLine(" stroke");
+		outputfile->AddLine(" stroke");
 
 
 		/* Left Arm */
 
-		postscriptfile->AddLine("%Left Arm");
-		postscriptfile->AddLine("newpath");
+		outputfile->AddLine("%Left Arm");
+		outputfile->AddLine("newpath");
 		line_buffer->Printf(" %i %i moveto", ap->lx[0],
 					-ap->ly[0] + y_offset);
-		postscriptfile->AddLine(*line_buffer);
+		outputfile->AddLine(*line_buffer);
 		for(i=1;i<6;i++){
 			line_buffer->Printf("  %i %i lineto", ap->lx[i],
 						-ap->ly[i] + y_offset);
-			postscriptfile->AddLine(*line_buffer);
+			outputfile->AddLine(*line_buffer);
 		}
-		postscriptfile->AddLine(" stroke");
+		outputfile->AddLine(" stroke");
 
 
 		/* Right Hand */
 
-		postscriptfile->AddLine("%Right Hand");
-		postscriptfile->AddLine("newpath");
+		outputfile->AddLine("%Right Hand");
+		outputfile->AddLine("newpath");
 		line_buffer->Printf(" %i %i moveto", rhand->gx + handp->rx[0],
 				-(rhand->gy + handp->ry[0])+y_offset);
-		postscriptfile->AddLine(*line_buffer);
+		outputfile->AddLine(*line_buffer);
 		for (i=1; i <= 9; i++) {
 			line_buffer->Printf("  %i %i lineto",
 				rhand->gx + handp->rx[i],
 				-(rhand->gy + handp->ry[i])+y_offset);
-			postscriptfile->AddLine(*line_buffer);
+			outputfile->AddLine(*line_buffer);
 		}
-		postscriptfile->AddLine(" closepath");
-		postscriptfile->AddLine(" stroke");
+		outputfile->AddLine(" closepath");
+		outputfile->AddLine(" stroke");
 
 
 		/* Left Hand */
 	
-		postscriptfile->AddLine("%Left Hand");
-		postscriptfile->AddLine("newpath");
+		outputfile->AddLine("%Left Hand");
+		outputfile->AddLine("newpath");
 		line_buffer->Printf(" %i %i moveto", lhand->gx + handp->lx[0],
 				-(lhand->gy + handp->ly[0])+y_offset);
-		postscriptfile->AddLine(*line_buffer);
-		postscriptfile->AddLine(*line_buffer);
+		outputfile->AddLine(*line_buffer);
+		outputfile->AddLine(*line_buffer);
 		for (i=1; i <= 9; i++) {
 			line_buffer->Printf("  %i %i lineto",
 				lhand->gx + handp->lx[i],
 				-(lhand->gy + handp->ly[i])+y_offset);
-			postscriptfile->AddLine(*line_buffer);
+			outputfile->AddLine(*line_buffer);
 		}
-		postscriptfile->AddLine(" closepath");
-		postscriptfile->AddLine(" stroke");
+		outputfile->AddLine(" closepath");
+		outputfile->AddLine(" stroke");
 
 
 		/* Balls */
 
-		postscriptfile->AddLine("%Balls");
-		postscriptfile->AddLine("newpath");
+		outputfile->AddLine("%Balls");
+		outputfile->AddLine("newpath");
 		int diam = 11*jmlib->dpm/DW;
 		for(i=jmlib->balln-1;i>=0;i--) {
 			line_buffer->Printf(" %i %i %i 0 360 arc",
 				jmlib->b[i].gx+diam,
 				-jmlib->b[i].gy-diam + y_offset,
 				diam);
-			postscriptfile->AddLine(*line_buffer);
-			postscriptfile->AddLine(" fill");
+			outputfile->AddLine(*line_buffer);
+			outputfile->AddLine(" fill");
 		}
-		postscriptfile->AddLine(" stroke");
+		outputfile->AddLine(" stroke");
 
 
-		postscriptfile->AddLine("} repeat");
+		outputfile->AddLine("} repeat");
 	}
 
-	postscriptfile->AddLine("} repeat");
-	postscriptfile->Write();
-	postscriptfile->Close();
-
-	delete postscriptfile;
+	outputfile->AddLine("} repeat");
 	delete line_buffer;
 
 	return 1;

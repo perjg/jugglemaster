@@ -77,7 +77,8 @@ must be named either patt_e.jm or patterns.jm.
 AAJM
 
 To build, go into src/aajm, and type "make". You'll need aalib,
-available from http://aa-project.sf.net
+available from http://aa-project.sf.net. To build, aajm uses aalib-config,
+so you may need the latest version of aalib on your system [at least 1.4]
 
 It should build two binaries, one called "aajm" that's all you really
 need. The other is called "aajm-remote" and can be used to remotely

@@ -15,6 +15,7 @@
 ;  '*' Author Credit
 ;  '%' Name of the style (30 characters or less) with style data,
 ;      or call the registered style.
+;  '&' Pattern Author
 ;
 ;This style is already defined.
 ;%Normal

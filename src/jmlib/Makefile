@@ -8,7 +8,7 @@ CXXFLAGS+=-g -Werror
 endif
 
 DATA=../../data/patterns.jm ../../data/semaphore.jm
-OBJ=jmlib.o prefs.o util.o validator.o patterns.o
+OBJ=jmlib.o prefs.o util.o validator.o patterns.o randompatt.o
 
 all: jmlib.a
 
@@ -20,8 +20,12 @@ patterns:
 	$(CXX) $(CXXFLAGS) -DPATTERNS_STANDALONE -c -o ./patterns-standalone.o ./patterns.cpp
 	$(CXX) $(LDFLAGS) -o ./patterns ./patterns-standalone.o $(LIBS)
 
+rand:
+	$(CXX) $(CXXFLAGS) -DRAND_STANDALONE -c -o ./rand-standalone.o ./randompatt.cpp
+	$(CXX) $(LDFLAGS) -o ./rand ./rand-standalone.o $(LIBS)
+
 clean:
-	rm -f *.o core jmlib.a patterns
+	rm -f *.o core jmlib.a patterns rand
 
 p: clean patterns
 	./patterns $(DATA)

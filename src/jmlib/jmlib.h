@@ -43,6 +43,7 @@
 #include "util.h"
 #include "validator.h"
 #include "patterns.h"
+#include "randompatt.h"
 
 // Misc. macros
 #ifndef max

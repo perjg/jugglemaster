@@ -127,7 +127,16 @@ int ParsePatterns(FILE *input,
 			group->next = NULL;
 		} else if(sscanf(buf, "%%%255[^\n]",current_style) == 1) {
 			/* New Style */
-			if(Find_Style(styles,current_style) != NULL) continue;
+			if(current_style && *current_style) {
+				if(Find_Style(styles,current_style) != NULL) {
+					strcpy(current_style,"Normal\0");
+					continue;
+				}
+			} else {
+				strcpy(current_style,"Normal\0");
+				continue;
+			}
+
 			newstyle = (struct style_t *)malloc(sizeof(struct style_t));
 
 			if(styles != NULL && styles->first == NULL) {
@@ -362,7 +371,7 @@ struct style_t *Find_Style(styles_t *style_list, const char *name) {
 	if(style_list == NULL || name == NULL || style_list->first == NULL) return NULL;
 	styles = style_list->first;
 	while(styles) {
-		if(styles->name != NULL) {
+		if(styles->name != NULL && name != NULL && *name && *styles->name) {
 			if(strcasecmp(styles->name,name) == 0) return styles;
 		}
 		styles = styles->next;

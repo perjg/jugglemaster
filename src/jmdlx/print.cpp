@@ -305,7 +305,8 @@ int Print::printPS(void) {
 				against it */
 
 	wxProgressDialog progress("Progress","Creating PostScript",
-		max_iterations->GetValue(), this, wxPD_APP_MODAL|wxPD_CAN_ABORT);
+		max_iterations->GetValue(), this,
+		wxPD_APP_MODAL|wxPD_CAN_ABORT);
 
 
 	y_offset=jmlib->imageHeight;

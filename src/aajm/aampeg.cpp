@@ -56,9 +56,6 @@ int creatempeg(JMLib *j, const char *filename) {
 	mpegcontext->gop_size = 30;
 	mpegcontext->max_b_frames=1;
 
-	printf("TextWidth: %i, Width: %i\n",aa_scrwidth(aacontext), mpegcontext->width);
-	printf("TextHeight: %i, Height: %i\n",aa_scrheight(aacontext), mpegcontext->height);
-
 	if (avcodec_open(mpegcontext, codec) < 0) {
 		return(1);
 	}

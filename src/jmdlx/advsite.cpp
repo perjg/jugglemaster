@@ -290,8 +290,10 @@ void RandomSiteSwap::OnOK(wxCommandEvent &WXUNUSED(event)) {
 void RandomSiteSwap::OnRandom(wxCommandEvent &WXUNUSED(event)) {
 	JML_CHAR *newsite;
 	newsite = jm_randnoparam();
-	newsiteswap->SetValue(newsite);
-	free(newsite);
+	if(newsite != NULL) {
+		newsiteswap->SetValue(newsite);
+		free(newsite);
+	}
 }
 
 void RandomSiteSwap::OnCreate(wxCommandEvent &WXUNUSED(event)) {
@@ -299,6 +301,8 @@ void RandomSiteSwap::OnCreate(wxCommandEvent &WXUNUSED(event)) {
 	newsite = jm_rand(numballs->GetValue(), pattlen->GetValue(),
 		mutations->GetValue(), synchronous->GetValue(),
 		multiplex->GetValue());
-	newsiteswap->SetValue(newsite);
-	free(newsite);
+	if(newsite != NULL) {
+		newsiteswap->SetValue(newsite);
+		free(newsite);
+	}
 }

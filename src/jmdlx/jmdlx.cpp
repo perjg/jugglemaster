@@ -341,6 +341,7 @@ void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
   hand* handp = &(jmlib->handpoly);
 
   dc.SetBackground(*wxWHITE_BRUSH);
+  // dc.SetBackground(wxBrush(wxColor(r,g,b),wxSOLID);
   dc.SetPen(*wxBLACK_PEN);
   dc.Clear();
 

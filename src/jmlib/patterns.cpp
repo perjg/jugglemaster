@@ -99,7 +99,7 @@ int ParsePatterns(FILE *input,
 			/* Show Pattern */
 		} else if(sscanf(buf, "#MR=%i",&currmr) == 1) {
 			/* Mirror */
-		} else if(sscanf(buf, "*%255[^]]",curr_author) == 1) {
+		} else if(sscanf(buf, "*%255[^\n]",curr_author) == 1) {
 			/* Change Author */
 		} else if(sscanf(buf, "/[ %255[^]] ]",current_group) == 1) {
 			/* New Group */
@@ -131,9 +131,8 @@ int ParsePatterns(FILE *input,
 			group->next = NULL;
 		} else if(sscanf(buf, "%%%255[^\n]",current_style) == 1) {
 			/* New Style */
-			if(current_style && *current_style && styles->first) {
+			if(current_style && *current_style) {
 				if(Find_Style(styles,current_style) != NULL) {
-					strcpy(current_style,"Normal\0");
 					continue;
 				}
 			} else {

@@ -76,11 +76,23 @@ void aa_octant1(aa_context *context, unsigned int x0, unsigned int y0,
 
 /* Bresenham's, flagrantly lifted from Abrash's black book */
 /* Doesn't call aa_flush */
+#ifndef min
+#define min(a,b) (a<b?a:b)
+#endif
+
 void aa_drawline(aa_context *context, int x0, int y0,
 				int x1, int y1, int color) {
 	int xlen, ylen;
-
+	char *horiz_linestart;
 	int tmp;
+		
+	if(y0 == y1) {
+		/* It's a flat line, which we can optimise a little :-) */
+		horiz_linestart = context->imagebuffer + min(x0,x1) +
+			(y0*aa_imgwidth(context));
+		memset((void *)horiz_linestart, color, abs(x1-x0));
+	}
+
 	if(y0>y1) {
 		tmp = y0;
 		y0 = y1;
@@ -89,7 +101,6 @@ void aa_drawline(aa_context *context, int x0, int y0,
 		x0 = x1;
 		x1 = tmp;
 	}
-
 	xlen = x1 - x0;
 	ylen = y1 - y0;
 

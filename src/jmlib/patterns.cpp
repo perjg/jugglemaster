@@ -127,7 +127,7 @@ int ParsePatterns(FILE *input,
 			group->next = NULL;
 		} else if(sscanf(buf, "%%%255[^\n]",current_style) == 1) {
 			/* New Style */
-			if(current_style && *current_style) {
+			if(current_style && *current_style && styles->first) {
 				if(Find_Style(styles,current_style) != NULL) {
 					strcpy(current_style,"Normal\0");
 					continue;

@@ -1,3 +1,11 @@
+Version 0.3
+ - aajm: Took out pointless macros AAWIDTH and AAHEIGHT
+ - jmlib: Provide ability to describe all the builtin styles
+ - aajm: modified to take advantage of new jmlib feature
+ - jmdlx: modified to take advantage of new jmlib feature
+ - jmlib: Added "Random" style.
+ - Added more patterns
+
 Version 0.2
 2003-12-11
  - Major addition: AAJM

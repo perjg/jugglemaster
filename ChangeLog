@@ -8,6 +8,7 @@ Version 0.5
  - aajm: Added MPEG support [I scare me]
  - jmdlx: New bloodshed files, Thanks to Shawn Fumo
  - all: Makefile voodoo, add VERSION to CFLAGS
+ - data: Added all valid patterns in my unix dictionary
 
 Version 0.4
 2004-09-01

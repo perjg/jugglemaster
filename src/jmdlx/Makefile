@@ -40,6 +40,7 @@ jm_lib:
 	$(MAKE) -C ../jmlib
 
 patt:
+	rm -f patt.o
 	$(CXX) -DPATT_STANDALONE $(CXXFLAGS) -c -o ./patt.o ./patt.cpp
 	$(CXX) $(LDFLAGS) -o ./patt $(CXXFLAGS) ./patt.o $(LIBS)
 

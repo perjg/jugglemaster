@@ -258,22 +258,38 @@ int Print::printImage() {
 	
 	wxInitAllImageHandlers();
 
+	wxString fileextn;
+	fileextn = filename->GetValue().AfterLast('.');
+	int formatfound = 0;
+
 	wxImageHandler* handler;
 	HandlerList& handlers = (HandlerList&)wxImage::GetHandlers();
 	// wxList handlers = wxImage::GetHandlers();
 	// ArrayOfIH handlers = (ArrayOfIH&)wxImage::GetHandlers();
 	HandlerList::Node *node = handlers.GetFirst();
+	wxString extn;
 	while(node) {
 		handler = (wxImageHandler *)node->GetData();
-		if(handler->GetExtension().Len() > 0) {
+		extn = handler->GetExtension();
+		/* Don't append if wx doesn't support writing */
+		if(extn.Len() > 0 &&
+			extn != "iff" &&
+			extn != "gif" &&
+			extn != "ani" ) {
 			formatchoice->Append(handler->GetExtension(), (void *)handler);
+			if(extn == fileextn) {
+				formatchoice->SetSelection(formatchoice->FindString(handler->GetExtension()));
+				formatfound++;
+			}
 		}
 		node = node->GetNext();
 	}
 
-	int png_pos = formatchoice->FindString("png");
-	if(-1 != png_pos) formatchoice->SetSelection(png_pos);
-	else formatchoice->SetSelection(0);
+	if(formatfound == 0) {
+		int png_pos = formatchoice->FindString("png");
+		if(-1 != png_pos) formatchoice->SetSelection(png_pos);
+		else formatchoice->SetSelection(0);
+	}
 
 
 	wxButton *ok = new wxButton(&formatchooser, wxID_OK, "OK");

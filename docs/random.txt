@@ -1,0 +1,58 @@
+How to generate random siteswaps
+
+
+All maths in this file courtesy of Aidan Burns,
+http://www.geocities.com/aidanjburns/
+
+
+ASYNCHRONOUS PATTERNS
+
+Seed a buffer of pattern_length with throws of height num_balls
+
+Rule 1,  The Downright Rule: to swap any two throws in a pattern, the
+throw that moves to the right decreases with each step, and the throw
+that moves to the left increases with each step. A throw may not move
+if it would decrease below zero.
+
+Rule 2,  The Circular Rule: a throw may be moved from the front to the
+back of a pattern.
+
+Implemenation note: Rule 2 is implied by doing all swapping arithmetic
+   modulo patt_len.
+
+
+SYNCHRONOUS PATTERNS
+
+To seed the pattern:
+  1) Even numbers of balls go (n,n)<rinse, repeat>
+  2) Odd numbers of balls should go ((2n-2)x,2)(2,(2n-2)x)<rinse, repeat>
+  3) Unfortunately, that breaks down the notation at 18 throws, so use
+    this instead: ((n+1)x, (n-1))((n-1), (n+1)x)<rinse, repeat>
+
+Rule 3,  The Handedness Rule: when you change a throws handedness, you
+change its crossedness.
+
+Rule 4,  The Two Up, Two Down Rule: to swap any two throws in a synchronous
+pattern, the throw that moves to the right decreases by two with each
+bracket, and the throw that moves to the left increases by two with each
+bracket. A throw may not move if it would decrease below zero.
+
+Rule 2 is also still used, and is also still implied by the implemenation
+
+
+MULTIPLEX PATTERNS
+
+Multiplex patterns can be created by combining same-length patterns of
+the either other two flavers. Example here is easier than anything else:
+
+  5  0  4 +    ( 3 balls )
+  4  2  0      ( 2 balls )
+-----------
+[54] 2  4      ( 5 balls )
+
+
+(  4    ,   4   ) +  ( 4 balls )
+(  6x   ,   6x  )    ( 6 balls )
+-----------------
+( [46x] , [46x] )    ( 10 balls )
+

@@ -1,0 +1,78 @@
+Here's how jugglemaster validates patterns
+
+
+[terminology: VSS == Vanilla Site Swap, MSS == Multiplex Site Swap,
+SSS == Synchronous Site Swap]
+
+1) For VSS
+Fill an array of length Pattern_length with ones. For each throw in the
+pattern, decrement by one the slot in that array where the ball should
+land. When you've gone through the whole pattern, check your array. If
+it's all zeros, you're gold.
+
+Worked example:
+Pattern:   5 3 1
+Array:     1 1 1
+Start with the 5. It goes along 5 throws, then you decrement:
+Array:     1 1 0
+Next is the three:
+Array:     1 0 0
+Finally, after the one:
+Array:     0 0 0
+We're good.
+
+Pattern:   6 3 1
+Array:     1 1 1
+Starting with the six:
+Array:     0 1 1
+Next is the three:
+Array:     0 0 1
+Finally, the one:
+Array:     -1 0 1
+Not so good.
+
+
+2) For MSS
+Do the same procedure as before, but instead of initialising with all
+ones, initialise with the number of throws in the multiplex, then
+decrement as before. This is a superset of the VSS one, but a bit slower
+to execute. Therefore we keep them separate
+
+Worked example:
+Pattern:  [53]  3  1
+Array:      2   1  1
+First the five:
+Array:      2   1  0
+Next the first three:
+Array:      1   1  0
+Next the second three:
+Array:      1   0  0
+Finally the one:
+Array:      0   0  0
+So this is valid.
+
+
+3) For SSS
+Amazing what judicious use of printf will do for you
+Turn the SSS into an equally valid MSS or VSS, and validate accordingly.
+We're going to build an array that is an VSS. For each throw in the SSS,
+if it's a normal throw, put it into the array untouched. If it's a
+crossing throw from the left, add one, if it's a crossing throw from the
+right, subtract one
+
+Worked example:
+Pattern:  ([42x], 4) (4, [42x])
+The array builds up, from left to right:
+Array:  [4]
+Array:  [43]
+Array:  [43]4
+Array:  [43]44
+Array:  [43]44[4
+Array:  [43]44[41]
+
+Then validate. For the interested, I believe this always generates the
+same number of balls in MSS as it has in the SSS, so long as the site is
+valid; if it's invalid, then having the same number of balls is mostly
+meaningless. I've not thought about this lnog enough to prove it, yet.
+
+Gary (-;

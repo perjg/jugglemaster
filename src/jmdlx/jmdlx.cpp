@@ -79,6 +79,7 @@ enum {
 	CHANGE_STYLE_S,
 	CHOOSE_PATTERN,
 	CHOOSE_SEMAPHORE,
+	PRINT_PS,
 	OPTION_MIRROR,
 	OPTION_REDOWNLOAD,
 	OPTION_PAUSE,
@@ -96,6 +97,7 @@ BEGIN_EVENT_TABLE(JMFrame, wxFrame)
     EVT_MENU(CHANGE_STYLE_S, JMFrame::changeStyle)
     EVT_MENU(CHOOSE_PATTERN, JMFrame::choosePattern)
     EVT_MENU(CHOOSE_SEMAPHORE, JMFrame::chooseSemaphore)
+    EVT_MENU(PRINT_PS, JMFrame::print)
     EVT_MENU(OPTION_MIRROR, JMFrame::changeMirror)
     EVT_MENU(OPTION_REDOWNLOAD, JMFrame::reDownload)
     EVT_MENU(OPTION_PAUSE, JMFrame::changePause)
@@ -115,12 +117,14 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
   speedMenu = new wxMenu();
 
   fileMenu->Append(CHANGE_SITESWAP_S, "Change &SiteSwap (Simple)");
-  fileMenu->Append(CHANGE_SITESWAP_A, "Change SiteSwap (&Advanced)");
+  fileMenu->Append(CHANGE_SITESWAP_A, "Change SiteSwap (Advanced)");
   fileMenu->AppendSeparator();
   fileMenu->Append(CHANGE_STYLE_S, "Change S&tyle");
   fileMenu->AppendSeparator();
-  fileMenu->Append(CHOOSE_PATTERN, "Choose &Pattern");
+  fileMenu->Append(CHOOSE_PATTERN, "Choose P&attern");
   fileMenu->Append(CHOOSE_SEMAPHORE, "Show Se&maphore");
+  fileMenu->AppendSeparator();
+  fileMenu->Append(PRINT_PS, "&Print...");
   fileMenu->AppendSeparator();
   fileMenu->Append(ID_EXIT, "E&xit");
 
@@ -251,6 +255,11 @@ void JMFrame::chooseSemaphore(wxCommandEvent& WXUNUSED(event))
   }
   wxMessageDialog *popup = new wxMessageDialog(this, "No Semaphores Loaded!", "Error", wxOK|wxICON_ERROR);
   popup->ShowModal();
+}
+
+void JMFrame::print(wxCommandEvent& WXUNUSED(event))
+{
+	new Print(this, jmlib);
 }
 
 void JMFrame::OnClose() {

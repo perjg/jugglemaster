@@ -11,7 +11,7 @@ ifeq ($(DEBUG), 1)
 CXXFLAGS += -g
 endif
 
-OBJ=jmdlx.o patt.o advsite.o choosepatt.o choosestyle.o newsemaphore.o
+OBJ=jmdlx.o patt.o advsite.o choosepatt.o choosestyle.o newsemaphore.o print.o
 
 all: jm_lib $(OBJ)
 	$(CXX) $(LDFLAGS) -o ./jmdlx $(CFLAGS) $(OBJ) ../jmlib/jmlib.a $(LIBS)

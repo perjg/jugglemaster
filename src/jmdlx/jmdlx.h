@@ -26,6 +26,7 @@
 #include "choosepatt.h"
 #include "choosestyle.h"
 #include "newsemaphore.h"
+#include "print.h"
 
 class JMFrame;
 class JMTimer;
@@ -74,6 +75,7 @@ private:
   void changePause(wxCommandEvent &);
   void choosePattern(wxCommandEvent &);
   void chooseSemaphore(wxCommandEvent &);
+  void print(wxCommandEvent &);
   void reDownload(wxCommandEvent &);
   void OnPaint(wxPaintEvent& WXUNUSED(event));
   void speedUp(wxCommandEvent &);

@@ -3,8 +3,16 @@ In this package:
 src/jmlib/* is licensed under the Modified BSD License, please see
 COPYING.jmlib for further details.
 
-src/jmdlx/* and src/aajm/* are licensed under the GPL
+The following are all licenced under the GPL:
+
+JMDlx    (wxWidgets) src/jmdlx/*
+JMPocket (PocketPC)  src/jmpocket/*
+AAJM     (aalib)     src/aajm/*
+
 The full text of the GPL is available in COPYING
 
 Chunky Kibbles
 <chunky@icculus.org>
+
+Per Johan Groland
+<jm@jugglemaster.net>

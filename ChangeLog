@@ -1,11 +1,12 @@
 Version 0.4
-2004-08-27
  - jmlib: Added patterns.h and patterns.cpp, which parse pattern files
  - data: Added some style data for completeness
  - jmdlx: Added printing mpegs. Thanks to luap for the color stuff.
  - jmdlx: Added printing images
  - jmdlx: HUGE list of fixes and changes from arkanes in #wxwidgets
  - jmdlx: Added Visual Studio build stuff, also arkanes
+ - jmpocket: initial add
+ - jmlib: minor jmpocket compatability fixes
 
 Version 0.3
 2004-03-17

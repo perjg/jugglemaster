@@ -1,6 +1,3 @@
-CXX=c++
-MAKE=make
-
 CXXFLAGS=-Wall -Werror -fsigned-char `wx-config --cppflags`
 # -ansi -pedantic cause warnings from some compilers [wx uses long long]
 LDFLAGS=`wx-config --ldflags`

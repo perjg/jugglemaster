@@ -1,4 +1,3 @@
-CXX=c++
 CXXFLAGS=-Wall -pedantic -Werror -ansi -fsigned-char
 LIBS+=-lm -ldl
 

@@ -1,4 +1,5 @@
 Version 0.5
+ - Major Addition: TorqueScript port of jmlib
  - docs: Added how random patterns are created
  - docs: Added how siteswaps are validated
  - jmdlx: Added Random Pattern support

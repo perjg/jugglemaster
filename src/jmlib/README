@@ -1,0 +1,90 @@
+README for using jmlib
+
+This is a quick README describing the salient bits of using jmlib to
+put together an application.
+
+The simplest-to-understand application using jmlib is [at time of writing,
+and likely to remain] aajm. Notably, the draw_juggler() function.
+
+
+1) Co-ordinate System
+
+jmlib considers (0,0) to be the top left of the screen. At the top of
+its throw, any given ball has its /minimum/ Y-value.
+
+The "left" things are on the left on-screen. Generally, consider watching
+a standard jmlib setup to be like watching yourself juggle in a mirror.
+
+
+2) Initialise
+
+JMLib *jm = new JMLib();
+jm->setWindowSize(width,height)
+
+
+3) Set Patterns/Styles
+
+jm->setPatternDefault();
+jm->setStyleDefault();
+jm->startJuggle();
+
+More generally:
+
+jm->setPattern("Pattern Name", "Siteswap");
+jm->setStyle("Style Name");
+  Where style is one of: "Normal", "Reverse", "Shower", "Mills Mess",
+  "Center", "Windmill", "Random"
+jm->startJuggle();
+
+
+4) Render
+
+arm* ap = &(jm->ap);
+ball* rhand = &(jm->rhand);
+ball* lhand = &(jm->lhand);
+hand* handp = &(jm->handpoly);
+
+
+Head:
+drawcircle(ap->hx, ap->hy, ap->hr); // Head X, Y, Radius
+
+Arms:
+Arms are in 5 segments.
+for (int i=0;i<5;i++) {
+    drawline(ap->rx[i], ap->ry[i], ap->rx[i+1], ap->ry[i+1]);
+    drawline(ap->lx[i], ap->ly[i], ap->lx[i+1], ap->ly[i+1]);
+}
+
+Hands:
+Hands are in 10 segments.
+
+for (int i=0; i < 10; i++) {
+    drawline(rhand->gx + handp->rx[i],
+        rhand->gy + handp->ry[i],
+        rhand->gx + handp->rx[(i+1)%10],
+        rhand->gy + handp->ry[(i+1)%10]);
+    drawline(lhand->gx + handp->lx[i],
+        lhand->gy + handp->ly[i],
+        lhand->gx + handp->lx[(i+1)%10],
+        lhand->gy + handp->ly[(i+1)%10]);
+}
+
+Balls:
+
+int diam = (11*jm->dpm/DW);
+for(int i=jm->balln-1;i>=0;i--) {
+	drawcircle(jm->b[i].gx + diam, jm->b[i].gy + diam, diam);
+}
+
+
+
+5) Loop
+
+jm->doJuggle();
+
+
+
+Obviously, there's more. This is intentionally the minimum required to
+show a juggler on the screen.
+
+Chunky Kibbles <chunky@icculus.org>

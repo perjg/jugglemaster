@@ -91,6 +91,7 @@ void aa_drawline(aa_context *context, int x0, int y0,
 		horiz_linestart = context->imagebuffer + min(x0,x1) +
 			(y0*aa_imgwidth(context));
 		memset((void *)horiz_linestart, color, abs(x1-x0));
+		return;
 	}
 
 	if(y0>y1) {

@@ -33,7 +33,7 @@ Print::Print(wxWindow *parent, JMLib *j)
 
   // Filename
 	wxBoxSizer *filenamesizer = new wxBoxSizer(wxHORIZONTAL);
-	filename = new wxTextCtrl(this,-1,wxString(jmlib->getPattName()) + ".ps");
+	filename = new wxTextCtrl(this,-1,jmlib->getPattName());
 	filenamesizer->Add(new wxStaticText(this, 0, "Filename"),
                                         0,
                                         wxALIGN_CENTER_VERTICAL|wxALL,
@@ -48,6 +48,12 @@ Print::Print(wxWindow *parent, JMLib *j)
 	output_type = new wxChoice(this,-1);
 	output_type->Append("PostScript");
 	output_type->SetStringSelection("PostScript");
+
+#ifdef HAVE_AVCODEC_H
+	output_type->Append("MPEG");
+	output_type->SetStringSelection("MPEG");
+#endif
+
 	typesizer->Add(new wxStaticText(this, 0, "Output Type"),
                                         0,
                                         wxALIGN_CENTER_VERTICAL|wxALL,
@@ -185,6 +191,12 @@ void Print::OnOK(wxCommandEvent &event) {
 	if (output_type->GetStringSelection() == "PostScript") {
 		printPS();
 	}
+
+#ifdef HAVE_AVCODEC_H
+	if (output_type->GetStringSelection() == "MPEG") {
+		printMPEG();
+	}
+#endif
 
 	if(do_change) {
 		jmlib->setWindowSize(oldwidth, 
@@ -369,3 +381,189 @@ int Print::printPS(void) {
 	return 1;
 
 }
+
+#ifdef HAVE_AVCODEC_H
+/* Pretty much taken from apiexample.c in ffmpeg/libavcodec */
+int Print::printMPEG() {
+	AVCodec *codec;
+	AVCodecContext *c= NULL;
+	AVFrame *picture;
+
+	int i, out_size, size, outbuf_size;
+	uint8_t *outbuf, *picture_buf;
+
+	int x,y;
+
+	wxBitmap frame(jmlib->getImageWidth(), jmlib->getImageHeight());
+	wxImage image;
+	wxMemoryDC dc;
+	struct ball firstpos[BMAX];
+
+	int current_frames = 0;
+	int done = 0;
+	arm* ap = &(jmlib->ap);
+	ball* rhand = &(jmlib->rhand);
+	ball* lhand = &(jmlib->lhand);
+	hand* handp = &(jmlib->handpoly);
+
+	avcodec_init();
+	avcodec_register_all();
+
+	codec = avcodec_find_encoder(CODEC_ID_MPEG1VIDEO);
+	if (!codec) {
+		return(1);
+	}
+
+	c= avcodec_alloc_context();
+	picture= avcodec_alloc_frame();
+
+	c->bit_rate = 400000;
+	c->width = jmlib->getImageWidth();
+	c->height = jmlib->getImageHeight();
+	/* c->frame_rate = 70/delay->GetValue(); */
+	c->frame_rate = 25;
+	c->frame_rate_base= 1;
+	c->gop_size = 30;
+	c->max_b_frames=1;
+
+	if (avcodec_open(c, codec) < 0) {
+		return(1);
+	}
+
+	outbuf_size = 100000;
+	outbuf = (uint8_t *)malloc(outbuf_size);
+	size = c->width * c->height;
+	picture_buf = (uint8_t *)malloc((size * 3) / 2); /* size for YUV 420 */
+
+	picture->data[0] = picture_buf;
+	picture->data[1] = picture->data[0] + size;
+	picture->data[2] = picture->data[1] + size / 4;
+	picture->linesize[0] = c->width;
+	picture->linesize[1] = c->width / 2;
+	picture->linesize[2] = c->width / 2;
+
+
+	for(i=jmlib->balln-1;i>=0;i--) {
+		firstpos[i] = jmlib->b[i];
+	}
+
+	while (!done) {
+		jmlib->doJuggle();
+
+		done = 1;
+
+		memset((void *)picture_buf, '\0', (size*3)/2);
+
+		for(i=jmlib->balln-1;i>=0;i--) {
+			if(firstpos[i].gx != jmlib->b[i].gx ||
+				firstpos[i].gy != jmlib->b[i].gy) done=0;
+		}
+		current_frames++;
+		if(current_frames > max_iterations->GetValue()) done=1;
+
+		dc.SelectObject(frame);
+		dc.SetBackground(*wxWHITE_BRUSH);
+		dc.SetPen(*wxBLACK_PEN);
+		dc.SetBrush(*wxWHITE_BRUSH);
+		dc.Clear();
+		// draw head
+		dc.DrawEllipse(ap->hx - ap->hr, ap->hy - ap->hr, ap->hr*2, ap->hr*2);
+
+		// draw juggler
+		for(i=0;i<5;i++){
+			dc.DrawLine(ap->rx[i], ap->ry[i], ap->rx[i+1], ap->ry[i+1]);
+			dc.DrawLine(ap->lx[i], ap->ly[i], ap->lx[i+1], ap->ly[i+1]);
+		}
+
+		// hands
+		for (i=0; i <= 8; i++) {
+			dc.DrawLine(rhand->gx + handp->rx[i], rhand->gy + handp->ry[i],
+				rhand->gx + handp->rx[i+1], rhand->gy + handp->ry[i+1]);
+			dc.DrawLine(lhand->gx + handp->lx[i], lhand->gy + handp->ly[i],
+				lhand->gx + handp->lx[i+1], lhand->gy + handp->ly[i+1]);
+		}
+
+		dc.DrawLine(rhand->gx + handp->rx[9], rhand->gy + handp->ry[9],
+			rhand->gx + handp->rx[0], rhand->gy + handp->ry[0]);
+		dc.DrawLine(lhand->gx + handp->lx[9], lhand->gy + handp->ly[9],
+			lhand->gx + handp->lx[0], lhand->gy + handp->ly[0]);
+
+		dc.SetBrush(*wxRED_BRUSH);
+
+		// draw balls
+		int diam = (11*jmlib->dpm/DW)*2;
+		for(i=jmlib->balln-1;i>=0;i--) {
+			dc.DrawEllipse(jmlib->b[i].gx, jmlib->b[i].gy, diam, diam);
+		}
+		wxString balltext;
+		balltext.Printf("Site: %s    Style: %s    Balls: %i",jmlib->getSite(),jmlib->getStyle(),jmlib->balln);
+		dc.DrawText(balltext, 10, 10);
+
+
+		image = frame.ConvertToImage();
+		unsigned char why,cr,cb;
+		for(x=0;x<c->width;x++) {
+			for(y=0;y<c->height;y++) {
+				why = RGBgetY(image.GetRed(x,y),image.GetGreen(x,y),image.GetBlue(x,y));
+					picture->data[0][y*picture->linesize[0] + x] = why;
+			}
+		}
+		for(x=0;x<c->width/2;x++) {
+			for(y=0;y<c->height/2;y++) {
+				cr = RGBgetCr(image.GetRed(x*2,y*2),image.GetGreen(x*2,y*2),image.GetBlue(x*2,y*2));
+				cb = RGBgetCb(image.GetRed(x*2,y*2),image.GetGreen(x*2,y*2),image.GetBlue(x*2,y*2));
+				picture->data[1][y*picture->linesize[1] + x] = cr;
+				picture->data[2][y*picture->linesize[2] + x] = cb;
+			}
+		}
+
+		out_size = avcodec_encode_video(c, outbuf, outbuf_size, picture);
+		fwrite(outbuf, 1, out_size, outputfile);
+
+	}
+
+	for(; out_size; i++) {
+		out_size = avcodec_encode_video(c, outbuf, outbuf_size, NULL);
+		fwrite(outbuf, 1, out_size, outputfile);
+	}
+
+	outbuf[0] = 0x00;
+	outbuf[1] = 0x00;
+	outbuf[2] = 0x01;
+	outbuf[3] = 0xb7;
+	fwrite(outbuf, 1, 4, outputfile);
+	free(picture_buf);
+	free(outbuf);
+
+	avcodec_close(c);
+	free(c);
+	free(picture);
+
+	return(0);
+
+}
+
+/*
+RGB -> YCbCr Conversions:
+
+Y = (77R + 150G + 29B) / 256
+Cr = (131R - 110G - 21B) / 256 + 128
+Cb = (-44R - 87G + 131B) / 256 + 128
+"Y ranges from 16 to 235, Cb and Cr range from 16 to 240"
+
+*/
+
+unsigned char Print::RGBgetY(unsigned char r, unsigned char g, unsigned char b) {
+	return (unsigned char)((((77*r + 150*g + 29*b)/256)*235/256)+16);
+	//return (unsigned char)(77*r + 150*g + 29*b)/256;
+}
+
+unsigned char Print::RGBgetCb(unsigned char r, unsigned char g, unsigned char b) {
+	return (unsigned char)(((128 + (131*r - 110*g - 12*b)/256)*240/256)+16);
+}
+
+unsigned char Print::RGBgetCr(unsigned char r, unsigned char g, unsigned char b) {
+	return (unsigned char)(((128 + (-44*r - 87*g + 131*b)/256)*240/256)+16);
+}
+
+#endif

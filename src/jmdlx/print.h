@@ -18,8 +18,13 @@
 
 #include <wx/wx.h>
 #include <wx/dialog.h>
+#include <wx/progdlg.h>
 #include "../jmlib/jmlib.h"
 #include "jmdlx.h"
+
+#ifdef HAVE_AVCODEC_H
+#include "avcodec.h"
+#endif
 
 class Print : public wxDialog {
 public:
@@ -37,6 +42,14 @@ protected:
 
   void OnOK(wxCommandEvent &event);
   int printPS();
+
+#ifdef HAVE_AVCODEC_H
+  int printMPEG();
+
+  unsigned char RGBgetY(unsigned char r, unsigned char g, unsigned char b);
+  unsigned char RGBgetCr(unsigned char r, unsigned char g, unsigned char b);
+  unsigned char RGBgetCb(unsigned char r, unsigned char g, unsigned char b);
+#endif
 
   DECLARE_EVENT_TABLE()
 };

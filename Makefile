@@ -1,6 +1,6 @@
 default:
 	@echo Please use "\"make {target}\"" where target can be any of:
-	@echo jmdlx, aajm, jmqt, all
+	@echo jmlib, jmdlx, aajm, jmqt, all
 	@echo
 	@echo If you don\'t know what you want, use "make jmdlx"
 	@echo
@@ -8,7 +8,10 @@ default:
 	@echo
 	@echo When built, binaries should be in the bin dir
 
-all: jmdlx aajm jmqt
+all: jmlib jmdlx aajm jmqt
+
+jmlib:
+	$(MAKE) -C src/jmlib
 
 jmdlx:
 	$(MAKE) -C src/jmdlx

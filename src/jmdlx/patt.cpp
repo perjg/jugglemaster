@@ -39,9 +39,25 @@ int PatternLoader::Usable() {
 }
 
 int PatternLoader::OpenFile(const char *filename, int redownload) {
-	patternfile = new wxTextFile(filename);
+	wxString targetfilename;
+	targetfilename = wxGetHomeDir();
+	if(targetfilename.Len() > 0) {
+		targetfilename += "/.jugglemaster/";
+		if(!wxDirExists(targetfilename)) {
+			if(!wxMkdir(targetfilename,0755)) {
+				targetfilename = "";
+			}
+		}
+		targetfilename += filename;
+	} else {
+		targetfilename = filename;
+	}
+	patternfile = new wxTextFile(targetfilename);
 
-	if(patternfile->Exists() && !redownload) {
+	if(wxFileExists(targetfilename) && !redownload) {
+		return(patternfile->Open());
+	} else if(wxFileExists(filename) && !redownload) {
+		wxCopyFile(filename,targetfilename);
 		return(patternfile->Open());
 	} else {
 		wxString fullurl(WEB_PREFIX);
@@ -53,7 +69,7 @@ int PatternLoader::OpenFile(const char *filename, int redownload) {
 		// wxInputStream *data = url.GetInputStream(fullurl);
 
 		if ( data ) {
-			wxFileOutputStream outputfile(filename);
+			wxFileOutputStream outputfile(targetfilename);
 			data->Read(outputfile);
 			printf("Downloading Done\n");
 			delete data;

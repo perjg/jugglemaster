@@ -61,3 +61,6 @@ clean:
 
 v: clean all
 	valgrind ./jmdlx
+
+a: all
+	./jmdlx

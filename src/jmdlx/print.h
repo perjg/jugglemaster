@@ -36,10 +36,9 @@ protected:
   JMLib* jmlib;
   wxTextCtrl* filename;
   wxChoice* output_type;
-  wxSpinCtrl* output_width;
-  wxSpinCtrl* output_height;
   wxSpinCtrl* delay;
   wxSpinCtrl* max_iterations;
+  wxChoice* handed;
   FILE* outputfile;
   wxString lastpath;
 
@@ -47,6 +46,7 @@ protected:
   void OnChooseFile(wxCommandEvent &event);
   int printImage();
   int printPS();
+  int printFlipBook();
 
 #ifdef HAVE_AVCODEC_H
   int printMPEG();

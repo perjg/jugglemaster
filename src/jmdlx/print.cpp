@@ -65,6 +65,7 @@ Print::Print(wxWindow *parent, JMLib *j)
 	output_type->Append("Image");
 	output_type->Append("PostScript");
 	output_type->SetStringSelection("PostScript");
+	output_type->Append("FlipBook");
 
 #ifdef HAVE_AVCODEC_H
 	output_type->Append("MPEG");
@@ -83,25 +84,10 @@ Print::Print(wxWindow *parent, JMLib *j)
   // Width, Height, Delay, Max Frames
 	wxFlexGridSizer *whdm = new wxFlexGridSizer(2,5,5);
 
-	output_width = new wxSpinCtrl(this,
-					-1,
-					wxString::Format(_T("%d"), jmlib->getImageWidth()),
-					wxDefaultPosition,
-					wxDefaultSize,
-					wxSP_ARROW_KEYS,
-					1,
-					1000,
-					jmlib->getImageWidth());
-
-	output_height = new wxSpinCtrl(this,
-					-1,
-					wxString::Format(_T("%d"), jmlib->getImageHeight()),
-					wxDefaultPosition,
-					wxDefaultSize,
-					wxSP_ARROW_KEYS,
-					1,
-					1000,
-					jmlib->getImageHeight());
+	handed = new wxChoice(this,-1);
+	handed->Append("Left");
+	handed->Append("Right");
+	handed->SetStringSelection("Left");
 
 	delay = new wxSpinCtrl(this,
 				-1,
@@ -115,7 +101,7 @@ Print::Print(wxWindow *parent, JMLib *j)
 
 	max_iterations = new wxSpinCtrl(this,
 				-1,
-				wxString::Format(_T("%d"), 1000),
+				wxString::Format(_T("%d"), 200),
 				wxDefaultPosition,
 				wxDefaultSize,
 				wxSP_ARROW_KEYS,
@@ -123,22 +109,18 @@ Print::Print(wxWindow *parent, JMLib *j)
 				10000,
 				1000);
 
-	whdm->Add(new wxStaticText(this, 0, "Output Width"),
-				1, wxALIGN_RIGHT|wxALL, 5);
-	whdm->Add(output_width,
-				1, wxALIGN_CENTRE|wxALL, 5);
-	whdm->Add(new wxStaticText(this, 0, "Output Height"),
-				1, wxALIGN_RIGHT|wxALL, 5);
-	whdm->Add(output_height,
-				1, wxALIGN_CENTRE|wxALL, 5);
 	whdm->Add(new wxStaticText(this, 0, "Delay"),
-				1, wxALIGN_RIGHT|wxALL, 5);
+				1, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	whdm->Add(delay,
-				1, wxALIGN_CENTRE|wxALL, 5);
-	whdm->Add(new wxStaticText(this, 0, "Max Iterations"),
-				1, wxALIGN_RIGHT|wxALL, 5);
+				1, wxALIGN_LEFT|wxALL, 5);
+	whdm->Add(new wxStaticText(this, 0, "Max Frames"),
+				1, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	whdm->Add(max_iterations,
-				1, wxALIGN_CENTRE|wxALL, 5);
+				1, wxALIGN_LEFT|wxALL, 5);
+	whdm->Add(new wxStaticText(this, 0, "FlipBook Handedness"),
+				1, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
+	whdm->Add(handed,
+				1, wxALIGN_LEFT|wxALL, 5);
 
   // Width, Height, Delay, Max Frames
 	wxButton *ok = new wxButton(this, wxID_OK, "OK");
@@ -186,23 +168,16 @@ void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	}
 
 
-	if (oldheight != output_width->GetValue() ||
-		oldwidth != output_height->GetValue()) do_change=1;
-
-	if(do_change) {
-		jmlib->setWindowSize(output_width->GetValue(),
-			output_height->GetValue());
-
-		/* Just make sure it clears out any guff */
-		for (i=0; i<400; i++) jmlib->doJuggle();
-	}
-
 	if (output_type->GetStringSelection() == "Image") {
 		print_success = printImage();
 	}
 
 	if (output_type->GetStringSelection() == "PostScript") {
 		print_success = printPS();
+	}
+
+	if (output_type->GetStringSelection() == "FlipBook") {
+		print_success = printFlipBook();
 	}
 
 #ifdef HAVE_AVCODEC_H
@@ -367,13 +342,13 @@ int Print::printPS(void) {
 
 	/* Some PS guff */
 
-	fprintf(outputfile, "%%!PS-Adobe-3.0\n");
+	fprintf(outputfile, "%%%%!PS-Adobe-3.0\n");
 	fprintf(outputfile, "%%%%BoundingBox: 0 0 %i %i\n",
 				jmlib->getImageWidth(),
 				jmlib->getImageHeight());
 	fprintf(outputfile, "%%%%Creator: JuggleMaster And Chunky Kibbles\n");
 	fprintf(outputfile, "%%%%Title: Juggling Pattern %s\n", jmlib->getSite());
-	fprintf(outputfile, "%%EndComments\n");
+	fprintf(outputfile, "%%%%EndComments\n");
 
 	/* The start of stuff for dynamically resizing to fit the page
 		instead of using a bounding box */
@@ -517,6 +492,251 @@ int Print::printPS(void) {
 	return 0;
 
 }
+
+int Print::printFlipBook(void) {
+
+
+	/* Note that postscript's co-ordinate system is upside down,
+		c.f. jmlib and wx */
+
+	int y_offset;
+	int current_page = 1;
+	struct ball firstpos[BMAX]; /* We'll rememeber where all the
+				balls were when we started, and check
+				against it */
+
+	int flipbook_width = 4;
+	int flipbook_height = 5;
+	int frame_width;
+	int frame_height;
+
+	wxProgressDialog progress("Progress","Creating FlipBook",
+		max_iterations->GetValue(), this,
+		wxPD_APP_MODAL|wxPD_CAN_ABORT);
+
+
+	y_offset=jmlib->imageHeight;
+
+	int i, j, k;
+	int current_frames = 0;
+	int done = 0;
+	arm* ap = &(jmlib->ap);
+	ball* rhand = &(jmlib->rhand);
+	ball* lhand = &(jmlib->lhand);
+	hand* handp = &(jmlib->handpoly);
+
+	outputfile = fopen((const char *)filename->GetValue(),"w");
+	if(outputfile == NULL) return 1;
+
+
+	/* Make the space at the side of each flip [for the staple]
+	1/4 of the width of the image itself. */
+	frame_width = jmlib->getImageWidth() + (jmlib->getImageWidth()/4);
+	frame_height = jmlib->getImageHeight() + (jmlib->getImageHeight()/4);
+
+	/* Some PS guff */
+	fprintf(outputfile, "%%!PS-Adobe-3.0\n");
+	fprintf(outputfile, "%%%%BoundingBox: 0 0 %i %i\n",
+				frame_width * flipbook_width,
+				frame_height * flipbook_height);
+	fprintf(outputfile, "%%%%Creator: JuggleMaster And Chunky Kibbles\n");
+	fprintf(outputfile, "%%%%Title: Juggling Pattern %s\n", jmlib->getSite());
+	fprintf(outputfile, "%%%%Pages: (atend)\n");
+	fprintf(outputfile, "%%%%Orientation: Portrait\n");
+	fprintf(outputfile, "%%%%LanguageLevel: 1\n");
+	fprintf(outputfile, "%%%%DocumentData: Clean7Bit\n");
+	fprintf(outputfile, "%%%%PageOrder: Ascend\n");
+	fprintf(outputfile, "%%%%EndComments\n");
+
+	/* The start of stuff for dynamically resizing to fit the page
+		instead of using a bounding box */
+
+	fprintf(outputfile, "%%%%BeginProlog\n");
+	fprintf(outputfile,
+		"/initialisePage {\n"
+		"  clear\n"
+		"  clippath pathbbox\n"
+		"  72 div /pageTop exch def\n"
+		"  72 div /pageRight exch def\n"
+		"  72 div /pageBottom exch def\n"
+		"  72 div /pageLeft exch def\n"
+		"  /pageWidth pageRight pageLeft sub def\n"
+		"  /pageHeight pageTop pageBottom sub def\n"
+		"  72 72 dtransform\n"
+		"  /yResolution exch abs def\n"
+		"  /xResolution exch abs def\n"
+
+		"  /Times-Roman findfont\n"
+		"  15 scalefont\n"
+		"  setfont\n"
+		"} def\n");
+
+	fprintf(outputfile, "%%%%EndProlog\n");
+
+	for(i=jmlib->balln-1;i>=0;i--) {
+		firstpos[i] = jmlib->b[i];
+	}
+
+	while (!done) {
+
+		done = 1;
+		jmlib->doJuggle();
+		for(i=jmlib->balln-1;i>=0;i--) {
+			if(firstpos[i].gx != jmlib->b[i].gx ||
+				firstpos[i].gy != jmlib->b[i].gy) done=0;
+		}
+
+		fprintf(outputfile, "%%%%Page: %i %i\n", current_page, current_page);
+		fprintf(outputfile, "gsave\n");
+		fprintf(outputfile, "initialisePage\n");
+
+		for(j=0; j<flipbook_width; j++) {
+			for(k=0; k<flipbook_height; k++) {
+				int f_offs_x = j * frame_width;
+				int f_offs_y = k * frame_height;
+
+				/* Cut marks */
+				fprintf(outputfile, "%i %i 2 2 rectfill\n",
+					f_offs_x, f_offs_y);
+				fprintf(outputfile, "%i %i 2 2 rectfill\n",
+					f_offs_x + frame_width - 2, f_offs_y);
+				fprintf(outputfile, "%i %i 2 2 rectfill\n",
+					f_offs_x, f_offs_y + frame_height - 2);
+				fprintf(outputfile, "%i %i 2 2 rectfill\n",
+					f_offs_x + frame_width - 2, f_offs_y + frame_height - 2);
+
+
+				if (handed->GetStringSelection() == "Right") {
+					f_offs_x += (jmlib->getImageWidth()/4);
+				}
+
+				current_frames++;
+				jmlib->doJuggle();
+				fprintf(outputfile, "%i %i moveto\n"	
+					"( Site: %s  Style: %s  Balls: %i ) show\n",
+					f_offs_x + 4, f_offs_y + 4,
+					jmlib->getSite(),
+					jmlib->getStyle(),
+					jmlib->balln);
+
+				fprintf(outputfile, "%i %i moveto\n"	
+					"( %i ) show\n",
+					(handed->GetStringSelection() == "Right"?
+						f_offs_x + 6:
+						f_offs_x + frame_width - 6),
+					f_offs_y + frame_height/2,
+					current_frames);
+
+				/* Draw Juggler */
+
+
+				/* Head */
+
+				fprintf(outputfile,"%%Head\n");
+				fprintf(outputfile,"newpath\n");
+				fprintf(outputfile, " %i %i %i 0 360 arc\n", f_offs_x + ap->hx,
+					f_offs_y + -ap->hy + y_offset, ap->hr);
+				fprintf(outputfile, " closepath\n");
+				fprintf(outputfile, " stroke\n");
+
+
+				/* Right Arm */
+
+				fprintf(outputfile, "%%Right Arm\n");
+				fprintf(outputfile, "newpath\n");
+				fprintf(outputfile, " %i %i moveto\n",
+					f_offs_x + ap->rx[0], f_offs_y - ap->ry[0] + y_offset);
+				for(i=1;i<6;i++){
+					fprintf(outputfile, "  %i %i lineto\n",
+						f_offs_x + ap->rx[i], f_offs_y - ap->ry[i] + y_offset);
+				}
+				fprintf(outputfile, " stroke\n");
+
+
+				/* Left Arm */
+
+				fprintf(outputfile, "%%Left Arm\n");
+				fprintf(outputfile, "newpath\n");
+				fprintf(outputfile, " %i %i moveto\n",
+					f_offs_x + ap->lx[0], f_offs_y - ap->ly[0] + y_offset);
+				for(i=1;i<6;i++){
+					fprintf(outputfile, "  %i %i lineto\n",
+						f_offs_x + ap->lx[i], f_offs_y - ap->ly[i] + y_offset);
+				}
+				fprintf(outputfile, " stroke\n");
+
+
+				/* Right Hand */
+
+				fprintf(outputfile, "%%Right Hand\n");
+				fprintf(outputfile, "newpath\n");
+				fprintf(outputfile, " %i %i moveto\n",
+						f_offs_x + rhand->gx + handp->rx[0],
+						f_offs_y - (rhand->gy + handp->ry[0])+y_offset);
+				for (i=1; i <= 9; i++) {
+					fprintf(outputfile, "  %i %i lineto\n",
+						f_offs_x + rhand->gx + handp->rx[i],
+						f_offs_y - (rhand->gy + handp->ry[i])+y_offset);
+				}
+				fprintf(outputfile, " closepath\n");
+				fprintf(outputfile, " stroke\n");
+
+
+				/* Left Hand */
+	
+				fprintf(outputfile, "%%Left Hand\n");
+				fprintf(outputfile, "newpath\n");
+				fprintf(outputfile, " %i %i moveto\n",
+					f_offs_x + lhand->gx + handp->lx[0],
+					f_offs_y -(lhand->gy + handp->ly[0])+y_offset);
+				for (i=1; i <= 9; i++) {
+					fprintf(outputfile, "  %i %i lineto\n",
+						f_offs_x + lhand->gx + handp->lx[i],
+						f_offs_y - (lhand->gy + handp->ly[i])+y_offset);
+				}
+				fprintf(outputfile, " closepath\n");
+				fprintf(outputfile, " stroke\n");
+
+
+				/* Balls */
+
+				fprintf(outputfile, "%%Balls\n");
+				fprintf(outputfile, "newpath\n");
+				int diam = 11*jmlib->dpm/DW;
+				for(i=jmlib->balln-1;i>=0;i--) {
+					fprintf(outputfile, " %i %i %i 0 360 arc\n",
+						f_offs_x + jmlib->b[i].gx+diam,
+						f_offs_y -jmlib->b[i].gy-diam + y_offset,
+						diam);
+					fprintf(outputfile, " fill\n");
+				}
+				fprintf(outputfile, " stroke\n");
+
+
+				if(current_frames >= max_iterations->GetValue()) done=1;
+				if(current_frames % 10 == 0 && !done) {
+					if(FALSE == progress.Update(current_frames)) {
+						fclose(outputfile);
+						return 1;
+					}
+				}
+			}
+		}
+		fprintf(outputfile, "grestore\n");
+		fprintf(outputfile, "showpage\n");
+		fprintf(outputfile, "%%%%EndPage: %i %i\n", current_page, current_page);
+		current_page++;
+	}
+
+	fprintf(outputfile, "%%%%Trailer\n");
+	fprintf(outputfile, "%%Frames: %i\n", current_frames);
+	fprintf(outputfile, "%%%%Pages: %i\n", current_page);
+	fprintf(outputfile, "%%%%EOF\n");
+	fclose(outputfile);
+	return 0;
+
+}
+
 
 #ifdef HAVE_AVCODEC_H
 /* Pretty much taken from apiexample.c in ffmpeg/libavcodec */

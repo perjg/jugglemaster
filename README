@@ -1,42 +1,89 @@
 JuggleMaster
 
 
-Uhm. Not sure what I can say here, really. It's a juggling siteswap
-animator. If you know what that is and think you want one, here's a
-really cool one for Linux, Windows, and some others.
+1. GENERAL
 
-If you don't know you want one, you can run it and just delve about in
-the "Choose Pattern" menus, looking at the pretty things you could tell
-the program to do if you understood siteswap.
+JuggleMaster is a juggling siteswap animator. It can animate any
+valid siteswap, and has a large library of patterns included.
 
-And if you want to learn siteswap, http://www.siteswap.org/ looks to be
-a pretty decent resource.
+If you want to learn siteswap, check out http://www.siteswap.org/,
+although it's not necessary to learn siteswap to get good use out of
+this program.
+
+JuggleMaster was originally written in C by Ken Matsuoka for DOS. It
+was later ported to C++ as a platform independent library (called
+jmlib) by Per Johan Groland, who also ported it to Palm OS and
+Pocket PC. It was later ported to wxWidgets by Gary Briggs (which
+allows it to run on a variety of platforms including Linux, Windows
+and MacOS).
+
+JuggleMaster is currently available for the following operating
+systems:
+
+MacOS, Windows, Linux   JMDlx     http://icculus.org/jugglemaster
+PocketPC                JMPocket  http://jugglemaster.net
+PalmOS                  JMPalm    http://jugglemaster.net (source not
+                                                yet available)
+Unices, DOS, Terminals  AAJM      http://icculus.org/jugglemaster/aa
+
+The weblinks above will direct you to the proper sites to download
+binaries for the various platforms. For the source code, go to
+http://icculus.org/jugglemaster/
+
+In the "docs" dir, you'll find Ken Matsuoka's original README, and
+Isaac Orr's readme from the Java version (which has a better
+description of how to edit the pattern files).
 
 
-To build, just go into the src/jmdlx dir and type "make". It creates a
-binary "jmdlx". Run it. You need wxWindows. To build it on windows either
-work it out yourself, or extract bloodshed.zip and use the excellent
-DevC++ from www.bloodshed.net
+2. BUILDING
 
-To build on OSX, go into src/jmdlx and type "make osx". It'll create
-JuggleMaster.app right there.
+Build instructions and requirements vary between the different
+platforms.
+
+JMDlx
+
+To build on Linux or other Unix operating systems, just go into the
+src/jmdlx dir and type "make". It creates a binary "jmdlx". Run it.
+You need wxWidgets, available from http://www.wxwidgets.org.
+
+To build it on Windows using Visual Studio, you need to set up the
+project file yourself. The wxWidgets home page includes instructions.
+If you don't have Visual Studio, either work it out yourself, or
+extract bloodshed.zip and use the excellent DevC++ from
+www.bloodshed.net
+
+To build on OSX, go into src/jmdlx and type "make osx". This will
+create JuggleMaster.app.
 
 If you don't have patterns.jm and semaphore.jm in the current dir when
-you run it, it attempts to download them and save them to a suitable
-dir. You'll find copies in the "data" dir, so you can just copy them
-across if you want.
+you run it, it attempts to download them to a suitable directory (on
+unices including OSX, this is $HOME/.jugglemaster. On windows, it's in
+your user's Documents and Settings, to a dir called ".jugglemaster")
+
+JMPocket
+
+To build JMPocket you need Microsoft eMbedded Visual Tools 3.0 2002
+Edition, available free of charge from Microsofts web page. JMPocket
+doesn't run properly in the Pocket PC 2002 emulator, so you will also
+need to download the Pocket PC 2000 SDK. The downloads can all be
+found at http://download.microsoft.com
+
+A properly configured project file is included in
+src/jmpocket/JMPocket.vcw
+
+JMPocket expects to find the pattern libary in My Documents, and it
+must be named either patt_e.jm or patterns.jm.
+
+AAJM
+
+To build, go into src/aajm, and type "make". You'll need aalib,
+available from http://aa-project.sf.net
+
+It should build two binaries, one called "aajm" that's all you really
+need. The other is called "aajm-remote" and can be used to remotely
+control aajm (if you start aajm with suitable command-line options -
+please see the AAJM README for more info on this).
 
 
-In the "docs" dir, you'll find Ken Matsuoka's original README, and Isaac
-Orr's readme from the Java version [which has a better description of
-how to edit the pattern files].
-
-
-And finally, because I'm incapable of producing anything without some
-kind of misabuse of it, this program includes things like Semaphores [that
-thing with the flags, not the resource control], a maximum of 630 balls
-instead of everyone else's 35, and probably some other stuff I've
-forgotten about.
-
-Chunky Kibbles
-<chunky@icculus.org>
+Chunky Kibbles <chunky@icculus.org>
+Per Johan Groland <per@jugglemaster.net>

@@ -12,6 +12,7 @@
 ;  ';' Comment.
 ;  '#' Set the parameter.
 ;  '/' Separator(Green color).
+;  '*' Author Credit
 ;  '%' Name of the style (30 characters or less) with style data,
 ;      or call the registered style.
 ;
@@ -1237,6 +1238,7 @@ k	20-Columns B
 /
 /[ Tricks by Isaac Orr ]
 /^^^^^^^^^^^^^^^^^^^^
+*Isaac Orr (http://www.juggler.net/orr/)
 #DR=0.5
 #HR=0.14
 %Church Windows
@@ -1573,6 +1575,7 @@ Orr
 /.
 /[ Tricks by JAG ]
 /^^^^^^^^^^^^^^
+*JAG (http://www.bogleg.com/)
 
 11314257 3-Balls Peter Gunn Theme
 33536479 5-Balls Peter Gunn Theme
@@ -1606,7 +1609,7 @@ Orr
 (6x,[4x4])(0,4x)(2,4x)([4x4],6x)(4x,0)(4x,2)    Orr Multiplex MM
 
 /[ Patterns By Toshiyuki Mori ]
-
+*Toshiyuki Mori (http://www.egroups.co.jp/files/patio-ml/en/jugglemaster.html)
 %Upside-down Tennis
 { 6, 3}{ 1, 3}
 { 6, 3}{ 1, 3}
@@ -1681,6 +1684,7 @@ Orr
 (2,2) Flags
 
 /[ Patterns by PWN ]
+*Beardy Paul <luap@icculus.org>
 #DR=0.5
 #HR=0.17
 %pwn
@@ -1721,6 +1725,7 @@ Orr
 [135]30333323[22]0 Low Triplex
 
 /[ Interesting groups of tricks ]
+*Chunky Kibbles <chunky@icculus.org>
 %Normal
 55550
 5551
@@ -1754,6 +1759,7 @@ Orr
 756
 
 /[ Patterns By Scotch Tom ]
+*Tom Davie <tom.davie@gmail.com>
 %Normal
 12340 Long Name for Pointless Trick
 40303 Random Doodle 1
@@ -1761,6 +1767,7 @@ Orr
 b444b333444 Ben Beaver at Chocfest
 
 /[ Stupid Patterns By Chunky Kibbles ]
+*Chunky Kibbles <chunky@icculus.org>
 %Normal
 zxvtrpnljhfdb97531 531-Extended
 [uvwxyz] Extended Sexta-Multiplex

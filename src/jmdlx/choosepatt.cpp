@@ -90,7 +90,6 @@ ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
 				wxTE_READONLY);
   showStylesizer->Add(showStyle, 1, wxALIGN_CENTRE|wxEXPAND|wxALL, 3);
 
-
   wxButton *ok = new wxButton(this, wxID_OK, "OK");
   wxButton *apply = new wxButton(this, wxID_APPLY, "Apply");
   wxButton *cancel = new wxButton(this, wxID_CANCEL, "Cancel");
@@ -115,6 +114,7 @@ ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
   CentreOnParent();
 
   SectionChange();
+  UpdateShownValues();
   ShowModal();
 }
 
@@ -146,8 +146,18 @@ void ChoosePatt::UpdateShownValues() {
 	wxString newSection;
 	wxString newPattern;
 
+	if(patternListBox->GetSelection() < 0) {
+		patternListBox->SetSelection(0);
+		if(patternListBox->GetSelection() < 0) return;
+	}
+	if(sectionChoice->GetSelection() < 0) {
+		sectionChoice->SetSelection(0);
+		if(sectionChoice->GetSelection() < 0) return;
+	}
+
 	newPattern = patternListBox->GetStringSelection();
 	newSection = sectionChoice->GetStringSelection();
+
 	patt = patterns->GetPattern((const char *)newSection,(const char *)newPattern);
 
 	showStyle->SetValue(Patt_GetStyle(patt));
@@ -190,5 +200,7 @@ void ChoosePatt::SectionChange() {
 	while ((curr_patt = patterns->GetNextPatternName())) {
 		patternListBox->Append(curr_patt);
 	}
+	patternListBox->SetSelection(0);
+	UpdateShownValues();
 	haschanged=1;
 }

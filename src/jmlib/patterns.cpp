@@ -49,6 +49,7 @@ int ParsePatterns(FILE *input,
 	char current_style[256];
 	char pattern_name[256];
 	char pattern_data[256];
+	char curr_author[256];
 	int x1, x2, y1, y2;
 
 	struct style_t *style = NULL;
@@ -98,6 +99,8 @@ int ParsePatterns(FILE *input,
 			/* Show Pattern */
 		} else if(sscanf(buf, "#MR=%i",&currmr) == 1) {
 			/* Mirror */
+		} else if(sscanf(buf, "*%255[^]]",curr_author) == 1) {
+			/* Change Author */
 		} else if(sscanf(buf, "/[ %255[^]] ]",current_group) == 1) {
 			/* New Group */
 			strcpy(current_style, "Normal");
@@ -112,6 +115,7 @@ int ParsePatterns(FILE *input,
 			currhd = 1;
 			currpd = 1;
 			currmr = 0;
+			memset(curr_author,'\0',sizeof(curr_author));
 
 			newgroup = (struct pattern_group_t *)malloc(sizeof(struct pattern_group_t));
 			if(groups != NULL && groups->first == NULL) {
@@ -208,6 +212,10 @@ int ParsePatterns(FILE *input,
 			strncpy(patt->style, current_style, strlen(current_style));
 			patt->style[strlen(current_style)] = '\0';
 
+			patt->author = (char *)malloc(strlen(curr_author) + 1);
+			strncpy(patt->author, curr_author, strlen(curr_author));
+			patt->author[strlen(curr_author)] = '\0';
+
 			patt->hr = currhr;
 			patt->dr = currdr;
 			patt->ga = currga;
@@ -236,15 +244,10 @@ void FreeGroups(struct groups_t *groups) {
 	while(group) {
 		patt = group->first_patt;
 		while(patt) {
-			if(patt->name != NULL) {
-				free((void *)patt->name);
-			}
-			if(patt->data != NULL) {
-				free((void *)patt->data);
-			}
-			if(patt->style != NULL) {
-				free((void *)patt->style);
-			}
+			if(patt->name != NULL) free((void *)patt->name);
+			if(patt->data != NULL) free((void *)patt->data);
+			if(patt->style != NULL) free((void *)patt->style);
+			if(patt->author != NULL) free((void *)patt->author);
 			tmppatt = patt;
 			patt = patt->next;
 			free((void *)tmppatt);
@@ -327,6 +330,11 @@ const JML_CHAR *Patt_GetData(struct pattern_t *p) {
 const JML_CHAR *Patt_GetStyle(struct pattern_t *p) {
 	if(p == NULL) return NULL;
 	return p->style;
+}
+
+const JML_CHAR *Patt_GetAuthor(struct pattern_t *p) {
+	if(p == NULL) return NULL;
+	return p->author;
 }
 
 const JML_FLOAT Patt_GetHR(struct pattern_t *p) {

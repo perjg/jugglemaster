@@ -43,6 +43,7 @@ struct pattern_t {
 	JML_CHAR *style;
 	JML_CHAR *name;
 	JML_CHAR *data;
+	JML_CHAR *author;
 	JML_FLOAT hr, dr; /* Height Ratio, Dwell Ratio */
 	JML_FLOAT ga, sp; /* Gravity, Speed */
 	int bgred, bggreen, bgblue; /* Background color */
@@ -79,6 +80,7 @@ struct pattern_t *NextPatt(struct pattern_t *p);
 const JML_CHAR *Patt_GetName(struct pattern_t *p);
 const JML_CHAR *Patt_GetData(struct pattern_t *p);
 const JML_CHAR *Patt_GetStyle(struct pattern_t *p);
+const JML_CHAR *Patt_GetAuthor(struct pattern_t *p);
 const JML_FLOAT Patt_GetDR(struct pattern_t *p);
 const JML_FLOAT Patt_GetHR(struct pattern_t *p);
 

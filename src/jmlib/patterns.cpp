@@ -257,6 +257,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	ParsePatterns(f,&g,&s);
+	fclose(f);
 
 	groups = FirstGroup(&g);
 	while(groups) {

@@ -33,6 +33,7 @@
 #include "jmlib_types.h"
 #include "util.h"
 #include "validator.h"
+#include "patterns.h"
 
 // Misc. macros
 #ifndef max

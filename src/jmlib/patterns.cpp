@@ -157,12 +157,12 @@ int ParsePatterns(FILE *input,
 				continue;
 			}
 			style->length += 4;
-			style->data = (int *)realloc((void *)style->data,
-				style->length*sizeof(int));
-			style->data[style->length-4] = x1;
-			style->data[style->length-3] = y1;
-			style->data[style->length-2] = x2;
-			style->data[style->length-1] = y2;
+			style->data = (JML_INT8 *)realloc((void *)style->data,
+				style->length*sizeof(JML_INT8));
+			style->data[style->length-4] = (JML_INT8)x1;
+			style->data[style->length-3] = (JML_INT8)y1;
+			style->data[style->length-2] = (JML_INT8)x2;
+			style->data[style->length-1] = (JML_INT8)y2;
 			style->next = NULL;
 		} else if (legal_pattern_first_char(buf[0])) {
 			/* Pattern */
@@ -280,56 +280,79 @@ int legal_pattern_first_char(char c) {
 
 
 struct pattern_group_t *FirstGroup(struct groups_t *g) {
+	if(g == NULL) return NULL;
 	return g->first;
 }
 
 struct pattern_group_t *NextGroup(struct pattern_group_t *g) {
+	if(g == NULL) return NULL;
 	return g->next;
 }
 
 const char *Group_GetName(struct pattern_group_t *g) {
+	if(g == NULL) return NULL;
 	return g->name;
 }
 
 struct pattern_t *Group_GetPatterns(struct pattern_group_t *g) {
+	if(g == NULL) return NULL;
 	return g->first_patt;
 }
 
 
 struct pattern_t *NextPatt(struct pattern_t *p) {
+	if(p == NULL) return NULL;
 	return p->next;
 }
 
 const char *Patt_GetName(struct pattern_t *p) {
+	if(p == NULL) return NULL;
 	return p->name;
 }
 
 const char *Patt_GetData(struct pattern_t *p) {
+	if(p == NULL) return NULL;
 	return p->data;
 }
 
 const char *Patt_GetStyle(struct pattern_t *p) {
+	if(p == NULL) return NULL;
 	return p->style;
 }
 
-
-struct style_t *FirstStyle(struct styles_t *f) {
-	return f->first;
+float Patt_GetHR(struct pattern_t *p) {
+	if(p == NULL) return 0;
+	return p->hr;
 }
 
-struct style_t *NextStyle(struct style_t *p) {
-	return p->next;
+float Patt_GetDR(struct pattern_t *p) {
+	if(p == NULL) return 0;
+	return p->dr;
+}
+
+
+struct style_t *FirstStyle(struct styles_t *s) {
+	if(s == NULL) return NULL;
+	return s->first;
+}
+
+struct style_t *NextStyle(struct style_t *s) {
+	if(s == NULL) return NULL;
+	return s->next;
 }
 
 const char *Style_GetName(struct style_t *s) {
+	if(s == NULL) return NULL;
 	return s->name;
 }
 
-int *Style_GetData(struct style_t *s) {
+JML_INT8 *Style_GetData(struct style_t *s) {
+	if(s == NULL) return NULL;
 	return s->data;
 }
 
 unsigned int Style_GetLength(struct style_t *s) {
+	if(s == NULL) return 0;
 	return s->length;
 }
 

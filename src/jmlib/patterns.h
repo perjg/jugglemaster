@@ -28,7 +28,7 @@ struct pattern_group_t;
 
 struct style_t {
 	char *name;
-	int *data;
+	JML_INT8 *data;
 	unsigned int length;
 	struct style_t *next;
 };
@@ -79,12 +79,14 @@ struct pattern_t *NextPatt(struct pattern_t *p);
 const char *Patt_GetName(struct pattern_t *p);
 const char *Patt_GetData(struct pattern_t *p);
 const char *Patt_GetStyle(struct pattern_t *p);
+float Patt_GetDR(struct pattern_t *p);
+float Patt_GetHR(struct pattern_t *p);
 
 /* Iterate across styles */
 struct style_t *FirstStyle(struct styles_t *f);
 struct style_t *NextStyle(struct style_t *p);
 const char *Style_GetName(struct style_t *s);
-int *Style_GetData(struct style_t *s);
+JML_INT8 *Style_GetData(struct style_t *s);
 unsigned int Style_GetLength(struct style_t *s);
 struct style_t *Find_Style(styles_t *style_list, const char *name);
 

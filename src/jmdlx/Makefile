@@ -28,14 +28,6 @@ osx: all
 jm_lib:
 	$(MAKE) -C ../jmlib
 
-upload: all
-	rm -f jmdlx.bz2
-	strip jmdlx
-	bzip2 -c ./jmdlx > jmdlx.bz2
-	scp ../../TODO ../../data/patterns.jm ../../data/semaphore.jm jmdlx.bz2 icculus.org:/webspace/projects/jugglemaster/
-	scp jmdlx icculus.org:/webspace/projects/jugglemaster/jmdlx.bin
-	rm -f jmdlx.bz2
-
 patt:
 	$(CXX) -DPATT_STANDALONE $(CXXFLAGS) -c -o ./patt.o ./patt.cpp
 	$(CXX) $(LDFLAGS) -o ./patt $(CXXFLAGS) ./patt.o $(LIBS)

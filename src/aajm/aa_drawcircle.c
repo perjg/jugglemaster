@@ -57,5 +57,7 @@ void aa_plot8circlepoints(aa_context *context, int x, int y,
 	if(fillcolor != -1) {
 		aa_drawline(context, cx-x+1, cy+y, cx+x-1, cy+y, fillcolor);
 		aa_drawline(context, cx-x+1, cy-y, cx+x-1, cy-y, fillcolor);
+		aa_drawline(context, cx-y+1, cy+x, cx+y-1, cy+x, fillcolor);
+		aa_drawline(context, cx-y+1, cy-x, cx+y-1, cy-x, fillcolor);
 	}
 }

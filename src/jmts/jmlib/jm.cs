@@ -16,31 +16,6 @@
 // Modified BSD License for more details.
 //
 
-
-function JMBall::OnAdd(%this) {
-	%this.bh = 0;
-	%this.gx = 0;
-	%this.gy = 0;
-	%this.c = 0;
-	%this.c0 = 0;
-	%this.chand = 0;
-	%this.thand = 0;
-	%this.st = 0;
-}
-
-function JMArm::OnAdd(%this) {
-	%this.hx = 0;
-	%this.hy = 0;
-	%this.hr = 0;
-	%this.st |= $OBJECT_HAND;
-	for(%i=0;%i<6;%i++) {
-		%this.rx[%i] = 0;
-		%this.ry[%i] = 0;
-		%this.lx[%i] = 0;
-		%this.ly[%i] = 0;
-	}
-}
-
 $KW=0.25;
 $XR=1024;
 $DW=290; //Max dpm
@@ -66,6 +41,32 @@ $HR_DEF=0.17;
 $DR_MAX=0.90; // DR == "Dwell Ratio"
 $DR_MIN=0.10;
 $DR_DEF=0.50;
+
+
+
+function JMBall::OnAdd(%this) {
+	%this.bh = 0;
+	%this.gx = 0;
+	%this.gy = 0;
+	%this.c = 0;
+	%this.c0 = 0;
+	%this.chand = 0;
+	%this.thand = 0;
+	%this.st = 0;
+}
+
+function JMArm::OnAdd(%this) {
+	%this.hx = 0;
+	%this.hy = 0;
+	%this.hr = 0;
+	%this.st |= $OBJECT_HAND;
+	for(%i=0;%i<6;%i++) {
+		%this.rx[%i] = 0;
+		%this.ry[%i] = 0;
+		%this.lx[%i] = 0;
+		%this.ly[%i] = 0;
+	}
+}
 
 function JMLib::OnAdd(%this) {
 
@@ -493,7 +494,7 @@ function JMLib::juggle(%this, %ball) {
 		%ball.st |= $OBJECT_UNDER;
 	
 		if(%ball.st & $OBJECT_HAND){
-			if(%ball.st & $OBJECT_MOVE2){
+			if((%ball.st & $OBJECT_MOVE2) != 0){
 				%ball.st |= $OBJECT_MOVE;
 				%ball.st &= ~$OBJECT_MOVE2;
 			} else {
@@ -536,14 +537,14 @@ function JMLib::juggle(%this, %ball) {
 	}
 
 
-	if((%ball.st & $OBJECT_MOVE) != 0){
+	if((%ball.st & $OBJECT_MOVE) == 0){
 		if(%ball.c < 0){
 			%tpox = %this.hand_pos_x(-%ball.c,%ball.chand);
 			%tpoz = %this.hand_pos_z(-%ball.c,%ball.chand);
 			%rpox = %tpox;
 			%rpoz = %tpoz;
 		} else {
-			if(%ball.st & $OBJECT_UNDER) {
+			if((%ball.st & $OBJECT_UNDER) != 0) {
 				%tpox = %this.hand_pos_x(%ball.c  , %ball.chand);
 				%tpoz = %this.hand_pos_z(%ball.c  , %ball.chand);
 				%rpox = %this.hand_pos_x(%ball.c+2, %ball.chand);
@@ -571,13 +572,13 @@ function JMLib::juggle(%this, %ball) {
 		}
 	}
 
-	if(%ball.st & $OBJECT_MOVE) {
+	if((%ball.st & $OBJECT_MOVE) != 0) {
 		if(%ball.bh == 1) {
 			%tpox = %this.hand_pos_x(%ball.c0+1, %ball.thand);
 			%tpoz = %this.hand_pos_z(%ball.c0+1, %ball.thand);
 			%rpox = %this.hand_pos_x(%ball.c+1 , %ball.chand);
 			%rpoz = %this.hand_pos_z(%ball.c+1 , %ball.chand);
-		} else if(%ball.st & $OBJECT_UNDER) {
+		} else if((%ball.st & $OBJECT_UNDER) != 0) {
 			%tpox = %this.hand_pos_x(%ball.c   , %ball.chand);
 			%tpoz = %this.hand_pos_z(%ball.c   , %ball.chand);
 			%rpox = %this.hand_pos_x(%ball.c+1 , %ball.chand);
@@ -591,7 +592,7 @@ function JMLib::juggle(%this, %ball) {
 	}
 
 
-	if( !(%ball.st & $OBJECT_HAND) && %ball.c<0 ) {
+	if( (%ball.st & $OBJECT_HAND) == 0 && %ball.c<0 ) {
 		if(%tpox==0) {
 			%fx=0;
 			%y= %tpoz*%this.dpm/20-%tp*%this.dpm/12/%this.tw;
@@ -603,14 +604,14 @@ function JMLib::juggle(%this, %ball) {
 			}
 			%y=%tpoz*%this.dpm/20;
 		}
-	} else if( !(%ball.st& $OBJECT_MOVE) ) {
+	} else if( (%ball.st & $OBJECT_MOVE) == 0 ) {
 		%fx=%tpox/10;
 		%y=%tpoz*%this.dpm/20;
 	} else {
 		if(%ball.bh==1) {
 				%fx=(%tp-%this.aw)/%this.tw*2+1;
 				%y=%this.high[1]*(1-squared(%fx));
-		} else if(%ball.st& $OBJECT_UNDER) {
+		} else if((%ball.st & $OBJECT_UNDER) != 0) {
 				%fx=%tp/%this.aw*2-1;
 				%y=%this.high[0]*(1-squared(%fx));
 		} else {
@@ -625,7 +626,7 @@ function JMLib::juggle(%this, %ball) {
 
 	%ball.gx=%this.horCenter + %x - 11;
 
-	if(%ball.st & $OBJECT_HAND){
+	if((%ball.st & $OBJECT_HAND) != 0){
 		if(%ball.chand) {
 			%ball.gx += %this.hand_x;
 		} else {

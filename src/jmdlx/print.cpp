@@ -506,7 +506,7 @@ int Print::printFlipBook(void) {
 				against it */
 
 	int flipbook_width = 4;
-	int flipbook_height = 5;
+	int flipbook_height = 6;
 	int frame_width;
 	int frame_height;
 
@@ -536,9 +536,7 @@ int Print::printFlipBook(void) {
 
 	/* Some PS guff */
 	fprintf(outputfile, "%%!PS-Adobe-3.0\n");
-	fprintf(outputfile, "%%%%BoundingBox: 0 0 %i %i\n",
-				frame_width * flipbook_width,
-				frame_height * flipbook_height);
+	fprintf(outputfile, "%%%%BoundingBox: 0 0 612 792\n");
 	fprintf(outputfile, "%%%%Creator: JuggleMaster And Chunky Kibbles\n");
 	fprintf(outputfile, "%%%%Title: Juggling Pattern %s\n", jmlib->getSite());
 	fprintf(outputfile, "%%%%Pages: (atend)\n");
@@ -566,10 +564,12 @@ int Print::printFlipBook(void) {
 		"  /yResolution exch abs def\n"
 		"  /xResolution exch abs def\n"
 
+		"  612 %i div 792 %i div scale\n"
 		"  /Times-Roman findfont\n"
 		"  15 scalefont\n"
 		"  setfont\n"
-		"} def\n");
+		"} def\n",
+		frame_width * flipbook_width, frame_height * flipbook_height);
 
 	fprintf(outputfile, "%%%%EndProlog\n");
 
@@ -590,20 +590,20 @@ int Print::printFlipBook(void) {
 		fprintf(outputfile, "gsave\n");
 		fprintf(outputfile, "initialisePage\n");
 
-		for(j=0; j<flipbook_width; j++) {
-			for(k=0; k<flipbook_height; k++) {
+		for(k=flipbook_height-1; k>=0; k--) {
+			for(j=0; j<flipbook_width; j++) {
 				int f_offs_x = j * frame_width;
 				int f_offs_y = k * frame_height;
 
 				/* Cut marks */
 				fprintf(outputfile, "%i %i 2 2 rectfill\n",
-					f_offs_x, f_offs_y);
+					f_offs_x + 1, f_offs_y);
 				fprintf(outputfile, "%i %i 2 2 rectfill\n",
-					f_offs_x + frame_width - 2, f_offs_y);
+					f_offs_x + frame_width - 1, f_offs_y);
 				fprintf(outputfile, "%i %i 2 2 rectfill\n",
-					f_offs_x, f_offs_y + frame_height - 2);
+					f_offs_x + 1, f_offs_y + frame_height - 1);
 				fprintf(outputfile, "%i %i 2 2 rectfill\n",
-					f_offs_x + frame_width - 2, f_offs_y + frame_height - 2);
+					f_offs_x + frame_width - 1, f_offs_y + frame_height - 1);
 
 
 				if (handed->GetStringSelection() == "Right") {
@@ -622,8 +622,8 @@ int Print::printFlipBook(void) {
 				fprintf(outputfile, "%i %i moveto\n"	
 					"( %i ) show\n",
 					(handed->GetStringSelection() == "Right"?
-						f_offs_x + 6:
-						f_offs_x + frame_width - 6),
+						f_offs_x + 30:
+						f_offs_x + frame_width - 30),
 					f_offs_y + frame_height/2,
 					current_frames);
 

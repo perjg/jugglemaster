@@ -1,6 +1,6 @@
 TEMPLATE	= app
 CONFIG		= qt warn_on release
-LIBS    += ../jmlib/jmlib.a
+LIBS    += -L../jmlib -ljm
 HEADERS		= jugglemaster.h \
 		  jugglewidget.h\
             ../jmlib/jmlib.h \

@@ -90,11 +90,11 @@ int ParsePatterns(FILE *input,
 		} else if(sscanf(buf, "#BC=%3s",currbc) == 1) {
 			/* BG Color */
 		} else if(sscanf(buf, "#BP=%i",&currbp) == 1) {
-			/* Gravity */
+			/* Beep */
 		} else if(sscanf(buf, "#HD=%i",&currhd) == 1) {
-			/* Speed */
+			/* Show Hand */
 		} else if(sscanf(buf, "#PD=%i",&currpd) == 1) {
-			/* BG Color */
+			/* Show Pattern */
 		} else if(sscanf(buf, "#MR=%i",&currmr) == 1) {
 			/* Mirror */
 		} else if(sscanf(buf, "/[ %255[^]] ]",current_group) == 1) {
@@ -105,9 +105,7 @@ int ParsePatterns(FILE *input,
 			newgroup = (struct pattern_group_t *)malloc(sizeof(struct pattern_group_t));
 			if(groups->first == NULL) {
 				groups->first = newgroup;
-			}
-
-			if(group != NULL) {
+			} else if(group != NULL) {
 				group->next = newgroup;
 			}
 			group = newgroup;

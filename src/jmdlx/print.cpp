@@ -505,8 +505,8 @@ int Print::printFlipBook(void) {
 				balls were when we started, and check
 				against it */
 
-	int flipbook_width = 4;
-	int flipbook_height = 6;
+	int flipbook_width = 3;
+	int flipbook_height = 5;
 	int frame_width;
 	int frame_height;
 
@@ -532,7 +532,7 @@ int Print::printFlipBook(void) {
 	/* Make the space at the side of each flip [for the staple]
 	1/4 of the width of the image itself. */
 	frame_width = jmlib->getImageWidth() + (jmlib->getImageWidth()/4);
-	frame_height = jmlib->getImageHeight() + (jmlib->getImageHeight()/4);
+	frame_height = jmlib->getImageHeight();
 
 	/* Some PS guff */
 	fprintf(outputfile, "%%!PS-Adobe-3.0\n");

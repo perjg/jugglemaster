@@ -19,6 +19,7 @@
 #include <wx/wx.h>
 #include <wx/dialog.h>
 #include <wx/progdlg.h>
+#include <wx/image.h>
 #include "../jmlib/jmlib.h"
 #include "jmdlx.h"
 

@@ -15,85 +15,89 @@
 
 #include "./aajm.h"
 
+aa_context *context;
+aa_renderparams *params;
+JMLib* jmlib;
+
 void errorCB(char* msg) {
 	aa_printf(context, 1, 1, AA_NORMAL, "%s", msg);
 	aa_flush(context);
 	sleep(2);
 }
 
-void draw_juggler(int show_loadavg) {
+void draw_juggler(int show_loadavg, aa_context *c, JMLib *j) {
 	int color;
 	int i;
 	struct loadavg load;
 
-	arm* ap = &(jmlib->ap);
-	ball* rhand = &(jmlib->rhand);
-	ball* lhand = &(jmlib->lhand);
-	hand* handp = &(jmlib->handpoly);
+	arm* ap = &(j->ap);
+	ball* rhand = &(j->rhand);
+	ball* lhand = &(j->lhand);
+	hand* handp = &(j->handpoly);
 
 	color = 64;
 	// draw head
-	aa_drawcircle(context,ap->hx, ap->hy,
+	aa_drawcircle(c,ap->hx, ap->hy,
 			ap->hr, color, -1);
 
-	aa_drawline(context, 0, 0, aa_imgwidth(context)/2, aa_imgheight(context)/2, 1);
+	aa_drawline(c, 0, 0, aa_imgwidth(c)/2, aa_imgheight(c)/2, 1);
 	// draw juggler
 	for (i=0;i<5;i++) {
-		aa_drawline(context, ap->rx[i], ap->ry[i],
+		aa_drawline(c, ap->rx[i], ap->ry[i],
 			ap->rx[i+1], ap->ry[i+1], color);
-		aa_drawline(context, ap->lx[i], ap->ly[i],
+		aa_drawline(c, ap->lx[i], ap->ly[i],
 			ap->lx[i+1], ap->ly[i+1], color);
 	}
 
 	// hands
 	for (i=0; i <= 8; i++) {
-		aa_drawline(context, rhand->gx + handp->rx[i],
+		aa_drawline(c, rhand->gx + handp->rx[i],
 			rhand->gy + handp->ry[i],
 			rhand->gx + handp->rx[i+1],
 			rhand->gy + handp->ry[i+1], color);
-		aa_drawline(context, lhand->gx + handp->lx[i],
+		aa_drawline(c, lhand->gx + handp->lx[i],
 			lhand->gy + handp->ly[i],
 			lhand->gx + handp->lx[i+1],
 			lhand->gy + handp->ly[i+1], color);
 	}
-	aa_drawline(context, rhand->gx + handp->rx[9],
+	aa_drawline(c, rhand->gx + handp->rx[9],
 		rhand->gy + handp->ry[9],
 		rhand->gx + handp->rx[0],
 		rhand->gy + handp->ry[0], color);
-	aa_drawline(context, lhand->gx + handp->lx[9],
+	aa_drawline(c, lhand->gx + handp->lx[9],
 		lhand->gy + handp->ly[9],
 		lhand->gx + handp->lx[0],
 		lhand->gy + handp->ly[0], color);
 
 	color = 255;
 	// draw balls
-	int diam = (11*jmlib->dpm/DW);
-	for(i=jmlib->balln-1;i>=0;i--) {
-		aa_drawcircle(context, jmlib->b[i].gx + diam,
-				jmlib->b[i].gy + diam,
+	int diam = (11*j->dpm/DW);
+	for(i=j->balln-1;i>=0;i--) {
+		aa_drawcircle(c, j->b[i].gx + diam,
+				j->b[i].gy + diam,
 				diam, color, color);
 	}
 
 
-	aa_render(context, params, 0, 0,
-		aa_imgwidth(context), aa_imgheight(context));
+	aa_render(c, params, 0, 0,
+		aa_imgwidth(c), aa_imgheight(c));
 
-	aa_printf(context, 0, 0, AA_SPECIAL,
+	aa_printf(c, 0, 0, AA_SPECIAL,
 		"Site: %s    Style: %s    Balls: %i",
-		jmlib->getSite(), jmlib->getStyle(), jmlib->balln);
+		j->getSite(), j->getStyle(), j->balln);
 
 	if(show_loadavg) {
 		loadaverage(&load);
-		aa_printf(context, 0, 1, AA_SPECIAL,
+		aa_printf(c, 0, 1, AA_SPECIAL,
 			"LoadAvg: %2.2f %2.2f %2.2f",
 			load.one, load.five, load.fifteen);
 	}
-	if(jmlib->getStatus() == ST_PAUSE) {
-		aa_puts(context, 1, 3, AA_SPECIAL, "Paused");
+	if(j->getStatus() == ST_PAUSE) {
+		aa_puts(c, 1, 3, AA_SPECIAL, "Paused");
 	}
-	aa_flush(context);
+	aa_flush(c);
 
-	memset(context->imagebuffer,0,aa_imgwidth(context)*aa_imgheight(context));
+	memset(c->imagebuffer,0,aa_imgwidth(c)*aa_imgheight(c));
 }
 
 /* Just for anyone not aware, /proc/loadavg gives load average over the
@@ -200,7 +204,7 @@ void main_loop(int max_iterations, int delay,
 	while (1) {
 		gettimeofday(&starttime,NULL);
 		jmlib->doJuggle();
-		draw_juggler(loadavg_flag);
+		draw_juggler(loadavg_flag, context, jmlib);
 
 		if(loadavg_flag) {
 			loadaverage(&load);
@@ -253,23 +257,30 @@ void main_loop(int max_iterations, int delay,
 			}
 		} else if(c=='h' || c=='H') {
 			/* Help */
-			aa_puts(context, 3, 4, AA_SPECIAL,
+			int curr_height = 4;
+			aa_puts(context, 3, curr_height, AA_SPECIAL,
 				"Key Help");
-			aa_puts(context, 3, 6, AA_SPECIAL,
+			++curr_height;
+			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
 				"h - This screen");
-			aa_puts(context, 3, 7, AA_SPECIAL,
+			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
 				"s - Change Siteswap");
-			aa_puts(context, 3, 8, AA_SPECIAL,
+			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
 				"t - Change Style");
-			aa_puts(context, 3, 9, AA_SPECIAL,
+			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
 				"l - Toggle Load Monitoring");
-			aa_puts(context, 3, 10, AA_SPECIAL,
+#ifdef HAVE_AVCODEC_H
+			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
+				"m - Dump MPEG");
+#endif
+			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
 				"q - Quit");
-			aa_puts(context, 3, 11, AA_SPECIAL,
+			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
 				"space - Pause");
-			aa_puts(context, 3, 12, AA_SPECIAL,
+			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
 				"+, -, enter - Speed up, down, reset");
-			aa_puts(context, 3, 14, AA_SPECIAL,
+			++curr_height;
+			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
 				"Press any key to remove this menu");
 			aa_flush(context);
 			aa_getkey(context, 1);
@@ -280,6 +291,19 @@ void main_loop(int max_iterations, int delay,
 		} else if(c=='-' || c=='j') {
 			/* Speed Down */
 			speed += 1500;
+#ifdef HAVE_AVCODEC_H
+		} else if(c=='m') {
+			/* Dump MPEG */
+			char mpegname[20];
+			memset(mpegname,0,20);
+			aa_puts(context, 1, 4, AA_SPECIAL,
+				"Enter MPEG Name...");
+			aa_edit(context, 1, 5, 20,
+				mpegname, JML_MAX_SITELEN);
+			if(mpegname[0]!=0) {
+				creatempeg(jmlib, mpegname);
+			}
+#endif
 		} else if(c=='l') {
 			/* Toggle Load Monitoring */
 			if(loadavg_flag == 1) {
@@ -408,7 +432,6 @@ void main_loop(int max_iterations, int delay,
 }
 
 int main(int argc, char **argv) {
-	char options[] = "aljhip:n:d:m:t:s:";
 	int help_flag = 0;
 	int aahelp_flag = 0;
 	int justoutput_flag = 0;
@@ -420,7 +443,7 @@ int main(int argc, char **argv) {
 	int normal_load;
 	int socket_fd = -1;
 
-	normal_load = (int)(DEFLOAD * 100);
+	char options[] = "aljhip:n:d:m:t:s:";
 	static struct option long_options[] =
         {
 		{"help", no_argument, &help_flag, 1},
@@ -437,6 +460,7 @@ int main(int argc, char **argv) {
 		{0,0,0,0}
 	};
 
+	normal_load = (int)(DEFLOAD * 100);
 	char optch;
 	int option_index = 0;
 
@@ -517,6 +541,7 @@ int main(int argc, char **argv) {
 		printf("Failed to initialize aalib\n");
 		exit(1);
 	}
+
 	if(!justoutput_flag) {
 		aa_autoinitkbd(context, 0);
 		aa_hidecursor(context);

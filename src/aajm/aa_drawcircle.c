@@ -14,6 +14,7 @@
  */ 
 
 #include "./aa_drawcircle.h"
+#include "./aa_drawline.h"
 
 /* Flagrantly ripped from http://homepage.smc.edu/kennedy_john/BCIRCLE.PDF
 	"A Fast Bresenham Type Algorithm For Drawing Circles" */

@@ -34,11 +34,8 @@
 #include "./aajm_common.h"
 #include "./aa_drawline.h"
 #include "./aa_drawcircle.h"
+#include "./aampeg.h"
 
-
-aa_context *context;
-aa_renderparams *params;
-JMLib* jmlib;
 
 struct loadavg {
 	float one, five, fifteen;
@@ -50,7 +47,7 @@ struct loadavg {
 
 
 void errorCB(char* msg);
-void draw_juggler(int show_loadavg);
+void draw_juggler(int show_loadavg, aa_context *c, JMLib *j);
 void loadaverage(struct loadavg *load);
 int startlistening(int port);
 void stoplistening(int fd);

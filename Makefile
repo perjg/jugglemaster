@@ -15,10 +15,12 @@ jmdlx:
 
 aajm:
 	$(MAKE) -C src/aajm
+	mkdir -p ./bin
 	cp src/aajm/aajm src/aajm/aajm-remote ./bin
 
 jmqt:
 	$(MAKE) -C src/jmqt
+	mkdir -p ./bin
 	cp src/jmqt/jmqt ./bin
 
 install:

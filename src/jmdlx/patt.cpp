@@ -182,6 +182,9 @@ void PatternLoader::PrintSections() {
 			printf("  Pattern Name: %s\n",Patt_GetName(current_pattern));
 			printf("   Style: %s\n",Patt_GetStyle(current_pattern));
 			printf("   Data: %s\n",Patt_GetData(current_pattern));
+			printf("   Height Ratio: %1.2f\n",Patt_GetHR(current_pattern));
+			printf("   Dwell Ratio: %1.2f\n",Patt_GetDR(current_pattern));
+			printf("   Author: %s\n",Patt_GetAuthor(current_pattern));
 			current_pattern = NextPatt(current_pattern);
 		}
 
@@ -289,20 +292,28 @@ struct pattern_t *PatternLoader::GetPattern(const char *section_name,const char 
 
 
 #ifdef PATT_STANDALONE
-int main(int argc, char *argv[]) {
+class JMPatt:public wxApp {
+	public:
+		bool OnInit();
+};
+IMPLEMENT_APP(JMPatt)
+
+bool JMPatt::OnInit() {
 	PatternLoader *p;
-	p = new PatternLoader(DEFAULT_SEMAPHOREFILE);
+	p = new PatternLoader(NULL, DEFAULT_SEMAPHOREFILE);
 	if(argc==1 || strcmp(argv[1], "-q") != 0) {
 		p->PrintStyles();
 		p->PrintSections();
 	}
 	delete p;
 
-	p = new PatternLoader(DEFAULT_PATTERNFILE);
+	p = new PatternLoader(NULL, DEFAULT_PATTERNFILE);
 	if(argc==1 || strcmp(argv[1], "-q") != 0) {
 		p->PrintStyles();
 		p->PrintSections();
 	}
 	delete p;
+
+	return(0);
 }
 #endif

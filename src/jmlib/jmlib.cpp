@@ -77,7 +77,13 @@ void JMLib::initialize(void) {
   
   status = ST_NONE;
   
+#ifdef _WIN32_WCE
+  CTime t;
+  srand((unsigned int)t.GetTime());
+#else
   srand(time(NULL));
+#endif
+
   if (styledata == NULL)
     styledata = new JML_CHAR[STYLEMAX*4];
   

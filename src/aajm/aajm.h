@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/time.h>
 #include <getopt.h>
 #include <malloc.h>
 #include "../jmlib/jmlib.h"

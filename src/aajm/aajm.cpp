@@ -95,6 +95,9 @@ void resizehandler(aa_context *resized_context) {
 }
 
 void main_loop(void) {
+	struct timeval starttime, endtime;
+	long sleeptime;
+	long speed = 25000; /* microseconds between frames */
 	char c;
 	int i;
 	char newsite[JML_MAX_SITELEN];
@@ -103,6 +106,7 @@ void main_loop(void) {
 	int numstyles = sizeof(possible_styles)/sizeof(possible_styles[0]);
 
 	while (1) {
+		gettimeofday(&starttime,NULL);
 		jmlib->doJuggle();
 		draw_juggler();
 		c=aa_getkey(context,0);
@@ -159,12 +163,34 @@ void main_loop(void) {
 				"q - Quit");
 			aa_puts(context, 3, 10, AA_SPECIAL,
 				"space - Pause");
-			aa_puts(context, 3, 12, AA_SPECIAL,
+			aa_puts(context, 3, 11, AA_SPECIAL,
+				"+, -, enter - Speed up, down, reset");
+			aa_puts(context, 3, 13, AA_SPECIAL,
 				"Press any key to remove this menu");
 			aa_flush(context);
 			aa_getkey(context, 1);
+		} else if(c=='+' || c=='=') {
+			speed -= 1500;
+			if(speed < 0) { speed = 0; }
+		} else if(c=='-') {
+			speed += 1500;
+		} else if(c==13) {
+			/* 13 == Enter */
+			speed = 25000;
 		}
-		usleep(20000);
+		gettimeofday(&endtime,NULL);
+		endtime.tv_sec -= starttime.tv_sec;
+		endtime.tv_usec -= starttime.tv_usec;
+		while (endtime.tv_usec < 0) {
+			endtime.tv_sec --;
+			endtime.tv_usec += 1000000;
+		}
+		sleeptime = speed - (endtime.tv_usec + endtime.tv_sec*1000000);
+		if(sleeptime > 0) {
+			usleep(sleeptime);
+		} else {
+			usleep(1);
+		}
 	}
 }
 

@@ -87,7 +87,7 @@ int ParsePatterns(FILE *input,
 			/* Gravity */
 		} else if(sscanf(buf, "#SP=%f",&currsp) == 1) {
 			/* Speed */
-		} else if(sscanf(buf, "#BC=%1i%1i%1i",&currbgred,
+		} else if(sscanf(buf, "#BC=%1x%1x%1x",&currbgred,
 				&currbggreen,&currbgblue) == 3) {
 			/* BG Color */
 		} else if(sscanf(buf, "#BP=%i",&currbp) == 1) {

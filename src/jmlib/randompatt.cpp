@@ -27,23 +27,57 @@
 #endif
 
 /* All maths in this file courtesy of Aidan Burns,
-http://www.geocities.com/aidanjburns/contents.html */
+http://www.geocities.com/aidanjburns/ */
 
 /*
-Transforming Asynchronous Patterns
+
+ASYNCHRONOUS PATTERNS
 
 Seed a buffer of pattern_length with throws of height num_balls, then:
 
-Rule 1  the Downright Rule: to swap any two throws in a pattern, the
+Rule 1,  The Downright Rule: to swap any two throws in a pattern, the
 throw that moves to the right decreases with each step, and the throw
 that moves to the left increases with each step. A throw may not move
 if it would decrease below zero.
 
-Rule 2  the Circular Rule: a throw may be moved from the front to the
+Rule 2,  The Circular Rule: a throw may be moved from the front to the
 back of a pattern.
 
-Implemenation note: Rule 2 is implied by doing all arithmetic modulo patt_len.
+Implemenation note: Rule 2 is implied by doing all swapping arithmetic
+   modulo patt_len.
 
+
+SYNCHRONOUS PATTERNS
+
+Seed a buffer of pattern_length with pairs of throws of height num_balls,
+then:
+
+Rule 3,  The Handedness Rule: when you change a throws handedness, you
+change its crossedness.
+
+Rule 4,  The Two Up, Two Down Rule: to swap any two throws in a synchronous
+pattern, the throw that moves to the right decreases by two with each
+bracket, and the throw that moves to the left increases by two with each
+bracket. A throw may not move if it would decrease below zero.
+
+Rule 2 is also still used, and is also still implied by the implemenation
+
+
+MULTIPLEX PATTERNS
+
+Multiplex patterns can be created by combining same-length patterns of
+the either other two flavers. Example here is easier than anything else:
+
+  5  0  4 +    ( 3 balls )
+  4  2  0      ( 2 balls )
+-----------
+[54] 2  4      ( 5 balls )
+
+
+(  4    ,   4   ) +  ( 4 balls )
+(  6x   ,   6x  )    ( 6 balls )
+-----------------
+( [46x] , [46x] )    ( 10 balls )
 */
 
 JML_CHAR *jm_rand(JML_INT8 numballs, JML_INT8 pattlen,
@@ -116,20 +150,6 @@ JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,
 	return returnvalue;
 }
 
-/*
-Transforming Synchronous Patterns
-
-Seed a buffer of pattern_length with pairs of throws of height num_balls,
-then:
-
-Rule 3  the Handedness Rule: when you change a throws handedness, you
-change its crossedness.
-
-Rule 4  the Two Up, Two Down Rule: to swap any two throws in a synchronous
-pattern, the throw that moves to the right decreases by two with each
-bracket, and the throw that moves to the left increases by two with each
-bracket. A throw may not move if it would decrease below zero.
-*/
 
 JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 		JML_INT8 transformations) {
@@ -140,6 +160,8 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 					/* buffers that say either a throw is, or isn't, crossing.
 					if leftcross[1] is set, then left[1] must be a crossing
 					throw. */
+	int leftcrosses = 0;
+	int rightcrosses = 0;
 	int totalcrosses = 0;
 	JML_CHAR *returnvalue;
 	JML_CHAR *returntmp;
@@ -172,8 +194,8 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 			/* the * 5 is a silly get-out in case we're not
 			getting stuff swapped */
 
-		/* Make rule4 considerably less likely than rule3 */
-		if(rand()%5 == 1) {
+		/* Make rule3 considerably less likely than rule4 */
+		if(rand()%6 == 1) {
 
 			/* RULE 3 */
 
@@ -184,6 +206,7 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 
 			if(leftcross[pos] > 0) leftcross[pos] = 0;
 			else leftcross[pos] = 1;
+
 			if(rightcross[pos] > 0) rightcross[pos] = 0;
 			else rightcross[pos] = 1;
 
@@ -236,10 +259,11 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 		where something can have an x on the end */
 
 	for(i=0;i<pattlen;i++) {
-		if(leftcross[i]) totalcrosses++;
-		if(rightcross[i]) totalcrosses++;
+		if(leftcross[i]) leftcrosses++;
+		if(rightcross[i]) rightcrosses++;
 	}
 
+	totalcrosses = leftcrosses + rightcrosses;
 	returnvalue = (JML_CHAR *)malloc(sizeof(JML_CHAR) * pattlen * 2 + /* Numbers */
 			sizeof(JML_CHAR) * pattlen * 3 + /* Brackets and commas */
 			sizeof(JML_CHAR) * totalcrosses + 1); /* x's */
@@ -323,10 +347,11 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	} */
+
 	for(sync = 0; sync <= 1; sync++) {
 		for(numballs = 0; numballs<=35; numballs++) {
-			for(pattlen = 1; pattlen < 20; pattlen++) {
-				for(transformations = 0; transformations < 10; transformations ++) {
+			for(pattlen = 1; pattlen < 50; pattlen++) {
+				for(transformations = 0; transformations < 20; transformations ++) {
 					int showpat = 0;
 					pattern = jm_rand(numballs, pattlen,
 								transformations, sync, 0);
@@ -347,6 +372,7 @@ int main(int argc, char *argv[]) {
 					}
 					if(pattern != NULL) {
 						free(pattern);
+						pattern = NULL;
 					}
 				}
 			}

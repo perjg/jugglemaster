@@ -1024,16 +1024,19 @@ JML_FLOAT JMLib::fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t) {
 	return(true);
 } */
 
+/* FIXME */
 void JMLib::speedUp(void) {
 	speed = SPEED_MAX;
 	set_ini(0);
 }
 
+/* FIXME */
 void JMLib::speedDown(void) {
 	speed = SPEED_MIN;
 	set_ini(0);
 }
 
+/* FIXME */
 void JMLib::speedReset(void) {
 	speed = SPEED_DEF;
 	set_ini(0);

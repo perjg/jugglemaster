@@ -239,6 +239,10 @@ class JMLib {
   JML_INT32 getSiteposLen(void) {
     return getSiteposStop() - getSiteposStart();
   }
+
+  JML_INT32 getiterations(void) {
+    return (dpm); /* FIXME */
+  }
 };
 
 #endif

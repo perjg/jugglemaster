@@ -1620,6 +1620,15 @@ Orr
 {0,0}{0,0}
 612 Seon
 
+#DR=0.5
+#HR=0.02
+%The Fastest Trick in the World
+{13,0}{13,0}
+{13,1}{13,3}
+{0,0}{0,0}
+423 The Fastest Trick in the World
+
+
 ;5 Ball Happy Cascade.
 #DR=0.6
 #HR=0.15

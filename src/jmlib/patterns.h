@@ -17,8 +17,8 @@
  */ 
 
 
-#ifndef PATTNERS__HDR_
-#define PATTNERS__HDR_
+#ifndef PATTERNS__HDR_
+#define PATTERNS__HDR_
 
 #include "jmlib.h"
 

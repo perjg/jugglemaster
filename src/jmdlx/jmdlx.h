@@ -36,6 +36,7 @@ class JMTimer;
 class JMCanvas : public wxScrolledWindow {
 public:
   JMCanvas(JMFrame* parent, JMLib *j);
+  ~JMCanvas();
 
   void OnPaint(wxPaintEvent &event);
   void OnEraseBackground(wxEraseEvent& event);
@@ -44,6 +45,7 @@ private:
   JMFrame* parent;
   JMLib* jmlib;
   wxBrush* ball_colors[NUMBALLCOLORS];
+  wxBitmap* backBuffer;
 
   DECLARE_EVENT_TABLE()
 };

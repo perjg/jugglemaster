@@ -317,15 +317,17 @@ JMCanvas::JMCanvas(JMFrame *p, JMLib *j) :
 	ball_colors[5] = wxCYAN_BRUSH;
 	ball_colors[6] = wxGREY_BRUSH;
 	ball_colors[7] = wxLIGHT_GREY_BRUSH;
+	backBuffer = new wxBitmap(wxGetDisplaySize().x, wxGetDisplaySize().y);
 }
+
+JMCanvas::~JMCanvas() {
+	delete backBuffer;
+}
+
 /*
     Refactor to use wxBufferedPaintDC
 */
-wxBitmap* backBuffer = NULL;
 void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
-  if(backBuffer == NULL) {
-    backBuffer = new wxBitmap(wxGetDisplaySize().x, wxGetDisplaySize().y);
-  }
   
   //wxMemoryDC dc;
   int i;

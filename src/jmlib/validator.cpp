@@ -374,7 +374,7 @@ bool JMSiteValidator::transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS) {
   return true;
 }
 
-/*
+#ifdef VALIDATOR_STANDALONE
 void foo(char* site) {
   printf("Site '%s' is ", site);
 
@@ -417,4 +417,4 @@ int main(void) {
   foo("(4,4)(0,4x)(4,4)(4x,0)");
   foo("([yxy],2)(2,[22])(2,[yxy])([22],2)");
 }
-*/
+#endif

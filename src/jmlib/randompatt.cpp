@@ -230,15 +230,22 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 
 			pos = rand()%pattlen;
 
-			tmp = leftcross[pos]?0:1;
-			leftcross[pos] = rightcross[pos]?0:1;
-			rightcross[pos] = tmp;
+			if(leftcross[pos] != 0 && right[pos] == 0) {  
+				j++;
+			} else if(rightcross[pos] != 0 && left[pos] == 0) {
+				j++;
+			} else {
 
-			tmp = left[pos];
-			left[pos] = right[pos];
-			right[pos] = tmp;
+				tmp = leftcross[pos]?0:1;
+				leftcross[pos] = rightcross[pos]?0:1;
+				rightcross[pos] = tmp;
 
-			i++;
+				tmp = left[pos];
+				left[pos] = right[pos];
+				right[pos] = tmp;
+
+				i++;
+			}
 
 		} else {
 
@@ -263,14 +270,21 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 			if((switchbuffer[first] - distance*2 >= 0) &&
 				(switchbuffer[(first+distance)%pattlen] + distance*2 <= 35)) {
 
-				tmp = switchbuffer[first] - distance*2;
-				switchbuffer[first] = switchbuffer[(first+distance)%pattlen] + distance*2;
-				switchbuffer[(first+distance)%pattlen] = tmp;
+				if(switchbuffer[first] - distance * 2 == 0
+					 && switchbuffercross[first] != 0) {
 
-				tmp = switchbuffercross[first];
-				switchbuffercross[first] = switchbuffercross[(first+distance)%pattlen];
-				switchbuffercross[(first+distance)%pattlen] = tmp;
-				i++;
+					j++;
+				} else {
+
+					tmp = switchbuffer[first] - distance*2;
+					switchbuffer[first] = switchbuffer[(first+distance)%pattlen] + distance*2;
+					switchbuffer[(first+distance)%pattlen] = tmp;
+
+					tmp = switchbuffercross[first];
+					switchbuffercross[first] = switchbuffercross[(first+distance)%pattlen];
+					switchbuffercross[(first+distance)%pattlen] = tmp;
+					i++;
+				}
 			} else {
 				j++;
 			}

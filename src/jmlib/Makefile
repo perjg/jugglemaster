@@ -27,13 +27,17 @@ rand: clean validator.o
 	$(CXX) $(LDFLAGS) -o ./rand ./rand-standalone.o validator.o $(LIBS)
 	./rand | less
 
+validator: clean
+	$(CXX) $(CXXFLAGS) -DVALIDATOR_STANDALONE -c -o ./validator-standalone.o ./validator.cpp
+	$(CXX) $(LDFLAGS) -o ./validator ./validator-standalone.o $(LIBS)
+
 install: $(LIBNAME)
 	mkdir -p /usr/local/include/jm
 	cp *.h /usr/local/include/jm/
 	cp libjm.a /usr/local/lib
 
 clean:
-	rm -f *.o core $(LIBNAME) patterns rand
+	rm -f *.o core $(LIBNAME) patterns rand validator
 
 p: clean patterns
 	./patterns $(DATA)

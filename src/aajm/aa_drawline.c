@@ -13,6 +13,8 @@
  * General Public License for more details.
  */ 
 
+#include <string.h>
+#include <stdlib.h>
 #include "./aa_drawline.h"
 
 

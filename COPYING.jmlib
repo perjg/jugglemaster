@@ -1,0 +1,42 @@
+JMLib Distribution License
+
+
+Thank you for downloading JMLib.
+Please read 'JMLib Distribution License' carefully.
+
+By downloading the software, you agree to the terms and conditions of
+the license.
+
+In the case of disagreement, dispose of the 'Bundle' of which the definition
+is given below.
+
+
+Definitions:
+
+'JuggleMaster' is what you downloaded.
+
+'JMLib' consists of files contained in the src/jmlib/ and directory,
+including but not necessarily limited to: jmlib.cpp jmlib.h jmlib_types.h
+juggler.h prefs.cpp prefs.h util.cpp util.h validator.cpp validator.h
+
+'Bundle' is synonymous with JMLib.
+
+1. You have the right to modify some or whole parts of Bundle.
+
+2. You can re-distribute Bundle, or make it public, regardless if it is
+modified or not, as long as it is free and copyrights are specified. In
+the case of re-distribution, you should also attach to it the license
+with exact terms 1 and 2 given here, either in English or Japanese. You
+are allowed to re-define 'Bundle', provided that it includes all the
+components of Bundle you received, and modified ones.
+
+3. Everything you downloaded not part of 'Bundle' is distributed under
+the modified GPL. Please see LICENSE and COPYING for more information.
+
+4. The distributor of JuggleMaster shall not be liable for any
+damages you suffer as a result of using JuggleMaster.
+
+
+ In short hand, "You can just change stuff in the jmlib dir to make
+ it suit your purpose, and put on your site, but remember to show the
+ copyrights. Good day."  Thank you.

@@ -1,0 +1,14 @@
+In this package:
+
+src/jmlib/* is licensed under the JMLib license, please see COPYING.jmlib
+for further details.
+
+src/jmdlx/* is licensed under the GPL, with modifications that allow it
+to be used with JMLib without causing JMLib to be under the GPL also,
+notably:
+You may link anything in the JMLib dir in the distribution you downloaded
+with jmdlx without JMLib being GPL'd.
+The full text of the GPL is available in COPYING
+
+Chunky Kibbles
+<chunky@icculus.org>

@@ -1,0 +1,312 @@
+<HTML>
+<HEAD>
+   <TITLE>JuggleMaster Java(English)</TITLE>
+</HEAD>
+<BODY>
+Last modified on 28 Nov 1999.
+<CENTER><H1>
+Applet JuggleMaster Java&nbsp; 
+<FONT SIZE=+0>ver 1.03</FONT>
+</H1></CENTER>
+
+<APPLET CODE="Jmj.class" ARCHIVE="jmj103.jar" WIDTH="0" HEIGHT="0">
+<PARAM NAME="file" VALUE="pattern.jm">
+</APPLET>
+
+<P><A HREF="index_ja.html">Japanese Version</A>/English Version
+
+<HR>There is an applet used here, so see this page with
+<BR>Netscape Communicator <FONT COLOR="#FF0000">4.x,</FONT>&nbsp;
+<BR>Internet Explorer <FONT COLOR="#FF0000">4.x,</FONT>&nbsp;
+<BR>or Appletviewer (JDK 1.1.x ).
+<BR>NOT available with 3.x or older browser, nor Mosaic.
+<HR>
+
+<BR>
+<CENTER>
+<H1>
+JuggleMaster Java Distribution License</H1></CENTER>
+
+<P>Thank you for downloading JuggleMaster java.
+Read 'JuggleMaster Java Distribution License' carefully.
+By downloading the software, 
+you agree to the terms and conditions of the license.
+In the case of disagreement, dipose of the bundle 
+of which the definition is given below.
+<P>
+<UL>
+<DT>
+Definition:</DT>
+
+<DD>
+'JuggleMaster Java' is what you downloaded.</DD>
+
+<DD>JuggleMaster Java's 'Bundle' consists of files
+with extension 'jar', 'class', 'java', and 'jm',
+which are included in JuggleMaster Java.
+</DD></UL>
+<P>
+<UL>
+<DT>
+1.</DT>
+
+<DD>
+You have the right to modify some or whole parts of Bundle.</DD>
+
+<DT>
+2.</DT>
+
+<DD>
+You can re-distribute Bundle, or make it public, regardless if it is modified
+or not, as long as it is free and copyrights are specified.
+In the case of re-distribution, you should
+also attach to it the license with exact terms 1 and 2 given here, 
+either in English or Japanese. You are
+allowed to re-define 'Bundle', provided that it includes all the components
+of Bundle you received, and modified ones.</DD>
+
+<DT>
+3.</DT>
+
+<DD>
+You don't have any restrictions about what you dowonloaded but not included
+in Bundle.</DD>
+
+<DT>
+4.</DT>
+
+<DD>
+The distributor of JuggleMaster Java shall not be liable for any damages
+you suffer as a result of using JuggleMaster Java.</DD>
+</UL>
+<P>
+<HR>
+ In short hand, "You can just change this html file
+to make it suit your purpose, and put on your site,
+but remember to show the copyrights. Good day."
+Thank you.
+
+<HR>
+RAQ (a Rarely Asked Question)
+<P>
+Q: What are those whole bunch of ***.java files? <BR>
+A: If you have got no ideas what they are, you can just throw them away.
+
+<P>
+<HR>
+<P>
+How to use JuggleMaster Java (now more helpful thanks to Mr. Isaac Orr)
+<P>
+You should have two applet windows open - 
+one is the control panel window and the other is the view window, 
+where the actual juggling patterns are displayed. 
+All user interface is done through the control panel - the view window is 
+for viewing only.
+Please note that you can not close these windows by pressing on the [x]
+ at the top right corner of the window; 
+They belong to an applet and therefore will close only when you exit 
+the applet by selecting 'quit' from the control panel menu.
+
+<P>
+Using the program to render one of the pre-programmed patterns is 
+fairly straightforward - simply scroll down to that
+pattern and double click it. 
+The pattern will start playing in the view window, 
+while you may alter its parameters using
+the control panel - setting the desired speed, height etc. 
+(you can get a "GloBall" effect by eliminating the siteswap text
+and the juggler's body). 
+Note that your control panel changes are applied 
+only when you press the 'Juggle' button.<BR>
+If you find Jmj is too exhaustive for your computer, reduce the value of 
+'smoothness'.
+
+<P>
+In addition to selecting predefined patterns from the list 
+you may also insert and view siteswaps of your own fancy 
+(so long as they constitute legal patterns). 
+Select 'try a new siteswap' from the 'option' menu 
+and type in your siteswap of choice. Here are a few guidelines:
+<P>
+<UL>
+<LI>
+Don't put any space between the digits. e.g.:7531 is ok, NOT 4_4_1</LI>
+
+<LI>
+Replace '10', '11' , ... with a, b, ... , z. 
+This allows siteswap up to 'z' = 35.
+<BR>e.g.: the 7 ball shower is d1.</LI>
+
+<LI>The number of balls in the pattern should not exceed 35. 
+e.g., [ma][gnu]s is not acceptable, because you need 43 balls.</LI>
+
+<LI>
+Put numbers in [ ] (square brackets) for the multiplexed throws, 
+i.e. throws of sevral balls at once. 
+<BR>e.g. '5 ball splits' is [54][22]2.</LI>
+
+<LI>
+For synchronous patterns, double the numbers.
+The throws from both hands should appear in a parenthesis, 
+separated by a comma.
+<BR>e.g: the 4 ball synchronous fountain is (4,4), NOT (2,2). </LI>
+<LI>
+Append 'x' after the digit for the throw crossed from hand to hand. 
+Balls without 'x' come back to the hand of the throw. 
+<BR>e.g., Box is (4,2x)(2x,4)</LI>
+</UL>
+
+<HR>
+<P>
+Of 'Pattern File'
+<P>
+JuggleMaster itself does not contain informations of patterns. It reads
+'pattern file' for the source of tricks.
+
+<P>You must have received two pattern files, pattern.jm and pattern_ja.jm,
+and the former is loaded automatically when JuggleMaster starts.
+<BR>* The latter is written in Japanese. 
+If you get interested, try it.
+<P>
+These two come from the original DOS version of JuggleMaster,
+which are the great pieces of work by Ken Matsuoka.
+<P>
+The versions included here also contain many, many extra tricks
+(of great fun!) given by Isaac Orr and his fellows.
+
+<P>You can load other pattern files by choosing 'load a pattern file' from
+the pulldown menu 'option'.
+It will lose the memory of former patterns, except arm motion styles.
+
+<HR>
+<P>
+Syntax of Pattern File
+<P>
+Read pattern.jm and you'll see. It is just a normal text file.
+<BR>A few changes for Java version will only be given here.
+<P>
+<UL>
+<LI>
+All the upper limitations written in pattern.jm are removed, 
+except the length of the pattern, 
+which should be of less than 200 letters.</LI>
+<LI>
+'Style' in the original is called 'arm motion' here.</LI>
+</UL>
+The exact syntax of the style was written in siteswap.txt ,
+which is not included in the Java version, and is written in Japanese...<P>
+But don't worry, I only am escaped to tell thee.
+<P>
+<UL>
+<BR>%<I>style name</I>
+<BR>{ x1, y1}{ x2, y2}
+<BR>{ x1, y1}{ x2, y2}
+<BR>....
+
+<P>The first line corresponds to the first throw, and the second is ..., 
+and so on.
+x1,y1 are the x/y coordinates at which the ball is catched, and at x2,y2
+thrown. The scale is like following:
+<P>
+<TABLE BORDER=5 >
+<TR>
+<TD></TD>
+
+<TD>value</TD>
+
+<TD>position</TD>
+
+<TD>range&nbsp;</TD>
+</TR>
+
+<TR>
+<TD VALIGN=CENTER>x&nbsp;</TD>
+
+<TD>10
+<BR>0
+<BR>-10&nbsp;</TD>
+
+<TD>below the throwing shoulder
+<BR>center of the body
+<BR>under the opposite shoulder&nbsp;</TD>
+
+<TD VALIGN=CENTER>-30 to +30&nbsp;</TD>
+</TR>
+
+<TR>
+<TD VALIGN=CENTER>y&nbsp;</TD>
+
+<TD>10
+<BR>0</TD>
+
+<TD>face level
+<BR>stomach level&nbsp;</TD>
+
+<TD VALIGN=CENTER>-10 to 20&nbsp;</TD>
+</TR>
+</TABLE>
+</UL>
+<P>
+This way of 'style' definition is proper to JuggleMaster, 
+and not universal like the siteswap notation.
+</UL>
+
+<HR>
+<P>
+&lt;APPLET&gt; tag syntax
+<UL>&lt;APPLET CODE="Jmj.class" ARCHIVE="jmj103.jar" WIDTH=0 HEIGHT=0>&lt;/APPLET&gt;
+<P>I think this suffices if you like to know.
+<BR>Those &lt;PARAM> tags can also be used.
+<LI>&lt;PARAM NAME="file" VALUE="<I>URL/filename</I>">
+<BR>Load specified URL when it starts.
+<LI>&lt;PARAM NAME"startwith" VALUE="<I>pattern name/siteswap</I>">
+<BR>Start with the given siteswap,
+<BR>or, start specified pattern after loading the pattern file.
+<BR>* Be exact with cases and spaces.</UL>
+
+Of, if you prefer somewhat fancier page using (that notorious) Java Script, 
+see <A HREF="js_jmpl_en.html">js_impl_en.html</A>
+<HR>
+<P>
+About JuggleMaster
+
+<UL>
+JuggleMaster Version 1.60 Copyright (C) 1995-1996 Ken Matsuoka
+JuggleMaster X Version 0.42 Copyright (C) 1996 MASUDA Kazuyoshi
+<BR><NOBR>JuggleMaster Java Version 1.03 Copyright (C) 1997-1999 Yuji Konishi,
+ASANUMA </NOBR>Nobuhiko
+
+<P><NOBR><A HREF="http://www.juggling.org/programs/ibm_pc/">JuggleMaster</A> ('original')is
+the software for DOS by <A HREF="mailto:GBA03100@nifty.ne.jp">Ken
+</A></NOBR><A HREF="mailto:GBA03100@nifty.ne.jp">Matsuoka(GBA03100@nifty.ne.jp)</A>.
+<BR><NOBR><A HREF="http://www.jah.ne.jp/~emda/">JuggleMaster X</A> ('JMX')is
+a port of the original for X Window System by </NOBR><A HREF="mailto:emda@po.jah.ne.jp">MASUDA
+Kazuyoshi(emda@po.jah.ne.jp)</A>.
+<BR>JuggleMaster Java ('JMJ')is a port to Java based on JMX
+by Yuji Konishi and ASANUMA Nobuhiko</A>.
+
+<P>Files called pattern.jm and pattern_ja.jm in JMJ are the components
+of the original, and were called patt_e.jm, patt_j.jm, respectively. Their
+copyright belongs to Ken Matsuoka.&nbsp;</UL>
+<HR>
+<P>
+Let Me Say
+<P>
+<CENTER>
+Let me, ASANUMA, say JuggleMaster is superb. I hope you'd soon follow me.<BR>
+*&nbsp; *&nbsp; *<BR>
+I'm really privileged to have such an opportunity to provide you JuggleMaster
+in such a way,<BR>
+and this Java port is my 'thanks a lot' to JuggleMaster.<BR>
+* * *<BR>
+We don't have any intention to continue the development of
+JuggleMaster Java any more.
+* * *<BR>
+I dedicate JuggleMaster Java for you who love juggling.<BR>
+Thanks to those who taught me how amusing juggling is.<BR>
+Last, but not least, great thanks to Ken Matsuoka, who invented JuggleMaster,
+and permitted to include some precious files
+in the JuggleMaster Java package.</CENTER>
+<HR>
+</BODY>
+</HTML>

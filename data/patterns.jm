@@ -1,0 +1,1689 @@
+;==============================================================================
+;       JuggleMaster Version 1.60  Copyright (c) 1995-1996 Ken Matsuoka
+;==============================================================================
+
+;The first numbers on the line are juggling patterns, and space or tab, title.
+;The length of pattern must be 76 or less, and title 40 or less.
+;JuggleMaster can read up to 9999 patterns.
+;Style names are limited to 300.
+;Style data are limited to 3000 lines.
+;
+;The first character on the line means...
+;  ';' Comment.
+;  '#' Set the parameter.
+;  '/' Separator(Green color).
+;  '%' Name of the style (30 characters or less) with style data,
+;      or call the registered style.
+;
+;This style is already defined.
+;%Normal
+;{ 13,  0}{  4,  0}
+
+;====  Parameters  ============================================================
+;
+
+#GA=9.8		;Gravity (0<f<=98) [meter/second^2]
+#DR=0.50	;Dwell ratio (0.10<=f<=0.90)
+#HR=0.20	;Height (0.01<=f<=1.00) [meter]
+#SP=1.0		;Speed ratio (0.1<=f<=2.0)
+#BC=000		;Background color  Red Green Blue (0<=R,G,B<=F)
+#BP=1		;Beep ON (n=0,1)
+#HD=1		;Hand ON (n=0,1)
+#PD=1		;Pattern ON (n=0,1)
+#MR=0		;Switch right and left (n=0,1)
+
+;==============================================================================
+
+%Reverse
+{  4,  0}{ 13,  0}
+
+%Shower
+{  5,  0}{ 10,  0}
+{ 10,  0}{  5,  0}
+
+%Center
+{ 13,  0}{  0,  0}
+/-------------------------------------
+/ JuggleMaster Version 1.60  
+/ Copyright (c) 1995-1996 Ken Matsuoka
+/-------------------------------------
+/
+/[ 3-Cascade Step By Step ]
+
+#DR=0.5
+#HR=0.2
+%Normal
+300	1 Ball out of a 3-Cascade
+33022	Throw Twice
+330	2 Balls out of a 3-Cascade
+[32]3322	Throw 3 Times
+3	3-Cascade
+
+#DR=0.75
+#HR=0.2
+3	Slower 3-Cascade
+
+
+/[ 4-Fountain Step By Step ]
+
+#DR=0.5
+#HR=0.2
+%Normal
+40	2 in One Hand
+(4,4)	4-Synchronous Fountain
+4	4-Fountain
+
+/[ 5-Cascade Step By Step ]
+
+#DR=0.5
+#HR=0.2
+%Normal
+50500	2 Balls out of a 5-Cascade
+52512	3 Balls
+50505	Chase
+55500	Flash
+[52][52]55022[22][22]	4 Balls
+55550	4 Balls out of a 5-Cascade
+552
+5551
+5	5-Cascade
+
+/[ 3-Cascade Tricks ]
+
+#DR=0.5
+#HR=0.3
+%Normal
+333355500	3-ball Flash
+
+#DR=0.5
+#HR=0.12
+%Chop
+{  4,  9}{-10, -3}
+{ 10,  6}{  7,  9}
+{ 10,  6}{  7,  9}
+{  4,  9}{-10, -3}
+(2,4x)(4x,2)	Chop
+
+#DR=0.5
+#HR=0.12
+%Eating Apples
+{  0,  7}{ -3, -3}
+{ 12, 10}{  0,  8}
+{ 12, 10}{  0,  8}
+{  0,  7}{ -3, -3}
+(2,4x)(4x,2)	Eating Apples
+
+#DR=0.5
+#HR=0.2
+%Eating an Apple
+{  0,  6}{ -3,  4}
+{ 13,  0}{  4,  0}
+{ 13,  0}{  4,  0}
+{ 13,  0}{  4,  0}
+{ 13,  0}{  4,  0}
+{ 13,  0}{  2,  0}
+{ 12,  7}{  0,  7}
+{ 13,  0}{ -4,  0}
+33333423	Eating an Apple (for light eaters)
+
+#DR=0.5
+#HR=0.12
+%Wide
+{ 21,  9}{ 18,  4}
+3	Wide Cascade
+
+#DR=0.5
+#HR=0.2
+%Tennis
+{  8,  0}{  4,  0}
+{  8,  0}{  4,  0}
+{ 14,  3}{ 14,  3}
+3	Juggler's Tennis
+
+#DR=0.5
+#HR=0.2
+%Over the Head
+{ 12, 19}{  3, 19}
+3	Over the Head
+
+#DR=0.5
+#HR=0.2
+%Reverse
+3	Reverse Cascade
+
+#DR=0.5
+#HR=0.2
+%Wide Reverse
+{ -8,  0}{ 12,  0}
+3	Wide Reverse Cascade
+
+#DR=0.5
+#HR=0.15
+%Reachover
+{ 13,  0}{  4,  0}
+{ 13,  0}{  4,  0}
+{ 13,  0}{  4,  0}
+{ 13,  0}{ 13,  0}
+{ 13,  0}{  4,  0}
+{ 10,  0}{  8, -2}
+{-13,  5}{  0,  2}
+{ 13, -3}{  4,  0}
+3	Reachover
+
+#DR=0.5
+#HR=0.15
+%Reachover (alternate)
+{ 10,  0}{  3, -2}
+{-13,  5}{ 13,  0}
+{ 13, -3}{  4,  0}
+3	Reachover (alternate)
+
+#DR=0.5
+#HR=0.15
+%Reachunder
+{ 13,  0}{  4,  0}
+{ 13,  0}{  4,  0}
+{ 13,  0}{  4,  0}
+{ 13,  0}{ 13,  0}
+{ 13,  0}{  4, -3}
+{ 10,  4}{  4,  4}
+{-16, -3}{  0,  0}
+{ 13,  3}{  4,  0}
+3	Reachunder
+
+#DR=0.5
+#HR=0.15
+%Reachunder (alternate)
+{ 10,  4}{  3,  4}
+{-13, -5}{ 13,  0}
+{ 13,  3}{  4,  0}
+3	Reachunder (alternate)
+
+#DR=0.5
+#HR=0.2
+%Crossed Arm Reverse
+{ -4,  0}{-12,  0}
+3	Crossed Arm Reverse
+
+/[ 3-ball Tricks ]
+
+#DR=0.5
+#HR=0.14
+%1Up-2Up A
+{  0,  0}{  0,  0}
+{ 10,  0}{ 10,  0}
+{ 10,  0}{ 10,  0}
+{ 10,  0}{ 10,  0}
+(0,4)(4,4)	1Up-2Up A (Columns)
+
+#DR=0.5
+#HR=0.14
+%1Up-2Up B
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{ 14,  0}{  0,  0}
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{ 14,  0}{  0,  0}
+(4,4)(0,4x)(4,4)(4x,0)	1Up-2Up B
+
+#DR=0.5
+#HR=0.14
+%1Up-2Up C
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{ 14,  0}{ 14,  0}
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{  0,  0}{  0,  0}
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{ 14,  0}{ 14,  0}
+{  7,  0}{  7,  0}
+{  7,  0}{  7,  0}
+{  0,  0}{  0,  0}
+{  7,  0}{  7,  0}
+(4,4)(0,4x)(4,4)(4,0)(4,4)(4x,0)(4,4)(0,4)	1Up-2Up C
+
+#DR=0.5
+#HR=0.14
+%1Up-2Up D
+{ 12,  0}{ -6,  0}
+{ -6,  0}{ 12,  0}
+{  0,  0}{  0,  0}
+{  6,  0}{  6,  0}
+{ -6,  0}{ 12,  0}
+{ 12,  0}{ -6,  0}
+{  6,  0}{  6,  0}
+{  0,  0}{  0,  0}
+(4,4)(0,4x)(4,4)(4x,0)	1Up-2Up D
+
+#DR=0.5
+#HR=0.14
+%1Up-2Up E
+{  4,  0}{  4,  0}
+{  4,  0}{  4,  0}
+{ 13,  0}{-13,  0}
+{  4,  0}{  4,  0}
+(4,4)(0,4)	1Up-2Up E
+
+#DR=0.5
+#HR=0.1
+%1Up-2Up F
+{  4,  0}{  4,  0}
+{  4,  0}{  4,  0}
+{ 13,  7}{  4,  0}
+{  4,  0}{  4,  0}
+{  4,  0}{  4,  0}
+{  4,  0}{ 13,  7}
+(6,6)(0,2x)(4x,0)	1Up-2Up F
+
+#DR=0.5
+#HR=0.13
+%Yo-Yo
+{  5,  2}{  5,  3}
+{ -5, -1}{ -5,  0}
+{  5, 13}{  5, 13}
+{  5, -1}{  5,  0}
+(4,2)	Yo-Yo
+
+#DR=0.5
+#HR=0.13
+%Oy-Oy
+{  5, -1}{  5,  0}
+{ -5,  3}{ -5,  4}
+{  5, 10}{  5, 10}
+{  5,  3}{  5,  4}
+(4,2)	Oy-Oy
+
+#DR=0.5
+#HR=0.13
+%Around The Yo-Yo
+{  0,  2}{  0,  3}
+{  0, -1}{  0,  0}
+{  0, 13}{  0, 13}
+{ 10, -1}{-10, -1}
+(4,2)	Around The Yo-Yo
+
+#DR=0.5
+#HR=0.14
+%Yo-Yo (Columns Fake A)
+{ 10, -1}{ 10,  0}
+{ 10, -1}{ 10,  0}
+{  0, -1}{  0,  0}
+{ 10, 10}{ 10, 10}
+(2,4)	Yo-Yo (Columns Fake A)
+
+#DR=0.5
+#HR=0.14
+%Yo-Yo (Columns Fake B)
+{  0, -1}{  0,  0}
+{ 10, -1}{ 10,  0}
+{ 10, -1}{ 10,  0}
+{ 10, 10}{ 10, 10}
+(2,4)	Yo-Yo (Columns Fake B)
+
+#DR=0.5
+#HR=0.13
+%Yo-Yo (Columns Fake C)
+{ 10, -1}{ 10,  0}
+{ 10, -1}{ 10,  0}
+{ 10, 10}{ 10, 10}
+{  0, -1}{  0,  0}
+{ 10, -1}{ 10,  0}
+{ 10, -1}{ 10,  0}
+{  0, -1}{  0,  0}
+{ 10, 10}{ 10, 10}
+(4,2)(4x,2)(2,4)(2,4x)	Yo-Yo (Columns Fake C)
+
+#DR=0.5
+#HR=0.2
+%Yo-Yo (Tornado)
+{  5,  0}{  5,  0}
+{ 15, 15}{-15, 14}
+{ -5,  0}{ -5,  0}
+{ 15, 14}{-15, 15}
+(2,4)	Yo-Yo (Tornado)
+
+#DR=0.5
+#HR=0.2
+%Yo-Yo (Traverse)
+{  5,  0}{  5,  0}
+{ 15, 12}{  0, 12}
+{ -5,  0}{ -5,  0}
+{-15, 12}{  0, 12}
+(2,4)	Yo-Yo (Traverse)
+
+;Frankenstein; added by Isacc Orr
+%Frankenstein
+{ 10, 10}{ 10, 0 }
+{ 10, 10}{ 10, 0 }
+{ 10, 9 }{ 10, 0 }
+{ 10, 9 }{ 10, 0 }
+(2,4x)(4x,2) Frankenstein
+;
+
+#DR=0.5
+#HR=0.13
+%Normal
+441
+
+#DR=0.5
+#HR=0.13
+%Outside 441
+{  4,  0}{ 13,  0}
+{  4,  0}{ 13,  0}
+{  4,  0}{  0,  0}
+441	Outside 441
+
+#DR=0.5
+#HR=0.13
+%Arches
+{ 20, 10}{ 20, 10}
+{ 10,  0}{ 10,  0}
+{ 15,  5}{ 15,  5}
+{ 20, 10}{ 20, 10}
+{ 10,  0}{ 10,  0}
+{ 15,  5}{ 15,  5}
+3	Arches
+
+#DR=0.5
+#HR=0.14
+%2-in-1-Hand Tennis
+{  5,  0}{  5,  0}
+{  5,  0}{  5,  0}
+{ 15,  3}{ 15,  3}
+{  5,  0}{  5,  0}
+{  5,  0}{  5,  0}
+{  5,  0}{  5,  0}
+{  5,  0}{  5,  0}
+{ 15,  3}{ 15,  3}
+(2,4)(2,4x)(4,2)(4x,2)	2-in-1-Hand Tennis
+
+#DR=0.5
+#HR=0.12
+%Statue of Liberty A
+{  3,  0}{ 12,  4}
+{ 10, 20}{  9, 19}
+3	Statue of Liberty A
+
+#DR=0.5
+#HR=0.14
+%Statue of Liberty B
+{  3,  4}{ 12,  0}
+{ 10, 17}{  9, 19}
+3	Statue of Liberty B
+
+#DR=0.5
+#HR=0.12
+%Shuffle
+{  0, -5}{ 12, 10}
+{ 10,  0}{ 14,  0}
+(4x,2x)	Shuffle
+
+#DR=0.5
+#HR=0.15
+%See Saw Shuffle
+{ 10,  0}{ 14, 10}
+{ 10, -3}{  6,  0}
+{ 10, -3}{  6,  0}
+{ 10,  0}{ 14, 10}
+(4,2x)(2x,4)	See Saw Shuffle (Luke's Shuffle)
+
+#DR=0.5
+#HR=0.1
+%441 Shuffle
+{  5, -2}{  5, -2}
+{  6,  0}{  6,  0}
+{ 15,  4}{  9, 10}
+441	441 Shuffle
+
+#DR=0.5
+#HR=0.1
+%Both Side Slam
+{  6,  0}{ 12, 10}
+{ 10,  0}{ 10,  0}
+{ 10,  0}{  4,  0}
+{  6,  0}{  6,  0}
+{ 10,  0}{ 10,  0}
+{  6,  0}{ 12, 10}
+{  6,  0}{  6,  0}
+{ 10,  0}{  4,  0}
+(4x,2x)(2,4x)(2x,4x)(4x,2)	Both Side Slam
+
+#DR=0.5
+#HR=0.15
+%Robot
+{  5,  4}{ 10, -3}
+{ 10,  0}{ 10,  0}
+{ 10, -3}{ 10, 13}
+{  0,  0}{  0,  0}
+{ 10, 13}{-10, 13}
+{  6,  0}{  6,  0}
+242334	Robot (Machine,Factory)
+
+#DR=0.5
+#HR=0.13
+%Exchange
+{  0, 11}{ 10, 11}
+{ 10,  0}{  0,  0}
+{  0, 12}{-10, 12}
+{ 10,  0}{  0,  0}
+2334	Exchange (Pendulum,Drop)
+
+#DR=0.5
+#HR=0.1
+%Carry
+{  7, 12}{ -7, 12}
+{  7,  0}{ -7,  0}
+3	Carry
+
+#DR=0.5
+#HR=0.1
+%Weave
+{ 10,  1}{ -7,  0}
+{ 12,  0}{ 12,  9}
+{  5,  0}{  5,  0}
+{ -5,  9}{  0,  3}
+{ 12,  0}{ 12,  9}
+{ 10,  1}{ -7,  0}
+{ -5,  9}{  0,  3}
+{  5,  0}{  5,  0}
+(2,4)(2,4x)(4,2)(4x,2)	Weave
+
+#DR=0.5
+#HR=0.1
+%Follow
+{-10, 10}{-10,  4}
+{ 10, -3}{ 10, 10}
+{  0,  4}{  0,  2}
+423	Follow
+
+#DR=0.5
+#HR=0.1
+%Burke's Barrage
+{ 12, 12}{ -6, -2}
+{ -6,  5}{ -6, 12}
+{  0,  5}{  0,  5}
+423	Burke's Barrage
+
+#DR=0.5
+#HR=0.15
+%Rubenstein's Revenge
+{  3,  1}{ 13,  8}
+{  7, -2}{-10, -3}
+{  3,  6}{-12,  2}
+{ -1,  0}{ 12,  2}
+{ -2,  2}{-10, -2}
+35223	Rubenstein's Revenge
+
+/[ 4-ball Tricks ]
+
+#DR=0.5
+#HR=0.2
+%Reverse
+(4,4)	4-Reverse Synchronous Fountain
+4	4-Reverse Fountain
+
+#DR=0.5
+#HR=0.2
+%4-Columns Switch
+{ 12,  0}{ 12,  2}
+{ 12,  2}{ 12,  0}
+{  4,  0}{  4,  0}
+{  4,  0}{  4,  0}
+(4x,4x)(4,4)	4-Columns Switch
+
+#DR=0.5
+#HR=0.2
+%4-ball Cross A
+{ 13,  0}{  7,  3}
+{ 13,  3}{  7,  0}
+(4x,4x)	4-ball Cross A
+
+#DR=0.5
+#HR=0.2
+%4-ball Cross B
+{ 13,  0}{  7,  3}
+{ 13,  3}{  7,  0}
+{ 13,  3}{  7,  0}
+{ 13,  0}{  7,  3}
+(4x,4x)	4-ball Cross B
+
+#DR=0.5
+#HR=0.3
+%Normal
+444447333
+
+#DR=0.5
+#HR=0.2
+%4-ball Tennis
+{  9,  0}{  4,  0}
+{  9,  0}{  4,  0}
+{  0,  0}{  4,  0}
+{ 15,  3}{ 15,  3}
+{  9,  0}{  4,  0}
+44453	4-ball Tennis
+
+#DR=0.5
+#HR=0.12
+%4-ball Burke's Barrage
+{ 14, 14}{ -5, -2}
+{ -9,  3}{ -9, 14}
+{  0,  0}{  3,  0}
+525	4-ball Burke's Barrage
+
+#DR=0.5
+#HR=0.15
+%Rubenstein's Revenge
+3[53]22[32]	Dancey's Devilment
+
+/[ 5-ball Tricks ]
+
+#DR=0.5
+#HR=0.2
+%Reverse
+5	5-Reverse Cascade
+
+%Normal
+[32][32][32][32][32][32][52][52][52]555555522	3-Cascade -> 5-Cascade
+
+#DR=0.5
+#HR=0.3
+%Normal
+555555744
+
+#DR=0.5
+#HR=0.12
+%5-ball Burke's Barrage
+{ 16, 14}{ -3, -4}
+{ -9,  0}{-10, 14}
+{  2, -2}{  4,  0}
+726	5-ball Burke's Barrage
+
+/[ Shower ]
+
+#DR=0.5
+#HR=0.2
+%Shower
+51	3-Shower Japanese "OTEDAMA"
+5223	3-Half Shower A
+
+%Odd Half
+{  8,  0}{ 15,  8}
+{ 15,  8}{  8,  0}
+3	3-Half Shower B
+
+%Shower
+71	4-Shower
+53	4-Half Shower
+
+%Odd Half
+5	5-Half Shower A
+
+%Shower
+73	5-Half Shower B
+(4x,6x)	5-Half Shower C
+75	6-Half Shower
+(2x,4x)	3-Synchronous Shower
+(2x,6x)	4-Synchronous Shower
+7131	3-High-Low Shower A
+
+#DR=0.5
+#HR=0.15
+%3-High-Low Shower B
+{  6,  0}{ 12,  3}
+{  6,  3}{  6,  0}
+{  6,  0}{  6,  3}
+{ 12,  3}{  6,  0}
+(2x,6x)(2x,2x)	3-High-Low Shower B
+
+#DR=0.5
+#HR=0.2
+%Shower
+315171	3-High-Low Shower C
+9151	4-High-Low Shower
+
+#DR=0.5
+#HR=0.2
+%Under-the-Hand Shower
+{  5,  0}{-10,  0}
+{  3,  4}{ -3,  4}
+(2x,4x)	Under-the-Hand Shower
+
+#DR=0.5
+#HR=0.2
+%Under-the-Hand Shower 2
+{  3,  0}{ 10,  0}
+{  5,  4}{  0,  4}
+{  3,  0}{-10,  0}
+{  5,  4}{  0,  4}
+(2x,4x)	Under-the-Hand Shower (alternate)
+
+%Odd Half
+35	4-Half Shower Like Trick
+
+#DR=0.5
+#HR=0.12
+%High Half Shower
+{  7,  7}{ -7,  7}
+{ 13,  0}{-13,  0}
+3	High Half Shower
+
+#DR=0.5
+#HR=0.2
+%Shower
+[97]121	Multi-Shower
+
+#DR=0.5
+#HR=0.2
+%False Shower
+{ 10,  0}{-10, -2}
+{-10,  4}{ 10,  2}
+3	False Shower (Windmill)
+
+/[ Mills Mess ]
+
+#DR=0.5
+#HR=0.13
+%Mills Mess
+{ -1,  0}{-12,  0}
+{  0,  0}{ 12,  0}
+{  1,  0}{-12,  0}
+330	2 out of the Mills Mess
+3	Standard Mills Mess
+
+#DR=0.5
+#HR=0.2
+423
+414
+315
+612	Mills Mess Box
+4	4-ball Mills Mess
+534
+552
+642
+5	5-ball Mills Mess
+6	6-ball Mills Mess
+864
+[34]23	Multi-Mills Mess
+
+#DR=0.5
+#HR=0.08
+%No Through Mills Mess
+{ -2,  1}{-12,  1}
+{  6, -3}{ 12,  2}
+{ -2,  2}{ -6, -4}
+3	No Through Mills Mess
+
+#DR=0.5
+#HR=0.13
+%Half Mess
+{ 12,  0}{ 12,  0}
+{  0,  0}{-12, -3}
+{  0,  2}{-12,  2}
+{  0, -3}{ -6,  0}
+3	Half Mess
+
+#DR=0.5
+#HR=0.13
+%Reverse Mills Mess
+{-12,  0}{ -1,  0}
+{ 12,  0}{  0,  0}
+{-12,  0}{  1,  0}
+3	Reverse Mills Mess
+
+#DR=0.5
+#HR=0.13
+%Mills 44133
+{ -2,  0}{-12,  5}
+{  2, -2}{ 12,  0}
+{  0,  2}{ -3,  0}
+{ 10,  0}{ 10,  2}
+{  7, -2}{-10, -3}
+44133	Mills 44133
+
+#DR=0.75
+#HR=0.06
+%Mills Simultaneous
+{  6, 10}{-10,  2}
+{  6, 10}{-10, -1}
+{ -4,  0}{ 12,  8}
+{ -4, -3}{ 12,  8}
+{  6, 10}{-10, -1}
+{  6, 10}{-10,  2}
+{ -4, -3}{ 12,  8}
+{ -4,  0}{ 12,  8}
+(4x,4x)(0,0)	2-Mills Simultaneous
+(4x,4x)(4x,0)(4x,4x)(0,4x)	3-Mills Simultaneous
+(4x,4x)	4-Mills Simultaneous
+
+/[ Box ]
+
+#DR=0.5
+#HR=0.12
+%Box
+{ 10,  0}{ 10,  0}
+{ 10,  0}{  2,  0}
+{ 10,  0}{  2,  0}
+{ 10,  0}{ 10,  0}
+(2x,4)(0,2x)	2 Balls out of the Box
+(2x,4)(4,2x)	Box (See Saw)
+
+#DR=0.5
+#HR=0.15
+%Normal
+126	A Box-like Pattern A
+630	A Box-like Pattern B
+
+#DR=0.5
+#HR=0.11
+%Double Box
+{ 14,  0}{  7,  0}
+{  0,  0}{  0,  0}
+{ 14,  0}{  0,  0}
+{  0,  0}{ 14,  0}
+{  0,  0}{  0,  0}
+{ 14,  0}{  7,  0}
+{  0,  0}{ 14,  0}
+{ 14,  0}{  0,  0}
+(4x,2x)(4,2x)(2x,4x)(2x,4)	Double Box
+
+#DR=0.5
+#HR=0.2
+%Advanced Box
+{  3,  0}{ 10,  0}
+{ 10,  0}{  3,  0}
+{  3,  0}{ 10,  0}
+{ 10,  0}{  3,  0}
+{ 10,  0}{  3,  0}
+{  3,  0}{ 10,  0}
+{ 10,  0}{  3,  0}
+{  3,  0}{ 10,  0}
+{ 10,  0}{  3,  0}
+{  3,  0}{ 10,  0}
+{  3,  0}{ 10,  0}
+{ 10,  0}{  3,  0}
+(2x,8)(2x,4)(0,2x)(8,2x)(4,2x)(2x,0)	Advanced Box
+
+#DR=0.5
+#HR=0.2
+%4-ball Box A
+{ 10,  0}{ 10,  0}
+{  7,  0}{  0,  0}
+{  7,  0}{  0,  0}
+633	4-ball Box A
+
+#DR=0.5
+#HR=0.2
+%4-ball Box B
+{ 10,  0}{ 10,  0}
+{ 10,  0}{  3,  0}
+{ 10,  0}{ 10,  0}
+{ 10,  0}{  3,  0}
+{ 10,  0}{  3,  0}
+{ 10,  0}{ 10,  0}
+{ 10,  0}{  3,  0}
+{ 10,  0}{ 10,  0}
+(2x,8)(2x,4)(8,2x)(4,2x)	4-ball Box B
+
+#DR=0.5
+#HR=0.2
+%Normal
+(2x,6)(2x,6)(6,2x)(6,2x)	4-ball Box C
+(4x,6)(6,4x)	5-ball Box
+
+/[ Columns ]
+
+#DR=0.5
+#HR=0.2
+%Boston Mess A
+{ 10, -2}{ 10, -2}
+{ 10,  3}{ 10,  3}
+{  0, -2}{  0, -2}
+{-10,  3}{-10,  3}
+{-10, -2}{-10, -2}
+{  0,  3}{  0,  3}
+3	Boston Mess A
+
+#DR=0.5
+#HR=0.2
+%Boston Mess B
+{ 10,  3}{ 10, -2}
+{ 10,  3}{ 10,  3}
+{  0, -2}{  0, -2}
+{-10,  3}{-10,  3}
+{-10, -2}{-10, -2}
+{  0,  3}{  0,  3}
+{ 10, -2}{ 10,  3}
+{ 10, -2}{ 10, -2}
+{  0,  3}{  0,  3}
+{-10, -2}{-10, -2}
+{-10,  3}{-10,  3}
+{  0, -2}{  0, -2}
+3	Boston Mess B
+
+#DR=0.5
+#HR=0.2
+%4-Columns (Asymmetry)
+{ 12,  0}{ 12,  0}
+{  4,  0}{  4,  0}
+{  4,  0}{  4,  0}
+{ 12,  0}{ 12,  0}
+4	4-Columns (Pistons)
+(4,4)	4-Synchronous Columns (Asymmetry)
+
+#DR=0.5
+#HR=0.2
+%4-Columns (Symmetry)
+{ 12,  0}{ 12,  0}
+{ 12,  0}{ 12,  0}
+{  4,  0}{  4,  0}
+{  4,  0}{  4,  0}
+(4,4)	4-Synchronous Columns (Symmetry)
+
+#DR=0.5
+#HR=0.2
+%4-Columns (Splits)
+{ 12,  0}{ 12,  0}
+{ -4,  0}{ -4,  0}
+{ -4,  0}{ -4,  0}
+{ 12,  0}{ 12,  0}
+(4,4)	4-Synchronous Columns (Splits)
+
+#DR=0.5
+#HR=0.2
+%5-Columns
+{ 12,  0}{ 12,  0}
+{ 12,  0}{ 12,  0}
+{  6,  0}{  6,  0}
+{  6,  0}{  6,  0}
+{  0,  0}{  0,  0}
+{  6,  0}{  6,  0}
+(6,6)(6,6)(0,6)	5-Columns
+
+#DR=0.5
+#HR=0.2
+%5-Mills Mess Columns A
+{-12,  0}{-12,  0}
+{ -6,  0}{ -6,  0}
+{  0,  0}{  0,  0}
+{  6,  0}{  6,  0}
+{ 12,  0}{ 12,  0}
+{ 12,  0}{ 12,  0}
+{  6,  0}{  6,  0}
+{  0,  0}{  0,  0}
+{ -6,  0}{ -6,  0}
+{-12,  0}{-12,  0}
+5	5-Mills Mess Columns A
+
+#DR=0.5
+#HR=0.2
+%5-Mills Mess Columns B
+{ 12,  0}{ 12,  0}
+{  6,  0}{  6,  0}
+{  6,  0}{  6,  0}
+{ 12,  0}{ 12,  0}
+{  0,  0}{  0,  0}
+{-12,  0}{-12,  0}
+{ -6,  0}{ -6,  0}
+{ -6,  0}{ -6,  0}
+{-12,  0}{-12,  0}
+{  0,  0}{  0,  0}
+5	5-Mills Mess Columns B
+
+#DR=0.5
+#HR=0.2
+%5-Mills Mess Columns C
+{ 12,  3}{ 12,  3}
+{ -6,  0}{ -6,  0}
+{  0,  3}{  0,  3}
+{  6,  0}{  6,  0}
+{-12,  3}{-12,  3}
+{-12,  0}{-12,  0}
+{  6,  3}{  6,  3}
+{  0,  0}{  0,  0}
+{ -6,  3}{ -6,  3}
+{ 12,  0}{ 12,  0}
+5	5-Mills Mess Columns C
+
+#DR=0.5
+#HR=0.2
+%6-Columns
+{ 15,  0}{ 15,  0}
+{ 15,  0}{ 15,  0}
+{  9,  0}{  9,  0}
+{  9,  0}{  9,  0}
+{  3,  0}{  3,  0}
+{  3,  0}{  3,  0}
+(6,6)	6-Columns
+
+#DR=0.5
+#HR=0.2
+%Multi-Columns
+{ 13,  0}{ 13,  0}
+{ 13,  0}{ 13,  0}
+{  0,  0}{  0,  0}
+{ 13,  0}{ 13,  0}
+{ 13,  0}{ 13,  0}
+{ 13,  0}{ 13,  0}
+([46],[46])(0,6)(2,2)	Multi-Columns
+
+/[ One Hand Tricks ]
+
+#DR=0.5
+#HR=0.2
+%2-ball Columns in One Hand
+{  0,  0}{  0,  0}
+{ 13,  0}{ 13,  0}
+{ 10,  0}{ 10,  0}
+{ 13,  0}{ 13,  0}
+40	2-ball Columns in One Hand
+
+#DR=0.5
+#HR=0.2
+%Normal
+60	3-ball in One Hand
+[46]06020	3-Multiplex in One Hand
+[46]06020[46]06020[46]060606060606020	Combination in One Hand
+8040
+
+#DR=0.5
+#HR=0.2
+%3-ball Columns in One Hand
+{ -2,  0}{ -2,  0}
+{ 13,  0}{ 13,  0}
+{  6,  0}{  6,  0}
+{ 13,  0}{ 13,  0}
+{ 14,  0}{ 14,  0}
+{ 13,  0}{ 13,  0}
+60	3-ball Columns in One Hand
+
+#DR=0.5
+#HR=0.2
+%Cascade in One Hand
+{ -6,  0}{  2,  0}
+{ 13,  0}{ 13,  0}
+{ 18,  0}{ 10,  0}
+{ 13,  0}{ 13,  0}
+60	Cascade in One Hand
+
+/[ Site Swaps ]
+
+#DR=0.5
+#HR=0.2
+%Normal
+33333333333333535051515151515151512441441441441441441	3-ball Combination
+;added by Isaac Orr
+53
+44453
+;
+501
+531
+561
+450 Complete Waste of a 5 Ball Juggler
+453
+720
+753
+741
+744
+6424
+64
+66661
+61616
+5241	(5201) & (0040)
+72312	(70300) & (02012)
+7272712
+51414
+7161616
+88333
+75751
+
+%Center
+123456789
+
+/[ Multiplex ]
+
+#DR=0.5
+#HR=0.2
+%Normal
+[34]1
+4[43]1	4[43]1 441+1
+
+#DR=0.5
+#HR=0.2
+%Martin
+{ 13,  0}{ 13,  0}
+{ 13,  0}{  4,  0}
+{ 13,  0}{  4,  0}
+[62]25	Martin
+
+#DR=0.5
+#HR=0.2
+%Normal
+[22]5[22]0[54]020	5-ball Multiplex A step_1
+[54]225[22]2	5-ball Multiplex A step_2
+[54][22]2	5-ball Multiplex A
+555555522[54][22]2[54][22]2[54][22]2[52][52][52]	5-Cascade -> 5-Multiplex A No.1
+555555522[54][22]2[54][22]2[54][22]2[54][52]	5-Cascade -> 5-Multiplex A No.2
+[54]24522	5-ball Multiplex B step_1
+24[54]	5-ball Multiplex B
+25[75]51
+[456][22]2	7-ball Splits A
+
+%Center
+([66x],2)(2,[66x])	7-ball Splits B
+
+%Normal
+26[76]
+[234]57
+[54]	9-ball Multiplex
+
+/[ Synchronous ]
+
+#DR=0.5
+#HR=0.2
+%Normal
+(2,4x)(4x,2)	3-Synchronous Cascade A
+(0,6x)(6x,0)	3-Synchronous Cascade B
+(2x,6x)(6x,2x)
+(4x,2x)(2,4)
+(4x,6)(0,2x)
+(2,6x)(2x,6)(6x,2)(6,2x)
+(2,4)([44x],2x)
+(2,[62])([22],6x)([62],2)(6x,[22])
+(6,6)	6-ball Synchronous Fountain
+
+/[ Numbers ]
+
+#DR=0.5
+#HR=0.2
+%Shower
+91	5-Shower
+b1	6-Shower
+d1	7-Shower  IJA Champion
+
+%Normal
+6	6-Fountain
+7	7-Cascade
+8	8-Fountain
+9	9-Cascade  IJA Champion
+
+/[ Are You God? ]
+
+#DR=0.5
+#HR=0.2
+%Normal
+z	35-Cascade
+
+%Shower
+z1	18-Shower
+[9bdfh][11111]	35-Multi Shower
+
+%Mills Mess
+333666999cccfffiiilll	12-Mills Mess
+
+%Normal
+[b9753]0020[22]0[222]0[2222]0
+
+%Center
+123456789abcdefghijklmnopqrstuvwxyz
+
+#DR=0.5
+#HR=0.2
+%9-ball Box
+{ 13,  0}{ 13,  0}
+{ 13,  0}{  3,  0}
+{  3,  0}{ 13,  0}
+{ 13,  0}{  3,  0}
+{  3,  0}{ 13,  0}
+{ 13,  0}{  3,  0}
+{  3,  0}{ 13,  0}
+{ 13,  0}{  3,  0}
+{  3,  0}{ 13,  0}
+{ 13,  0}{  3,  0}
+{  3,  0}{ 13,  0}
+{ 13,  0}{  3,  0}
+{  3,  0}{ 13,  0}
+{ 13,  0}{  3,  0}
+{ 13,  0}{ 13,  0}
+u1q1m1i1e1a1612	9-ball Box
+
+#DR=0.5
+#HR=0.2
+%Normal
+trpnljhfdb97531
+Ken
+;added by Isaac Orr
+x
+zxv
+zxvtrpnljhfdb97531
+;
+[56789]	Penta-Multiplex
+
+#DR=0.5
+#HR=0.1
+%20-Columns A
+{ 29,  3}{ 29,  3}
+{  2,  3}{  2,  3}
+{ 26,  3}{ 26,  3}
+{  5,  3}{  5,  3}
+{ 23,  3}{ 23,  3}
+{  8,  3}{  8,  3}
+{ 20,  3}{ 20,  3}
+{ 11,  3}{ 11,  3}
+{ 17,  3}{ 17,  3}
+{ 14,  3}{ 14,  3}
+{ 14,  3}{ 14,  3}
+{ 17,  3}{ 17,  3}
+{ 11,  3}{ 11,  3}
+{ 20,  3}{ 20,  3}
+{  8,  3}{  8,  3}
+{ 23,  3}{ 23,  3}
+{  5,  3}{  5,  3}
+{ 26,  3}{ 26,  3}
+{  2,  3}{  2,  3}
+{ 29,  3}{ 29,  3}
+(k,k)	20-Columns A
+
+#DR=0.5
+#HR=0.1
+%20-Columns B
+{ 20,  3}{ 20,  3}
+{ 18,  3}{ 18,  3}
+{ 16,  3}{ 16,  3}
+{ 14,  3}{ 14,  3}
+{ 12,  3}{ 12,  3}
+{ 10,  3}{ 10,  3}
+{  8,  3}{  8,  3}
+{  6,  3}{  6,  3}
+{  4,  3}{  4,  3}
+{  2,  3}{  2,  3}
+{  2,  3}{  2,  3}
+{  4,  3}{  4,  3}
+{  6,  3}{  6,  3}
+{  8,  3}{  8,  3}
+{ 10,  3}{ 10,  3}
+{ 12,  3}{ 12,  3}
+{ 14,  3}{ 14,  3}
+{ 16,  3}{ 16,  3}
+{ 18,  3}{ 18,  3}
+{ 20,  3}{ 20,  3}
+k	20-Columns B
+
+/
+/-----------------------------------
+/Hereafter are compiled by Isaac Orr
+/ Copyright (C) Isaac Orr 1999
+/-----------------------------------
+/
+/[ Tricks by Isaac Orr ]
+/^^^^^^^^^^^^^^^^^^^^
+#DR=0.5
+#HR=0.14
+%Church Windows
+{  0,  0}{  0,  0}
+{ 10,  0}{ 10,  0}
+{ 10,  1}{ 10,  1}
+{ 10,  -1}{ 10,  -1}
+{ 10,  0}{ 10,  0}
+{  0,  0}{  0,  0}
+{ 10,  -1}{ 10,  -1}
+{ 10,  1}{ 10,  1}
+(0,4x)(4x,4x)(4x,0)(4x,4x)	Church Windows
+
+%Hunchback
+{  0,  0}{   0,  0}
+{ 10,  0}{  10,  0}
+{ 10,  1}{ -10, -1}
+{ 10, -1}{ -10,  1}
+{ 10,  0}{  10,  0}
+{  0,  0}{   0,  0}
+{ 10, -1}{ -10,  1}
+{ 10,  1}{ -10, -1}
+(0,4x)(4,4)(4x,0)(4,4)	Hunchback of Notre Dam
+
+%Hunchback's Brother
+{   0,  0}{  0,  0}
+{  10,  0}{ 10,  0}
+{ -10, -1}{ 10,  1}
+{ -10,  1}{ 10, -1}
+{  10,  0}{ 10,  0}
+{   0,  0}{  0,  0}
+{ -10,  1}{ 10, -1}
+{ -10, -1}{ 10,  1}
+(0,4x)(4,4)(4x,0)(4,4)	Hunchback's brother
+
+
+#DR=0.5
+#HR=0.1
+%Center
+575151
+7141404
+(8x,2)(8,8)(8,8)(2,8x)(8,8)(8,8)
+(6x,2)(6,6)(2,6x)(6,6)
+([6x6],2)(2,[6x6])
+56702
+
+#DR=0.5
+#HR=0.2
+%Center
+64244
+[34]
+
+#DR=0.5
+#HR=0.2
+%Normal
+(6x,2x)(2x,6x)			4-ball Box variation 1
+(6x,4x)(2x,4x)(4x,6x)(4x,2x)	4-ball Box variation 2
+
+[34]1
+4[43]1	4[43]1 441+1
+6316131 
+
+%Center
+55514
+12345
+23456
+1234567
+633
+44633
+44444444633
+64514
+
+%5 Ball Tennis
+{  10,  0}{  4,  0}
+{  10,  0}{  4,  0}
+{  10,  0}{  4,  0}
+{  10,  0}{  4,  0}
+{ 15,  0}{ 15,  0}
+{  10,  0}{  4,  0}
+{  10,  0}{  4,  0}
+5555744 5 Ball Tennis
+
+#DR=0.5
+#HR=0.14
+%1 up 4 up (standard)
+{ 10, 0}{ 10, 0}
+{ 10, 0}{ 10, 0}
+{ 10, 0}{ 10, 0}
+{ 0,  0}{ 0,   0}
+{ 10, 0}{ 10, 0}
+{ 10, 0}{ 10, 0}
+{ 10, 0}{ 10, 0}
+{ 10, 0}{ 10, 0}
+{ 0,  0}{ 0,   0}
+{ 10, 0}{ 10, 0}
+{ 10, 0}{ 10, 0}
+{ 10, 0}{ 10, 0}
+([46],[46])(6x,0)(2,2)([46],[46])(0,6x)(2,2)    1 up 4 up (standard)
+
+%1 up 4 up (flashy)
+{ 15, -4}{ 15,  4}
+{ 15,  4}{ 15, -4}
+{ 15,  0}{ 15,  0}
+{ 0,  0}{ 0,   0}
+{ 15, -4}{ 15,  0}
+{ 15,  4}{ 15,  0}
+{ 15, -4}{ 15,  4}
+{ 15,  4}{ 15, -4}
+{ 0,  0}{ 0,   0}
+{ 15,  0}{ 15,  0}
+{ 15, -4}{ 15,  0}
+{ 15,  4}{ 15,  0}
+([4x6x],[4x6x])(6x,0)(2,2)([4x6x],[4x6x])(0,6x)(2,2)    1 up 4 up (flashy)
+
+%2 up 4 up (standard)
+{ 10, 0}{ 10, 0}
+{ 10, 0}{ 10, 0}
+{ 4,  0}{ 4,  0}
+{ 4,  0}{ 4,  0}
+{ 10, 0}{ 10, 0}
+{ 10, 0}{ 10, 0}
+([46],[46])(6,6)(2,2)    2 up 4 up (standard)
+
+%2 up 4 up (flashy)
+{ 15, -4}{ 15,  4}
+{ 15,  4}{ 15, -4}
+{ 0,  0}{ 0,  0}
+{ 4,  0}{ 4,  0}
+{ 15, -4}{ 15,  0}
+{ 15,  4}{ 15,  0}
+([4x6x],[4x6x])(6,6)(2,2)    2 up 4 up (flashy)
+
+
+%Normal
+#HR=0.1
+(0,[4x4])(0,4x)(2,4x)([4x4],0)(4x,0)(4x,2)	Orr Multiplex (3 balls)
+
+#HR=0.2
+(6x,[4x4])(0,4x)(2,4x)([4x4],6x)(4x,0)(4x,2)    Orr Multiplex (4 balls)
+%Orr Multiplex
+{ 10, 0}{  4,  0}
+{ 10, 0}{ -16, -4}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{ -16, -4}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+(6x,[4x4])(0,4x)(2,4x)([4x4],6x)(4x,0)(4x,2)    Orr Multiplex underhand
+%Reverse
+(6x,[4x4])(0,4x)(2,4x)([4x4],6x)(4x,0)(4x,2)    Reverse Orr Multiplex
+
+%Center
+#HR=0.015
+([yxy],2)(2,[22])(2,[yxy])([22],2)   Macdonalds!
+
+#HR=0.15
+%Wide Shower
+{  5,  0}{ 20,  0}
+{ 20,  0}{  5,  0}
+73 Wide Half Shower 5
+53 Wide Half Shower 4
+
+%Normal
+0123456
+0303456
+63123
+6051
+63303
+64113
+70161
+83031
+6316131
+612
+62313
+63141
+52413
+63501
+
+%Center
+60 3 in 1 hand
+8040 3 Hi-Lo in 1 hand
+123456060606060 Alternate 3 Balls in Hand A 
+303456060606060 Alternate 3 Balls in Hand B
+6161601 Alternate 3 Balls in Hand C
+
+%Normal
+56162
+6451
+5641
+5560
+6352
+83333
+845151
+83441
+83531
+83522
+7522
+83423
+7423
+804
+36362
+7531
+75314
+714
+73334
+5911
+831
+7045
+73451
+7441
+74414
+642
+4246
+62525
+5751613
+673175151
+773151
+746151
+661515
+751515
+6631
+72461
+72416
+73631
+75661
+
+66314
+63524
+4444445574057405740574052 7405 Transitions A
+55515574052 7405 Transitions B
+5574052 7405 Transitions C
+45525574052 7405 Transitions D
+55550557405255550 7405 Transitions E
+555183333
+5551955500
+5551552
+55255550
+53633
+7731514
+7461514
+5661514
+35741
+
+44444567171717123 4 Shower Transition 1
+44444747171717141 4 Shower Transition 2
+4444456717171716151 4 Shower Transition 3
+
+4567123 Alternate 4 Shower 1
+7471414 Alternate 4 Shower 2
+456716151 Alternate 4 Shower 3
+915171 4 Shower - Three heights
+747191517141 4 Shower - Crazy
+717181717170 4 Shower with a leak
+8170 1 up 1 across
+
+%Reverse
+7333444 Playing catch
+7272712 Looking idle
+
+%Normal
+33536479 5 Balls Peter Gunn
+726
+7346
+7463
+663
+88441
+88531
+8444
+8534
+8633
+84445
+85345
+94444
+94534
+96451
+95551
+96631
+753
+771
+861
+64
+645
+6662
+75661
+756615
+7562
+777171
+5555557777700 Full 5 Flash
+55555577722 3 of 5 Flash
+97531
+x
+zxv
+%Wide
+Itzik
+Orr
+
+/.
+/[ Tricks by JMpatt ]
+/^^^^^^^^^^^^^^^
+/(Courtesy of Barton Chittenden)
+
+%JMpatt(4x2x)
+{0,0}{-5,0}
+{-5,0}{-15,0}
+(4x,2x)		JMpatt (4x,2x)
+
+%JMpatt(3333)
+{-10,0}{-15,0}
+{-15,5}{-15,5}
+{20,5}{20,5}
+{10,0}{15,5}
+3333		JMpatt 3333
+
+%JMpatt(5141)a
+{15,0}{15,5}
+{10,0}{0,0}
+{-20,0}{-15,0}
+{-15,0}{-25,5}
+{20,0}{15,0}
+51414		JMpatt 51414 I
+
+%JMpatt(5141)b
+{0,0}{-10,0}
+{15,0}{15,5}
+{-10,5}{-20,0}
+{15,0}{20,5}
+{0,0}{-5,0}
+51414		JMpatt 51414 II
+/.
+/[ Tricks by JAG ]
+/^^^^^^^^^^^^^^
+
+11314257 3-Balls Peter Gunn Theme
+33536479 5-Balls Peter Gunn Theme
+
+/.
+/[ Multiplex mills mess ]
+/^^^^^^^^^^^^^^^^^^^^^^
+#DR=0.5
+#HR=0.16
+#SP=1.6
+%Mills Mess
+[54][22]2 5 ball Easier Variation
+24[54] 5 ball Harder Variation
+
+#HR=0.1
+[34]23 4 Ball (Orinoco)
+
+%Orr Multiplex MM
+{ 10, 0}{  4,  0}
+{ 10, 0}{ -16, -4}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{ -16, -4}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+{ 10, 0}{  4,  0}
+(6x,[4x4])(0,4x)(2,4x)([4x4],6x)(4x,0)(4x,2)    Orr Multiplex MM
+
+/[ Patterns By Toshiyuki Mori ]
+
+#DR=0.5
+#HR=0.2
+;very fast trick by Seon McKinney in 1999 IJA Championships.
+%Seon
+#DR=0.50
+#HR=0.02
+{13,0}{13,0}
+{0,0}{0,0}
+{0,0}{0,0}
+612 Seon
+
+;5 Ball Happy Cascade.
+#DR=0.6
+#HR=0.15
+%Happy
+{ 20, 2}{ -5, 2}
+{ 1, 2}{ 20, 2}
+{ 1, 2}{ 20, 2}
+{ 20, 2}{ -5, 2}
+(2,4x)(4x,2)    Happy Cascade
+(2,8x)(8x,2)    5 Ball Happy Cascade
+
+%Exercise
+{ 20, 5}{ -5, 5}
+{ 20, 5}{ -5, 5}
+{ -5, 5}{ 20, 5}
+{ -5, 5}{ 20, 5}
+(2,2) Exercise
+
+ 
+
+%Dance
+{ 20, 5}{ -5, 5}
+{ -15, 5}{ 10, 5}
+{ 10, 5}{-15, 5}
+{ -5, 5}{ 20, 5}
+{-15, 5}{ 10, 5}
+{ 20, 5}{-5, 5}
+{ -5, 5}{ 20, 5}
+{ 10, 5}{ -15, 5}
+(2,2) Dance
+
+%Flags
+{10,5}{10,5}
+{-1,13}{-1,13}
+{-1,13}{-1,13}
+{10,5}{10,5}
+(2,2) Flags
+
+/[ Patterns by PWN ]
+#DR=0.5
+#HR=0.17
+%pwn
+{  4,  2}{ 13,  0}
+{  4, -2}{ 13,  0}
+{  4,  0}{ 13,  0}
+{  4,  0}{ 13,  0}
+{  4,  0}{ 13, -2}
+{  4,  0}{ 13,  2}
+(4,4)(6,6)(2x,2x)       PWN1
+
+%pwn2
+{ 13,  0}{  4,  0}
+{ 13,  0}{  4,  0}
+{ 13,  0}{  4,  0}
+{ 13,  8}{  4,  6}
+[35]521  Half Norton's Demultiplexer
+
+%pwn3
+{ 13,  2}{  4,-2}
+{ 13, -2}{  4, 2}
+{ 13, -2}{  4, 2}
+{ 13,  2}{  4,-2}
+([44x],[44x]) Norton's Messy 4s
+
+
+/[ Stupid Patterns By Chunky Kibbles ]
+%Normal
+zxvtrpnljhfdb97531 531-Extended
+[uvwxyz] Extended Sexta-Multiplex
+[pqrstuvwxyz] 330-Ball 11-Multiplex [requries fast computer]
+[123456789abcdefghijklmnopqrstuvwxyz] 630 Balls
+[oqsuwy]0 One-handed Extended Sexta-Multiplex
+[31] Multiplexing Two-handed Shower (Simple)
+[51] Multiplexing Two-handed Shower
+[71] Multiplexing Two-handed Shower (Hard)
+
+%Windmill
+zxvtrpnljhfdb97531 531-Extended Windmill
+
+
+
+/----------------- end ------------------

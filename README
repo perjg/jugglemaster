@@ -1,0 +1,39 @@
+JuggleMaster
+
+
+Uhm. Not sure what I can say here, really. It's a juggling siteswap
+animator. If you know what that is and think you want one, here's a
+really cool one for Linux, Windows, and some others.
+
+If you don't know you want one, you can run it and just delve about in
+the "Choose Pattern" menus, looking at the pretty things you could tell
+the program to do if you understood siteswap.
+
+And if you want to learn siteswap, http://www.siteswap.org/ looks to be
+a pretty decent resource.
+
+
+To build, just go into the src/jmdlx dir and type "make". It creates a
+binary "jmdlx". Run it. You need wxWindows. To build it on windows either
+work it out yourself, or extract bloodshed.zip and use the excellent
+DevC++ from www.bloodshed.net
+
+If you don't have patterns.jm and semaphore.jm in the current dir when
+you run it, it attempts to download them and save them to the current
+dir. You'll find copies in the "data" dir, so you can just copy them
+across if you want.
+
+
+In the "docs" dir, you'll find Ken Matsuoka's original README, and Isaac
+Orr's readme from the Java version [which has a better description of
+how to edit the pattern files].
+
+
+And finally, because I'm incapable of producing anything without some
+kind of misabuse of it, this program includes things like Semaphores [that
+thing with the flags, not the resource control], a maximum of 630 balls
+instead of everyone else's 35, and probably some other stuff I've
+forgotten about.
+
+Chunky Kibbles
+<chunky@icculus.org>

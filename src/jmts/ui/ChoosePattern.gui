@@ -1,0 +1,205 @@
+//--- OBJECT WRITE BEGIN ---
+new GuiControl(ChoosePattern) {
+   profile = "GuiDefaultProfile";
+   horizSizing = "right";
+   vertSizing = "bottom";
+   position = "0 0";
+   extent = "640 480";
+   minExtent = "8 2";
+   visible = "1";
+
+   new GuiWindowCtrl(ChoosePatternWindow) {
+      profile = "GuiWindowProfile";
+      horizSizing = "right";
+      vertSizing = "bottom";
+      position = "104 18";
+      extent = "469 415";
+      minExtent = "8 2";
+      visible = "1";
+      text = "Choose Pattern";
+      maxLength = "255";
+      resizeWidth = "1";
+      resizeHeight = "1";
+      canMove = "1";
+      canClose = "1";
+      canMinimize = "1";
+      canMaximize = "1";
+      minSize = "50 50";
+
+      new GuiButtonCtrl(guiChoosePattOK) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "57 382";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "guiChoosePattApplyfunction();canvas.popDialog(ChoosePattern);";
+         text = "OK";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiButtonCtrl(guiChoosePattApply) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "182 382";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "guiChoosePattApplyfunction();";
+         text = "Apply";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiButtonCtrl(guiChoosePattCancel) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "307 382";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "canvas.popDialog(ChoosePattern);";
+         text = "Cancel";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiPopUpMenuCtrl(guiChoosePattGroupSelect) {
+         profile = "GuiPopUpMenuProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "109 33";
+         extent = "338 19";
+         minExtent = "8 2";
+         visible = "1";
+         maxLength = "255";
+         maxPopupHeight = "200";
+      };
+      new GuiTextCtrl(guiChoosePattGroup_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "24 33";
+         extent = "70 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Pattern Group:";
+         maxLength = "255";
+      };
+      new GuiScrollCtrl() {
+         profile = "GuiScrollProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "23 62";
+         extent = "423 255";
+         minExtent = "8 2";
+         visible = "1";
+         willFirstRespond = "1";
+         hScrollBar = "alwaysOff";
+         vScrollBar = "alwaysOn";
+         constantThumbHeight = "0";
+         childMargin = "0 0";
+
+         new GuiTextListCtrl(guiChoosePattPattList) {
+            profile = "GuiTextListProfile";
+            horizSizing = "right";
+            vertSizing = "bottom";
+            position = "2 2";
+            extent = "403 64";
+            minExtent = "8 2";
+            visible = "1";
+            enumerate = "0";
+            resizeCell = "1";
+            columns = "0";
+            fitParentWidth = "1";
+            clipColumnText = "0";
+         };
+      };
+      new GuiTextCtrl(guiChoosePattSite_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "34 327";
+         extent = "21 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Site:";
+         maxLength = "255";
+      };
+      new GuiTextCtrl(guiChoosePattStyle_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "28 353";
+         extent = "27 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Style:";
+         maxLength = "255";
+      };
+      new GuiTextEditCtrl(guiChoosePattSite) {
+         profile = "GuiTextEditProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "66 327";
+         extent = "378 18";
+         minExtent = "8 2";
+         visible = "1";
+         maxLength = "255";
+         historySize = "0";
+         password = "0";
+         tabComplete = "0";
+         sinkAllKeyEvents = "0";
+      };
+      new GuiTextEditCtrl(guiChoosePattStyle) {
+         profile = "GuiTextEditProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "66 353";
+         extent = "378 18";
+         minExtent = "8 2";
+         visible = "1";
+         maxLength = "255";
+         historySize = "0";
+         password = "0";
+         tabComplete = "0";
+         sinkAllKeyEvents = "0";
+      };
+   };
+};
+//--- OBJECT WRITE END ---
+
+function guiChoosePattGroupSelect::onSelect( %this, %id, %text )
+{
+	if(%id == -1) {
+		MessageBoxOK("Error", "Couldn't find group", "");
+		return;
+	}
+	$currentgroupid = %id;
+	guiChoosePattPattList.clear();
+	for(%i=0;%i<$jmpatterns.GetGroupNumPatterns(%id);%i++) {
+		guiChoosePattPattList.addRow( %i, $jmpatterns.GetPatternName(%id,%i));
+	}
+	guiChoosePattPattList.setSelectedById(0);
+}
+
+function guiChoosePattPattList::onSelect( %this, %id, %text) {
+	guiChoosePattSite.setValue($jmpatterns.GetPatternSite($currentgroupid, %id));
+	guiChoosePattStyle.setValue($jmpatterns.GetPatternStyle($currentgroupid, %id));
+}
+
+function guiSetupGroups() {
+	guiChoosePattGroupSelect.clear();
+	for(%i=0;%i<$jmpatterns.NumGroups();%i++) {
+		guiChoosePattGroupSelect.add($jmpatterns.GetGroupName(%i), %i);
+	}
+	guiChoosePattGroupSelect.setSelected(0);
+}
+
+function guiChoosePattApplyfunction() {
+	changesite(guiChoosePattPattList.getValue(),guiChoosePattSite.getValue());
+	changestyle(guiChoosePattStyle.getValue());
+}
+
+guiSetupGroups();

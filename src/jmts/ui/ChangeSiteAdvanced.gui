@@ -1,0 +1,178 @@
+//--- OBJECT WRITE BEGIN ---
+new GuiControl(ChangeSiteAdvanced) {
+   profile = "GuiDefaultProfile";
+   horizSizing = "right";
+   vertSizing = "bottom";
+   position = "0 0";
+   extent = "640 480";
+   minExtent = "8 2";
+   visible = "1";
+
+   new GuiWindowCtrl(AdvancedSiteWindow) {
+      profile = "GuiWindowProfile";
+      horizSizing = "right";
+      vertSizing = "bottom";
+      position = "95 83";
+      extent = "440 244";
+      minExtent = "8 2";
+      visible = "1";
+      text = "Change SiteSwap (Advanced)";
+      maxLength = "255";
+      resizeWidth = "1";
+      resizeHeight = "1";
+      canMove = "1";
+      canClose = "1";
+      canMinimize = "1";
+      canMaximize = "1";
+      minSize = "50 50";
+
+      new GuiButtonCtrl(guiAdvancedOK) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "39 205";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "guiAdvancedApplyfunction();canvas.popDialog(ChangeSiteAdvanced);";
+         text = "OK";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiButtonCtrl(guiAdvancedApply) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "164 205";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "guiAdvancedApplyfunction();";
+         text = "Apply";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiButtonCtrl(guiAdvancedCancel) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "289 205";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "canvas.popDialog(ChangeSiteAdvanced);";
+         text = "Cancel";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiTextCtrl(guiAdvancedNewSite_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "45 36";
+         extent = "76 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "New SiteSwap:";
+         maxLength = "255";
+      };
+      new GuiTextEditCtrl(guiAdvancedNewSite) {
+         profile = "GuiTextEditProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "129 36";
+         extent = "291 18";
+         minExtent = "8 2";
+         visible = "1";
+         maxLength = "255";
+         historySize = "0";
+         password = "0";
+         tabComplete = "0";
+         sinkAllKeyEvents = "0";
+      };
+      new GuiTextCtrl(guiAdvancedNewStyle_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "68 69";
+         extent = "53 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "New Style:";
+         maxLength = "255";
+      };
+      new GuiPopUpMenuCtrl(guiAdvancedChooseStyle) {
+         profile = "GuiPopUpMenuProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "129 69";
+         extent = "246 19";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Choose New Style...";
+         maxLength = "255";
+         maxPopupHeight = "200";
+      };
+      new GuiTextCtrl(guiAdvancedHR_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "61 107";
+         extent = "60 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Height Ratio:";
+         maxLength = "255";
+      };
+      new GuiTextCtrl(guiAdvancedDR_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "64 146";
+         extent = "57 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Dwell Ratio:";
+         maxLength = "255";
+      };
+      new GuiSliderCtrl(guiAdvancedHR) {
+         profile = "GuiSliderProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "129 107";
+         extent = "287 31";
+         minExtent = "8 2";
+         visible = "1";
+         range = "0.040000 1.000000";
+         ticks = "10";
+         value = "0.17";
+      };
+      new GuiSliderCtrl(guiAdvancedDR) {
+         profile = "GuiSliderProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "129 146";
+         extent = "287 31";
+         minExtent = "8 2";
+         visible = "1";
+         range = "0.100000 0.900000";
+         ticks = "10";
+         value = "0.5";
+      };
+   };
+};
+//--- OBJECT WRITE END ---
+
+guiAdvancedChooseStyle.add("Normal", "Normal");
+guiAdvancedChooseStyle.add("Mills Mess", "Mills Mess");
+guiAdvancedChooseStyle.add("Windmill", "Windmill");
+guiAdvancedChooseStyle.add("Reverse", "Reverse");
+guiAdvancedChooseStyle.add("Shower", "Shower");
+guiAdvancedChooseStyle.add("Random", "Random");
+
+function guiAdvancedApplyfunction() {
+    changesite(guiAdvancedNewSite.getValue(), guiAdvancedNewSite.getValue(),
+		guiAdvancedHR.getValue(), guiAdvancedDR.getValue());
+	$jm.setStyleNamed(guiAdvancedChooseStyle.getText());
+}
+

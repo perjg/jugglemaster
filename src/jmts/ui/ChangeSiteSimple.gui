@@ -1,0 +1,95 @@
+//--- OBJECT WRITE BEGIN ---
+new GuiControl(ChangeSiteSimple) {
+   profile = "GuiDefaultProfile";
+   horizSizing = "right";
+   vertSizing = "bottom";
+   position = "0 0";
+   extent = "640 480";
+   minExtent = "8 2";
+   visible = "1";
+
+   new GuiWindowCtrl(SimpleSiteWindow) {
+      profile = "GuiWindowProfile";
+      horizSizing = "right";
+      vertSizing = "bottom";
+      position = "99 93";
+      extent = "440 114";
+      minExtent = "8 2";
+      visible = "1";
+      text = "Change SiteSwap (Simple)";
+      maxLength = "255";
+      resizeWidth = "1";
+      resizeHeight = "1";
+      canMove = "1";
+      canClose = "1";
+      canMinimize = "1";
+      canMaximize = "1";
+      minSize = "50 50";
+
+      new GuiButtonCtrl(guiSimpleOK) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "36 76";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "changesite(guiSimpleNewSite.getValue());canvas.popDialog(ChangeSiteSimple);";
+         text = "OK";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiButtonCtrl(guiSimpleApply) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "161 76";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "changesite(guiSimpleNewSite.getValue());";
+         text = "Apply";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiButtonCtrl(guiSimpleCancel) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "286 76";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "canvas.popDialog(ChangeSiteSimple);";
+         text = "Cancel";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiTextCtrl(guiSimpleText) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "17 39";
+         extent = "76 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "New SiteSwap:";
+         maxLength = "255";
+      };
+      new GuiTextEditCtrl(guiSimpleNewSite) {
+         profile = "GuiTextEditProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "108 39";
+         extent = "313 18";
+         minExtent = "8 2";
+         visible = "1";
+         maxLength = "255";
+         historySize = "0";
+         password = "0";
+         tabComplete = "0";
+         sinkAllKeyEvents = "0";
+      };
+   };
+};
+//--- OBJECT WRITE END ---

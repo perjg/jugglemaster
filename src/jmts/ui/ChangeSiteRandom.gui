@@ -1,0 +1,245 @@
+//--- OBJECT WRITE BEGIN ---
+new GuiControl(ChangeSiteRandom) {
+   profile = "GuiDefaultProfile";
+   horizSizing = "right";
+   vertSizing = "bottom";
+   position = "0 0";
+   extent = "640 480";
+   minExtent = "8 2";
+   visible = "1";
+
+   new GuiWindowCtrl(RandomPatternWindow) {
+      profile = "GuiWindowProfile";
+      horizSizing = "right";
+      vertSizing = "bottom";
+      position = "136 37";
+      extent = "440 350";
+      minExtent = "8 2";
+      visible = "1";
+      text = "Change SiteSwap (Random)";
+      maxLength = "255";
+      resizeWidth = "1";
+      resizeHeight = "1";
+      canMove = "1";
+      canClose = "1";
+      canMinimize = "1";
+      canMaximize = "1";
+      minSize = "50 50";
+
+      new GuiButtonCtrl(guiRandGenerate) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "21 224";
+         extent = "187 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "gui_newrandomsite();";
+         text = "Generate";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiButtonCtrl(guiRandTotallyrandom) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "224 224";
+         extent = "187 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "guiRandNewsite.setValue(JMRand::jm_randnoparam());";
+         text = "Totally Random";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiTextEditCtrl(guiRandNewsite) {
+         profile = "GuiTextEditProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "13 276";
+         extent = "405 18";
+         minExtent = "8 2";
+         visible = "1";
+         maxLength = "255";
+         historySize = "0";
+         password = "0";
+         tabComplete = "0";
+         sinkAllKeyEvents = "0";
+      };
+      new GuiTextEditCtrl(guiRandNumballs) {
+         profile = "GuiTextEditProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "198 43";
+         extent = "183 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "5";
+         maxLength = "255";
+         historySize = "0";
+         password = "0";
+         tabComplete = "0";
+         sinkAllKeyEvents = "0";
+      };
+      new GuiTextCtrl(guiRandNumballs_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "48 43";
+         extent = "76 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Number of Balls";
+         maxLength = "255";
+      };
+      new GuiTextCtrl(guiRandPattlen_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "48 77";
+         extent = "70 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Pattern Length";
+         maxLength = "255";
+      };
+      new GuiTextEditCtrl(guiRandPattlen) {
+         profile = "GuiTextEditProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "198 77";
+         extent = "183 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "5";
+         maxLength = "255";
+         historySize = "0";
+         password = "0";
+         tabComplete = "0";
+         sinkAllKeyEvents = "0";
+      };
+      new GuiTextEditCtrl(guiRandTransforms) {
+         profile = "GuiTextEditProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "198 111";
+         extent = "183 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "3";
+         maxLength = "255";
+         historySize = "0";
+         password = "0";
+         tabComplete = "0";
+         sinkAllKeyEvents = "0";
+      };
+      new GuiTextCtrl(guiRandTransforms_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "48 111";
+         extent = "109 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Number of Transforms";
+         maxLength = "255";
+      };
+      new GuiCheckBoxCtrl(guiRandSynchronous) {
+         profile = "GuiCheckBoxProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "197 175";
+         extent = "140 30";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Synchronous";
+         groupNum = "-1";
+         buttonType = "ToggleButton";
+      };
+      new GuiTextEditCtrl(guiRandMultiplexes) {
+         profile = "GuiTextEditProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "198 145";
+         extent = "183 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "0";
+         maxLength = "255";
+         historySize = "0";
+         password = "0";
+         tabComplete = "0";
+         sinkAllKeyEvents = "0";
+      };
+      new GuiTextCtrl(guiRandMultiplexes_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "48 145";
+         extent = "76 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Max Multiplexes";
+         maxLength = "255";
+      };
+      new GuiButtonCtrl(guiRandOK) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "36 313";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "changesite(guiRandNewsite.getValue());canvas.popDialog(ChangeSiteRandom);";
+         text = "OK";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiButtonCtrl(guiRandCancel) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "286 313";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "canvas.popDialog(ChangeSiteRandom);";
+         text = "Cancel";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiButtonCtrl(guiRandApply) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "161 313";
+         extent = "112 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "changesite(guiRandNewsite.getValue());";
+         text = "Apply";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiTextCtrl(guiRandNewSite_text) {
+         profile = "GuiTextProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "27 254";
+         extent = "118 18";
+         minExtent = "8 2";
+         visible = "1";
+         text = "New Random SiteSwap:";
+         maxLength = "255";
+      };
+   };
+};
+//--- OBJECT WRITE END ---
+
+
+function gui_newrandomsite() {
+	%newsite = JMRand::jm_rand(guiRandNumballs.getValue(),
+		guiRandPattlen.getValue(), guiRandTransforms.getValue(),
+		guiRandSynchronous.getValue(), guiRandMultiplexes.getValue());
+	guiRandNewsite.setValue(%newsite);
+}

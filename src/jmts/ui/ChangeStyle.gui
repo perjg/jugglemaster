@@ -1,0 +1,93 @@
+//--- OBJECT WRITE BEGIN ---
+new GuiControl(ChangeStyle) {
+   profile = "GuiDefaultProfile";
+   horizSizing = "right";
+   vertSizing = "bottom";
+   position = "0 0";
+   extent = "640 480";
+   minExtent = "8 2";
+   visible = "1";
+
+   new GuiWindowCtrl(ChangeStyleWindow) {
+      profile = "GuiWindowProfile";
+      horizSizing = "right";
+      vertSizing = "bottom";
+      position = "106 113";
+      extent = "362 109";
+      minExtent = "8 2";
+      visible = "1";
+      text = "Change Style";
+      maxLength = "255";
+      resizeWidth = "1";
+      resizeHeight = "1";
+      canMove = "1";
+      canClose = "1";
+      canMinimize = "1";
+      canMaximize = "1";
+      minSize = "50 50";
+
+      new GuiButtonCtrl(guiStyleOK) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "12 75";
+         extent = "105 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "guiStyleApplyFunction();canvas.popDialog(ChangeStyle);";
+         text = "OK";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiPopUpMenuCtrl(guiStyleChooseStyle) {
+         profile = "GuiPopUpMenuProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "61 38";
+         extent = "246 19";
+         minExtent = "8 2";
+         visible = "1";
+         text = "Choose New Style...";
+         maxLength = "255";
+         maxPopupHeight = "200";
+      };
+      new GuiButtonCtrl(guiStyleApply) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "129 75";
+         extent = "105 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "guiStyleApplyFunction();";
+         text = "Apply";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+      new GuiButtonCtrl(guiStyleCancel) {
+         profile = "GuiButtonProfile";
+         horizSizing = "right";
+         vertSizing = "bottom";
+         position = "246 75";
+         extent = "105 19";
+         minExtent = "8 2";
+         visible = "1";
+         command = "canvas.popDialog(ChangeStyle);";
+         text = "Cancel";
+         groupNum = "-1";
+         buttonType = "PushButton";
+      };
+   };
+};
+//--- OBJECT WRITE END ---
+
+guiStyleChooseStyle.add("Normal", "Normal");
+guiStyleChooseStyle.add("Mills Mess", "Mills Mess");
+guiStyleChooseStyle.add("Windmill", "Windmill");
+guiStyleChooseStyle.add("Reverse", "Reverse");
+guiStyleChooseStyle.add("Shower", "Shower");
+guiStyleChooseStyle.add("Random", "Random");
+
+function guiStyleApplyfunction() {
+	$jm.setStyleNamed(guiStyleChooseStyle.getText());
+}

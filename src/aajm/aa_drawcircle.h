@@ -25,7 +25,7 @@ void aa_drawcircle(aa_context *context, int cx, int cy,
 
 /*
  * Draws 8 of the points on the circle radius
- * For internal use, Use aa_drawline instead.
+ * For internal use, Use aa_drawcircle instead.
  */
 void aa_plot8circlepoints(aa_context *context, int x, int y,
 			int cx, int cy, int color);

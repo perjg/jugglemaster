@@ -1,3 +1,6 @@
+Version 0.5
+ - jmlib: Added authors to patterns
+
 Version 0.4
 2004-09-01
  - all: Makefile voodoo

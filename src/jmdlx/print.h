@@ -41,8 +41,10 @@ protected:
   wxSpinCtrl* delay;
   wxSpinCtrl* max_iterations;
   FILE* outputfile;
+  wxString lastpath;
 
   void OnOK(wxCommandEvent &event);
+  void OnChooseFile(wxCommandEvent &event);
   int printImage();
   int printPS();
 

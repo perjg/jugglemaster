@@ -24,8 +24,13 @@ Not needed under Windows
 #include <sys/stat.h>
 
 
+enum {
+	CHOOSEFILE
+};
+
 BEGIN_EVENT_TABLE(Print, wxDialog)
 	EVT_BUTTON(wxID_OK, Print::OnOK)
+	EVT_BUTTON(CHOOSEFILE, Print::OnChooseFile)
 END_EVENT_TABLE()
 
 Print::Print(wxWindow *parent, JMLib *j)
@@ -35,6 +40,7 @@ Print::Print(wxWindow *parent, JMLib *j)
 
 	jmlib = j;
 
+	lastpath = wxGetHomeDir();
 
   // Filename
 	wxBoxSizer *filenamesizer = new wxBoxSizer(wxHORIZONTAL);
@@ -44,6 +50,11 @@ Print::Print(wxWindow *parent, JMLib *j)
                                         wxALIGN_CENTER_VERTICAL|wxALL,
                                         5);
 	filenamesizer->Add(filename,
+                        1,
+                        wxALIGN_CENTRE_VERTICAL|wxALL,
+                        5);
+
+	filenamesizer->Add(new wxButton(this, CHOOSEFILE, "Choose File"),
                         1,
                         wxALIGN_CENTRE_VERTICAL|wxALL,
                         5);
@@ -218,6 +229,19 @@ void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	/* Just make sure it clears out any guff */
 	for (i=0; i<200; i++) jmlib->doJuggle();
 	EndModal(wxID_OK);
+}
+
+void Print::OnChooseFile(wxCommandEvent &WXUNUSED(event)) {
+	wxFileDialog filedialog(this, _("Choose a File to Print to"),
+		lastpath, "",
+		"All Files|*",
+		wxSAVE);
+
+	if(filedialog.ShowModal() != wxID_OK) return;
+
+	lastpath = filedialog.GetDirectory();
+
+	filename->SetValue(filedialog.GetPath());
 }
 
 WX_DECLARE_LIST(wxImageHandler, HandlerList);

@@ -4,6 +4,8 @@ default:
 	@echo
 	@echo If you don\'t know what you want, use "make jmdlx"
 	@echo
+	@echo To install just the lib, \"make jmlib-install\"
+	@echo
 	@echo When built, binaries should be in the bin dir
 
 all: jmdlx aajm jmqt
@@ -22,6 +24,9 @@ jmqt:
 	$(MAKE) -C src/jmqt
 	mkdir -p ./bin
 	cp src/jmqt/jmqt ./bin
+
+jmlib-install:
+	$(MAKE) -C src/jmlib install
 
 install:
 	@echo Current no-oped.

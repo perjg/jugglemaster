@@ -233,6 +233,7 @@ class JMLib {
   void setMirror(JML_BOOL mir = true);
 
   JML_CHAR* getSite(void) { return siteswap; }
+  JML_CHAR* getPattName(void) { return pattname; }
   JML_CHAR* getStyle(void) { return stylename; }
 
   JML_INT32 getImageWidth(void) { return imageWidth; }

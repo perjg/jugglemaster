@@ -33,7 +33,7 @@ Print::Print(wxWindow *parent, JMLib *j)
 
   // Filename
 	wxBoxSizer *filenamesizer = new wxBoxSizer(wxHORIZONTAL);
-	filename = new wxTextCtrl(this,-1,"juggling.ps");
+	filename = new wxTextCtrl(this,-1,wxString(jmlib->getPattName()) + ".ps");
 	filenamesizer->Add(new wxStaticText(this, 0, "Filename"),
                                         0,
                                         wxALIGN_CENTER_VERTICAL|wxALL,

@@ -42,7 +42,7 @@ int ParsePatterns(FILE *input,
 
 	float currhr,currdr;
 	float currga,currsp;
-	int currbgred, currbggreen, currbgblue;
+	unsigned int currbgred, currbggreen, currbgblue;
 	int currbp,currhd,currpd,currmr;
 	char buf[1024];
 	char current_group[256];

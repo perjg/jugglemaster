@@ -63,7 +63,7 @@ your user's Documents and Settings, to a dir called ".jugglemaster")
 
 There are some extra features in jmdlx that aren't enabled by default
 [eg mpeg videos, since they need ffmpeg]. To enable them, please edit
-the Makefile in the jmdlx directory.
+Makefile.cfg in the top-level dir
 
 
 JMPocket

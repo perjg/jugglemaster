@@ -222,11 +222,9 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 
 			pos = rand()%pattlen;
 
-			if(leftcross[pos] != 0) leftcross[pos] = 0;
-			else leftcross[pos] = 1;
-
-			if(rightcross[pos] != 0) rightcross[pos] = 0;
-			else rightcross[pos] = 1;
+			tmp = leftcross[pos]?0:1;
+			leftcross[pos] = rightcross[pos]?0:1;
+			rightcross[pos] = tmp;
 
 			tmp = left[pos];
 			left[pos] = right[pos];

@@ -142,8 +142,8 @@ int PatternLoader::CloseFile() {
 
 PatternLoader::~PatternLoader() {
 	/* God only knows why there's a type error on this. FIXME */
-	/* FreeGroups(&groups);
-	FreeStyles(&styles); */
+	FreeGroups(&groups);
+	FreeStyles(&styles);
 }
 
 void PatternLoader::PrintStyles() {

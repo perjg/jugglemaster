@@ -64,8 +64,8 @@ int ParsePatterns(FILE *input,
 	struct groups_t *groups, struct styles_t *styles);
 
 /* Use FreePatterns and FreeStyles to delete the data structures created */
-void FreeGroups(struct pattern_group_t *groups);
-void FreeStyles(struct style_t *styles);
+void FreeGroups(struct groups_t *groups);
+void FreeStyles(struct styles_t *styles);
 
 
 /* Iterate across groups */

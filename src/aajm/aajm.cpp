@@ -164,7 +164,7 @@ void main_loop(void) {
 			aa_flush(context);
 			aa_getkey(context, 1);
 		}
-		usleep(35);
+		usleep(20000);
 	}
 }
 

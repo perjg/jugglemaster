@@ -3,7 +3,9 @@ Version 0.3
  - jmlib: Provide ability to describe all the builtin styles
  - aajm: modified to take advantage of new jmlib feature
  - jmdlx: modified to take advantage of new jmlib feature
- - jmlib: Added "Random" style.
+ - jmlib: Added "Random" style. Thanks to Barton Chittenden for the
+    [ridiculously simple if I'd taken two minutes to think about it]
+    pseudocode
  - Added more patterns
 
 Version 0.2

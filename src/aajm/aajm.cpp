@@ -116,6 +116,36 @@ void loadaverage(struct loadavg *load) {
 	}
 }
 
+int startlistening() {
+	char myname[MAXHOSTNAME+1];
+	int s;
+	struct sockaddr_in sa;
+	struct hostent *hp;
+	memset(&sa, 0, sizeof(struct sockaddr_in));
+	gethostname(myname, MAXHOSTNAME);
+	if((hp = gethostbyname(myname)) == NULL) {
+		return(-1);
+	}
+
+	sa.sin_family = hp->h_addrtype;
+	sa.sin_port = htons(DEFPORT);
+
+	if ((s = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+		return(-1);
+	}
+
+	if (bind(s, (struct sockaddr *)&sa, sizeof(struct sockaddr_in)) < 0) {
+		close(s);
+		return(-1);
+	}
+	listen(s, 1);
+	return(s);
+}
+
+void stoplistening(int fd) {
+	close(fd);
+}
+
 void resizehandler(aa_context *resized_context) {
 	jmlib->setWindowSize(AAWIDTH(resized_context),
 			AAHEIGHT(resized_context));
@@ -123,18 +153,28 @@ void resizehandler(aa_context *resized_context) {
 }
 
 void main_loop(int max_iterations, int delay,
-		int loadavg_flag, int normal_load) {
-	struct timeval starttime, endtime;
+		int loadavg_flag, int normal_load, int socket_fd) {
+	struct timeval starttime, endtime, selecttime;
 	struct loadavg load;
-	long sleeptime;
 	long speed = DEFSPEED; /* microseconds between frames */
-	long load_speed_modifier = 0;
+	long load_speed = 0; /* Speed adjustment, based on load */
 	int loop_forever = 0;
 	char c;
 	int i;
 	int tmp;
 	char newsite[JML_MAX_SITELEN];
 	char newstyle[2];
+
+	int accepted_sock = 0; /* FD for accept()ed socket */
+	int amount_read = 0; /* Amount read into buffer so far */
+	int r; /* Num bytes read in last read() */
+	char socket_buffer[MAX_SOCKET_BUFFER]; /* Buffer */
+	char command[MAX_SOCKET_BUFFER];
+	char data[MAX_SOCKET_BUFFER];
+	fd_set socket_set; /* Used for select() */
+	socklen_t sin_size; /* Used by accept() */
+	struct sockaddr their_addr; /* Used by accept() */
+
 	int newstyle_index;
 	int numstyles = sizeof(possible_styles)/sizeof(possible_styles[0]);
 
@@ -150,6 +190,10 @@ void main_loop(int max_iterations, int delay,
 		loop_forever = 1;
 	}
 
+	memset((void *)socket_buffer,0,MAX_SOCKET_BUFFER);
+	memset((void *)command,0,MAX_SOCKET_BUFFER);
+	memset((void *)data,0,MAX_SOCKET_BUFFER);
+
 	while (1) {
 		gettimeofday(&starttime,NULL);
 		jmlib->doJuggle();
@@ -159,7 +203,7 @@ void main_loop(int max_iterations, int delay,
 			loadaverage(&load);
 			if(load.one != -1) {
 				tmp = (int)(load.one*100 - normal_load);
-				load_speed_modifier = 5000 * tmp;
+				load_speed = 5000 * tmp;
 			}
 		}
 
@@ -237,7 +281,7 @@ void main_loop(int max_iterations, int delay,
 			/* Toggle Load Monitoring */
 			if(loadavg_flag == 1) {
 				loadavg_flag = 0;
-				load_speed_modifier = 0;
+				load_speed = 0;
 			} else {
 				loadavg_flag = 1;
 			}
@@ -247,19 +291,100 @@ void main_loop(int max_iterations, int delay,
 			speed = DEFSPEED;
 		}
 		gettimeofday(&endtime,NULL);
-		endtime.tv_sec -= starttime.tv_sec;
-		endtime.tv_usec -= starttime.tv_usec;
-		while (endtime.tv_usec < 0) {
-			endtime.tv_sec --;
-			endtime.tv_usec += 1000000;
+
+		selecttime.tv_sec = endtime.tv_sec - starttime.tv_sec;
+		if (selecttime.tv_sec != 0) {
+			endtime.tv_usec += 1000000*selecttime.tv_sec;
+			selecttime.tv_sec = 0;
 		}
-		sleeptime = (speed + load_speed_modifier)
-				- (endtime.tv_usec + endtime.tv_sec*1000000);
-		if(sleeptime > 0) {
-			usleep(sleeptime);
+		selecttime.tv_usec = (speed + load_speed) - 
+					(endtime.tv_usec - starttime.tv_usec);
+		if(selecttime.tv_usec < 0) {
+			selecttime.tv_usec = 1;
+		}
+
+		/* IPC Code begins here */
+		if(socket_fd <= 0) {
+			select(0,NULL,NULL,NULL,&selecttime);
 		} else {
-			usleep(1);
+
+		FD_ZERO(&socket_set);
+		FD_SET(socket_fd,&socket_set);
+		if(accepted_sock > 0) {
+			r = read(accepted_sock,
+				(void *)&socket_buffer[amount_read],1);
+			if(r == -1 && errno != EAGAIN) {
+				memset((void *)socket_buffer,0,MAX_SOCKET_BUFFER-amount_read-1);
+				close(accepted_sock);
+				amount_read = 0;
+				accepted_sock = 0;
+			} else if(r > 0) {
+				amount_read++;
+				if(socket_buffer[amount_read-1] == '=') {
+					memset((void *)command,0,MAX_SOCKET_BUFFER);
+					memcpy((void *)command,(void *)socket_buffer, amount_read-1);
+					memset((void *)socket_buffer,0,MAX_SOCKET_BUFFER);
+					amount_read = 0;
+				} else if(socket_buffer[amount_read-1] == ';') {
+					memset((void *)data,0,MAX_SOCKET_BUFFER);
+					memcpy((void *)data,(void *)socket_buffer, amount_read-1);
+					memset((void *)socket_buffer,0,MAX_SOCKET_BUFFER);
+					close(accepted_sock);
+					amount_read = 0;
+					accepted_sock = 0;
+				}
+			}
+			if(amount_read >= MAX_SOCKET_BUFFER-1) {
+			/* Too late, F**k 'em, they're trying
+			to overflow us anyway */
+				write(accepted_sock,OVERFLOW_ERROR,strlen(OVERFLOW_ERROR));
+				memset((void *)socket_buffer,0,MAX_SOCKET_BUFFER);
+				close(accepted_sock);
+				amount_read = 0;
+				accepted_sock = 0;
+			}
 		}
+
+		if(command[0] != '\0' && data[0] != '\0') {
+			if(!strcmp(command,"Style")) {
+				jmlib->setStyle(data);
+			} else if(!strcmp(command,"Site")) {
+				jmlib->setPattern("Something",data,
+					HR_DEF, DR_DEF);
+				jmlib->setStyleDefault();
+				jmlib->startJuggle();
+			} else if(!strcmp(command,"Speed")) {
+				if(!strcmp(data,"Up")) {
+					speed -= 1500;
+					if(speed < 0) speed = 0;
+				} else if(!strcmp(data,"Down")) {
+					speed += 1500;
+				} else if(!strcmp(data,"Reset")) {
+					speed = DEFSPEED;
+				}
+			}
+
+			memset((void *)data,0,MAX_SOCKET_BUFFER);
+			memset((void *)command,0,MAX_SOCKET_BUFFER);
+		}
+		if(!strcmp(command,"Quit")) {
+			return;
+		}
+				
+		if(select(socket_fd+1, &socket_set,
+			NULL, NULL, &selecttime) > 0) {
+			sin_size = sizeof(sockaddr);
+			if(FD_ISSET(socket_fd,&socket_set) && accepted_sock) {
+			/* Just close any subsequent conenctions until
+				this one's done */
+				close(accept(socket_fd,&their_addr,&sin_size));
+			} else if(FD_ISSET(socket_fd,&socket_set) && !accepted_sock) {
+				accepted_sock = accept(socket_fd,&their_addr, &sin_size);
+				fcntl(accepted_sock, F_SETFL, O_NONBLOCK);
+			}
+		}
+		}
+
 		if(!loop_forever && max_iterations-- <= 0) {
 			break;
 		}
@@ -275,6 +400,7 @@ int main(int argc, char **argv) {
 	int max_iterations = 0;
 	int delay = 0;
 	int normal_load = 20;
+	int socket_fd;
 
 	static struct option long_options[] =
         {
@@ -376,8 +502,11 @@ int main(int argc, char **argv) {
 			can go down to as-low-as-possible priority */
 		nice(19);
 	}
-	main_loop(max_iterations,delay,loadavg_flag,normal_load);
+	socket_fd = startlistening();
 
+	main_loop(max_iterations,delay,loadavg_flag,normal_load, socket_fd);
+
+	stoplistening(socket_fd);
 	aa_close(context);
 
 	delete jmlib;

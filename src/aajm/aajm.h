@@ -17,11 +17,17 @@
 #define AAJM_H
 
 #include <aalib.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <sys/socket.h>
+#include <sys/wait.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <fcntl.h>
 #include <getopt.h>
 #include <malloc.h>
 #include "../jmlib/jmlib.h"
@@ -49,14 +55,20 @@ struct loadavg {
 
 #define AAWIDTH(context) aa_imgwidth(context)
 #define AAHEIGHT(context) aa_imgheight(context)
-#define DEFSPEED 18000
 /* speed is in microseconds-between-frames, because I'm that lazy */
+#define DEFSPEED 18000
+#define DEFPORT 56001
+#define MAXHOSTNAME 1024
+#define MAX_SOCKET_BUFFER (JML_MAX_SITELEN+40)
+#define OVERFLOW_ERROR "\nFailed miserably to overflow\n"
+
 
 void errorCB(char* msg);
 void draw_juggler(int show_loadavg);
 void loadaverage(struct loadavg *load);
+int startlistening(void);
+void stoplistening(int fd);
 void resizehandler(aa_context *resized_context);
 void main_loop(int max_iterations, int delay,
-			int loadavg_flag, int normal_load);
-
+			int loadavg_flag, int normal_load, int socket_fd);
 #endif

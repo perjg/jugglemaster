@@ -1,7 +1,6 @@
 CXX=c++
 MAKE=make
 
-# took out -ansi since usleep(3) isn't ANSI
 CXXFLAGS=-Wall -pedantic -Werror -fsigned-char `aalib-config --cflags`
 LDFLAGS=`aalib-config --libs`
 

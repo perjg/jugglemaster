@@ -14,6 +14,7 @@
  */ 
 
 #include "patt.h"
+#include <wx/progdlg.h>
 
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(PatternList);
@@ -61,20 +62,31 @@ int PatternLoader::OpenFile(const char *filename, int redownload) {
 		return(patternfile->Open());
 	} else {
 		wxString fullurl(WEB_PREFIX);
+		wxString message;
 		fullurl.Append(filename);
-		printf("Downloading File: %s\n",(const char *)fullurl);
+		message.Printf("Downloading File: %s\n",(const char *)fullurl);
+		unsigned int current_progress = 0;
+		char buffer[1024];
 		wxURL url(fullurl);
 		wxInputStream *data = url.GetInputStream();
 		// wxHTTP url;
 		// wxInputStream *data = url.GetInputStream(fullurl);
 
 		if ( data ) {
+			wxProgressDialog progress("Progress",message,(int)data->GetSize());
 			wxFileOutputStream outputfile(targetfilename);
-			data->Read(outputfile);
-			printf("Downloading Done\n");
+			while(!data->Eof() && current_progress!=data->GetSize()) {
+				data->Read((void *)buffer,1024);
+				outputfile.Write((const void *)buffer,data->LastRead());
+				current_progress+=data->LastRead();
+				progress.Update(current_progress);
+			}
+			// data->Read(outputfile);
+			// printf("Downloading Done\n");
 			delete data;
 		} else {
-			printf("An undefined error occurred\n");
+			wxMessageDialog errordlg(parent,"An error occured while downloading","Error",wxOK|wxICON_ERROR);
+			errordlg.ShowModal();
 		}
 		return(patternfile->Open());
 	}

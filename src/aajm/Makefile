@@ -10,12 +10,13 @@ endif
 
 OBJ=aa_drawcircle.o aa_drawline.o aajm.o
 
-all: jm_lib $(OBJ)
+all: jm_lib $(OBJ) aajm-remote
 	$(CXX) $(LDFLAGS) -o ./aajm $(OBJ) ../jmlib/jmlib.a
+
 
 jm_lib:
 	$(MAKE) -C ../jmlib
 
 clean:
-	rm -f *.o core aajm
+	rm -f *.o core aajm aajm-remote
 	$(MAKE) -C ../jmlib clean

@@ -176,7 +176,6 @@ void main_loop(int max_iterations, int delay,
 	struct sockaddr their_addr; /* Used by accept() */
 
 	int newstyle_index;
-	int numstyles = sizeof(possible_styles)/sizeof(possible_styles[0]);
 
 	load.one = -1;
 	load.five = -1;
@@ -234,7 +233,7 @@ void main_loop(int max_iterations, int delay,
 			/* Change Style */
 			aa_puts(context, 3, 4, AA_SPECIAL,
 				"Choose New Style...");
-			for (i=0;i<numstyles;i++) {
+			for (i=0;i<NUMSTYLES;i++) {
 				aa_printf(context, 3, 5+i, AA_SPECIAL,
 					"%i: %s",i+1,possible_styles[i]);
 			}
@@ -244,7 +243,7 @@ void main_loop(int max_iterations, int delay,
 			if(newstyle[0]!=0) {
 				newstyle_index=atoi(newstyle)-1;
 				if(newstyle_index>=0
-				  && newstyle_index<numstyles) {
+				  && newstyle_index<NUMSTYLES) {
 					jmlib->setStyle(possible_styles[newstyle_index]);
 				}
 			}

@@ -11,12 +11,11 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the GNU
  * General Public License for more details.
- */ 
+ */
 
-#ifndef AAJM_H
-#define AAJM_H
+#ifndef AAJM_REMOTE_H
+#define AAJM_REMOTE_H
 
-#include <aalib.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,36 +26,10 @@
 #include <sys/wait.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <fcntl.h>
 #include <getopt.h>
-#include <malloc.h>
-#include "../jmlib/jmlib.h"
 #include "./aajm_common.h"
-#include "./aa_drawline.h"
-#include "./aa_drawcircle.h"
+#include "../jmlib/jmlib.h"
 
+int do_command(int port, char *host, char *command, char *data);
 
-aa_context *context;
-aa_renderparams *params;
-JMLib* jmlib;
-
-struct loadavg {
-	float one, five, fifteen;
-};
-
-#define AAWIDTH(context) aa_imgwidth(context)
-#define AAHEIGHT(context) aa_imgheight(context)
-/* speed is in microseconds-between-frames, because I'm that lazy */
-#define DEFSPEED 18000
-#define DEFLOAD (float)0.2
-
-
-void errorCB(char* msg);
-void draw_juggler(int show_loadavg);
-void loadaverage(struct loadavg *load);
-int startlistening(int port);
-void stoplistening(int fd);
-void resizehandler(aa_context *resized_context);
-void main_loop(int max_iterations, int delay,
-			int loadavg_flag, int normal_load, int socket_fd);
 #endif

@@ -1594,6 +1594,21 @@ Orr
 
 /[ Patterns By Toshiyuki Mori ]
 
+%Upside-down Tennis
+{ 6, 3}{ 1, 3}
+{ 6, 3}{ 1, 3}
+{ 10, -2}{ -10, -2}
+3 Upside-down Tennis
+
+%Upside-down Tennis2
+{ 3, 3}{ 3, 3}
+{ 3, 3}{ 3, 3}
+{ 10, -2}{ -10, -2}
+{-3, 3}{-3, 3}
+{-3, 3}{-3, 3}
+{ 10, -2}{ -10, -2}
+3 Upside-down Tennis2
+
 #DR=0.5
 #HR=0.2
 ;very fast trick by Seon McKinney in 1999 IJA Championships.

@@ -120,9 +120,7 @@ int ParsePatterns(FILE *input,
 
 			if(styles->first == NULL) {
 				styles->first = newstyle;
-			}
-
-			if(style != NULL) {
+			} else if(style != NULL) {
 				style->next = newstyle;
 			}
 			style = newstyle;
@@ -150,8 +148,8 @@ int ParsePatterns(FILE *input,
 				style->length*sizeof(int));
 			style->data[style->length-4] = x1;
 			style->data[style->length-3] = y1;
-			style->data[style->length-2] = x1;
-			style->data[style->length-1] = y1;
+			style->data[style->length-2] = x2;
+			style->data[style->length-1] = y2;
 			style->next = NULL;
 		} else if (legal_pattern_first_char(buf[0])) {
 			/* Pattern */
@@ -172,16 +170,16 @@ int ParsePatterns(FILE *input,
 
 			if(group->first_patt == NULL) {
 				group->first_patt = newpatt;
-			}
-
-			if(patt != NULL) {
+			} else if(patt != NULL) {
 				patt->next = newpatt;
 			}
 			patt = newpatt;
 			patt->name = (char *)malloc(strlen(pattern_name) + 1);
 			strncpy(patt->name, pattern_name, strlen(pattern_name));
+
 			patt->data = (char *)malloc(strlen(pattern_data) + 1);
 			strncpy(patt->data, pattern_data, strlen(pattern_data));
+
 			patt->style = (char *)malloc(strlen(current_style) + 1);
 			strncpy(patt->style, current_style, strlen(current_style));
 			patt->hr = currhr;

@@ -58,6 +58,7 @@ struct loadavg {
 /* speed is in microseconds-between-frames, because I'm that lazy */
 #define DEFSPEED 18000
 #define DEFPORT 56001
+#define DEFLOAD (float)0.2
 #define MAXHOSTNAME 1024
 #define MAX_SOCKET_BUFFER (JML_MAX_SITELEN+40)
 #define OVERFLOW_ERROR "\nFailed miserably to overflow\n"
@@ -66,7 +67,7 @@ struct loadavg {
 void errorCB(char* msg);
 void draw_juggler(int show_loadavg);
 void loadaverage(struct loadavg *load);
-int startlistening(void);
+int startlistening(int port);
 void stoplistening(int fd);
 void resizehandler(aa_context *resized_context);
 void main_loop(int max_iterations, int delay,

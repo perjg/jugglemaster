@@ -116,7 +116,7 @@ void loadaverage(struct loadavg *load) {
 	}
 }
 
-int startlistening() {
+int startlistening(int port) {
 	char myname[MAXHOSTNAME+1];
 	int s;
 	struct sockaddr_in sa;
@@ -128,7 +128,7 @@ int startlistening() {
 	}
 
 	sa.sin_family = hp->h_addrtype;
-	sa.sin_port = htons(DEFPORT);
+	sa.sin_port = htons(port);
 
 	if ((s = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		return(-1);
@@ -392,27 +392,33 @@ void main_loop(int max_iterations, int delay,
 }
 
 int main(int argc, char **argv) {
-	char options[] = "aljhn:d:m:t:s:";
+	char options[] = "aljhip:n:d:m:t:s:";
 	int help_flag = 0;
 	int aahelp_flag = 0;
 	int justoutput_flag = 0;
 	int loadavg_flag = 0;
+	int ipc_flag = 0;
+	int port_num = DEFPORT;
 	int max_iterations = 0;
 	int delay = 0;
-	int normal_load = 20;
-	int socket_fd;
+	int normal_load;
+	int socket_fd = -1;
 
+	normal_load = (int)(DEFLOAD * 100);
 	static struct option long_options[] =
         {
 		{"help", no_argument, &help_flag, 1},
 		{"aahelp", no_argument, &aahelp_flag, 1},
 		{"justoutput", no_argument, &justoutput_flag, 1},
+		{"ipc", no_argument, &ipc_flag, 1},
 		{"loadavg", no_argument, &loadavg_flag, 1},
 		{"maxiterations", required_argument, 0, 'm'},
+		{"port", required_argument, 0, 'p'},
 		{"normalload", required_argument, 0, 'n'},
 		{"delay", required_argument, 0, 'd'},
 		{"siteswap", required_argument, 0, 's'},
-		{"style", required_argument, 0, 't'}
+		{"style", required_argument, 0, 't'},
+		{0,0,0,0}
 	};
 
 	char optch;
@@ -456,6 +462,12 @@ int main(int argc, char **argv) {
 			case 'n':
 				normal_load = (int)(100*atof(optarg));
 				break;
+			case 'i':
+				ipc_flag=1;
+				break;
+			case 'p':
+				port_num=atoi(optarg);
+				break;
 		}
 
 	if(aahelp_flag || help_flag) {
@@ -469,8 +481,10 @@ int main(int argc, char **argv) {
 		printf("  -d, --delay=XX             delay XX ms between frames (%i)\n", (int)DEFSPEED/1000);
 		printf("  -m, --maxiterations=XX     do at most XX iterations\n");
 		printf("  -j, --justoutput           only output [don't init kb or mouse]\n");
+		printf("  -i, --ipc                  enable IPC\n");
+		printf("  -p, --port=XX              use port XX for IPC (%i)\n",DEFPORT);
 		printf("  -l, --loadavg              change speed based on load average\n");
-		printf("  -n, --normalload=XX        a normal load average for your machine (0.2)\n");
+		printf("  -n, --normalload=XX        a normal load average for your machine (%2.2f)\n",DEFLOAD);
 		printf("  -h, --help                 get help [this screen]\n");
 		printf("  -a, --aahelp               get help on AA options\n\n");
 	}
@@ -502,11 +516,16 @@ int main(int argc, char **argv) {
 			can go down to as-low-as-possible priority */
 		nice(19);
 	}
-	socket_fd = startlistening();
+
+	if(ipc_flag) {
+		socket_fd = startlistening(port_num);
+	}
 
 	main_loop(max_iterations,delay,loadavg_flag,normal_load, socket_fd);
 
-	stoplistening(socket_fd);
+	if(socket_fd > 0) {
+		stoplistening(socket_fd);
+	}
 	aa_close(context);
 
 	delete jmlib;

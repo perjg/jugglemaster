@@ -437,6 +437,9 @@ int main(int argc, char *argv[]) {
 					printf("  Pattern Name: %s\n",Patt_GetName(patterns));
 					printf("   Style: %s\n",Patt_GetStyle(patterns));
 					printf("   Data: %s\n",Patt_GetData(patterns));
+					printf("   Height ratio: %1.2f\n",Patt_GetHR(patterns));
+					printf("   Dwell Ratio: %1.2f\n",Patt_GetDR(patterns));
+					printf("   Author: %s\n",Patt_GetAuthor(patterns));
 					patterns = NextPatt(patterns);
 				}
 

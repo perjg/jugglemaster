@@ -132,7 +132,9 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
   optionsMenu->AppendCheckItem(OPTION_MIRROR, "&Mirror");
   optionsMenu->AppendCheckItem(OPTION_PAUSE, "&Pause");
   optionsMenu->AppendCheckItem(OPTION_COLORBALLS, "&Color Balls");
+#ifndef __WXMAC__
   optionsMenu->Append(OPTION_REDOWNLOAD, "Re&Download Patterns");
+#endif
 
   speedMenu->Append(SPEED_UP,"&Up");
   speedMenu->Append(SPEED_DOWN,"&Down");

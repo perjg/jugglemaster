@@ -562,15 +562,15 @@ NODEP_CPP_ABOUT=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_ABOUT=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\validator.h"\
 	".\aboutdlg.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\stdafx.h"\
-	
-NODEP_CPP_ABOUT=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -800,24 +800,24 @@ NODEP_CPP_APP_C=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_APP_C=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\prefs.h"\
+	"..\jmlib\validator.h"\
 	".\app.h"\
 	".\colorentry.h"\
 	".\fileparser.h"\
 	".\form.h"\
 	".\memdc.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\patternloader.h"\
 	".\quickbrowser.h"\
 	".\regprefs.h"\
 	".\stdafx.h"\
 	".\view.h"\
-	
-NODEP_CPP_APP_C=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\prefs.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -1027,16 +1027,16 @@ NODEP_CPP_CHOOS=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_CHOOS=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\validator.h"\
 	".\choosecolor.h"\
 	".\memdc.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\stdafx.h"\
-	
-NODEP_CPP_CHOOS=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -1221,17 +1221,17 @@ NODEP_CPP_ENTER=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_ENTER=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\prefs.h"\
+	"..\jmlib\validator.h"\
 	".\entersitedlg.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\regprefs.h"\
 	".\stdafx.h"\
-	
-NODEP_CPP_ENTER=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\prefs.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -1406,15 +1406,15 @@ NODEP_CPP_FILEP=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_FILEP=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\validator.h"\
 	".\fileparser.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\patternloader.h"\
-	
-NODEP_CPP_FILEP=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -1644,24 +1644,24 @@ NODEP_CPP_FORM_=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_FORM_=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\prefs.h"\
+	"..\jmlib\validator.h"\
 	".\app.h"\
 	".\colorentry.h"\
 	".\fileparser.h"\
 	".\form.h"\
 	".\memdc.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\patternloader.h"\
 	".\quickbrowser.h"\
 	".\regprefs.h"\
 	".\stdafx.h"\
 	".\view.h"\
-	
-NODEP_CPP_FORM_=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\prefs.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -1920,23 +1920,23 @@ NODEP_CPP_MFCUT=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_MFCUT=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\prefs.h"\
+	"..\jmlib\validator.h"\
 	".\colorentry.h"\
 	".\fileparser.h"\
 	".\form.h"\
 	".\memdc.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\patternloader.h"\
 	".\quickbrowser.h"\
 	".\regprefs.h"\
 	".\stdafx.h"\
 	".\view.h"\
-	
-NODEP_CPP_MFCUT=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\prefs.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -2135,15 +2135,15 @@ NODEP_CPP_PATTE=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_PATTE=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\validator.h"\
 	".\fileparser.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\patternloader.h"\
-	
-NODEP_CPP_PATTE=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -2352,21 +2352,21 @@ NODEP_CPP_PREFC=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_PREFC=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\prefs.h"\
+	"..\jmlib\validator.h"\
 	".\choosecolor.h"\
 	".\colorentry.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\prefcolorpage.h"\
 	".\prefgenpage.h"\
 	".\prefsheet.h"\
 	".\regprefs.h"\
 	".\stdafx.h"\
-	
-NODEP_CPP_PREFC=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\prefs.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -2599,21 +2599,21 @@ NODEP_CPP_PREFG=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_PREFG=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\prefs.h"\
+	"..\jmlib\validator.h"\
 	".\choosecolor.h"\
 	".\colorentry.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\prefcolorpage.h"\
 	".\prefgenpage.h"\
 	".\prefsheet.h"\
 	".\regprefs.h"\
 	".\stdafx.h"\
-	
-NODEP_CPP_PREFG=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\prefs.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -2832,19 +2832,19 @@ NODEP_CPP_PREFS=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_PREFS=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\prefs.h"\
+	"..\jmlib\validator.h"\
 	".\colorentry.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\prefcolorpage.h"\
 	".\prefgenpage.h"\
 	".\prefsheet.h"\
 	".\regprefs.h"\
 	".\stdafx.h"\
-	
-NODEP_CPP_PREFS=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\prefs.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -3076,22 +3076,22 @@ NODEP_CPP_QUICK=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_QUICK=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\prefs.h"\
+	"..\jmlib\validator.h"\
 	".\colorentry.h"\
 	".\fileparser.h"\
 	".\memdc.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\patternloader.h"\
 	".\quickbrowser.h"\
 	".\regprefs.h"\
 	".\stdafx.h"\
 	".\view.h"\
-	
-NODEP_CPP_QUICK=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\prefs.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -3183,121 +3183,99 @@ DEP_CPP_QUICK=\
 # End Source File
 # Begin Source File
 
-SOURCE=.\regpefs.cpp
+SOURCE=.\regprefs.cpp
 
 !IF  "$(CFG)" == "JMPocket - Win32 (WCE MIPS) Release"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE MIPS) Debug"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE SH4) Release"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE SH4) Debug"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE SH3) Release"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE SH3) Debug"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Release"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Debug"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86em) Release"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
+	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
-	
-NODEP_CPP_REGPE=\
-	"..\prefs.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86em) Debug"
 
-DEP_CPP_REGPE=\
+DEP_CPP_REGPR=\
 	"..\jmlib\prefs.h"\
 	".\app.h"\
 	".\regprefs.h"\
@@ -3439,19 +3417,19 @@ NODEP_CPP_SELEC=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_SELEC=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\prefs.h"\
+	"..\jmlib\validator.h"\
 	".\fileparser.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\patternloader.h"\
 	".\regprefs.h"\
 	".\selectpattdlg.h"\
 	".\stdafx.h"\
-	
-NODEP_CPP_SELEC=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\prefs.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -3620,13 +3598,13 @@ NODEP_CPP_STDAF=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_STDAF=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\validator.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\stdafx.h"\
-	
-NODEP_CPP_STDAF=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -3890,6 +3868,11 @@ NODEP_CPP_VIEW_=\
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE ARM) Debug"
 
 DEP_CPP_VIEW_=\
+	"..\jmlib\jmlib.h"\
+	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
+	"..\jmlib\prefs.h"\
+	"..\jmlib\validator.h"\
 	".\aboutdlg.h"\
 	".\app.h"\
 	".\colorentry.h"\
@@ -3898,6 +3881,8 @@ DEP_CPP_VIEW_=\
 	".\form.h"\
 	".\memdc.h"\
 	".\MFCUtil.h"\
+	".\mygba.h"\
+	".\PalmOS.h"\
 	".\patternloader.h"\
 	".\prefcolorpage.h"\
 	".\prefgenpage.h"\
@@ -3907,13 +3892,6 @@ DEP_CPP_VIEW_=\
 	".\selectpattdlg.h"\
 	".\stdafx.h"\
 	".\view.h"\
-	
-NODEP_CPP_VIEW_=\
-	"..\jmlib.h"\
-	"..\jmlib_types.h"\
-	"..\mygba.h"\
-	"..\prefs.h"\
-	"..\validator.h"\
 	
 
 !ELSEIF  "$(CFG)" == "JMPocket - Win32 (WCE x86) Release"
@@ -4274,6 +4252,7 @@ NODEP_CPP_JMLIB=\
 DEP_CPP_JMLIB=\
 	"..\jmlib\jmlib.h"\
 	"..\jmlib\jmlib_types.h"\
+	"..\jmlib\patterns.h"\
 	"..\jmlib\validator.h"\
 	
 NODEP_CPP_JMLIB=\

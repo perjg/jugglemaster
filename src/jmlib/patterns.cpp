@@ -42,7 +42,7 @@ int ParsePatterns(FILE *input,
 
 	float currhr,currdr;
 	float currga,currsp;
-	char currbc[4];
+	int currbgred, currbggreen, currbgblue;
 	int currbp,currhd,currpd,currmr;
 	char buf[1024];
 	char current_group[256];
@@ -87,7 +87,8 @@ int ParsePatterns(FILE *input,
 			/* Gravity */
 		} else if(sscanf(buf, "#SP=%f",&currsp) == 1) {
 			/* Speed */
-		} else if(sscanf(buf, "#BC=%3s",currbc) == 1) {
+		} else if(sscanf(buf, "#BC=%1i%1i%1i",&currbgred,
+				&currbggreen,&currbgblue) == 3) {
 			/* BG Color */
 		} else if(sscanf(buf, "#BP=%i",&currbp) == 1) {
 			/* Beep */
@@ -102,6 +103,16 @@ int ParsePatterns(FILE *input,
 			strcpy(current_style, "Normal");
 			currdr = DR_DEF;
 			currhr = HR_DEF;
+			currbgred = 0;
+			currbggreen = 0;
+			currbgblue = 0;
+			currga = 9.8;
+			currsp = 1.0;
+			currbp = 0;
+			currhd = 1;
+			currpd = 1;
+			currmr = 0;
+
 			newgroup = (struct pattern_group_t *)malloc(sizeof(struct pattern_group_t));
 			if(groups->first == NULL) {
 				groups->first = newgroup;
@@ -184,6 +195,15 @@ int ParsePatterns(FILE *input,
 			strncpy(patt->style, current_style, strlen(current_style));
 			patt->hr = currhr;
 			patt->dr = currdr;
+			patt->ga = currga;
+			patt->sp = currsp;	
+			patt->bgred = currbgred;
+			patt->bggreen = currbggreen;
+			patt->bgblue = currbgblue;
+			patt->bp = currbp;
+			patt->hd = currhd;
+			patt->pd = currpd;
+			patt->mr = currmr;
 			patt->next = NULL;
 		}
 	}

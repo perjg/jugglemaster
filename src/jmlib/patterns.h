@@ -43,8 +43,10 @@ struct pattern_t {
 	char *style;
 	char *name;
 	char *data;
-	JML_FLOAT hr;
-	JML_FLOAT dr;
+	float hr, dr; /* Height Ratio, Dwell Ratio */
+	float ga, sp; /* Gravity, Speed */
+	int bgred, bggreen, bgblue; /* Background color */
+	int bp, hd, pd, mr; /* Beep, Hand, Pattern, Mirror */
 	struct pattern_t *next;
 };
 

@@ -1,42 +1,41 @@
 JMLib Distribution License
 
 
-Thank you for downloading JMLib.
-Please read 'JMLib Distribution License' carefully.
+Berkeley-based copyrights:
 
-By downloading the software, you agree to the terms and conditions of
-the license.
+1) General
 
-In the case of disagreement, dispose of the 'Bundle' of which the definition
-is given below.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
 
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of the author may not be used to endorse or promote
+   products derived from this software without specific prior written
+   permission.
 
-Definitions:
-
-'JuggleMaster' is what you downloaded.
-
-'JMLib' consists of files contained in the src/jmlib/ and directory,
-including but not necessarily limited to: jmlib.cpp jmlib.h jmlib_types.h
-juggler.h prefs.cpp prefs.h util.cpp util.h validator.cpp validator.h
-
-'Bundle' is synonymous with JMLib.
-
-1. You have the right to modify some or whole parts of Bundle.
-
-2. You can re-distribute Bundle, or make it public, regardless if it is
-modified or not, as long as it is free and copyrights are specified. In
-the case of re-distribution, you should also attach to it the license
-with exact terms 1 and 2 given here, either in English or Japanese. You
-are allowed to re-define 'Bundle', provided that it includes all the
-components of Bundle you received, and modified ones.
-
-3. Everything you downloaded not part of 'Bundle' is distributed under
-the modified GPL. Please see LICENSE and COPYING for more information.
-
-4. The distributor of JuggleMaster shall not be liable for any
-damages you suffer as a result of using JuggleMaster.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
- In short hand, "You can just change stuff in the jmlib dir to make
- it suit your purpose, and put on your site, but remember to show the
- copyrights. Good day."  Thank you.
+2) JMLib
+
+Version 2.0
+Copyright (C) Gary Briggs 2003-2004
+Copyright (C) Per Johan Persson 2000-2002
+
+Based on JuggleMaster Version 1.60
+Copyright (C) Ken Matsuoka 1995-1996
+

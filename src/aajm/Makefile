@@ -1,7 +1,7 @@
 CXX=c++
 MAKE=make
 
-CXXFLAGS=-Wall -pedantic -Werror -fsigned-char `aalib-config --cflags` -g
+CXXFLAGS=-Wall -pedantic -Werror -fsigned-char `aalib-config --cflags`
 LDFLAGS=`aalib-config --libs`
 
 ifeq ($(DEBUG), 1)

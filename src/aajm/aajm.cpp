@@ -117,6 +117,7 @@ void loadaverage(struct loadavg *load) {
 }
 
 int startlistening(int port) {
+	/* Canned start-socket-listening code */
 	char myname[MAXHOSTNAME+1];
 	int s;
 	struct sockaddr_in sa;
@@ -312,16 +313,28 @@ void main_loop(int max_iterations, int delay,
 
 		FD_ZERO(&socket_set);
 		FD_SET(socket_fd,&socket_set);
+		/* accepted_sock is the fd we get
+			from accept()ing the socket */
 		if(accepted_sock > 0) {
+			/* read just one byte */
 			r = read(accepted_sock,
 				(void *)&socket_buffer[amount_read],1);
 			if(r == -1 && errno != EAGAIN) {
+			/* EAGAIN means we need to try reading again,
+			there wasn't an error, the descriptor just had
+			nothing waiting in it
+			Else, close the handle reset the other data stuff */
 				memset((void *)socket_buffer,0,MAX_SOCKET_BUFFER-amount_read-1);
 				close(accepted_sock);
 				amount_read = 0;
 				accepted_sock = 0;
+				memset((void *)data,0,MAX_SOCKET_BUFFER);
+				memset((void *)command,0,MAX_SOCKET_BUFFER);
 			} else if(r > 0) {
-				amount_read++;
+			/* transfer stuff: command=data; If we see an
+			'=', everything before it was a command. If we
+			see a ';', the stuff before it was data */
+				amount_read+=r;
 				if(socket_buffer[amount_read-1] == '=') {
 					memset((void *)command,0,MAX_SOCKET_BUFFER);
 					memcpy((void *)command,(void *)socket_buffer, amount_read-1);
@@ -375,12 +388,13 @@ void main_loop(int max_iterations, int delay,
 				
 		if(select(socket_fd+1, &socket_set,
 			NULL, NULL, &selecttime) > 0) {
-			sin_size = sizeof(sockaddr);
 			if(FD_ISSET(socket_fd,&socket_set) && accepted_sock) {
 			/* Just close any subsequent conenctions until
 				this one's done */
 				close(accept(socket_fd,&their_addr,&sin_size));
 			} else if(FD_ISSET(socket_fd,&socket_set) && !accepted_sock) {
+			/* Else accept() the socket, and set it to not block */
+				sin_size = sizeof(sockaddr);
 				accepted_sock = accept(socket_fd,&their_addr, &sin_size);
 				fcntl(accepted_sock, F_SETFL, O_NONBLOCK);
 			}

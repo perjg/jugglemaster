@@ -95,8 +95,8 @@ int creatempeg(JMLib *j, const char *filename) {
 
 	draw_juggler(0, aacontext, j);
 	memset((void *)picture_buf, 16, (size*3)/2);
-	memset((void *)picture->data[1], 15, size/4);
-	memset((void *)picture->data[2], 15, size/4);
+	memset((void *)picture->data[1], 128, size/4);
+	memset((void *)picture->data[2], 128, size/4);
 
 	for (xchar = 0; xchar < aa_scrwidth(aacontext); xchar++) {
 		for (ychar = 0; ychar < aa_scrheight(aacontext); ychar++) {
@@ -162,10 +162,11 @@ int creatempeg(JMLib *j, const char *filename) {
 	free(mpegcontext);
 	free(picture);
 
-	aa_close(aacontext);
-
 	return 0;
 	/* this segfaults */
+	aa_close(aacontext);
+
+	/* this does, too */
 	avcodec_close(mpegcontext);
 
 	return(0);

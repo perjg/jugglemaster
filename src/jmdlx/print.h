@@ -20,6 +20,7 @@
 #include <wx/dialog.h>
 #include <wx/progdlg.h>
 #include <wx/image.h>
+#include <wx/list.h>
 #include "../jmlib/jmlib.h"
 #include "jmdlx.h"
 
@@ -42,6 +43,7 @@ protected:
   FILE* outputfile;
 
   void OnOK(wxCommandEvent &event);
+  int printImage();
   int printPS();
 
 #ifdef HAVE_AVCODEC_H
@@ -52,6 +54,7 @@ protected:
   unsigned char RGBgetCb(unsigned char r, unsigned char g, unsigned char b);
 #endif
 
+  void RenderFrame(wxDC *dc, JMLib *j);
   DECLARE_EVENT_TABLE()
 };
 

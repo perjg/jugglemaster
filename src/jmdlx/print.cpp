@@ -46,6 +46,7 @@ Print::Print(wxWindow *parent, JMLib *j)
   // Output Type
 	wxBoxSizer *typesizer = new wxBoxSizer(wxHORIZONTAL);
 	output_type = new wxChoice(this,-1);
+	// output_type->Append("Image");
 	output_type->Append("PostScript");
 	output_type->SetStringSelection("PostScript");
 
@@ -189,6 +190,10 @@ void Print::OnOK(wxCommandEvent &event) {
 		for (i=0; i<400; i++) jmlib->doJuggle();
 	}
 
+	if (output_type->GetStringSelection() == "Image") {
+		print_success = printImage();
+	}
+
 	if (output_type->GetStringSelection() == "PostScript") {
 		print_success = printPS();
 	}
@@ -219,6 +224,46 @@ void Print::OnOK(wxCommandEvent &event) {
 	/* Just make sure it clears out any guff */
 	for (i=0; i<200; i++) jmlib->doJuggle();
 	EndModal(wxID_OK);
+}
+
+int Print::printImage() {
+	wxChoice formatchoice( this, -1 );
+	
+	wxInitAllImageHandlers();
+
+	wxBitmap frame(jmlib->getImageWidth(), jmlib->getImageHeight());
+	wxImage image;
+	wxMemoryDC dc;
+
+	wxImageHandler* handler;
+	printf("Trying to get handlers\n");
+	wxList handlers = wxImage::GetHandlers();
+	printf("Got handlers, trying getfirst\n");
+	wxNode *node = handlers.GetFirst();
+	printf("Got first\n");
+	while(node) {
+		printf("Trying getData\n");
+		handler = (wxImageHandler *)node->GetData();
+		printf("Got Data\n");
+		if(handler->GetExtension().Len() > 0) {
+			formatchoice.Append(handler->GetExtension(), (void *)handler);
+			printf("Handler for mime type %s and extension %s found\n", (const char *)handler->GetMimeType(), (const char *)handler->GetExtension());
+		}
+		printf("Trying getNext\n");
+		node = node->GetNext();
+		printf("Got Next - If it hits this, I'll be pissed\n");
+	}
+
+	dc.SelectObject(frame);
+
+	RenderFrame(&dc, jmlib);
+
+	image = frame.ConvertToImage();
+
+	if(image.SaveFile(filename->GetValue(), 0) == 0) {
+		return 0;
+	}
+	return 1;
 }
 
 int Print::printPS(void) {
@@ -421,10 +466,6 @@ int Print::printMPEG() {
 
 	int current_frames = 0;
 	int done = 0;
-	arm* ap = &(jmlib->ap);
-	ball* rhand = &(jmlib->rhand);
-	ball* lhand = &(jmlib->lhand);
-	hand* handp = &(jmlib->handpoly);
 
 	avcodec_init();
 	avcodec_register_all();
@@ -482,43 +523,8 @@ int Print::printMPEG() {
 		if(current_frames > max_iterations->GetValue()) done=1;
 
 		dc.SelectObject(frame);
-		dc.SetBackground(*wxWHITE_BRUSH);
-		dc.SetPen(*wxBLACK_PEN);
-		dc.SetBrush(*wxWHITE_BRUSH);
-		dc.Clear();
-		// draw head
-		dc.DrawEllipse(ap->hx - ap->hr, ap->hy - ap->hr, ap->hr*2, ap->hr*2);
 
-		// draw juggler
-		for(i=0;i<5;i++){
-			dc.DrawLine(ap->rx[i], ap->ry[i], ap->rx[i+1], ap->ry[i+1]);
-			dc.DrawLine(ap->lx[i], ap->ly[i], ap->lx[i+1], ap->ly[i+1]);
-		}
-
-		// hands
-		for (i=0; i <= 8; i++) {
-			dc.DrawLine(rhand->gx + handp->rx[i], rhand->gy + handp->ry[i],
-				rhand->gx + handp->rx[i+1], rhand->gy + handp->ry[i+1]);
-			dc.DrawLine(lhand->gx + handp->lx[i], lhand->gy + handp->ly[i],
-				lhand->gx + handp->lx[i+1], lhand->gy + handp->ly[i+1]);
-		}
-
-		dc.DrawLine(rhand->gx + handp->rx[9], rhand->gy + handp->ry[9],
-			rhand->gx + handp->rx[0], rhand->gy + handp->ry[0]);
-		dc.DrawLine(lhand->gx + handp->lx[9], lhand->gy + handp->ly[9],
-			lhand->gx + handp->lx[0], lhand->gy + handp->ly[0]);
-
-		dc.SetBrush(*wxRED_BRUSH);
-
-		// draw balls
-		int diam = (11*jmlib->dpm/DW)*2;
-		for(i=jmlib->balln-1;i>=0;i--) {
-			dc.DrawEllipse(jmlib->b[i].gx, jmlib->b[i].gy, diam, diam);
-		}
-		wxString balltext;
-		balltext.Printf("Site: %s    Style: %s    Balls: %i",jmlib->getSite(),jmlib->getStyle(),jmlib->balln);
-		dc.DrawText(balltext, 10, 10);
-
+		RenderFrame(&dc, jmlib);
 
 		image = frame.ConvertToImage();
 		unsigned char why,cr,cb;
@@ -579,16 +585,76 @@ Cb = (-44R - 87G + 131B) / 256 + 128
 */
 
 unsigned char Print::RGBgetY(unsigned char r, unsigned char g, unsigned char b) {
-	return (unsigned char)((((77*r + 150*g + 29*b)/256)*235/256)+16);
+	unsigned char value;
+	value = (77*r + 150*g + 29*b)/256;
+	if(value > 235) value = 235;
+	else if(value < 16) value = 16;
+	return value;
+	// return (unsigned char)((((77*r + 150*g + 29*b)/256)*235/256)+16);
 	//return (unsigned char)(77*r + 150*g + 29*b)/256;
 }
 
 unsigned char Print::RGBgetCb(unsigned char r, unsigned char g, unsigned char b) {
-	return (unsigned char)(((128 + (131*r - 110*g - 12*b)/256)*240/256)+16);
+	unsigned char value;
+	value = 128 + (131*r - 110*g - 12*b)/256;
+	if(value > 240) value = 240;
+	else if(value < 16) value = 16;
+	return value;
+	// return (unsigned char)(((128 + (131*r - 110*g - 12*b)/256)*240/256)+16);
 }
 
 unsigned char Print::RGBgetCr(unsigned char r, unsigned char g, unsigned char b) {
-	return (unsigned char)(((128 + (-44*r - 87*g + 131*b)/256)*240/256)+16);
+	unsigned char value;
+	value = 128 + (-44*r - 87*g + 131*b)/256;
+	if(value > 240) value = 240;
+	else if(value < 16) value = 16;
+	return value;
+	// return (unsigned char)(((128 + (-44*r - 87*g + 131*b)/256)*240/256)+16);
 }
 
 #endif
+
+void Print::RenderFrame(wxDC *dc, JMLib *j) {
+	int i;
+	arm* ap = &(j->ap);
+	ball* rhand = &(j->rhand);
+	ball* lhand = &(j->lhand);
+	hand* handp = &(j->handpoly);
+	dc->SetBackground(*wxWHITE_BRUSH);
+	dc->SetPen(*wxBLACK_PEN);
+	dc->SetBrush(*wxWHITE_BRUSH);
+	dc->Clear();
+	// draw head
+	dc->DrawEllipse(ap->hx - ap->hr, ap->hy - ap->hr, ap->hr*2, ap->hr*2);
+
+	// draw juggler
+	for(i=0;i<5;i++){
+		dc->DrawLine(ap->rx[i], ap->ry[i], ap->rx[i+1], ap->ry[i+1]);
+		dc->DrawLine(ap->lx[i], ap->ly[i], ap->lx[i+1], ap->ly[i+1]);
+	}
+
+	// hands
+	for (i=0; i <= 8; i++) {
+		dc->DrawLine(rhand->gx + handp->rx[i], rhand->gy + handp->ry[i],
+			rhand->gx + handp->rx[i+1], rhand->gy + handp->ry[i+1]);
+		dc->DrawLine(lhand->gx + handp->lx[i], lhand->gy + handp->ly[i],
+			lhand->gx + handp->lx[i+1], lhand->gy + handp->ly[i+1]);
+	}
+
+	dc->DrawLine(rhand->gx + handp->rx[9], rhand->gy + handp->ry[9],
+		rhand->gx + handp->rx[0], rhand->gy + handp->ry[0]);
+	dc->DrawLine(lhand->gx + handp->lx[9], lhand->gy + handp->ly[9],
+		lhand->gx + handp->lx[0], lhand->gy + handp->ly[0]);
+
+	dc->SetBrush(*wxRED_BRUSH);
+
+	// draw balls
+	int diam = (11*j->dpm/DW)*2;
+	for(i=j->balln-1;i>=0;i--) {
+		dc->DrawEllipse(j->b[i].gx, j->b[i].gy, diam, diam);
+	}
+	wxString balltext;
+	balltext.Printf("Site: %s    Style: %s    Balls: %i",j->getSite(),j->getStyle(),j->balln);
+	dc->DrawText(balltext, 10, 10);
+
+}

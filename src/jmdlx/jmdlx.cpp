@@ -143,7 +143,7 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 
   menuBar->Append(fileMenu, "&File");
   menuBar->Append(optionsMenu, "&Options");
-  menuBar->Append(speedMenu, "&Speed");
+  // menuBar->Append(speedMenu, "&Speed");
   menuBar->Append(helpMenu, "&Help");
   SetMenuBar(menuBar);
 

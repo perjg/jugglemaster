@@ -6,6 +6,7 @@ Version 0.5
  - data: Added more patterns
  - jmlib: Other minor fixes
  - aajm: Added MPEG support [I scare me]
+ - jmdlx: New bloodshed files, Thanks to Shawn Fumo
  - all: Makefile voodoo, add VERSION to CFLAGS
 
 Version 0.4

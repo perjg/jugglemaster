@@ -54,6 +54,8 @@ create JuggleMaster.app.
 
 To build on Windows using Visual Studio, extract VisualStudio.zip
 where it is, and build.
+To build on Windows using BloodShed's Dev-CPP, extract dev-cpp.zip where
+it is, and build. More detailed instructions are in the zip file.
 
 If you don't have patterns.jm and semaphore.jm in the current dir when
 you run it, it attempts to download them to a suitable directory (on

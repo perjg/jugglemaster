@@ -79,6 +79,10 @@ void draw_juggler(void) {
 	aa_printf(context, 0, 0, AA_SPECIAL,
 		"Site: %s    Style: %s    Balls: %i",
 		jmlib->getSite(), jmlib->getStyle(), jmlib->balln);
+
+	if(jmlib->getStatus() == ST_PAUSE) {
+		aa_puts(context, 0, 1, AA_SPECIAL, "Paused");
+	}
 	aa_flush(context);
 
 	memset(context->imagebuffer,0,AAWIDTH(context)*AAHEIGHT(context));
@@ -121,7 +125,7 @@ void main_loop(void) {
 			/* 27 == Escape
 			Don't complain. This was a hack before it started */
 			return;
-		} else if(c==' ') {
+		} else if(c==' ' || c=='p' || c=='P') {
 			/* Toggle Pause */
 			jmlib->togglePause();
 		} else if(c=='t' || c=='T') {
@@ -142,6 +146,23 @@ void main_loop(void) {
 					jmlib->setStyle(possible_styles[newstyle_index]);
 				}
 			}
+		} else if(c=='h' || c=='H') {
+			aa_puts(context, 3, 4, AA_SPECIAL,
+				"Key Help");
+			aa_puts(context, 3, 6, AA_SPECIAL,
+				"h - This screen");
+			aa_puts(context, 3, 7, AA_SPECIAL,
+				"s - Change Siteswap");
+			aa_puts(context, 3, 8, AA_SPECIAL,
+				"t - Change Style");
+			aa_puts(context, 3, 9, AA_SPECIAL,
+				"q - Quit");
+			aa_puts(context, 3, 10, AA_SPECIAL,
+				"space - Pause");
+			aa_puts(context, 3, 12, AA_SPECIAL,
+				"Press any key to remove this menu");
+			aa_flush(context);
+			aa_getkey(context, 1);
 		}
 		usleep(35);
 	}

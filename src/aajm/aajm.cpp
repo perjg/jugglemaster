@@ -224,10 +224,32 @@ void main_loop(int max_iterations, int delay,
 			aa_edit(context, 1, 5, 20,
 				newsite, JML_MAX_SITELEN);
 			if(newsite[0]!=0) {
-				jmlib->setPattern("Something",newsite,
+				jmlib->setPattern(newsite,newsite,
 					HR_DEF, DR_DEF);
 				jmlib->setStyleDefault();
 				jmlib->startJuggle();
+			}
+		} else if(c=='r' || c=='R') {
+			JML_CHAR *randompatt = NULL;
+			int getout = 0;
+			while(randompatt == NULL && getout < 5) {
+				randompatt = jm_randnoparam();
+					/* Temporary hack until it doesn't produce 0xs */
+				if(randompatt != NULL &&
+					strstr(randompatt,"0x") != NULL)  {
+					free(randompatt);
+					randompatt = NULL;
+				}
+				getout++;
+			}
+			if(randompatt != NULL) {
+				jmlib->setPattern("Random Pattern", randompatt,
+					HR_DEF, DR_DEF);
+				/* printf("Random Pattern: %s, got it on the %i try\n",
+					randompatt, getout); */
+				jmlib->setStyleDefault();
+				jmlib->startJuggle();
+				free(randompatt);
 			}
 		} else if(c=='q' || c=='Q' || c==27) {
 			/* Quit */
@@ -265,6 +287,8 @@ void main_loop(int max_iterations, int delay,
 				"h - This screen");
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
 				"s - Change Siteswap");
+			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
+				"r - Random Pattern");
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
 				"t - Change Style");
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,

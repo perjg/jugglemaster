@@ -16,6 +16,7 @@ and Abrash supplied the algorithms for the aa_ series of files here.
 
 Once running, you can use the following keys:
 s - change siteswap
+r - random pattern
 t - change style
 l - toggle load monitoring
 m - Dump MPEG

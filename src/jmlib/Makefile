@@ -20,4 +20,7 @@ clean:
 	rm -f *.o core jmlib.a patterns
 
 p: clean patterns
-	./patterns -q ../../data/patterns.jm
+	./patterns ../../data/patterns.jm
+
+v: clean patterns
+	valgrind --leak-check=yes ./patterns -q ../../data/patterns.jm

@@ -22,10 +22,28 @@
 #include <errno.h>
 #include "./patterns.h"
 
+
+/*
+
+From the default patterns.jm:
+#GA=9.8         ;Gravity (0<f<=98) [meter/second^2]
+#DR=0.50        ;Dwell ratio (0.10<=f<=0.90)
+#HR=0.20        ;Height (0.01<=f<=1.00) [meter]
+#SP=1.0         ;Speed ratio (0.1<=f<=2.0)
+#BC=000         ;Background color  Red Green Blue (0<=R,G,B<=F)
+#BP=1           ;Beep ON (n=0,1)
+#HD=1           ;Hand ON (n=0,1)
+#PD=1           ;Pattern ON (n=0,1)
+#MR=0           ;Switch right and left (n=0,1)
+*/
+
 int ParsePatterns(FILE *input, 
 	struct groups_t *groups, struct styles_t *styles) {
 
 	float currhr,currdr;
+	float currga,currsp;
+	char currbc[4];
+	int currbp,currhd,currpd,currmr;
 	char buf[1024];
 	char current_group[256];
 	char current_style[256];
@@ -65,13 +83,26 @@ int ParsePatterns(FILE *input,
 			} else if (currdr < DR_MIN) {
 				currdr = DR_MIN;
 			}
+		} else if(sscanf(buf, "#GA=%f",&currga) == 1) {
+			/* Gravity */
+		} else if(sscanf(buf, "#SP=%f",&currsp) == 1) {
+			/* Speed */
+		} else if(sscanf(buf, "#BC=%3s",currbc) == 1) {
+			/* BG Color */
+		} else if(sscanf(buf, "#BP=%i",&currbp) == 1) {
+			/* Gravity */
+		} else if(sscanf(buf, "#HD=%i",&currhd) == 1) {
+			/* Speed */
+		} else if(sscanf(buf, "#PD=%i",&currpd) == 1) {
+			/* BG Color */
+		} else if(sscanf(buf, "#MR=%i",&currmr) == 1) {
+			/* Mirror */
 		} else if(sscanf(buf, "/[ %255[^]] ]",current_group) == 1) {
 			/* New Group */
 			strcpy(current_style, "Normal");
 			currdr = DR_DEF;
 			currhr = HR_DEF;
 			newgroup = (struct pattern_group_t *)malloc(sizeof(struct pattern_group_t));
-
 			if(groups->first == NULL) {
 				groups->first = newgroup;
 			}
@@ -82,6 +113,8 @@ int ParsePatterns(FILE *input,
 			group = newgroup;
 			group->name = (char *)malloc(strlen(current_group) + 1);
 			strcpy(group->name, current_group);
+			group->first_patt = NULL;
+			group->next = NULL;
 		} else if(sscanf(buf, "%%%255[^\n]",current_style) == 1) {
 			/* New Style */
 			if(Find_Style(styles,current_style) != NULL) continue;
@@ -121,6 +154,7 @@ int ParsePatterns(FILE *input,
 			style->data[style->length-3] = y1;
 			style->data[style->length-2] = x1;
 			style->data[style->length-1] = y1;
+			style->next = NULL;
 		} else if (legal_pattern_first_char(buf[0])) {
 			/* Pattern */
 			if(sscanf(buf, "%255s %255[^\n]", pattern_data, pattern_name) != 2) {
@@ -154,6 +188,7 @@ int ParsePatterns(FILE *input,
 			strncpy(patt->style, current_style, strlen(current_style));
 			patt->hr = currhr;
 			patt->dr = currdr;
+			patt->next = NULL;
 		}
 	}
 	return(1);
@@ -170,7 +205,7 @@ void FreeGroups(struct groups_t *groups) {
 	while(group) {
 		patt = group->first_patt;
 		while(patt) {
-			/* if(patt->name != NULL) {
+			if(patt->name != NULL) {
 				free((void *)patt->name);
 			}
 			if(patt->data != NULL) {
@@ -178,7 +213,7 @@ void FreeGroups(struct groups_t *groups) {
 			}
 			if(patt->style != NULL) {
 				free((void *)patt->style);
-			} */
+			}
 			tmppatt = patt;
 			patt = patt->next;
 			free((void *)tmppatt);
@@ -197,6 +232,7 @@ void FreeStyles(struct styles_t *styles) {
 	struct style_t *style = NULL;
 	struct style_t *tmpstyle = NULL;
 
+	if(styles == NULL) return;
 	style = styles->first;
 	while(style) {
 		if(style->name != NULL) {

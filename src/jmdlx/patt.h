@@ -30,58 +30,34 @@
 
 #define WEB_PREFIX "http://icculus.org/jugglemaster/"
 
-
-struct StyleDefn {
-	JML_INT8 *data;
-	JML_UINT8 length;
-};
-
-class PatternDefn {
-	public:
-	wxString style;
-	wxString name;
-	wxString data;
-	JML_FLOAT hr;
-	JML_FLOAT dr;
-};
-
-WX_DECLARE_STRING_HASH_MAP( StyleDefn, StyleHash );
-WX_DECLARE_LIST( PatternDefn, PatternList );
-
-// All Patterns is a hash of lists of structs.
-//    section-name -> list-of-patterns-for-section
-WX_DECLARE_STRING_HASH_MAP( PatternList*, PatternsHash );
-
 class PatternLoader {
 	protected:
-		wxTextFile *patternfile;
+		FILE *patternfile;
 		wxWindow *parent;
-		StyleHash styles;
-		PatternsHash allpatterns;
-		PatternsHash::iterator current_section_it;
-		wxString current_section_name;
-		PatternList::Node *current_pattern_node;
-		wxString current_pattern_name;
-		PatternDefn *current_pattern;
-		PatternDefn *chosen_pattern;
 		int can_use;
 		int OpenFile(const char *,int);
+		int ParseFile();
+		int CloseFile();
+		struct groups_t groups;
+		struct styles_t styles;
+		struct pattern_group_t *current_group;
+		struct style_t *current_style;
+		struct pattern_t *current_pattern;
 
 	public:
 		PatternLoader(wxWindow *p = NULL, int redownload=0);
 		PatternLoader(const char *filename, wxWindow *p = NULL, int redownload=0);
 		~PatternLoader();
-		int ParseFile();
 		int Usable();
 		void PrintStyles();
 		void PrintSections();
-		JML_INT8* GetStyle(wxString stylename);
-		JML_UINT8 GetStyleLength(wxString stylename);
-		wxString *GetFirstSection();
-		wxString *GetNextSection();
-		int SetSection(wxString *section_name);
-		wxString *GetNextPatternName();
-		PatternDefn *GetPattern(wxString *section_name,const wxString *pattern_name);
+		JML_INT8* GetStyle(const char *stylename);
+		JML_UINT8 GetStyleLength(const char *stylename);
+		const char *GetFirstSection();
+		const char *GetNextSection();
+		int SetSection(const char *section_name);
+		const char *GetNextPatternName();
+		struct pattern_t *GetPattern(const char *section_name,const char *pattern_name);
 };
 
 

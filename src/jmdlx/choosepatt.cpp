@@ -35,16 +35,16 @@ ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
 
 
 
-  wxString *curr_patt;
+  const char *curr_patt;
   wxBoxSizer *choicesizer = new wxBoxSizer(wxVERTICAL);
 
   sectionChoice = new wxChoice(this,
                                 -1,
                                 wxDefaultPosition,
                                 wxDefaultSize);
-  wxString *curr_sect;
+  const char *curr_sect;
   for(curr_sect = patterns->GetFirstSection(); curr_sect ; curr_sect=patterns->GetNextSection()) {
-        sectionChoice->Append((wxString &)*curr_sect);
+        sectionChoice->Append(curr_sect);
   }
   sectionChoice->SetSelection(0);
 
@@ -53,10 +53,10 @@ ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
                                 wxDefaultPosition,
                                 wxDefaultSize);
 
-  wxString newSection=sectionChoice->GetStringSelection();
-  patterns->SetSection(&newSection);
+  const char *newSection=(const char *)sectionChoice->GetStringSelection();
+  patterns->SetSection(newSection);
   while((curr_patt = patterns->GetNextPatternName())) {
-        patternListBox->Append((wxString &)*curr_patt);
+        patternListBox->Append(curr_patt);
   }
 
   choicesizer->Add(sectionChoice,0,wxALIGN_TOP|wxEXPAND|wxALL,5);
@@ -114,7 +114,7 @@ ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
 }
 
 void ChoosePatt::ApplySettings() {
-	PatternDefn *patt;
+	struct pattern_t *patt;
 	wxString newSection;
 	wxString newPattern;
 	newSection = sectionChoice->GetStringSelection();
@@ -122,31 +122,31 @@ void ChoosePatt::ApplySettings() {
 	if(!newSection || !newPattern) {
 		return;
 	}
-	patt = patterns->GetPattern(&newSection,&newPattern);
+	patt = patterns->GetPattern((const char *)newSection,(const char *)newPattern);
 	jmlib->stopJuggle();
-	jmlib->setPattern((JML_CHAR *)(const char *)patt->name,(JML_CHAR *)(const char *)patt->data, patt->hr, patt->dr);
-	JML_UINT8 style_length = patterns->GetStyleLength(patt->style);
-	JML_INT8* style_data = patterns->GetStyle(patt->style);
+	jmlib->setPattern((JML_CHAR *)Patt_GetName(patt),(JML_CHAR *)Patt_GetData(patt), Patt_GetHR(patt), Patt_GetDR(patt));
+	JML_UINT8 style_length = patterns->GetStyleLength(Patt_GetStyle(patt));
+	JML_INT8* style_data = patterns->GetStyle(Patt_GetStyle(patt));
 	if(style_length>0) {
-		jmlib->setStyle((JML_CHAR *)(const char *)patt->style,style_length/4,style_data);
+		jmlib->setStyle((JML_CHAR *)Patt_GetStyle(patt),style_length/4,style_data);
 	} else {
-		jmlib->setStyle((JML_CHAR *)(const char *)patt->style);
+		jmlib->setStyle((JML_CHAR *)Patt_GetStyle(patt));
 	}
 	jmlib->startJuggle();
 	haschanged=0;
 }
 
 void ChoosePatt::UpdateShownValues() {
-	PatternDefn *patt;
+	struct pattern_t *patt;
 	wxString newSection;
 	wxString newPattern;
 
 	newPattern = patternListBox->GetStringSelection();
 	newSection = sectionChoice->GetStringSelection();
-	patt = patterns->GetPattern(&newSection,&newPattern);
+	patt = patterns->GetPattern((const char *)newSection,(const char *)newPattern);
 
-	showStyle->SetValue(patt->style);
-	showSite->SetValue(patt->data);
+	showStyle->SetValue(Patt_GetStyle(patt));
+	showSite->SetValue(Patt_GetData(patt));
 }
 
 void ChoosePatt::OnApply(wxCommandEvent &event) {
@@ -168,16 +168,18 @@ void ChoosePatt::PattChange(wxCommandEvent &event) {
 }
 
 void ChoosePatt::PattDblClick(wxCommandEvent &event) {
-	ApplySettings();
+	if(haschanged) {
+		ApplySettings();
+	}
 }
 
 void ChoosePatt::SectionChange(wxCommandEvent &event) {
 	wxString newSection=sectionChoice->GetStringSelection();
-	patterns->SetSection(&newSection);
+	patterns->SetSection((const char *)newSection);
 	patternListBox->Clear();
-	wxString *curr_patt;
+	const char *curr_patt;
 	while ((curr_patt = patterns->GetNextPatternName())) {
-		patternListBox->Append(*curr_patt);
+		patternListBox->Append(curr_patt);
 	}
 	haschanged=1;
 }

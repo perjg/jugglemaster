@@ -20,9 +20,9 @@ patterns:
 	$(CXX) $(CXXFLAGS) -DPATTERNS_STANDALONE -c -o ./patterns-standalone.o ./patterns.cpp
 	$(CXX) $(LDFLAGS) -o ./patterns ./patterns-standalone.o $(LIBS)
 
-rand:
+rand: clean validator.o
 	$(CXX) $(CXXFLAGS) -DRAND_STANDALONE -c -o ./rand-standalone.o ./randompatt.cpp
-	$(CXX) $(LDFLAGS) -o ./rand ./rand-standalone.o $(LIBS)
+	$(CXX) $(LDFLAGS) -o ./rand ./rand-standalone.o validator.o $(LIBS)
 
 clean:
 	rm -f *.o core jmlib.a patterns rand

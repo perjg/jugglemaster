@@ -22,6 +22,10 @@
 #include <errno.h>
 #include "./randompatt.h"
 
+#ifdef RAND_STANDALONE
+#include "./validator.h"
+#endif
+
 /* All maths in this file courtesy of Aidan Burns,
 http://www.geocities.com/aidanjburns/contents.html */
 
@@ -43,7 +47,7 @@ back of a pattern.
 JML_CHAR *jm_rand(JML_INT8 numballs, JML_INT8 pattlen,
         JML_INT8 transformations, JML_BOOL synchronous) {
 	if(synchronous) {
-		return jm_rand_sync(numballs, pattlen, transformations);
+		return jm_rand_sync(numballs, (pattlen + 1)/2, transformations);
 	} else {
 		return jm_rand_async(numballs, pattlen, transformations);
 	}
@@ -76,7 +80,7 @@ JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,
 		int tmp;
 
 		first = rand()%pattlen;
-		distance = rand()%pattlen;
+		distance = rand()%pattlen - first;
 
 		if((buf[first] - distance >= 0) &&
 			(buf[(first+distance)%pattlen] + distance >= 0) &&
@@ -193,14 +197,17 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 			int distance, first;
 			int tmp;
 			int *switchbuffer;
+			int *switchbuffercross;
 
 			first = rand()%pattlen;
 			distance = rand()%pattlen;
 
 			if(rand()%1) {
 				switchbuffer = left;
+				switchbuffercross = leftcross;
 			} else {
 				switchbuffer = right;
+				switchbuffercross = rightcross;
 			}
 
 			if((switchbuffer[first] - distance*2 >= 0) &&
@@ -211,6 +218,10 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 				tmp = switchbuffer[first] - distance*2;
 				switchbuffer[first] = switchbuffer[(first+distance)%pattlen] + distance*2;
 				switchbuffer[(first+distance)%pattlen] = tmp;
+
+				tmp = switchbuffercross[first];
+				switchbuffercross[first] = switchbuffercross[(first+distance)%pattlen];
+				switchbuffercross[(first+distance)%pattlen] = tmp;
 				i++;
 			} else if((switchbuffer[first] + (numballs - distance*2) >= 0) &&
 				(switchbuffer[(first+distance)%pattlen] - (numballs - distance*2) >= 0) &&
@@ -220,6 +231,10 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 				tmp = switchbuffer[first] + (numballs - distance*2);
 				switchbuffer[first] = switchbuffer[(first+distance)%pattlen] - (numballs - distance*2);
 				switchbuffer[(first+distance)%pattlen] = tmp;
+
+				tmp = switchbuffercross[first];
+				switchbuffercross[first] = switchbuffercross[(first+distance)%pattlen];
+				switchbuffercross[(first+distance)%pattlen] = tmp;
 				i++;
 			} else {
 				j++;
@@ -284,9 +299,10 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 int main(int argc, char *argv[]) {
 	int numballs, pattlen, transformations, sync;
 	JML_CHAR *pattern;
-	char line[100];
+	JMSiteValidator val;
 
-	FILE *inputfile;
+	/* FILE *inputfile;
+	char line[100];
 
 	if(argc < 2 || strcmp(argv[1],"-h") == 0) {
 		printf("Usage: %s <inputfile>\n"
@@ -312,6 +328,34 @@ int main(int argc, char *argv[]) {
 			if(pattern != NULL) {
 				printf("Pattern: %s\n",pattern);
 				free(pattern);
+			}
+		}
+	} */
+	for(sync = 0; sync <= 1; sync++) {
+		for(numballs = 0; numballs<=10; numballs++) {
+			for(pattlen = 1; pattlen < 10; pattlen++) {
+				for(transformations = 0; transformations < 10; transformations ++) {
+					int showpat = 0;
+					pattern = jm_rand(numballs, pattlen, transformations, sync);
+					if(pattern != NULL) {
+						if(val.validateSite(pattern)) {
+							printf("SUCCESS");
+						} else {
+							printf("FAIL");
+							showpat++;
+						}
+					} else {
+						printf("NULL RETURNED ");
+					}
+					printf(" - balls: %i len: %i, tran: %i, sync: %i\n",
+						numballs, pattlen, transformations, sync);
+					if(showpat) {
+						printf("     %s\n", pattern);
+					}
+					if(pattern != NULL) {
+						free(pattern);
+					}
+				}
 			}
 		}
 	}

@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
 			"numballs=%i pattlen=%i transformations=%i",&numballs,
 			&pattlen, &transformations)) {
 
-			pattern = jm_rand(numballs, pattlen, transformations);
+			pattern = jm_rand(numballs, pattlen, transformations, 0);
 			printf("Balls: %i, Pattlen: %i, Transformations: %i\n",
 				numballs, pattlen, transformations);
 			if(pattern != NULL) {

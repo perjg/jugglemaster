@@ -23,6 +23,9 @@
 
 # This is another of those pieces of code that's reserving me a spot in hell.
 
+# To use this, copy patterns.jm to the current dir, and run it. It'll
+# output patterns.cs
+
 my $numgroups = -1; # My skin burns
 my $numcurrpatts = 0;
 my $currstyle = "Normal";

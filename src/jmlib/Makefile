@@ -10,11 +10,12 @@ endif
 DATA=../../data/patterns.jm ../../data/semaphore.jm
 OBJ=jmlib.o prefs.o util.o validator.o patterns.o randompatt.o
 
-all: jmlib.a
+LIBNAME=libjm.a
+all: $(LIBNAME)
 
-jmlib.a: $(OBJ)
-	ar -r jmlib.a $(OBJ)
-	ranlib jmlib.a
+$(LIBNAME): $(OBJ)
+	ar -r $(LIBNAME) $(OBJ)
+	ranlib $(LIBNAME)
 
 patterns:
 	$(CXX) $(CXXFLAGS) -DPATTERNS_STANDALONE -c -o ./patterns-standalone.o ./patterns.cpp
@@ -26,7 +27,7 @@ rand: clean validator.o
 	./rand | less
 
 clean:
-	rm -f *.o core jmlib.a patterns rand
+	rm -f *.o core $(LIBNAME) patterns rand
 
 p: clean patterns
 	./patterns $(DATA)

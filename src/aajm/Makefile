@@ -1,8 +1,8 @@
 include ../../Makefile.cfg
 
 CXXFLAGS+=-Wall -fsigned-char `aalib-config --cflags`
-CFLAGS+=-Wall -fsigned-char `aalib-config --cflags`
-LIBS+=`aalib-config --libs`
+CFLAGS+=-Wall -fsigned-char `aalib-config --cflags` -I../jmlib
+LIBS+=`aalib-config --libs` -L../jmlib -ljm
 BINARY=aajm
 INSTALL=install
 
@@ -22,7 +22,7 @@ OBJ=aa_drawcircle.o aa_drawline.o aajm.o aampeg.o
 all: aajm aajm-remote
 
 aajm: jm_lib $(OBJ)
-	$(CXX) $(LDFLAGS) -o $(BINARY) $(OBJ) $(LIBS) ../jmlib/jmlib.a
+	$(CXX) $(LDFLAGS) -o $(BINARY) $(OBJ) $(LIBS)
 
 jm_lib:
 	$(MAKE) -C ../jmlib

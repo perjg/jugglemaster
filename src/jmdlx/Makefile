@@ -1,11 +1,11 @@
 include ../../Makefile.cfg
 
-CXXFLAGS+=-Wall -fsigned-char `wx-config --cppflags`
+CXXFLAGS+=-Wall -fsigned-char `wx-config --cppflags` -I../jmlib
 # -ansi -pedantic cause warnings from some compilers [wx uses long long]
 LDFLAGS+=`wx-config --ldflags`
 # STATICFLAGS=-Wl,-Bstatic
 STATICFLAGS=-static
-LIBS+=`wx-config --libs`
+LIBS+=`wx-config --libs` -L../jmlib -ljm
 BINARY=jmdlx
 INSTALL=install
 
@@ -30,7 +30,7 @@ OBJ=jmdlx.o patt.o advsite.o choosepatt.o choosestyle.o newsemaphore.o print.o
 all: jmdlx
 
 jmdlx: jm_lib $(OBJ)
-	$(CXX) $(LDFLAGS) -o ./$(BINARY) $(CFLAGS) $(OBJ) ../jmlib/jmlib.a $(LIBS)
+	$(CXX) $(LDFLAGS) -o ./$(BINARY) $(CFLAGS) $(OBJ) $(LIBS)
 	cp ../../data/*.jm .
 
 osx: all
@@ -51,7 +51,7 @@ install:
 patt: jm_lib
 	rm -f patt.o
 	$(CXX) -DPATT_STANDALONE $(CXXFLAGS) -c -o ./patt.o ./patt.cpp
-	$(CXX) $(LDFLAGS) -o ./patt ./patt.o ../jmlib/jmlib.a $(LIBS)
+	$(CXX) $(LDFLAGS) -o ./patt ./patt.o $(LIBS)
 
 clean:
 	rm -f *.o core $(BINARY) $(BINARY)-static patt patterns.jm semaphore.jm

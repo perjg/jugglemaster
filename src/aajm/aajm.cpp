@@ -116,6 +116,12 @@ void loadaverage(struct aajm_loadavg *load) {
 		fscanf(loadf, "%f %f %f",
 			&load->one, &load->five, &load->fifteen);
 		fclose(loadf);
+	} else {
+		double l[3];
+		getloadavg(l,3);
+		load->one = (float)l[0];
+		load->five = (float)l[1];
+		load->fifteen = (float)l[2];
 	}
 }
 

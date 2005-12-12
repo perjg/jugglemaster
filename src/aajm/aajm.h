@@ -43,6 +43,8 @@ struct aajm_loadavg {
 /* speed is in microseconds-between-frames, because I'm that lazy */
 #define DEFSPEED 18000
 #define DEFLOAD (float)0.2
+#define DEFRANDOMSITETIME 600.0
+#define DEFRANDOMSTYLETIME 150.0
 
 
 void errorCB(char* msg);

@@ -162,9 +162,37 @@ void resizehandler(aa_context *resized_context) {
 	context = resized_context;
 }
 
+void randompattern(void) {
+	JML_CHAR *randompatt = NULL;
+	int getout = 0;
+	while(randompatt == NULL && getout < 5) {
+		randompatt = jm_randnoparam();
+			/* Temporary hack until it doesn't produce 0xs */
+		if(randompatt != NULL &&
+			strstr(randompatt,"0x") != NULL)  {
+			free(randompatt);
+			randompatt = NULL;
+		}
+		getout++;
+	}
+	if(randompatt != NULL) {
+		jmlib->setPattern("Random Pattern", randompatt,
+			HR_DEF, DR_DEF);
+		/* printf("Random Pattern: %s, got it on the %i try\n",
+			randompatt, getout); */
+		//jmlib->setStyleDefault();
+		jmlib->startJuggle();
+		free(randompatt);
+	}
+}
+
+
 void main_loop(int max_iterations, int delay,
-		int loadavg_flag, int normal_load, int socket_fd) {
+		int loadavg_flag, int normal_load, int socket_fd,
+		float randomizestyletime, float randomizesitetime) {
 	struct timeval starttime, endtime, selecttime;
+	struct timeval lastrandomizestyletime={0,0};
+	struct timeval lastrandomizesitetime ={0,0};
 	struct aajm_loadavg load;
 	long speed = DEFSPEED; /* microseconds between frames */
 	long load_speed = 0; /* Speed adjustment, based on load */
@@ -208,6 +236,23 @@ void main_loop(int max_iterations, int delay,
 
 	while (1) {
 		gettimeofday(&starttime,NULL);
+                if (randomizesitetime > 0 &&
+                           (starttime.tv_sec -lastrandomizesitetime.tv_sec ) +
+                    (float)(starttime.tv_usec-lastrandomizesitetime.tv_usec)/1000000
+                     >= randomizesitetime) {
+                        randompattern();
+                        lastrandomizesitetime.tv_sec  = starttime.tv_sec;
+                        lastrandomizesitetime.tv_usec = starttime.tv_usec;
+                }
+                if (randomizestyletime > 0 &&
+                           (starttime.tv_sec -lastrandomizestyletime.tv_sec ) +
+                    (float)(starttime.tv_usec-lastrandomizestyletime.tv_usec)/1000000
+                      >= randomizestyletime) {
+                        jmlib->setStyle("Random");
+                        lastrandomizestyletime.tv_sec  = starttime.tv_sec;
+                        lastrandomizestyletime.tv_usec = starttime.tv_usec;
+                }
+
 		jmlib->doJuggle();
 		draw_juggler(loadavg_flag, context, jmlib);
 
@@ -235,27 +280,7 @@ void main_loop(int max_iterations, int delay,
 				jmlib->startJuggle();
 			}
 		} else if(c=='r' || c=='R') {
-			JML_CHAR *randompatt = NULL;
-			int getout = 0;
-			while(randompatt == NULL && getout < 5) {
-				randompatt = jm_randnoparam();
-					/* Temporary hack until it doesn't produce 0xs */
-				if(randompatt != NULL &&
-					strstr(randompatt,"0x") != NULL)  {
-					free(randompatt);
-					randompatt = NULL;
-				}
-				getout++;
-			}
-			if(randompatt != NULL) {
-				jmlib->setPattern("Random Pattern", randompatt,
-					HR_DEF, DR_DEF);
-				/* printf("Random Pattern: %s, got it on the %i try\n",
-					randompatt, getout); */
-				jmlib->setStyleDefault();
-				jmlib->startJuggle();
-				free(randompatt);
-			}
+                        randompattern();
 		} else if(c=='q' || c=='Q' || c==27) {
 			/* Quit */
 			/* 27 == Escape
@@ -471,8 +496,11 @@ int main(int argc, char **argv) {
 	int delay = 0;
 	int normal_load;
 	int socket_fd = -1;
+	float randomizestyletime = 0;
+	float randomizesitetime  = 0;
+	char *endptr;
 
-	char options[] = "aljhip:n:d:m:t:s:";
+	char options[] = "aljhip:n:d:m:t:s:T:S:";
 	static struct option long_options[] =
         {
 		{"help", no_argument, &help_flag, 1},
@@ -486,6 +514,8 @@ int main(int argc, char **argv) {
 		{"delay", required_argument, 0, 'd'},
 		{"siteswap", required_argument, 0, 's'},
 		{"style", required_argument, 0, 't'},
+		{"rstyle", required_argument, 0, 'S'},
+		{"rsiteswap", required_argument, 0, 'T'},
 		{0,0,0,0}
 	};
 
@@ -509,6 +539,18 @@ int main(int argc, char **argv) {
 				break;
 			case 't':
 				jmlib->setStyle(optarg);
+				break;
+			case 'S':
+				randomizesitetime = strtod(optarg, &endptr);
+				if (endptr==optarg || *endptr != 0) {
+						randomizesitetime = DEFRANDOMSITETIME;
+				}
+				break;
+			case 'T':
+				randomizestyletime = strtod(optarg, &endptr);
+				if (endptr==optarg || *endptr != 0) {
+						randomizestyletime = DEFRANDOMSTYLETIME;
+				}
 				break;
 			case 'h':
 				help_flag=1;
@@ -547,6 +589,8 @@ int main(int argc, char **argv) {
 		printf("Jugglemaster Options:\n");
 		printf("  -s, --siteswap=XX          show siteswap XX (3)\n");
 		printf("  -t, --style=XX             use style XX (\"Normal\")\n");
+		printf("  -S, --rsiteswap=XX         Randomize siteswap every XX seconds (%f)\n", DEFRANDOMSITETIME);
+		printf("  -T, --rstyle=XX            Randomize style every XX seconds (%f)\n", DEFRANDOMSTYLETIME);
 		printf("  -d, --delay=XX             delay XX ms between frames (%i)\n", (int)DEFSPEED/1000);
 		printf("  -m, --maxiterations=XX     do at most XX iterations\n");
 		printf("  -j, --justoutput           only output [don't init kb or mouse]\n");
@@ -591,7 +635,8 @@ int main(int argc, char **argv) {
 		socket_fd = startlistening(port_num);
 	}
 
-	main_loop(max_iterations,delay,loadavg_flag,normal_load, socket_fd);
+	main_loop(max_iterations,delay,loadavg_flag,normal_load, socket_fd,
+                  randomizestyletime, randomizesitetime);
 
 	if(socket_fd > 0) {
 		stoplistening(socket_fd);

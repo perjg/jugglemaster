@@ -17,6 +17,7 @@ Version 0.5
  - jmdlx: New bloodshed files, Thanks to Shawn Fumo
  - all: Makefile voodoo, add VERSION to CFLAGS
  - data: Added all valid patterns in my unix dictionary
+ - aajm: Added screensaver type options -T -S, thanks Jorgen Cederlof
 
 Version 0.4
 2004-09-01

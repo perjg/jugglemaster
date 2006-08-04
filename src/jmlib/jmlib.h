@@ -1,10 +1,9 @@
 // 	$Id$	 
 
-
 /*
  * JMLib - Portable JuggleMaster Library
  * Version 2.0
- * (C) Per Johan Persson 2000-2002, Gary Briggs 2003
+ * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
@@ -27,13 +26,24 @@
 //#include <math.h>
 #include <string.h>
 
-// time.h is not available for Windows CE / Pocket PC,
+// time.h is not available for PPC,
 // Use the MFC functions
 #ifdef _WIN32_WCE
 #include <afxwin.h>
-// All other platforms are assumed to support the time.h header
+#elif defined(__PALMOS__)
+// No time.h on Palm OS
 #else
 #include <time.h>
+#endif
+
+// For JMPalm support
+#ifndef EXTRA_SECTION_ONE
+#  ifdef __PALMOS__
+#  include "../jmpalm/src/sections.h"
+#  else
+#  define EXTRA_SECTION_ONE
+#  define EXTRA_SECTION_TWO
+#  endif
 #endif
 
 //#include <malloc.h>
@@ -42,8 +52,18 @@
 #include "jmlib_types.h"
 #include "util.h"
 #include "validator.h"
+
+// PPC and Palm OS have custom pattern loading
+#ifndef _WIN32_WCE
+#ifndef __PALMOS__
 #include "patterns.h"
+#endif
+#endif
+
+// No support for random patterns on Palm OS
+#ifndef __PALMOS__
 #include "randompatt.h"
+#endif
 
 // Misc. macros
 #ifndef max
@@ -67,19 +87,25 @@
 
 // Misc. constants
 #define KW 0.25
-#define XR 1024L
 #define DW 290               // max of dpm
 
-// max number of balls
-#ifdef BALLS_MAX_35
-#define BMAX 35
+// Always use LOW_MEM_DEVICE profile on Palm OS
+#ifdef __PALMOS__
+#define LOW_MEM_DEVICE
+#endif
+
+#ifdef LOW_MEM_DEVICE
+#define XR 255L     // Accuracy of x axis, set higher for large screens 255
+#define BMAX 35     // max number of balls
+#define MMAX 11    // Max multiplex, double+1
 #else
-#define BMAX 630
+#define XR 1024L    // Accuracy of x axis, set higher for large screens 255
+#define BMAX 630    // max number of balls
+#define MMAX 71    // Max multiplex, double+1
 #endif
 
 #define LMAX 76		     // max column of a pattern
- // MMAX 11
-#define MMAX 71              // Max multiplex, double+1
+
 #define OBJECT_HAND   0x01
 #define OBJECT_UNDER  0x02
 #define OBJECT_MOVE   0x04
@@ -89,7 +115,11 @@
 #define JML_MAX_SECTIONLEN  40
 #define JML_MAX_NAMELEN  56
 #define JML_MAX_SITELEN  56
+#ifdef LOW_MEM_DEVICE
+#define JML_MAX_STYLELEN 56
+#else
 #define JML_MAX_STYLELEN 500
+#endif
 #define SPEED_MAX 2.0F
 #define SPEED_MIN 0.1F
 #define SPEED_DEF 1.0F
@@ -178,8 +208,8 @@ class JMLib {
   // JML_INT32 frameSkip; // frameskip counter
   JML_CHAR siteswap[JML_MAX_SITELEN]; // The current siteswap
   JML_CHAR pattname[LMAX]; // The name of the current pattern
-  JML_CHAR stylename[JML_MAX_NAMELEN]; // The name of the current style
   JML_INT8 steps[LMAX]; // used to print the site on screen
+  JML_CHAR stylename[JML_MAX_NAMELEN]; // The name of the current style
   JML_CHAR **possible_styles; // Contains list of all possible styles
   JML_INT32 num_possible_styles; // Number of possible styles
 
@@ -190,13 +220,13 @@ class JMLib {
 
 
   // internal methods
-  JML_INT32 ctod(JML_CHAR c);
-  JML_FLOAT fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t);
-  void hand_pos(JML_INT32 c, JML_INT32 h, JML_INT32* x, JML_INT32* z);
-  JML_INT32 juggle(struct ball *);
-  void set_dpm(void);
-  JML_INT32 set_ini(JML_INT32 rr);
-  JML_INT32 set_patt(JML_CHAR* w);
+  JML_INT32 ctod(JML_CHAR c) EXTRA_SECTION_TWO;
+  JML_FLOAT fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t)  EXTRA_SECTION_TWO;
+  void hand_pos(JML_INT32 c, JML_INT32 h, JML_INT32* x, JML_INT32* z)  EXTRA_SECTION_TWO;
+  JML_INT32 juggle(struct ball *)  EXTRA_SECTION_TWO;
+  void set_dpm(void)  EXTRA_SECTION_TWO;
+  JML_INT32 set_ini(JML_INT32 rr)  EXTRA_SECTION_TWO;
+  JML_INT32 set_patt(JML_CHAR* w)  EXTRA_SECTION_TWO;
   void xbitset(void);
   void arm_line(void);
   void applyCorrections(void);
@@ -261,12 +291,13 @@ class JMLib {
   void speedReset(void);
 
   JML_CHAR getSiteposStart(void) {
-    return steps[time_period];
+    if (syn && time_period % 2 == 1) return steps[time_period-1];
+	return steps[time_period];
   }
 
   JML_CHAR getSiteposStop(void) {
-    if (syn) return steps[time_period+2];
-    else     return steps[time_period+1];
+	if (syn && time_period % 2 == 0) return steps[time_period+2];
+	return steps[time_period+1];
   }
 
   JML_INT32 getSiteposLen(void) {
@@ -275,6 +306,10 @@ class JMLib {
 
   JML_INT32 getiterations(void) {
     return (dpm); /* FIXME */
+  }
+  
+  JML_INT32 getBallRadius(void) {
+  	return 11 * dpm / DW;
   }
 };
 

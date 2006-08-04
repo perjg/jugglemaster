@@ -1,10 +1,9 @@
 // 	$Id$	
 
-
 /*
  * JMLib - Portable JuggleMaster Library
  * Version 2.0
- * (C) Per Johan Persson 2000-2002, Gary Briggs 2003
+ * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
@@ -48,16 +47,19 @@ void JMLib::initialize(void) {
 	"Shower",
 	"Mills Mess",
 	"Center",
-	"Windmill",
-	"Random" };
+	"Windmill"
+#ifndef __PALMOS__
+	,"Random"
+#endif
+  };
 
   int i;
 
   num_possible_styles = (int)(sizeof(possible_styles_list)/sizeof(possible_styles_list[0]));
   possible_styles = (JML_CHAR **)malloc((size_t)num_possible_styles*sizeof(JML_CHAR *));
   for(i=0;i<num_possible_styles;i++) {
-	possible_styles[i]=(JML_CHAR *)malloc(strlen(possible_styles_list[i])+1);
-	strncpy(possible_styles[i],possible_styles_list[i],strlen(possible_styles_list[i])+1);
+    possible_styles[i]=(JML_CHAR *)malloc(strlen(possible_styles_list[i])+1);
+    strncpy(possible_styles[i],possible_styles_list[i],strlen(possible_styles_list[i])+1);
   }
 
   // Set default values
@@ -80,8 +82,8 @@ void JMLib::initialize(void) {
 #ifdef _WIN32_WCE
   CTime t;
   srand((unsigned int)t.GetTime());
-#else
-  srand(time(NULL));
+#elif !defined(__PALMOS__)
+  srand((unsigned int)time(NULL));
 #endif
 
   if (styledata == NULL)
@@ -89,7 +91,6 @@ void JMLib::initialize(void) {
   
   setWindowSize(480, 400);
   setPatternDefault();
-  setStyleDefault();
 }
 
 void JMLib::shutdown(void) {
@@ -264,8 +265,7 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name, JML_UINT8 length,
 }
 
 JML_BOOL JMLib::setStyle(JML_CHAR* name) {
-/* After adding a style here, also add to possible_styles_list at line 36 */
-
+// After adding a style here, also add to possible_styles_list at line 36
   if (strcmp(name, "Reverse") == 0 || strcmp(name, "reverse") == 0) {
     JML_INT8 style[] = { 4, 0, 13, 0 };
     setStyle("Reverse", 1, style);
@@ -286,6 +286,7 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name) {
     JML_INT8 style[] = { 10, 0, -8, 0, -8, 0, 10, 0 };
     setStyle("Windmill", 2, style);
   }
+#ifndef __PALMOS__
   else if (strcmp(name, "Random") == 0 || strcmp(name, "random") == 0) {
     int i;
     JML_INT8 *style;
@@ -295,16 +296,18 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name) {
 	  style[i++] = (rand()%30)-15;
 	  style[i++] = (rand()%10);
 	}
-	setStyle("Random", strlen(getSite()), style);
+	setStyle("Random", (JML_UINT8)strlen(getSite()), style);
 	free((void *)style);
 	startJuggle();
     } else {
 	setStyleDefault();
     }
   }
+#endif
   else { // anything else is interpreted as "Normal"
     setStyleDefault();
   }
+
   return true;
 }
 
@@ -325,7 +328,6 @@ void JMLib::setStyleDefault(void) {
   JML_INT8 defStyle[] = { 13, 0, 4, 0 };
   setStyle("Normal", 1, defStyle);
 }
-
 
 void JMLib::setHR(JML_FLOAT HR) {
 	if (HR > HR_MAX) {
@@ -949,7 +951,7 @@ void JMLib::set_dpm(void) {
 JML_INT32 JMLib::set_patt(JML_CHAR* s) {
   JML_INT32 i, l, flag = 0, flag2 = 0, a = 0;
   
-  l=strlen(s);
+  l = (JML_INT32)strlen(s);
   
   if(l>LMAX) return 10;
   

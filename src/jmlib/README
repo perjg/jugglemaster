@@ -82,9 +82,40 @@ for(int i=jm->balln-1;i>=0;i--) {
 
 jm->doJuggle();
 
-
-
 Obviously, there's more. This is intentionally the minimum required to
 show a juggler on the screen.
 
+6) Adding support for showing the siteswap on screen
+
+Use the functions getSiteposStart and getSiteposStop to get the part of the
+siteswap that is currently active. When you draw the siteswap on screen, this
+part of the siteswap string should be drawn using a special color (or similar).
+
+Pseudo-code follows:
+
+void draw_chars(char* str, int length, int x, int y); // add plaftorm specific implementation
+int string_pixel_width(char* str, int length); // add plaform specific implementation
+
+int start = (int)jmlib->getSiteposStart(); 
+int stop  = (int)jmlib->getSiteposStop();
+int diff = stop - start;
+char* site = jmlib->getSite();
+int x = <calculate aproporiate position for centering string on screen>
+int y = 0;
+
+// First part of string
+if (start > 0) draw_chars(site, start, x, y);
+
+// Active part of string, should be drawn in different color
+x += string_pixel_width(site, start);
+site += start;
+draw_chars(site, diff, x, y);
+
+// Last part of string
+x += string_pixel_width(site, diff);
+site += diff;
+draw_chars(site, strlen(site), x, y);
+
+
 Chunky Kibbles <chunky@icculus.org>
+Per Johan Groland <jm@jugglemaster.net>

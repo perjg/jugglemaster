@@ -3,7 +3,7 @@
 /*
  * JMLib - Portable JuggleMaster Library
  * Version 2.0
- * (C) Per Johan Persson 2000-2002, Gary Briggs 2003
+ * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
@@ -208,7 +208,7 @@ bool JMSiteValidator::validateSite(JML_CHAR* site) {
  */
 bool JMSiteValidator::validateVSS(JML_CHAR* site) {
   JML_INT32 i, x;
-  JML_INT32 len = strlen(site);
+  JML_INT32 len = (JML_INT32)strlen(site);
   JML_CHAR* ls = new JML_CHAR[len];
   memset(ls, 1, len);
 
@@ -255,7 +255,7 @@ bool JMSiteValidator::validateSSS(JML_CHAR* site) {
 bool JMSiteValidator::validateMSS(JML_CHAR* site) {
   //MSS* mss = new MSS(site);
   JML_INT32 i, x;
-  JML_INT32 len = strlen(site);
+  JML_INT32 len = (JML_INT32)strlen(site);
   JML_CHAR* ls = new JML_CHAR[len]; // Guaranteed to be long enough
   JML_INT32 lsLen = 0;
   JML_INT32 throwCount = 0;
@@ -322,7 +322,7 @@ bool JMSiteValidator::validateMSS(JML_CHAR* site) {
 
 bool JMSiteValidator::transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS) {
   JML_INT32 i, x;
-  JML_INT32 len = strlen(SSS);
+  JML_INT32 len = (JML_INT32)strlen(SSS);
   JML_INT32 add = 1;
   JML_INT32 mssPos = 0;
 

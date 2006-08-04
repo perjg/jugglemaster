@@ -3,7 +3,7 @@
 /*
  * JMLib - Portable JuggleMaster Library
  * Version 2.0
- * (C) Per Johan Persson 2000-2002, Gary Briggs 2003
+ * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
@@ -22,7 +22,7 @@
 #define JMLIB_TYPES__HDR_
 
 // For all versions of Palm OS
-#ifdef PALMOS
+#ifdef __PALMOS__
 
 // See the file PalmOS.h in this directory for an explanation
 #include "PalmOS.h"
@@ -34,7 +34,7 @@ typedef Int16           JML_INT16;
 typedef UInt32          JML_UINT32;
 typedef Int32           JML_INT32;
 typedef unsigned char   JML_BOOL;
-typedef signed char     JML_CHAR;
+typedef char            JML_CHAR;
 typedef float           JML_FLOAT;
 
 // For the Game Boy advance using HamLib

@@ -22,8 +22,7 @@ systems:
 
 MacOS, Windows, Linux   JMDlx     http://icculus.org/jugglemaster
 PocketPC                JMPocket  http://jugglemaster.net
-PalmOS                  JMPalm    http://jugglemaster.net (source not
-                                                yet available)
+PalmOS                  JMPalm    http://jugglemaster.net
 Unices, DOS, Terminals  AAJM      http://icculus.org/jugglemaster/aa
 
 The weblinks above will direct you to the proper sites to download
@@ -81,6 +80,29 @@ src/jmpocket/JMPocket.vcw
 JMPocket expects to find the pattern libary in My Documents, and it
 must be named either patt_e.jm or patterns.jm.
 
+
+JMPalm
+
+To build JMPalm, you need PRC-TOOLS and Palm OS Developer Suite (PODS).
+The PODS installation package includes the PRC-TOOLS.
+
+JMPalm includes project files for Palm OS Developer Suite (PODS). It is
+also set up to use the PODS xrd resource format. To build, import the
+project in the jmpalm directory into your PODS workspace.
+
+To build from the command line, simply run make from the jmpalm directory.
+If you have PRC-TOOLS set up without PODS, you will probably not have the
+required resource compiler. A resource file for PilRC is included as well,
+but you will need to tweak the makefile to use this. The actual resource
+file will probably need some tweaking as well.
+
+The build is set up to build to support certain sony-specific hardware.
+This requires specific headers from sony not included in the standard Palm
+OS sdk. If you do not have these headers, turn off the SONY_SUPPORT define
+in the makefile. The resulting binary will still work on sony devices,
+but will not support any of the custom hardware. See the file sony.txt
+in the jmpalm directory for information on how to set up the sony headers
+correctly to work with prc-tools.
 
 AAJM
 

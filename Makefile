@@ -8,7 +8,7 @@ default:
 	@echo
 	@echo When built, binaries should be in the bin dir
 
-all: jmlib jmdlx aajm jmqt
+all: jmlib jmdlx aajm
 
 jmlib:
 	$(MAKE) -C src/jmlib

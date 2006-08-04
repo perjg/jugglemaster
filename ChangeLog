@@ -1,11 +1,11 @@
-Version 0.6
+Version 0.5
+In Progress
+ - jmqt: Added complete rewrite
  - jmpalm: Initial addition
  - jmlib: Several patches for Palm OS support
  - jmlib: Fixed incorrect implementation of getSiteposStart and getSiteposStop
  - docs: Added description of how to implement "siteswap on screen" feature
  - jmdlx: Replaced corrupted VisualStudio.zip file
-
-Version 0.5
  - Major Addition: TorqueScript port of jmlib
  - docs: Added how random patterns are created
  - docs: Added how siteswaps are validated

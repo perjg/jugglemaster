@@ -1,0 +1,96 @@
+changes.txt
+
+This file contains a list of changes in each version of JMPalm.
+The newest version is listed first.
+
+See the file todo.txt for information on features that might
+be added in a future release of JMPalm.
+
+** 1.2 (01.08.2006)
+
+- Now open source!
+- Full support for Palm OS 5.0 high resolution and soft silk screen
+- Hands are drawn properly instead of just being squares
+- Landscape mode
+- Now runs without a pattern library present
+- Updated to use new open source jmlib. Incompatible patterns in the
+  old version work fine now.
+- Removed Beam function (it never functioned properly anyway)
+- Show current pattern and site on screen when paused
+- Misc cleanup to make everything C++ compatible
+- Massive source cleanup. Removed several halfway implemented features
+
+** 1.1 (31.03.2002)
+
+- Any previously selected category and pattern is remembered in
+  "Select Pattern."
+- Added "Center" style to selectable styles in "Enter Siteswap."
+- "20-Ball Columns A/B" in "Are You God?" category disabled. These
+  patterns cause JMPalm to hang.
+- Fixed a memory leak bug.
+- The juggler will no longer show when switching between pages in
+  "Preferences"
+
+** 1.0 (31.10.2001)
+
+- Miscellaneous GUI cleanup. Some elements that weren't implemented
+  have been removed from the screen.
+- Fixed a bug which caused incorrect hand placement for vanilla siteswaps
+  with a '2' as the second throw.
+- Implemented "Height Ratio Reduction" setting.
+
+** 0.3 (03.08.2001)
+
+- Mirror pattern setting added
+- File format has changed (database files are now much smaller)
+- JMC (JuggleMaster Pattern Converter) released. This allows you to compile
+  your own list of patterns to use on JMPalm. (downloaded separately).
+- Added an "Info" button in the "Select Pattern" form.
+- All speedup bugs should be gone for good.
+- Attempting to load an incorrect pattern will no longer leave
+  rubbish on screen on PalmOS version prior to 3.5
+- Full color support added (finally!)
+- Preferences are now saved and loaded
+- Hard buttons are now fully configurable. The default configuration
+  is to use the up and down buttons for speed up and down
+  respectively.
+- Rudimentary speed tweaking added.
+- The shortcut buttons in "Enter Siteswap" now insert text at the cursor,
+  and replaces any selected text.
+- Added a "Beam" option. This will beam JMPalm and its database to another
+  Palm. This is untested (I don't have a second palm around right now), so
+  it may very well not work properly.
+
+** 0.2 (14.01.2001)
+
+- Full JuggleMaster pattern library included
+  (database format has changed)
+- The juggler's head is now drawn as an outline.
+- Fixed ball placement bugs.
+- Added a splash screen.
+- Added a "Loading Pattern" message which is shown whenever
+  a pattern is loaded or a siteswap entered.
+- Added color icons for Palm IIIc and Visor Prism.
+- Shortcut buttons for ()[],x in Enter Siteswap.
+- It is now possible to set height and dwell ratio in
+  Enter Siteswap.
+
+** 0.12 (28.11.2000)
+
+- Fixed a bug that prevented version 0.11 from running on
+  non PalmOS 3.5 devices.
+
+** 0.11 (27.11.2000)
+
+- Fixed a bug that caused some palms to crash during or after
+  hotsync of the program.
+
+** 0.1 (27.11.2000)
+
+- Initial beta release
+
+
+
+*********************************************************
+JMPalm (C) Per Johan Persson 2001-2002
+See readme.txt for details.

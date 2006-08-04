@@ -1,0 +1,46 @@
+How to build JMPalm with Sony support
+
+JMPalm must be built with Sony support headers in order to be
+compatible with the soft silk screen (dia) on Sony devices.
+
+The included makefile is set up to build with Sony headers,
+which are assumed to be located in a subdirectory named sony.
+Edit the makefile, and set SYSTEM_INCLUDE_PATHS to point to
+the correct place if your headers are located elsewhere.
+
+SYSTEM_INCLUDE_PATHS = -Isony/R5.0/Incs -Isony/R5.0/Incs/Libraries -Isony/R5.0/Incs/System -Isony/R5.0/Incs/System/etc
+
+To turn off Sony support, remove the SONY_SUPPORT define in
+the makefile:
+
+DEFINES = SONY_SUPPORT
+
+You need Sony SDK 5.0 headers. They do not work correctly with
+PRC-TOOLS of the box. 
+
+The problem is that the headers define system traps via enums,
+which is not supported by PRC-TOOLS. You need to change these
+to use #defines instead:
+
+Change:
+
+typedef enum tagHRTrapNumEnum
+{
+	HRTrapGetAPIVersion = sysLibTrapCustom,
+	HRTrapWinClipRectangle,
+	HRTrapWinCopyRectangle,
+...
+} HRTrapNumEnum;
+
+To:
+
+#define	HRTrapGetAPIVersion (sysLibTrapCustom+0)
+#define	HRTrapWinClipRectangle (sysLibTrapCustom+1)
+#define	HRTrapWinCopyRectangle (sysLibTrapCustom+2)
+...
+
+Search for sysLibTrapCustom in all headers, and change
+accordingly. Once all system traps definitions are changed
+to use #defines, you should be able to compile with Sony
+support turned on.
+

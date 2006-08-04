@@ -389,9 +389,46 @@ void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
 
     dc.DrawEllipse(jmlib->b[i].gx, jmlib->b[i].gy, diam, diam);
   }
+
+  // Draw pattern info on screen
+  int start = (int)jmlib->getSiteposStart(); 
+  int stop  = (int)jmlib->getSiteposStop();
+  int diff = stop - start;
+  wxCoord x = 10;
+  wxCoord y = 10;
+  wxCoord strWidth = 0;
+  wxCoord strHeight = 0;
+
+  wxString sitetext("Site: ");
+  wxString site(jmlib->getSite());
+
+  dc.DrawText(sitetext, x, y);
+  dc.GetTextExtent(sitetext, &strWidth, &strHeight);
+  x += strWidth;
+
+  // First part of string
+  if (start > 0) {
+    dc.DrawText(site.Mid(0, start), x, y);
+    dc.GetTextExtent(site.Mid(0, start), &strWidth, &strHeight);
+	x += strWidth;
+  }
+
+  // Active part of string
+  dc.SetTextForeground(wxColour(255, 0, 0));
+  dc.DrawText(site.Mid(start, diff), x, y);
+  dc.GetTextExtent(site.Mid(start, diff), &strWidth, &strHeight);
+  x += strWidth;
+
+  // Last part of string
+  dc.SetTextForeground(wxColour(0, 0, 0));
+  dc.DrawText(site.Mid(stop), x, y);
+  dc.GetTextExtent(site.Mid(stop), &strWidth, &strHeight);
+  x += strWidth;
+
+  // More pattern information
   wxString balltext;
-  balltext.Printf("Site: %s    Style: %s    Balls: %i",jmlib->getSite(),jmlib->getStyle(),jmlib->balln);
-  dc.DrawText(balltext, 10, 10);
+  balltext.Printf("    Style: %s    Balls: %i", jmlib->getStyle(), jmlib->balln);
+  dc.DrawText(balltext, x, y);
 
   // flip
  // wxPaintDC sdc(this);

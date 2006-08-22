@@ -24,7 +24,7 @@
 
 /* Use jm_randnoparam to get a random pattern.
 use jm_rand to get a random pattern if some of the parameters matter to you
-Please free it when you're done.  */
+Please delete it when you're done.  */
 
 JML_CHAR *jm_randnoparam(void);
 

@@ -170,7 +170,7 @@ void randompattern(void) {
 			/* Temporary hack until it doesn't produce 0xs */
 		if(randompatt != NULL &&
 			strstr(randompatt,"0x") != NULL)  {
-			free(randompatt);
+			delete randompatt;
 			randompatt = NULL;
 		}
 		getout++;
@@ -182,7 +182,7 @@ void randompattern(void) {
 			randompatt, getout); */
 		//jmlib->setStyleDefault();
 		jmlib->startJuggle();
-		free(randompatt);
+		delete randompatt;
 	}
 }
 

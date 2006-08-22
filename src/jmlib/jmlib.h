@@ -46,7 +46,6 @@
 #  endif
 #endif
 
-//#include <malloc.h>
 #include <stdlib.h>
 
 #include "jmlib_types.h"
@@ -210,8 +209,7 @@ class JMLib {
   JML_CHAR pattname[LMAX]; // The name of the current pattern
   JML_INT8 steps[LMAX]; // used to print the site on screen
   JML_CHAR stylename[JML_MAX_NAMELEN]; // The name of the current style
-  JML_CHAR **possible_styles; // Contains list of all possible styles
-  JML_INT32 num_possible_styles; // Number of possible styles
+  static JML_CHAR *possible_styles[]; // Contains list of all possible styles
 
   void (*mCallback)(void *, JML_CHAR *);
   void *mUData;

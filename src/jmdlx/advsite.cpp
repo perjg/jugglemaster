@@ -292,7 +292,7 @@ void RandomSiteSwap::OnRandom(wxCommandEvent &WXUNUSED(event)) {
 	newsite = jm_randnoparam();
 	if(newsite != NULL) {
 		newsiteswap->SetValue(newsite);
-		free(newsite);
+		delete newsite;
 	}
 }
 
@@ -303,6 +303,6 @@ void RandomSiteSwap::OnCreate(wxCommandEvent &WXUNUSED(event)) {
 		multiplex->GetValue());
 	if(newsite != NULL) {
 		newsiteswap->SetValue(newsite);
-		free(newsite);
+		delete newsite;
 	}
 }

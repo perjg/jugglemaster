@@ -40,8 +40,7 @@ JMLib::~JMLib() {
   shutdown();
 }
 
-void JMLib::initialize(void) {
-  JML_CHAR *possible_styles_list[] = {
+JML_CHAR *JMLib::possible_styles[] = {
 	"Normal",
 	"Reverse",
 	"Shower",
@@ -51,17 +50,9 @@ void JMLib::initialize(void) {
 #ifndef __PALMOS__
 	,"Random"
 #endif
-  };
+};
 
-  int i;
-
-  num_possible_styles = (int)(sizeof(possible_styles_list)/sizeof(possible_styles_list[0]));
-  possible_styles = (JML_CHAR **)malloc((size_t)num_possible_styles*sizeof(JML_CHAR *));
-  for(i=0;i<num_possible_styles;i++) {
-    possible_styles[i]=(JML_CHAR *)malloc(strlen(possible_styles_list[i])+1);
-    strncpy(possible_styles[i],possible_styles_list[i],strlen(possible_styles_list[i])+1);
-  }
-
+void JMLib::initialize(void) {
   // Set default values
   ga = 9.8F;
   dwell_ratio = 0.5F;
@@ -94,15 +85,10 @@ void JMLib::initialize(void) {
 }
 
 void JMLib::shutdown(void) {
-  int i;
   if (styledata != NULL) {
     delete styledata;
     styledata = (JML_CHAR*)NULL;
   }
-  for(i=0;i<num_possible_styles;i++) {
-    free((void *)possible_styles[i]);
-  }
-  free((void *)possible_styles);
 }
 
 void JMLib::setErrorCallback(void *aUData, void (*aCallback)
@@ -290,14 +276,14 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name) {
   else if (strcmp(name, "Random") == 0 || strcmp(name, "random") == 0) {
     int i;
     JML_INT8 *style;
-    style = (JML_INT8 *)malloc((size_t)(4*sizeof(JML_INT8)*strlen(getSite())));
+    style = new JML_INT8[(size_t)(4*sizeof(JML_INT8)*strlen(getSite()))];
     if(style != NULL) {
 	for(i=0;i<(int)strlen(getSite())*4;) {
 	  style[i++] = (rand()%30)-15;
 	  style[i++] = (rand()%10);
 	}
 	setStyle("Random", (JML_UINT8)strlen(getSite()), style);
-	free((void *)style);
+	delete style;
 	startJuggle();
     } else {
 	setStyleDefault();
@@ -316,7 +302,8 @@ JML_CHAR **JMLib::getStyles(void) {
 }
 
 JML_INT32 JMLib::numStyles(void) {
-  return num_possible_styles;
+  return (int)(sizeof(possible_styles)/sizeof(possible_styles[0]));
+
 }
 
 void JMLib::setPatternDefault(void) {

@@ -117,14 +117,14 @@ int ParsePatterns(FILE *input,
 			currmr = 0;
 			memset(curr_author,'\0',sizeof(curr_author));
 
-			newgroup = (struct pattern_group_t *)malloc(sizeof(struct pattern_group_t));
+			newgroup = new pattern_group_t;
 			if(groups != NULL && groups->first == NULL) {
 				groups->first = newgroup;
 			} else if(group != NULL) {
 				group->next = newgroup;
 			}
 			group = newgroup;
-			group->name = (char *)malloc(strlen(current_group) + 1);
+			group->name = new char[strlen(current_group) + 1];
 			strcpy(group->name, current_group);
 			group->name[strlen(current_group)] = '\0';
 			group->first_patt = NULL;
@@ -140,7 +140,7 @@ int ParsePatterns(FILE *input,
 				continue;
 			}
 
-			newstyle = (struct style_t *)malloc(sizeof(struct style_t));
+			newstyle = new style_t;
 
 			if(styles != NULL && styles->first == NULL) {
 				styles->first = newstyle;
@@ -148,7 +148,7 @@ int ParsePatterns(FILE *input,
 				style->next = newstyle;
 			}
 			style = newstyle;
-			style->name = (char *)malloc(strlen(current_style) + 1);
+			style->name = new char[strlen(current_style) + 1];
 			strncpy(style->name, current_style, strlen(current_style));
 			style->name[strlen(current_style)] = '\0';
 			style->length = 0;
@@ -191,7 +191,7 @@ int ParsePatterns(FILE *input,
 					bail, as we've noplace to put it */
 				continue;
 			}
-			newpatt = (struct pattern_t *)malloc(sizeof(struct pattern_t));
+			newpatt = new pattern_t;
 
 			if(group->first_patt == NULL) {
 				group->first_patt = newpatt;
@@ -199,19 +199,19 @@ int ParsePatterns(FILE *input,
 				patt->next = newpatt;
 			}
 			patt = newpatt;
-			patt->name = (char *)malloc(strlen(pattern_name) + 1);
+			patt->name = new char[strlen(pattern_name) + 1];
 			strncpy(patt->name, pattern_name, strlen(pattern_name));
 			patt->name[strlen(pattern_name)] = '\0';
 
-			patt->data = (char *)malloc(strlen(pattern_data) + 1);
+			patt->data = new char[strlen(pattern_data) + 1];
 			strncpy(patt->data, pattern_data, strlen(pattern_data));
 			patt->data[strlen(pattern_data)] = '\0';
 
-			patt->style = (char *)malloc(strlen(current_style) + 1);
+			patt->style = new char[strlen(current_style) + 1];
 			strncpy(patt->style, current_style, strlen(current_style));
 			patt->style[strlen(current_style)] = '\0';
 
-			patt->author = (char *)malloc(strlen(curr_author) + 1);
+			patt->author = new char[strlen(curr_author) + 1];
 			strncpy(patt->author, curr_author, strlen(curr_author));
 			patt->author[strlen(curr_author)] = '\0';
 
@@ -243,20 +243,20 @@ void FreeGroups(struct groups_t *groups) {
 	while(group) {
 		patt = group->first_patt;
 		while(patt) {
-			if(patt->name != NULL) free((void *)patt->name);
-			if(patt->data != NULL) free((void *)patt->data);
-			if(patt->style != NULL) free((void *)patt->style);
-			if(patt->author != NULL) free((void *)patt->author);
+			if(patt->name != NULL) delete patt->name;
+			if(patt->data != NULL) delete patt->data;
+			if(patt->style != NULL) delete patt->style;
+			if(patt->author != NULL) delete patt->author;
 			tmppatt = patt;
 			patt = patt->next;
-			free((void *)tmppatt);
+			delete tmppatt;
 		}
 		if(group->name != NULL) {
-			free((void *)group->name);
+			delete group->name;
 		}
 		tmpgroup = group;
 		group = group->next;
-		free((void *)tmpgroup);
+		delete tmpgroup;
 	}
 	groups->first = NULL;
 }
@@ -269,14 +269,14 @@ void FreeStyles(struct styles_t *styles) {
 	style = styles->first;
 	while(style) {
 		if(style->name != NULL) {
-			free((void *)style->name);
+			delete style->name;
 		}
 		if(style->data != NULL) {
-			free((void *)style->data);
+			delete style->data;
 		}
 		tmpstyle = style;
 		style = style->next;
-		free((void *)tmpstyle);
+		delete tmpstyle;
 	}
 	styles->first = NULL;
 }

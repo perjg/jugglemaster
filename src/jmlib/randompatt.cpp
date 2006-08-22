@@ -105,7 +105,7 @@ JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,
 		return NULL;
 	}
 
-	buf = (int *)malloc(sizeof(int) * pattlen);
+	buf = new int[pattlen];
 
 	for(i = 0; i < pattlen; i++) {
 		buf[i]=numballs;
@@ -136,7 +136,7 @@ JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,
 			j++;
 		}
 	}
-	returnvalue = (JML_CHAR *)malloc(sizeof(JML_CHAR) * pattlen + 1);
+	returnvalue = new JML_CHAR[pattlen+1];
 	memset(returnvalue, '\0', sizeof(JML_CHAR) * pattlen + 1);
 
 	for(i = 0; i < pattlen; i++) {
@@ -148,7 +148,7 @@ JML_CHAR *jm_rand_async(JML_INT8 numballs, JML_INT8 pattlen,
 			returnvalue[i] = 0;
 		}
 	}
-	free(buf);
+	delete buf;
 	return returnvalue;
 }
 
@@ -182,10 +182,10 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 		pattlen++;
 	}
 
-	left = (int *)malloc(sizeof(int) * pattlen);
-	right = (int *)malloc(sizeof(int) * pattlen);
-	leftcross = (int *)malloc(sizeof(int) * pattlen);
-	rightcross = (int *)malloc(sizeof(int) * pattlen);
+	left = new int[pattlen];
+	right = new int[pattlen];
+	leftcross = new int[pattlen];
+	rightcross = new int[pattlen];
 
 	/* To seed the pattern:
 		Even numbers of balls go (n,n)<rinse, repeat>
@@ -302,20 +302,16 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 	if(leftcrosses != rightcrosses) {
 		/* All the balls would end up in the same hand - this
 			shouldn't ever happen */
-		free(left);
-		free(right);
-		free(leftcross);
-		free(rightcross);
+		delete left;
+		delete right;
+		delete leftcross;
+		delete rightcross;
 		return NULL;
 	}
 
 	totalcrosses = leftcrosses + rightcrosses;
-	returnvalue = (JML_CHAR *)malloc(sizeof(JML_CHAR) * pattlen * 2 +
-			sizeof(JML_CHAR) * pattlen * 3 +
-			sizeof(JML_CHAR) * totalcrosses + 1);
-	memset(returnvalue, '\0', sizeof(JML_CHAR) * pattlen * 2 + /* Numbers */
-			sizeof(JML_CHAR) * pattlen * 3 + /* Brackets and commas */
-			sizeof(JML_CHAR) * totalcrosses + 1); /* x's */
+	returnvalue = new JML_CHAR[pattlen*2 + pattlen*3 + totalcrosses + 1];
+	memset(returnvalue, '\0', sizeof(JML_CHAR) * (pattlen*2 + pattlen*3 + totalcrosses + 1));
 
 	for(returntmp=returnvalue,i=0;i<pattlen;i++) {
 		*returntmp++ = '(';
@@ -349,10 +345,10 @@ JML_CHAR *jm_rand_sync(JML_INT8 numballs, JML_INT8 pattlen,
 		*returntmp++ = ')';
 	}
 
-	free(left);
-	free(right);
-	free(leftcross);
-	free(rightcross);
+	delete left;
+	delete right;
+	delete leftcross;
+	delete rightcross;
 
 	return returnvalue;
 }
@@ -369,8 +365,7 @@ JML_CHAR *jm_multiplex_combine_async(JML_CHAR *patt1,
 
 	JML_CHAR *returnvalue,*returntmp;
 
-	throws = (JML_CHAR *)malloc(sizeof(JML_CHAR) * (plexes + 1) * pattlen);
-	memset(throws, '\0', sizeof(JML_CHAR) * (plexes + 1) * pattlen);
+	throws = new JML_CHAR[(plexes + 1) * pattlen];
 
 	curr_throw = 0;
 	in_plex = 0;
@@ -422,10 +417,8 @@ JML_CHAR *jm_multiplex_combine_async(JML_CHAR *patt1,
 		}
 	}
 
-	returnvalue = (JML_CHAR *)malloc(sizeof(JML_CHAR) * totalthrows +
-				sizeof(JML_CHAR) * newplexes * 2 + 1);
-	memset(returnvalue, '\0', sizeof(JML_CHAR) * totalthrows +
-				sizeof(JML_CHAR) * newplexes * 2 + 1);
+	returnvalue = new JML_CHAR[totalthrows + newplexes*2 + 1];
+	memset(returnvalue, '\0', sizeof(JML_CHAR) * (totalthrows + newplexes*2  + 1));
 
 	returntmp = returnvalue;
 	for(i=0; i<pattlen; i++) {
@@ -442,7 +435,7 @@ JML_CHAR *jm_multiplex_combine_async(JML_CHAR *patt1,
 		}
 	}
 
-	free(throws);
+	delete throws;
 
 	return returnvalue;
 }
@@ -513,7 +506,7 @@ int main(int argc, char *argv[]) {
 						}
 					}
 					if(pattern != NULL) {
-						free(pattern);
+						delete pattern;
 						pattern = NULL;
 					}
 				}

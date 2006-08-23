@@ -9,6 +9,7 @@ typedef struct shead
 	float r;
 } head;
 
+
 @interface JMController : NSObject
 {
 	JMLib *jm;

@@ -4,6 +4,7 @@
 
 @interface JMView(Private)
 
+- (void)drawSiteSwap;
 - (void)drawBall:(int)ball;
 
 @end
@@ -53,10 +54,12 @@
 		[rightArmPath lineToPoint:NSMakePoint(a.rx[i], a.ry[i])];
 		[leftArmPath lineToPoint:NSMakePoint(a.lx[i], a.ly[i])];
 	}
-		
+	
 	[[NSColor blackColor] set];
 	[NSBezierPath fillRect:rect];
 	
+	[self drawSiteSwap];
+
 	[[NSColor whiteColor] set];
 	[headPath stroke];
 	[rightArmPath stroke];
@@ -65,6 +68,43 @@
 	for(ballNum = 0; ballNum < [dataSource numberOfBalls]; ballNum++)
 	{
 		[self drawBall:ballNum];
+	}
+}
+
+- (void)drawSiteSwap
+{
+	NSAttributedString *currentSwap;
+	NSShadow *textShadow;
+	NSMutableParagraphStyle *paragraphStyle;
+	
+	if ([dataSource shouldShowPattern])
+	{
+		textShadow = [[[NSShadow alloc] init] autorelease];
+		[textShadow setShadowOffset:NSMakeSize(10,-10)];
+		[textShadow setShadowColor:[NSColor darkGrayColor]];
+		[textShadow setShadowBlurRadius:1];
+		
+		paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
+		[paragraphStyle setAlignment:NSCenterTextAlignment];
+		
+		currentSwap = [[[NSAttributedString alloc] initWithString:[dataSource currentThrow]
+													   attributes:
+			[NSDictionary dictionaryWithObjects:
+				[NSArray arrayWithObjects:
+					[NSFont fontWithName:@"Futura" size:64],
+					textShadow,
+					[NSColor lightGrayColor],
+					paragraphStyle,
+					nil]
+										forKeys:
+				[NSArray arrayWithObjects:
+					NSFontAttributeName,
+					NSShadowAttributeName,
+					NSForegroundColorAttributeName,
+					NSParagraphStyleAttributeName,
+					nil]]] autorelease];
+		
+		[currentSwap drawInRect:[self frame]];
 	}
 }
 

@@ -30,6 +30,8 @@ static JML_CHAR patterns[7][12]
 		jm->startJuggle();
 		jm->doJuggle();
 		
+		showPattern = NO;
+		
 		[self showInspector:self];
 		
 		renderTimer = [[NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(doRender:) userInfo:nil repeats:YES] retain];
@@ -82,6 +84,11 @@ static JML_CHAR patterns[7][12]
 	jm->startJuggle();
 }
 
+- (IBAction)toggleShowPattern:(id)sender
+{
+	showPattern = !showPattern;
+}
+
 - (void)setFrame:(NSRect)frameRect
 {
 	jm->setWindowSize(frameRect.size.width, frameRect.size.height);
@@ -118,6 +125,28 @@ static JML_CHAR patterns[7][12]
 {
 	jm->doJuggle();
 	[view setNeedsDisplay:YES];
+}
+
+- (BOOL)shouldShowPattern
+{
+	return showPattern;
+}
+
+- (NSString *)currentThrow
+{
+	int start = jm->getSiteposStart();
+	int stop = jm->getSiteposStop();
+	int current;
+	JML_CHAR *site = jm->getSite();
+	JML_CHAR *subString = (JML_CHAR *)malloc((stop - start + 1) * sizeof(JML_CHAR));
+	
+	for (current = start; current < stop; current++)
+	{
+		subString[current - start] = site[current];
+	}
+	subString[current - start] = '\0';
+	
+	return [NSString stringWithCString:(char *)subString];
 }
 
 @end

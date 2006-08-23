@@ -8,7 +8,13 @@
         }, 
         {CLASS = InstantTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
         {
-            ACTIONS = {setPattern = id; setSpeed = id; setStyle = id; showInspector = id; }; 
+            ACTIONS = {
+                setPattern = id; 
+                setSpeed = id; 
+                setStyle = id; 
+                showInspector = id; 
+                toggleShowPattern = id; 
+            }; 
             CLASS = JMController; 
             LANGUAGE = ObjC; 
             OUTLETS = {errorReporter = NSImageView; view = JMView; }; 

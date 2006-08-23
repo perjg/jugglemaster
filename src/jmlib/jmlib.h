@@ -179,7 +179,7 @@ class JMLib {
   JML_INT32 hand_x;
   JML_INT32 hand_y;
   JML_INT32 horCenter, verCenter;
-  JML_CHAR* styledata;
+  JML_CHAR styledata[STYLEMAX*4];
   JML_INT32 style_len;
   JML_FLOAT ga;
   JML_FLOAT dwell_ratio;

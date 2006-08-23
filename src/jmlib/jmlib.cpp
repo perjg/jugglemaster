@@ -21,7 +21,7 @@
 #include "jmlib.h"
 
 JMLib::JMLib() {
-  styledata = (JML_CHAR*)NULL;
+  // styledata = (JML_CHAR*)NULL;
   initialize();
   use_cpp_callback = 0;
   cb = (ERROR_CALLBACK*)NULL;
@@ -29,7 +29,7 @@ JMLib::JMLib() {
 }
 
 JMLib::JMLib(ERROR_CALLBACK* _cb) {
-  styledata = (JML_CHAR*)NULL;
+  // styledata = (JML_CHAR*)NULL;
   initialize();
   use_cpp_callback = 0;
   cb = _cb;
@@ -77,18 +77,18 @@ void JMLib::initialize(void) {
   srand((unsigned int)time(NULL));
 #endif
 
-  if (styledata == NULL)
-    styledata = new JML_CHAR[STYLEMAX*4];
+  // if (styledata == NULL)
+    // styledata = new JML_CHAR[STYLEMAX*4];
   
   setWindowSize(480, 400);
   setPatternDefault();
 }
 
 void JMLib::shutdown(void) {
-  if (styledata != NULL) {
-    delete styledata;
-    styledata = (JML_CHAR*)NULL;
-  }
+  // if (styledata != NULL) {
+    // delete styledata;
+    // styledata = (JML_CHAR*)NULL;
+  // }
 }
 
 void JMLib::setErrorCallback(void *aUData, void (*aCallback)

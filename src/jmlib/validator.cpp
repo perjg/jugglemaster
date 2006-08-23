@@ -209,7 +209,12 @@ bool JMSiteValidator::validateSite(JML_CHAR* site) {
 bool JMSiteValidator::validateVSS(JML_CHAR* site) {
   JML_INT32 i, x;
   JML_INT32 len = (JML_INT32)strlen(site);
-  JML_CHAR* ls = new JML_CHAR[len];
+  JML_CHAR* ls;
+  bool ret = true;
+
+  if(1 == len && -1 != siteDigit(site[0])) return true;
+
+  ls = new JML_CHAR[len];
   memset(ls, 1, len);
 
   for (i = 0; i < len; i++) {
@@ -219,13 +224,12 @@ bool JMSiteValidator::validateVSS(JML_CHAR* site) {
   
   for (i = 0; i < len; i++) {
     if (ls[i] != 0) {
-      delete ls;
-      return false;
+      ret = false;
     }
   }
 
   delete ls;
-  return true;
+  return ret;
 }
 
 bool JMSiteValidator::validateSSS(JML_CHAR* site) {
@@ -256,9 +260,13 @@ bool JMSiteValidator::validateMSS(JML_CHAR* site) {
   //MSS* mss = new MSS(site);
   JML_INT32 i, x;
   JML_INT32 len = (JML_INT32)strlen(site);
-  JML_CHAR* ls = new JML_CHAR[len]; // Guaranteed to be long enough
+  JML_CHAR* ls;
   JML_INT32 lsLen = 0;
   JML_INT32 throwCount = 0;
+
+  if(1 == len && -1 != siteDigit(site[0])) return true;
+
+  ls = new JML_CHAR[len]; // Guaranteed to be long enough
   memset(ls, 0, len);
   
   for (i = 0; i < len; i++) {

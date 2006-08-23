@@ -50,7 +50,6 @@
 		1FD17BBB0A9BD85D00668490 /* JMView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = JMView.h; sourceTree = "<group>"; };
 		1FD17CC40A9BFCCF00668490 /* JMInspector.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = JMInspector.nib; sourceTree = "<group>"; };
 		1FD17D960A9C838A00668490 /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error.png; sourceTree = "<group>"; };
-		1FD17E280A9C8DF800668490 /* jmlib-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "jmlib-Info.plist"; sourceTree = "<group>"; };
 		1FD17EC40A9CB6B300668490 /* error2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error2.png; sourceTree = "<group>"; };
 		1FD17EFD0A9CD0DA00668490 /* InstantTextField.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = InstantTextField.h; sourceTree = "<group>"; };
 		1FD17EFE0A9CD0DA00668490 /* InstantTextField.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = InstantTextField.m; sourceTree = "<group>"; };
@@ -140,7 +139,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				1FD17E280A9C8DF800668490 /* jmlib-Info.plist */,
 			);
 			name = jmcocoa;
 			sourceTree = "<group>";
@@ -325,7 +323,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
-				PREBINDING = YES;
+				PREBINDING = NO;
 				PRODUCT_NAME = "Juggle Master";
 				WRAPPER_EXTENSION = app;
 			};

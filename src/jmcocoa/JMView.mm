@@ -39,12 +39,16 @@
 	NSBezierPath *rightArmPath = [NSBezierPath bezierPath];
 	NSBezierPath *leftArmPath = [NSBezierPath bezierPath];
 	
+	[headPath setLineWidth:2.0];
+	[rightArmPath setLineWidth:2.0];
+	[leftArmPath setLineWidth:2.0];
+	
 	[rightArmPath setLineJoinStyle:NSRoundLineJoinStyle];
 	[rightArmPath moveToPoint:NSMakePoint(a.rx[0], a.ry[0])];
 	[leftArmPath setLineJoinStyle:NSRoundLineJoinStyle];
 	[leftArmPath moveToPoint:NSMakePoint(a.lx[0], a.ly[0])];
 	
-	for (int i=1;i<5;i++)
+	for (int i=1;i<=5;i++)
 	{
 		[rightArmPath lineToPoint:NSMakePoint(a.rx[i], a.ry[i])];
 		[leftArmPath lineToPoint:NSMakePoint(a.lx[i], a.ly[i])];

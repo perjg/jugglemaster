@@ -1,0 +1,14 @@
+JuggleMaster Torquescript
+
+What is it?
+
+It's a reimplementation of jmlib in the language Torquescript - the
+runtime scripting language using in the Torque Game Engine, from
+http://www.garagegames.com
+
+It was my first exercise in learning torquescript, and I originally
+wrote it to work with Torque Game Builder [back then, it was actually
+Torque2D].
+
+Chunky Kibbles
+<chunky@icculus.org>

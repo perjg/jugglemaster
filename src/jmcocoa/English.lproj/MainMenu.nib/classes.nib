@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {setPattern = id; setStyle = id; showInspector = id; }; 
+            CLASS = JMController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {view = JMView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = JMView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {dataSource = id; }; 
+            SUPERCLASS = NSView; 
+        }
+    ); 
+    IBVersion = 1; 
+}

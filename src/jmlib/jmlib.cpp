@@ -21,7 +21,6 @@
 #include "jmlib.h"
 
 JMLib::JMLib() {
-  // styledata = (JML_CHAR*)NULL;
   initialize();
   use_cpp_callback = 0;
   cb = (ERROR_CALLBACK*)NULL;
@@ -29,7 +28,6 @@ JMLib::JMLib() {
 }
 
 JMLib::JMLib(ERROR_CALLBACK* _cb) {
-  // styledata = (JML_CHAR*)NULL;
   initialize();
   use_cpp_callback = 0;
   cb = _cb;
@@ -58,7 +56,7 @@ void JMLib::initialize(void) {
   dwell_ratio = 0.5F;
   height_ratio = 0.20F;
   mirror = 0;
-  speed = SPEED_DEF;
+  cSpeed = SPEED_DEF;
   syn = 0;
   hand_on = 1;
   hand_x = 0;
@@ -77,18 +75,11 @@ void JMLib::initialize(void) {
   srand((unsigned int)time(NULL));
 #endif
 
-  // if (styledata == NULL)
-    // styledata = new JML_CHAR[STYLEMAX*4];
-  
   setWindowSize(480, 400);
   setPatternDefault();
 }
 
 void JMLib::shutdown(void) {
-  // if (styledata != NULL) {
-    // delete styledata;
-    // styledata = (JML_CHAR*)NULL;
-  // }
 }
 
 void JMLib::setErrorCallback(void *aUData, void (*aCallback)
@@ -711,7 +702,7 @@ JML_INT32 JMLib::set_ini(JML_INT32 rr) {
 		    if(rr==0) return 0;
 		    
 		    if(pmax<3) pmax=3;
-		    tw0 = newton_sqrt(2/ga*pmax*height_ratio)*2/(pmax-dwell_ratio*2)*smode/speed;
+		    tw0 = newton_sqrt(2/ga*pmax*height_ratio)*2/(pmax-dwell_ratio*2)*smode/cSpeed;
 		    tw = (JML_INT32)fadd(tw0,0,0);
 		    if(tw==0) return 15;
 		    aw0 = tw0*dwell_ratio*2;
@@ -723,16 +714,16 @@ JML_INT32 JMLib::set_ini(JML_INT32 rr) {
 		    
 		    if(fpu){
 		      high[0]=(JML_FLOAT)(-.2*dpm);
-		      high[1]=ga*jijo(tw0/smode*speed)/8*dpm;
+		      high[1]=ga*jijo(tw0/smode*cSpeed)/8*dpm;
 		      for(i=2;i<=pmax;i++)
-			high[i]=ga*jijo((tw0*i-aw0)/smode*speed)/8*dpm;
+			high[i]=ga*jijo((tw0*i-aw0)/smode*cSpeed)/8*dpm;
 		    }
 		    else{
 		      high0[0]=(JML_INT32)(-jijo(XR)/(JML_FLOAT)(.2*dpm));
-		      high0[1]=(JML_INT32)(jijo(XR)/(JML_FLOAT)(ga*jijo(tw0/smode*speed)/8*dpm));
+		      high0[1]=(JML_INT32)(jijo(XR)/(JML_FLOAT)(ga*jijo(tw0/smode*cSpeed)/8*dpm));
 		      for(i=2;i<=pmax;i++)
 			high0[i]=(JML_INT32)(jijo(XR)/
-					(JML_FLOAT)(ga*jijo((tw0*i-aw0)/smode*speed)/8*dpm));
+					(JML_FLOAT)(ga*jijo((tw0*i-aw0)/smode*cSpeed)/8*dpm));
 		    }
 		    
 		    for(i=0;i<balln;i++){
@@ -774,11 +765,11 @@ JML_INT32 JMLib::set_ini(JML_INT32 rr) {
 
 /* original set_dpm
    void JMLib::set_dpm(void){
-   float speed0;
+   float cSpeed0;
    int i;
    
-   speed0=speed;
-   speed=2;
+   cSpeed0=cSpeed;
+   cSpeed=2;
    base=0;
    dpm=400;
    //dpm = (int)(400 * 400 / imageHeight);
@@ -843,16 +834,16 @@ JML_INT32 JMLib::set_ini(JML_INT32 rr) {
    
    }
    
-   speed=speed0;
+   cSpeed=cSpeed0;
    }
 */
 
 void JMLib::set_dpm(void) {
-  JML_FLOAT speed0;
+  JML_FLOAT cSpeed0;
   JML_INT32 i;
   
-  speed0=speed;
-  speed=(JML_FLOAT)2;
+  cSpeed0=cSpeed;
+  cSpeed=(JML_FLOAT)2;
   base=0;
   dpm=400;
   
@@ -932,7 +923,7 @@ void JMLib::set_dpm(void) {
     //base=370-(JML_INT32)( (JML_FLOAT)gy_max*dpm/400 );
   }
   
-  speed=speed0;
+  cSpeed=cSpeed0;
 }
 
 JML_INT32 JMLib::set_patt(JML_CHAR* s) {
@@ -1083,20 +1074,29 @@ JML_FLOAT JMLib::fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t) {
 
 /* FIXME */
 void JMLib::speedUp(void) {
-	speed = SPEED_MAX;
+	cSpeed = SPEED_MAX;
 	set_ini(0);
 }
 
 /* FIXME */
 void JMLib::speedDown(void) {
-	speed = SPEED_MIN;
+	cSpeed = SPEED_MIN;
 	set_ini(0);
 }
 
 /* FIXME */
 void JMLib::speedReset(void) {
-	speed = SPEED_DEF;
+	cSpeed = SPEED_DEF;
 	set_ini(0);
+}
+
+void JMLib::setSpeed(float s) {
+	cSpeed = s;
+	set_ini(0);
+}
+
+float JMLib::speed(void) {
+	return cSpeed;
 }
 
 JML_INT32 JMLib::doJuggle(void) {

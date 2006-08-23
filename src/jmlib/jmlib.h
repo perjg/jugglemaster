@@ -188,7 +188,7 @@ class JMLib {
   JML_INT32 mirror;
   JML_UINT32 time_count;
   JML_INT32 time_period;
-  JML_FLOAT speed;
+  JML_FLOAT cSpeed;
   JML_INT32 beep;
   JML_INT32 syn;
   JML_INT32 hand_on;
@@ -287,6 +287,8 @@ class JMLib {
   void speedUp(void);
   void speedDown(void);
   void speedReset(void);
+  void setSpeed(float s);
+  float speed(void);
 
   JML_CHAR getSiteposStart(void) {
     if (syn && time_period % 2 == 1) return steps[time_period-1];

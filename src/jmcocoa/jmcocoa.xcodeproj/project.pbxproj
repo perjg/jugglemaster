@@ -60,7 +60,7 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* jmcocoa_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmcocoa_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Juggle Master.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Juggle Master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* Juggle Master.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Juggle Master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +78,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1F4D31B10A9D0BA4002B80C0 /* jmcocoa */,
 				1FD17B340A9BD45800668490 /* jmlib */,
 			);
 			name = Classes;
@@ -107,6 +108,19 @@
 				8D1107320486CEB800E47090 /* Juggle Master.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		1F4D31B10A9D0BA4002B80C0 /* jmcocoa */ = {
+			isa = PBXGroup;
+			children = (
+				1FD17BB70A9BD85500668490 /* JMController.h */,
+				1FD17BB80A9BD85500668490 /* JMController.mm */,
+				1FD17BBB0A9BD85D00668490 /* JMView.h */,
+				1FD17BBA0A9BD85D00668490 /* JMView.mm */,
+				1FD17EFD0A9CD0DA00668490 /* InstantTextField.h */,
+				1FD17EFE0A9CD0DA00668490 /* InstantTextField.m */,
+			);
+			name = jmcocoa;
 			sourceTree = "<group>";
 		};
 		1FD17B340A9BD45800668490 /* jmlib */ = {
@@ -148,12 +162,6 @@
 			children = (
 				32CA4F630368D1EE00C91783 /* jmcocoa_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
-				1FD17BB70A9BD85500668490 /* JMController.h */,
-				1FD17BB80A9BD85500668490 /* JMController.mm */,
-				1FD17BBB0A9BD85D00668490 /* JMView.h */,
-				1FD17BBA0A9BD85D00668490 /* JMView.mm */,
-				1FD17EFD0A9CD0DA00668490 /* InstantTextField.h */,
-				1FD17EFE0A9CD0DA00668490 /* InstantTextField.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";

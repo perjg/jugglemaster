@@ -1,5 +1,6 @@
 Version 0.5
 In Progress
+ - Major Addition: JMCocoa, by Tom Davie
  - jmlib: replaced malloc/free with new/delete everywhere
  - jmdlx: show active part of siteswap feature added
  - jmqt: Added complete rewrite

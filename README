@@ -15,7 +15,8 @@ was later ported to C++ as a platform independent library (called
 jmlib) by Per Johan Groland, who also ported it to Palm OS and
 Pocket PC. It was later ported to wxWidgets by Gary Briggs (which
 allows it to run on a variety of platforms including Linux, Windows
-and MacOS).
+and MacOS). More recent ports include the QT port by Greg Gilbert
+and catstar and The Mac OS X Cocoa port by Tom Davie.
 
 JuggleMaster is currently available for the following operating
 systems:
@@ -24,6 +25,8 @@ MacOS, Windows, Linux   JMDlx     http://icculus.org/jugglemaster
 PocketPC                JMPocket  http://jugglemaster.net
 PalmOS                  JMPalm    http://jugglemaster.net
 Unices, DOS, Terminals  AAJM      http://icculus.org/jugglemaster/aa
+Sharp Zaurus / QT       JMQt      http://zaurus.catstar.org/jmqt/index_e.html
+Mac OS X (Cocoa)        JMCocoa   ?
 
 The weblinks above will direct you to the proper sites to download
 binaries for the various platforms. For the source code, go to
@@ -124,6 +127,9 @@ You'll need Qt, available from http://www.trolltech.com
 Just type "make jmqt" in the top level dir. Look in "bin" when you're
 done.
 
+JMCocoa
+
+JMCocoa comes with an XCode project file. Just open it in XCode and compile.
 
 
 Chunky Kibbles <chunky@icculus.org>

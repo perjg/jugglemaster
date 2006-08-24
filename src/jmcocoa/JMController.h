@@ -14,6 +14,7 @@ typedef enum
 	IBOutlet JMView *view;
 	IBOutlet NSImageView *errorReporter;
 	IBOutlet NSMatrix *patternStyleButtons;
+	IBOutlet NSPanel *inspectorPanel;
 	NSTimer *renderTimer;
 	BOOL showPattern;
 	pat currentPat;

@@ -52,6 +52,7 @@ static JML_CHAR patterns[7][12]
 - (IBAction)showInspector:(id)sender
 {
 	[NSBundle loadNibNamed:@"JMInspector" owner:self];
+	[patternStyleButtons setEnabled:NO];
 }
 
 - (IBAction)setPattern:(id)sender
@@ -88,6 +89,7 @@ static JML_CHAR patterns[7][12]
 - (IBAction)toggleShowPattern:(id)sender
 {
 	showPattern = !showPattern;
+	[patternStyleButtons setEnabled:![patternStyleButtons isEnabled]];
 }
 
 - (IBAction)setPatternStyle:(id)sender

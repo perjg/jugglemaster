@@ -13,6 +13,7 @@ typedef enum
 	JMLib *jm;
 	IBOutlet JMView *view;
 	IBOutlet NSImageView *errorReporter;
+	IBOutlet NSMatrix *patternStyleButtons;
 	NSTimer *renderTimer;
 	BOOL showPattern;
 	pat currentPat;

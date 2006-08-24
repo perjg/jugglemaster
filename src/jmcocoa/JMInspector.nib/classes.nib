@@ -18,7 +18,7 @@
             }; 
             CLASS = JMController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {errorReporter = NSImageView; view = JMView; }; 
+            OUTLETS = {errorReporter = NSImageView; patternStyleButtons = NSMatrix; view = JMView; }; 
             SUPERCLASS = NSObject; 
         }
     ); 

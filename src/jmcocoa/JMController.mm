@@ -31,6 +31,7 @@ static JML_CHAR patterns[7][12]
 		jm->doJuggle();
 		
 		showPattern = NO;
+		currentPat = singleThrow;
 		
 		[self showInspector:self];
 		
@@ -89,6 +90,11 @@ static JML_CHAR patterns[7][12]
 	showPattern = !showPattern;
 }
 
+- (IBAction)setPatternStyle:(id)sender
+{
+	currentPat = (pat)[sender selectedRow];
+}
+
 - (void)setFrame:(NSRect)frameRect
 {
 	jm->setWindowSize(frameRect.size.width, frameRect.size.height);
@@ -132,7 +138,7 @@ static JML_CHAR patterns[7][12]
 	return showPattern;
 }
 
-- (NSString *)currentThrow
+- (NSAttributedString *)currentThrow
 {
 	int start = jm->getSiteposStart();
 	int stop = jm->getSiteposStop();
@@ -140,13 +146,70 @@ static JML_CHAR patterns[7][12]
 	JML_CHAR *site = jm->getSite();
 	JML_CHAR *subString = (JML_CHAR *)malloc((stop - start + 1) * sizeof(JML_CHAR));
 	
-	for (current = start; current < stop; current++)
-	{
-		subString[current - start] = site[current];
-	}
-	subString[current - start] = '\0';
+	NSMutableAttributedString *currentSwap;
+	NSShadow *textShadow;
+	NSMutableParagraphStyle *paragraphStyle;
+
+	textShadow = [[[NSShadow alloc] init] autorelease];
+	[textShadow setShadowOffset:NSMakeSize(10,-10)];
+	[textShadow setShadowColor:[NSColor darkGrayColor]];
+	[textShadow setShadowBlurRadius:1];
 	
-	return [NSString stringWithCString:(char *)subString];
+	paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
+	[paragraphStyle setAlignment:NSCenterTextAlignment];
+		
+	if ([self patternStyle] == singleThrow)
+	{
+		for (current = start; current < stop; current++)
+		{
+			subString[current - start] = site[current];
+		}
+		subString[current - start] = '\0';
+
+		return [[[NSAttributedString alloc] initWithString:[NSString stringWithCString:(char *)subString]
+												attributes:
+			[NSDictionary dictionaryWithObjects:
+				[NSArray arrayWithObjects:
+					[NSFont fontWithName:@"Futura" size:64],
+					textShadow,
+					[NSColor lightGrayColor],
+					paragraphStyle,
+					nil]
+										forKeys:
+				[NSArray arrayWithObjects:
+					NSFontAttributeName,
+					NSShadowAttributeName,
+					NSForegroundColorAttributeName,
+					NSParagraphStyleAttributeName,
+					nil]]] autorelease];
+	}
+	else if ([self patternStyle] == karaoke)
+	{
+		currentSwap = [[[NSMutableAttributedString alloc] initWithString:[NSString stringWithCString:(char *)site]
+															  attributes:
+			[NSDictionary dictionaryWithObjects:
+				[NSArray arrayWithObjects:
+					[NSFont fontWithName:@"Futura" size:64],
+					textShadow,
+					[NSColor lightGrayColor],
+					paragraphStyle,
+					nil]
+										forKeys:
+				[NSArray arrayWithObjects:
+					NSFontAttributeName,
+					NSShadowAttributeName,
+					NSForegroundColorAttributeName,
+					NSParagraphStyleAttributeName,
+					nil]]] autorelease];
+		[currentSwap addAttribute:NSForegroundColorAttributeName value:[NSColor yellowColor] range:NSMakeRange(start, stop - start)];
+	}
+	
+	return currentSwap;
+}
+
+- (pat)patternStyle
+{
+	return currentPat;
 }
 
 @end

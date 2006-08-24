@@ -73,38 +73,9 @@
 
 - (void)drawSiteSwap
 {
-	NSAttributedString *currentSwap;
-	NSShadow *textShadow;
-	NSMutableParagraphStyle *paragraphStyle;
-	
 	if ([dataSource shouldShowPattern])
 	{
-		textShadow = [[[NSShadow alloc] init] autorelease];
-		[textShadow setShadowOffset:NSMakeSize(10,-10)];
-		[textShadow setShadowColor:[NSColor darkGrayColor]];
-		[textShadow setShadowBlurRadius:1];
-		
-		paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
-		[paragraphStyle setAlignment:NSCenterTextAlignment];
-		
-		currentSwap = [[[NSAttributedString alloc] initWithString:[dataSource currentThrow]
-													   attributes:
-			[NSDictionary dictionaryWithObjects:
-				[NSArray arrayWithObjects:
-					[NSFont fontWithName:@"Futura" size:64],
-					textShadow,
-					[NSColor lightGrayColor],
-					paragraphStyle,
-					nil]
-										forKeys:
-				[NSArray arrayWithObjects:
-					NSFontAttributeName,
-					NSShadowAttributeName,
-					NSForegroundColorAttributeName,
-					NSParagraphStyleAttributeName,
-					nil]]] autorelease];
-		
-		[currentSwap drawInRect:[self frame]];
+		[[dataSource currentThrow] drawInRect:[self frame]];
 	}
 }
 

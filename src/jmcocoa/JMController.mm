@@ -111,7 +111,7 @@ static JML_CHAR patterns[7][12]
 
 - (int)ballDiameter
 {
-	return (11*jm->dpm/DW);	
+	return jm->getBallRadius()*2;	
 }
 
 - (int)numberOfBalls

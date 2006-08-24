@@ -84,7 +84,7 @@
 	NSPoint p = [dataSource ballPosition:ball];
 	float radius = (float)[dataSource ballDiameter] / 2.0;
 	
-	NSBezierPath *ballPath = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(p.x - radius, p.y - radius, radius * 2, radius * 2)];
+	NSBezierPath *ballPath = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(p.x, p.y, radius * 2, radius * 2)];
 	
 	[[dataSource ballColour:ball] set];
 	[ballPath fill];

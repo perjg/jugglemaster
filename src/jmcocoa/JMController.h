@@ -2,6 +2,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define TEXT_PROPORTION 35
+
 typedef enum
 {
 	normalThrow = 0,
@@ -39,7 +41,8 @@ typedef enum
 
 - (BOOL)shouldShowPattern;
 - (pat)patternStyle;
-- (NSAttributedString *)currentThrow;
-- (NSAttributedString *)juggleStyle;
+- (NSAttributedString *)currentThrowString;
+- (NSAttributedString *)juggleStyleString;
+- (NSAttributedString *)numberOfBallsString;
 
 @end

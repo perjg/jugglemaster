@@ -75,8 +75,16 @@
 {
 	if ([dataSource shouldShowPattern])
 	{
-		[[dataSource currentThrow] drawInRect:[self frame]];
-		[[dataSource juggleStyle] drawInRect:[self frame]];
+		NSRect frame = [self frame];
+		
+		frame.size.width -= 10;
+		frame.size.height -= 10;
+		frame.origin.x += 5;
+		frame.origin.y += 5;
+		
+		[[dataSource currentThrowString] drawInRect:frame];
+		[[dataSource juggleStyleString] drawInRect:frame];
+		[[dataSource numberOfBallsString] drawInRect:frame];
 	}
 }
 

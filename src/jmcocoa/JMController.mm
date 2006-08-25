@@ -143,7 +143,7 @@ static JML_CHAR patterns[7][12]
 	return showPattern;
 }
 
-- (NSAttributedString *)currentThrow
+- (NSAttributedString *)currentThrowString
 {
 	int start = jm->getSiteposStart();
 	int stop = jm->getSiteposStop();
@@ -165,11 +165,11 @@ static JML_CHAR patterns[7][12]
 		}
 		subString[current - start] = '\0';
 
-		return [[[NSAttributedString alloc] initWithString:[NSString stringWithCString:(char *)subString]
+		return [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Pattern: %@", [NSString stringWithCString:(char *)site]]
 												attributes:
 			[NSDictionary dictionaryWithObjects:
 				[NSArray arrayWithObjects:
-					[NSFont fontWithName:@"Futura" size:32],
+					[NSFont fontWithName:@"Futura" size:[view frame].size.width / TEXT_PROPORTION],
 					[NSColor lightGrayColor],
 					paragraphStyle,
 					nil]
@@ -182,11 +182,11 @@ static JML_CHAR patterns[7][12]
 	}
 	else
 	{
-		currentSwap = [[[NSMutableAttributedString alloc] initWithString:[NSString stringWithCString:(char *)site]
+		currentSwap = [[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Pattern: %@", [NSString stringWithCString:(char *)site]]
 															  attributes:
 			[NSDictionary dictionaryWithObjects:
 				[NSArray arrayWithObjects:
-					[NSFont fontWithName:@"Futura" size:32],
+					[NSFont fontWithName:@"Futura" size:[view frame].size.width / TEXT_PROPORTION],
 					[NSColor lightGrayColor],
 					paragraphStyle,
 					nil]
@@ -198,25 +198,25 @@ static JML_CHAR patterns[7][12]
 					nil]]] autorelease];
 		if ([self patternStyle] == karaoke)
 		{
-			[currentSwap addAttribute:NSForegroundColorAttributeName value:[NSColor yellowColor] range:NSMakeRange(start, stop - start)];
+			[currentSwap addAttribute:NSForegroundColorAttributeName value:[NSColor yellowColor] range:NSMakeRange(start + 9, stop - start)];
 		}
 	}
 	
 	return currentSwap;
 }
 
-- (NSAttributedString *)juggleStyle
+- (NSAttributedString *)juggleStyleString
 {
 	NSMutableParagraphStyle *paragraphStyle;
 	
 	paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
 	[paragraphStyle setAlignment:NSRightTextAlignment];
 	
-	return [[[NSAttributedString alloc] initWithString:[[styleSelect selectedItem] title]
+	return [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Style: %@", [[styleSelect selectedItem] title]]
 											attributes:
 		[NSDictionary dictionaryWithObjects:
 			[NSArray arrayWithObjects:
-				[NSFont fontWithName:@"Futura" size:32],
+				[NSFont fontWithName:@"Futura" size:[view frame].size.width / TEXT_PROPORTION],
 				[NSColor lightGrayColor],
 				paragraphStyle,
 				nil]
@@ -225,6 +225,22 @@ static JML_CHAR patterns[7][12]
 				NSFontAttributeName,
 				NSForegroundColorAttributeName,
 				NSParagraphStyleAttributeName,
+				nil]]] autorelease];
+}
+
+- (NSAttributedString *)numberOfBallsString
+{
+	return [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Balls: %d", jm->balln]
+											attributes:
+		[NSDictionary dictionaryWithObjects:
+			[NSArray arrayWithObjects:
+				[NSFont fontWithName:@"Futura" size:[view frame].size.width / TEXT_PROPORTION],
+				[NSColor lightGrayColor],
+				nil]
+									forKeys:
+			[NSArray arrayWithObjects:
+				NSFontAttributeName,
+				NSForegroundColorAttributeName,
 				nil]]] autorelease];
 }
 

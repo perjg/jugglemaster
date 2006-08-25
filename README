@@ -68,6 +68,17 @@ There are some extra features in jmdlx that aren't enabled by default
 [eg mpeg videos, since they need ffmpeg]. To enable them, please edit
 Makefile.cfg in the top-level dir
 
+To compile JMDlx with 3D support, you need to define the symbol
+OPENGL_SUPPORT. Also, add the files opengl.cpp/h and opengl_renderer.cpp/h
+to the build.
+
+Also, you should add the libraries opengl32.lib and wxmsw26d_gl.lib
+(for Windows, on other platforms, the library names may be different)
+If your wxWidgets library is not compiled with OpenGL support, you will
+need to recompile with the symbol wxUSE_GLCANVAS set.
+
+To build on Windows using Visual Studio, extract VisualStudio_3D.zip
+where it is, and build.
 
 JMPocket
 

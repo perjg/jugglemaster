@@ -73,7 +73,7 @@ int creatempeg(JMLib *j, const char *filename) {
 	picture->linesize[2] = mpegcontext->width / 2;
 
 
-	for(i=j->balln-1;i>=0;i--) {
+	for(i=j->numBalls()-1;i>=0;i--) {
 		firstpos[i] = j->b[i];
 	}
 
@@ -82,7 +82,7 @@ int creatempeg(JMLib *j, const char *filename) {
 	
 	j->doJuggle();
 	done = 1;
-	for(i=j->balln-1;i>=0;i--) {
+	for(i=j->numBalls()-1;i>=0;i--) {
 		if(firstpos[i].gx != j->b[i].gx ||
 			firstpos[i].gy != j->b[i].gy) done=0;
 	}

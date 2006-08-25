@@ -335,6 +335,10 @@ JML_FLOAT JMLib::getDR() {
 	return(dwell_ratio);
 }
 
+JML_INT32 JMLib::numBalls(void) {
+	return balln;
+}
+
 
 // Internal functions
 void JMLib::arm_line(void){

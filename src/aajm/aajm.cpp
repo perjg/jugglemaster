@@ -71,7 +71,7 @@ void draw_juggler(int show_loadavg, aa_context *c, JMLib *j) {
 	color = 255;
 	// draw balls
 	int diam = (11*j->dpm/DW);
-	for(i=j->balln-1;i>=0;i--) {
+	for(i=j->numBalls()-1;i>=0;i--) {
 		aa_drawcircle(c, j->b[i].gx + diam,
 				j->b[i].gy + diam,
 				diam, color, color);
@@ -83,7 +83,7 @@ void draw_juggler(int show_loadavg, aa_context *c, JMLib *j) {
 
 	aa_printf(c, 0, 0, AA_SPECIAL,
 		"Site: %s    Style: %s    Balls: %i",
-		j->getSite(), j->getStyle(), j->balln);
+		j->getSite(), j->getStyle(), j->numBalls());
 
 	if(show_loadavg) {
 		loadaverage(&load);

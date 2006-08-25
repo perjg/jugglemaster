@@ -370,7 +370,7 @@ int Print::printPS(void) {
 
 	fprintf(outputfile, "%i {\n", max_iterations->GetValue());
 
-	for(i=jmlib->balln-1;i>=0;i--) {
+	for(i=jmlib->numBalls()-1;i>=0;i--) {
 		firstpos[i] = jmlib->b[i];
 	}
 
@@ -378,7 +378,7 @@ int Print::printPS(void) {
 		jmlib->doJuggle();
 
 		done = 1;
-		for(i=jmlib->balln-1;i>=0;i--) {
+		for(i=jmlib->numBalls()-1;i>=0;i--) {
 			if(firstpos[i].gx != jmlib->b[i].gx ||
 				firstpos[i].gy != jmlib->b[i].gy) done=0;
 		}
@@ -390,7 +390,7 @@ int Print::printPS(void) {
 				"( Site: %s  Style: %s  Balls: %i ) show\n",
 				jmlib->getSite(),
 				jmlib->getStyle(),
-				jmlib->balln);
+				jmlib->numBalls());
 
 		fprintf(outputfile, "%i {\n", delay->GetValue());
 		/* Draw Juggler */
@@ -467,7 +467,7 @@ int Print::printPS(void) {
 		fprintf(outputfile, "%%Balls\n");
 		fprintf(outputfile, "newpath\n");
 		int diam = 11*jmlib->dpm/DW;
-		for(i=jmlib->balln-1;i>=0;i--) {
+		for(i=jmlib->numBalls()-1;i>=0;i--) {
 			fprintf(outputfile, " %i %i %i 0 360 arc\n",
 				jmlib->b[i].gx+diam,
 				-jmlib->b[i].gy-diam + y_offset,
@@ -573,7 +573,7 @@ int Print::printFlipBook(void) {
 
 	fprintf(outputfile, "%%%%EndProlog\n");
 
-	for(i=jmlib->balln-1;i>=0;i--) {
+	for(i=jmlib->numBalls()-1;i>=0;i--) {
 		firstpos[i] = jmlib->b[i];
 	}
 
@@ -581,7 +581,7 @@ int Print::printFlipBook(void) {
 
 		done = 1;
 		jmlib->doJuggle();
-		for(i=jmlib->balln-1;i>=0;i--) {
+		for(i=jmlib->numBalls()-1;i>=0;i--) {
 			if(firstpos[i].gx != jmlib->b[i].gx ||
 				firstpos[i].gy != jmlib->b[i].gy) done=0;
 		}
@@ -627,7 +627,7 @@ int Print::printFlipBook(void) {
 					f_offs_x + 4, f_offs_y + 4,
 					jmlib->getSite(),
 					jmlib->getStyle(),
-					jmlib->balln);
+					jmlib->numBalls());
 
 				/* Draw Juggler */
 
@@ -705,7 +705,7 @@ int Print::printFlipBook(void) {
 				fprintf(outputfile, "%%Balls\n");
 				fprintf(outputfile, "newpath\n");
 				int diam = 11*jmlib->dpm/DW;
-				for(i=jmlib->balln-1;i>=0;i--) {
+				for(i=jmlib->numBalls()-1;i>=0;i--) {
 					fprintf(outputfile, " %i %i %i 0 360 arc\n",
 						f_offs_x + jmlib->b[i].gx+diam,
 						f_offs_y -jmlib->b[i].gy-diam + y_offset,
@@ -803,7 +803,7 @@ int Print::printMPEG() {
 	picture->linesize[2] = c->width / 2;
 
 
-	for(i=jmlib->balln-1;i>=0;i--) {
+	for(i=jmlib->numBalls()-1;i>=0;i--) {
 		firstpos[i] = jmlib->b[i];
 	}
 
@@ -814,7 +814,7 @@ int Print::printMPEG() {
 
 		memset((void *)picture_buf, '\0', (size*3)/2);
 
-		for(i=jmlib->balln-1;i>=0;i--) {
+		for(i=jmlib->numBalls()-1;i>=0;i--) {
 			if(firstpos[i].gx != jmlib->b[i].gx ||
 				firstpos[i].gy != jmlib->b[i].gy) done=0;
 		}
@@ -950,11 +950,11 @@ void Print::RenderFrame(wxDC *dc, JMLib *j) {
 
 	// draw balls
 	int diam = (11*j->dpm/DW)*2;
-	for(i=j->balln-1;i>=0;i--) {
+	for(i=j->numBalls()-1;i>=0;i--) {
 		dc->DrawEllipse(j->b[i].gx, j->b[i].gy, diam, diam);
 	}
 	wxString balltext;
-	balltext.Printf("Site: %s    Style: %s    Balls: %i",j->getSite(),j->getStyle(),j->balln);
+	balltext.Printf("Site: %s    Style: %s    Balls: %i",j->getSite(),j->getStyle(),j->numBalls());
 	dc->DrawText(balltext, 10, 10);
 
 }

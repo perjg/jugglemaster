@@ -167,12 +167,12 @@ class JMLib {
   struct hand handpoly;
   struct ball b[BMAX];
   JML_INT32 dpm;
-  JML_INT32 balln;
   JML_INT32 gx_max, gx_min, gy_max, gy_min;
   JML_INT32 imageWidth, imageHeight;
   // read-write
   JML_INT32 status;
  protected:
+  JML_INT32 balln;
   JML_INT32 bm1;
   JML_INT32 arm_x;
   JML_INT32 arm_y;
@@ -259,6 +259,8 @@ class JMLib {
   JML_FLOAT getDR();
   // repeat for all toggleable settings
 
+  JML_INT32 numBalls(void);
+  
   // toggle Z coordinate calculation on and off
   void calculateZ(JML_BOOL flag); 
 

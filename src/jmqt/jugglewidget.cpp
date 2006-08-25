@@ -111,13 +111,13 @@ void JuggleWidget::updateBuffer(void) {
 
   int diam = (11*m_jmlib->dpm/DW)*2;
   if(pUP->isUseColorList()) {
-    for(int i=0;i<=m_jmlib->balln-1;i++) {
+    for(int i=0;i<=m_jmlib->numBalls()-1;i++) {
       p.setBrush(pUP->getBallColor(i));
       p.drawEllipse(m_jmlib->b[i].gx, m_jmlib->b[i].gy, diam, diam);
     }
   } else {
     p.setBrush(pUP->getBallColorSame());
-    for(int i=0;i<=m_jmlib->balln-1;i++) {
+    for(int i=0;i<=m_jmlib->numBalls()-1;i++) {
       p.drawEllipse(m_jmlib->b[i].gx, m_jmlib->b[i].gy, diam, diam);
     }
   }

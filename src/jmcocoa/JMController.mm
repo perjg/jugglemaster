@@ -119,7 +119,7 @@ static JML_CHAR patterns[7][12]
 
 - (int)numberOfBalls
 {
-	return jm->balln;
+	return jm->numBalls();
 }
 
 - (NSPoint)ballPosition:(int)ballNum
@@ -230,7 +230,7 @@ static JML_CHAR patterns[7][12]
 
 - (NSAttributedString *)numberOfBallsString
 {
-	return [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Balls: %d", jm->balln]
+	return [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Balls: %d", [self numberOfBalls]]
 											attributes:
 		[NSDictionary dictionaryWithObjects:
 			[NSArray arrayWithObjects:

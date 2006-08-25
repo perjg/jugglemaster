@@ -423,7 +423,7 @@ void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
 
   // draw balls
   int diam = (11*jmlib->dpm/DW)*2;
-  for(i=jmlib->balln-1;i>=0;i--) {
+  for(i=jmlib->numBalls()-1;i>=0;i--) {
     if(parent->optionsMenu->IsChecked(OPTION_COLORBALLS)) {
 	dc.SetBrush(*ball_colors[i%NUMBALLCOLORS]);
     }
@@ -468,7 +468,7 @@ void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
 
   // More pattern information
   wxString balltext;
-  balltext.Printf("    Style: %s    Balls: %i", jmlib->getStyle(), jmlib->balln);
+  balltext.Printf("    Style: %s    Balls: %i", jmlib->getStyle(), jmlib->numBalls());
   dc.DrawText(balltext, x, y);
 
   // flip

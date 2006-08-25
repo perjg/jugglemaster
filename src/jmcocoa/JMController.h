@@ -16,6 +16,7 @@ typedef enum
 	IBOutlet NSImageView *errorReporter;
 	IBOutlet NSMatrix *patternStyleButtons;
 	IBOutlet NSPanel *inspectorPanel;
+	IBOutlet NSPopUpButton *styleSelect;
 	NSTimer *renderTimer;
 	BOOL showPattern;
 	pat currentPat;
@@ -39,5 +40,6 @@ typedef enum
 - (BOOL)shouldShowPattern;
 - (pat)patternStyle;
 - (NSAttributedString *)currentThrow;
+- (NSAttributedString *)juggleStyle;
 
 @end

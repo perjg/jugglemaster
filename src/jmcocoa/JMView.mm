@@ -76,6 +76,7 @@
 	if ([dataSource shouldShowPattern])
 	{
 		[[dataSource currentThrow] drawInRect:[self frame]];
+		[[dataSource juggleStyle] drawInRect:[self frame]];
 	}
 }
 

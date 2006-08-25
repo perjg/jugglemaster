@@ -169,7 +169,7 @@ static JML_CHAR patterns[7][12]
 												attributes:
 			[NSDictionary dictionaryWithObjects:
 				[NSArray arrayWithObjects:
-					[NSFont fontWithName:@"Futura" size:64],
+					[NSFont fontWithName:@"Futura" size:32],
 					[NSColor lightGrayColor],
 					paragraphStyle,
 					nil]
@@ -186,7 +186,7 @@ static JML_CHAR patterns[7][12]
 															  attributes:
 			[NSDictionary dictionaryWithObjects:
 				[NSArray arrayWithObjects:
-					[NSFont fontWithName:@"Futura" size:64],
+					[NSFont fontWithName:@"Futura" size:32],
 					[NSColor lightGrayColor],
 					paragraphStyle,
 					nil]
@@ -203,6 +203,29 @@ static JML_CHAR patterns[7][12]
 	}
 	
 	return currentSwap;
+}
+
+- (NSAttributedString *)juggleStyle
+{
+	NSMutableParagraphStyle *paragraphStyle;
+	
+	paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
+	[paragraphStyle setAlignment:NSRightTextAlignment];
+	
+	return [[[NSAttributedString alloc] initWithString:[[styleSelect selectedItem] title]
+											attributes:
+		[NSDictionary dictionaryWithObjects:
+			[NSArray arrayWithObjects:
+				[NSFont fontWithName:@"Futura" size:32],
+				[NSColor lightGrayColor],
+				paragraphStyle,
+				nil]
+								   forKeys:
+			[NSArray arrayWithObjects:
+				NSFontAttributeName,
+				NSForegroundColorAttributeName,
+				NSParagraphStyleAttributeName,
+				nil]]] autorelease];
 }
 
 - (pat)patternStyle

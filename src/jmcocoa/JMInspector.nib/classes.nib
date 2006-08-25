@@ -22,6 +22,7 @@
                 errorReporter = NSImageView; 
                 inspectorPanel = NSPanel; 
                 patternStyleButtons = NSMatrix; 
+                styleSelect = NSPopUpButton; 
                 view = JMView; 
             }; 
             SUPERCLASS = NSObject; 

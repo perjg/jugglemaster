@@ -49,6 +49,11 @@ static JML_CHAR patterns[7][12]
 	[super dealloc];
 }
 
+- (IBAction)copy:(id)sender
+{
+	[view copy:sender];
+}
+
 - (IBAction)showInspector:(id)sender
 {
 	if (!inspectorPanel)

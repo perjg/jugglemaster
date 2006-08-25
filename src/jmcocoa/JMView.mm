@@ -21,22 +21,41 @@
 	return self;
 }
 
+- (void)awakeFromNib
+{
+	[[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:self];
+}
+
+- (IBAction)copy:(id)sender
+{
+	[[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:self];
+	
+	[sender setData:[[self frameGrab] TIFFRepresentation] forType:NSTIFFPboardType];
+}
+
+- (NSImage *)frameGrab
+{
+	NSImage *image = [[NSImage alloc] initWithSize:[self frame].size];
+		
+	[image lockFocus];
+	[self drawRect:[self frame]];
+	[image unlockFocus];
+	
+	return image;
+}
+
 - (void)setFrame:(NSRect)frameRect
 {
 	[super setFrame:frameRect];
 	[dataSource setFrame:frameRect];
 }
 
-- (BOOL)isFlipped
-{
-	return YES;
-}
-
 - (void)drawRect:(NSRect)rect
 {
 	int ballNum;
+	int maxY = [self frame].size.height;
 	arm a= [dataSource bodyPartPositions];
-	NSBezierPath *headPath = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(a.hx - a.hr, a.hy - a.hr, a.hr * 2, a.hr * 2)];
+	NSBezierPath *headPath = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(a.hx - a.hr, maxY - (a.hy - a.hr), a.hr * 2, -a.hr * 2)];
 	NSBezierPath *rightArmPath = [NSBezierPath bezierPath];
 	NSBezierPath *leftArmPath = [NSBezierPath bezierPath];
 	
@@ -45,14 +64,14 @@
 	[leftArmPath setLineWidth:2.0];
 	
 	[rightArmPath setLineJoinStyle:NSRoundLineJoinStyle];
-	[rightArmPath moveToPoint:NSMakePoint(a.rx[0], a.ry[0])];
+	[rightArmPath moveToPoint:NSMakePoint(a.rx[0], maxY - a.ry[0])];
 	[leftArmPath setLineJoinStyle:NSRoundLineJoinStyle];
-	[leftArmPath moveToPoint:NSMakePoint(a.lx[0], a.ly[0])];
+	[leftArmPath moveToPoint:NSMakePoint(a.lx[0], maxY - a.ly[0])];
 	
 	for (int i=1;i<=5;i++)
 	{
-		[rightArmPath lineToPoint:NSMakePoint(a.rx[i], a.ry[i])];
-		[leftArmPath lineToPoint:NSMakePoint(a.lx[i], a.ly[i])];
+		[rightArmPath lineToPoint:NSMakePoint(a.rx[i], maxY - a.ry[i])];
+		[leftArmPath lineToPoint:NSMakePoint(a.lx[i], maxY - a.ly[i])];
 	}
 	
 	[[NSColor blackColor] set];
@@ -93,10 +112,24 @@
 	NSPoint p = [dataSource ballPosition:ball];
 	float radius = (float)[dataSource ballDiameter] / 2.0;
 	
-	NSBezierPath *ballPath = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(p.x, p.y, radius * 2, radius * 2)];
+	NSBezierPath *ballPath = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(p.x, [self frame].size.height - p.y, radius * 2, -radius * 2)];
 	
 	[[dataSource ballColour:ball] set];
 	[ballPath fill];
+}
+
+- (void)pasteboard:(NSPasteboard *)sender provideDataForType:(NSString *)type
+{
+	NSImage *image = [[NSImage alloc] initWithSize:[self frame].size];
+	
+	if ([type isEqualTo:NSTIFFPboardType])
+	{
+		[image lockFocus];
+		[self drawRect:[self frame]];
+		[image unlockFocus];
+		
+		[sender setData:[image TIFFRepresentation] forType:NSTIFFPboardType];
+	}
 }
 
 @end

@@ -2,10 +2,24 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {setPattern = id; setStyle = id; showInspector = id; }; 
+            ACTIONS = {
+                captureScreenshot = id; 
+                setPattern = id; 
+                setPatternStyle = id; 
+                setSpeed = id; 
+                setStyle = id; 
+                showInspector = id; 
+                toggleShowPattern = id; 
+            }; 
             CLASS = JMController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {view = JMView; }; 
+            OUTLETS = {
+                errorReporter = NSImageView; 
+                inspectorPanel = NSPanel; 
+                patternStyleButtons = NSMatrix; 
+                styleSelect = NSPopUpButton; 
+                view = JMView; 
+            }; 
             SUPERCLASS = NSObject; 
         }, 
         {

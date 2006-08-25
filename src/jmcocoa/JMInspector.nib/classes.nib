@@ -9,6 +9,7 @@
         {CLASS = InstantTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
         {
             ACTIONS = {
+                renderToImage = id; 
                 setPattern = id; 
                 setPatternStyle = id; 
                 setSpeed = id; 

@@ -6,4 +6,9 @@
 {
     IBOutlet id dataSource;
 }
+
+- (IBAction)copy:(id)sender;
+
+- (NSImage *)frameGrab;
+
 @end

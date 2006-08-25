@@ -31,7 +31,7 @@ static JML_CHAR patterns[7][12]
 		jm->doJuggle();
 		
 		showPattern = NO;
-		currentPat = singleThrow;
+		currentPat = karaoke;
 		
 		[self showInspector:self];
 		
@@ -51,8 +51,11 @@ static JML_CHAR patterns[7][12]
 
 - (IBAction)showInspector:(id)sender
 {
-	[NSBundle loadNibNamed:@"JMInspector" owner:self];
-	[patternStyleButtons setEnabled:NO];
+	if (!inspectorPanel)
+	{
+		[NSBundle loadNibNamed:@"JMInspector" owner:self];
+		[patternStyleButtons setEnabled:NO];
+	}
 }
 
 - (IBAction)setPattern:(id)sender
@@ -149,13 +152,7 @@ static JML_CHAR patterns[7][12]
 	JML_CHAR *subString = (JML_CHAR *)malloc((stop - start + 1) * sizeof(JML_CHAR));
 	
 	NSMutableAttributedString *currentSwap;
-	NSShadow *textShadow;
 	NSMutableParagraphStyle *paragraphStyle;
-
-	textShadow = [[[NSShadow alloc] init] autorelease];
-	[textShadow setShadowOffset:NSMakeSize(10,-10)];
-	[textShadow setShadowColor:[NSColor darkGrayColor]];
-	[textShadow setShadowBlurRadius:1];
 	
 	paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
 	[paragraphStyle setAlignment:NSCenterTextAlignment];
@@ -173,37 +170,36 @@ static JML_CHAR patterns[7][12]
 			[NSDictionary dictionaryWithObjects:
 				[NSArray arrayWithObjects:
 					[NSFont fontWithName:@"Futura" size:64],
-					textShadow,
 					[NSColor lightGrayColor],
 					paragraphStyle,
 					nil]
 										forKeys:
 				[NSArray arrayWithObjects:
 					NSFontAttributeName,
-					NSShadowAttributeName,
 					NSForegroundColorAttributeName,
 					NSParagraphStyleAttributeName,
 					nil]]] autorelease];
 	}
-	else if ([self patternStyle] == karaoke)
+	else
 	{
 		currentSwap = [[[NSMutableAttributedString alloc] initWithString:[NSString stringWithCString:(char *)site]
 															  attributes:
 			[NSDictionary dictionaryWithObjects:
 				[NSArray arrayWithObjects:
 					[NSFont fontWithName:@"Futura" size:64],
-					textShadow,
 					[NSColor lightGrayColor],
 					paragraphStyle,
 					nil]
 										forKeys:
 				[NSArray arrayWithObjects:
 					NSFontAttributeName,
-					NSShadowAttributeName,
 					NSForegroundColorAttributeName,
 					NSParagraphStyleAttributeName,
 					nil]]] autorelease];
-		[currentSwap addAttribute:NSForegroundColorAttributeName value:[NSColor yellowColor] range:NSMakeRange(start, stop - start)];
+		if ([self patternStyle] == karaoke)
+		{
+			[currentSwap addAttribute:NSForegroundColorAttributeName value:[NSColor yellowColor] range:NSMakeRange(start, stop - start)];
+		}
 	}
 	
 	return currentSwap;

@@ -4,7 +4,8 @@
 
 typedef enum
 {
-	singleThrow = 0,
+	normalThrow = 0,
+	singleThrow,
 	karaoke
 } pat;
 

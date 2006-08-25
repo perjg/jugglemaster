@@ -583,6 +583,7 @@ JML_INT32 JMLib::juggle(struct ball *d) {
       }
       
       y+=(JML_INT32)((JML_FLOAT)(fx*(rpoz-tpoz)+rpoz+tpoz)*dpm/40);
+      d->t = fx; // spin
       fx=(fx*(rpox-tpox)+rpox+tpox)/20;
     }
     

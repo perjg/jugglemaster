@@ -132,6 +132,9 @@
 #define FS_MIN 1
 #define FS_DEF 1
 
+#define PI 3.14159265f
+#define HALF_PI 1.570796325f
+
 typedef void (ERROR_CALLBACK)(JML_CHAR*);
 typedef void (PATTPRINT_CALLBACK)(JML_INT32,JML_INT32,JML_CHAR*,JML_BOOL);
 
@@ -145,6 +148,16 @@ struct ball {
   JML_INT32 chand;    // catching hand (0-left, 1-right)
   JML_INT32 thand;    // throwing hand (0-left, 1-right)
   JML_INT32 st;       // object status (OBJECT_HAND etc.)
+  JML_FLOAT t;        // for spin calculation
+
+  float getSpin(int spins) {
+    if (isHolding()) return HALF_PI;
+    else return (HALF_PI + (float)t * PI) * ((spins * bh - 1) / 2);
+  }
+
+  JML_BOOL isHolding() {
+    return (st & OBJECT_UNDER);
+  }
 };
 
 struct arm {

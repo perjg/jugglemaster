@@ -96,11 +96,11 @@
 #ifdef LOW_MEM_DEVICE
 #define XR 255L     // Accuracy of x axis, set higher for large screens 255
 #define BMAX 35     // max number of balls
-#define MMAX 11    // Max multiplex, double+1
+#define MMAX 11     // Max multiplex, double+1
 #else
 #define XR 1024L    // Accuracy of x axis, set higher for large screens 255
 #define BMAX 630    // max number of balls
-#define MMAX 71    // Max multiplex, double+1
+#define MMAX 71     // Max multiplex, double+1
 #endif
 
 #define LMAX 76		     // max column of a pattern
@@ -275,6 +275,7 @@ class JMLib {
 
   // JML_BOOL setFrameskip(JML_INT32 fs);
   JML_BOOL setWindowSize(JML_INT32 width, JML_INT32 height);
+  void     setWindowSizeDefault() { setWindowSize(480, 400); }
   void setMirror(JML_BOOL mir = true);
 
   JML_CHAR* getSite(void) { return siteswap; }

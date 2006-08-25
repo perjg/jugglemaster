@@ -123,7 +123,7 @@ void JMOpenGLRenderer::doCoordTransform(bool flipY, bool centerOrigin) {
   ap.head_radius = jmlib_ap->hr * scalingFactor;
 
   // balls
-  for(i = jmlib->balln - 1; i >= 0; i--) {
+  for(i = jmlib->numBalls() - 1; i >= 0; i--) {
     if (flipY) b[i].gy = h - jmlib->b[i].gy;
     else       b[i].gy = jmlib->b[i].gy;
 
@@ -260,7 +260,7 @@ void JMOpenGLRenderer::drawFlat() {
   // Draw balls
   glColor3f(1.0, 0.0, 0.0);
   int r = (11*jmlib->dpm/DW);
-  for(i = jmlib->balln - 1; i >= 0; i--) {
+  for(i = jmlib->numBalls() - 1; i >= 0; i--) {
     if (coloredBalls) setBallColor(i%6);
 
     drawFilledCircle(b[i].gx+r, b[i].gy+r, ballRadius);
@@ -294,7 +294,7 @@ void JMOpenGLRenderer::draw3d() {
 
   // Draw balls
   glColor3f(1.0, 0.0, 0.0);
-  for(int i = jmlib->balln - 1 ; i >= 0; i--) {
+  for(int i = jmlib->numBalls() - 1 ; i >= 0; i--) {
     glLoadIdentity();
 
     glTranslatef(0.0, 0.0, b[i].gz);

@@ -1,4 +1,4 @@
-/*
+
  * JMDeluxe - Portable JuggleMaster based on wxWindows
  * (C) Per Johan Persson 2002, Gary Briggs 2003
  *
@@ -15,6 +15,7 @@
 
 #include "jmdlx.h"
 #include <wx/dcbuffer.h>    //wxBufferedDC
+
 // JMLib* jmlib;
 
 IMPLEMENT_APP(JMApp)
@@ -67,10 +68,6 @@ bool JMApp::OnInit() {
 	frame = new JMFrame(NULL, -1, "JuggleMaster Deluxe",
 		wxDefaultPosition, wxSize(windowx,windowy), jmlib);
 
-  // Set the frame as the top window (this ensures that the application is closed
-  // when the frame is closed
-  SetTopWindow(frame);
-
 	// Show the frame
 	frame->Show(true);
 
@@ -81,28 +78,6 @@ int JMApp::OnExit() {
 	delete jmlib;
 	return 0;
 }
-
-
-// Menu
-enum {
-	ID_EXIT,
-	ID_ABOUT,
-	CHANGE_SITESWAP_S,
-	CHANGE_SITESWAP_A,
-	CHANGE_SITESWAP_R,
-	CHANGE_STYLE_S,
-	CHOOSE_PATTERN,
-	CHOOSE_SEMAPHORE,
-	PRINT_PS,
-	OPTION_MIRROR,
-	OPTION_REDOWNLOAD,
-	OPTION_PAUSE,
-	OPTION_COLORBALLS,
-	SPEED_UP,
-	SPEED_DOWN,
-	SPEED_RESET
-};
-
 
 BEGIN_EVENT_TABLE(JMFrame, wxFrame)
     EVT_MENU(ID_EXIT,  JMFrame::OnClose)
@@ -120,6 +95,11 @@ BEGIN_EVENT_TABLE(JMFrame, wxFrame)
     EVT_MENU(SPEED_UP, JMFrame::speedUp)
     EVT_MENU(SPEED_DOWN, JMFrame::speedDown)
     EVT_MENU(SPEED_RESET, JMFrame::speedReset)
+#ifdef OPENGL_SUPPORT
+    EVT_MENU(OPTION_OGL_AUTOROTATE, JMFrame::changeAutoRotate)
+    EVT_MENU(OPTION_OGL_3D_MODE, JMFrame::changeRenderMode)
+    EVT_MENU(OPTION_COLORBALLS, JMFrame::changeColorballs)
+#endif
 END_EVENT_TABLE()
 
 JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
@@ -150,6 +130,15 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
   optionsMenu->AppendCheckItem(OPTION_COLORBALLS, "&Color Balls");
   optionsMenu->Append(OPTION_REDOWNLOAD, "Re&Download Patterns");
 
+  // OpenGL specific options
+#ifdef OPENGL_SUPPORT
+  optionsMenu->AppendCheckItem(OPTION_OGL_AUTOROTATE, "&Rotate Automatically");
+  optionsMenu->AppendCheckItem(OPTION_OGL_3D_MODE, "3&D Mode");
+
+  optionsMenu->Check(OPTION_OGL_AUTOROTATE, TRUE);
+  optionsMenu->Check(OPTION_OGL_3D_MODE, TRUE);
+#endif
+
   speedMenu->Append(SPEED_UP,"&Up");
   speedMenu->Append(SPEED_DOWN,"&Down");
   speedMenu->Append(SPEED_RESET,"&Reset");
@@ -170,9 +159,19 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
   jmlib->setErrorCallback(this, ErrorCallBack);
 
   // The draw canvas
+#ifdef OPENGL_SUPPORT
+  if (OpenGLSupported()) {
+    glCanvas = new JMOpenGLCanvas(this, jmlib);
+    timer = new JMTimer(NULL, glCanvas, jmlib);
+  }
+  else {
+    canvas = new JMCanvas(this, jmlib);
+    timer = new JMTimer(canvas, NULL, jmlib);
+  }
+#else
   canvas = new JMCanvas(this, jmlib);
-
   timer = new JMTimer(canvas, jmlib);
+#endif
 
   // Initialise Pattern Loader
   patterns = new PatternLoader();
@@ -201,10 +200,23 @@ void JMFrame::reDownload(wxCommandEvent& WXUNUSED(event)) {
 	semaphores = new PatternLoader(this, DEFAULT_SEMAPHOREFILE, 1);
 }
 
+void JMFrame::setPause() {
+	optionsMenu->Check(OPTION_PAUSE,TRUE);
+	jmlib->setPause(optionsMenu->IsChecked(OPTION_PAUSE));
+}
+
 void JMFrame::unPause() {
 	optionsMenu->Check(OPTION_PAUSE,FALSE);
 	jmlib->setPause(optionsMenu->IsChecked(OPTION_PAUSE));
 }
+
+void JMFrame::togglePause() {
+  if (optionsMenu->IsChecked(OPTION_PAUSE))
+    unPause();
+  else
+    setPause();
+}
+
 void JMFrame::changePause(wxCommandEvent& WXUNUSED(event)) {
 	jmlib->setPause(optionsMenu->IsChecked(OPTION_PAUSE));
 }
@@ -244,6 +256,9 @@ void JMFrame::changeSiteSwap(wxCommandEvent& WXUNUSED(event))
         jmlib->startJuggle();
 	unPause();
   }
+  else {
+      unPause();
+  }
 }
 
 void JMFrame::changeStyle(wxCommandEvent& WXUNUSED(event))
@@ -280,6 +295,31 @@ void JMFrame::print(wxCommandEvent& WXUNUSED(event))
 	new Print(this, jmlib);
 }
 
+#ifdef OPENGL_SUPPORT
+void JMFrame::changeAutoRotate(wxCommandEvent& WXUNUSED(event)) {
+  if (optionsMenu->IsChecked(OPTION_OGL_AUTOROTATE))
+    glCanvas->enableAutoRotate();
+  else
+    glCanvas->disableAutoRotate();
+}
+#endif
+
+
+#ifdef OPENGL_SUPPORT
+void JMFrame::changeRenderMode(wxCommandEvent& WXUNUSED(event)) {
+  if (optionsMenu->IsChecked(OPTION_OGL_3D_MODE))
+    glCanvas->setRenderMode3D();
+  else
+    glCanvas->setRenderModeFlat();
+}
+#endif
+
+#ifdef OPENGL_SUPPORT
+void JMFrame::changeColorballs(wxCommandEvent& WXUNUSED(event)) {
+  glCanvas->ballColors(optionsMenu->IsChecked(OPTION_COLORBALLS));
+}
+#endif
+
 void JMFrame::OnClose(wxCommandEvent &WXUNUSED(event)) {
 	Close(TRUE);
 }
@@ -312,6 +352,7 @@ BEGIN_EVENT_TABLE(JMCanvas, wxScrolledWindow)
   EVT_PAINT(JMCanvas::OnPaint)
   EVT_ERASE_BACKGROUND(JMCanvas::OnEraseBackground) 
   EVT_SIZE(JMCanvas::OnSize)
+  EVT_LEFT_DOWN(JMCanvas::OnLMouseDown)
 END_EVENT_TABLE()
 
 
@@ -450,16 +491,35 @@ void JMCanvas::OnSize(wxSizeEvent &event) {
 	event.Skip();
 }
 
+void JMCanvas::OnLMouseDown(wxMouseEvent& event) {
+  parent->togglePause();
+  event.Skip();
+}
+
+#ifdef OPENGL_SUPPORT
+JMTimer::JMTimer(JMCanvas *c, JMOpenGLCanvas* glc, JMLib *j) : wxTimer() {
+	canvas = c;
+	glCanvas = glc;
+	jmlib = j;
+	current_delay = 30;
+	Start(current_delay);
+}
+#else
 JMTimer::JMTimer(JMCanvas *c, JMLib *j) : wxTimer() {
 	canvas = c;
 	jmlib = j;
 	current_delay = 30;
 	Start(current_delay);
 }
+#endif
+
 
 void JMTimer::Notify() {
   jmlib->doJuggle();
-  canvas->Refresh();
+  if (canvas)   canvas->Refresh();
+#ifdef OPENGL_SUPPORT
+  if (glCanvas) glCanvas->Refresh();
+#endif
   wxWakeUpIdle();
   wxYieldIfNeeded();
 }

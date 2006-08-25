@@ -1,6 +1,6 @@
 /*
  * JMDeluxe - Portable JuggleMaster based on wxWindows
- * (C) Per Johan Persson 2002, Gary Briggs 2003
+ * (C) Per Johan Groland 2002, Gary Briggs 2003
  *
  * JuggleMaster is  free software; you can redistribute  it and/or modify
  * it under the  terms of the GNU General  Public License as published
@@ -27,6 +27,9 @@
 #include "choosestyle.h"
 #include "newsemaphore.h"
 #include "print.h"
+#ifdef OPENGL_SUPPORT
+#include "opengl.h"
+#endif
 
 class JMFrame;
 class JMTimer;
@@ -41,6 +44,7 @@ public:
   void OnPaint(wxPaintEvent &event);
   void OnEraseBackground(wxEraseEvent& event);
   void OnSize(wxSizeEvent &event);
+  void OnLMouseDown(wxMouseEvent &event);
 private:
   JMFrame* parent;
   JMLib* jmlib;
@@ -57,7 +61,9 @@ public:
   void OnClose(wxCommandEvent &);
   void setSiteSwap(wxString *);
   void setStyle(wxString *);
+  void setPause();
   void unPause();
+  void togglePause();
 
   wxMenu* optionsMenu;
   wxMenu* fileMenu;
@@ -67,7 +73,12 @@ public:
 private:
   JMLib* jmlib;
   JMCanvas* canvas;
+#ifdef OPENGL_SUPPORT
+  JMOpenGLCanvas* glCanvas;
+#endif
+public:
   JMTimer* timer;
+private:
   PatternLoader *patterns;
   PatternLoader *semaphores;
   JML_INT32 current_speed;
@@ -88,6 +99,11 @@ private:
   void speedDown(wxCommandEvent &);
   void speedReset(wxCommandEvent &);
   static void ErrorCallBack(void *aUData, JML_CHAR *aErrMsg);
+#ifdef OPENGL_SUPPORT
+  void changeAutoRotate(wxCommandEvent &);
+  void changeRenderMode(wxCommandEvent &);
+  void changeColorballs(wxCommandEvent &);
+#endif
 
   DECLARE_EVENT_TABLE()
 };
@@ -118,7 +134,11 @@ private:
 
 class JMTimer:public wxTimer {
 public:
+#ifdef OPENGL_SUPPORT
+	JMTimer(JMCanvas *c, JMOpenGLCanvas* glc, JMLib *j);
+#else
 	JMTimer(JMCanvas *c, JMLib *j);
+#endif
 	void Notify();
 	int SpeedUp();
 	int SpeedDown();
@@ -127,7 +147,34 @@ public:
 protected:
 	int current_delay;
 	JMCanvas *canvas;
+#ifdef OPENGL_SUPPORT
+	JMOpenGLCanvas* glCanvas;
+#endif
 	JMLib *jmlib;
+};
+
+// Menu
+enum {
+	ID_EXIT,
+	ID_ABOUT,
+	CHANGE_SITESWAP_S,
+	CHANGE_SITESWAP_A,
+	CHANGE_SITESWAP_R,
+	CHANGE_STYLE_S,
+	CHOOSE_PATTERN,
+	CHOOSE_SEMAPHORE,
+	PRINT_PS,
+	OPTION_MIRROR,
+	OPTION_REDOWNLOAD,
+	OPTION_PAUSE,
+	OPTION_COLORBALLS,
+#ifdef OPENGL_SUPPORT
+    OPTION_OGL_AUTOROTATE,
+    OPTION_OGL_3D_MODE,
+#endif
+	SPEED_UP,
+	SPEED_DOWN,
+	SPEED_RESET
 };
 
 #endif

@@ -1,6 +1,8 @@
 /* JMConterller */
 
 #import <Cocoa/Cocoa.h>
+#import <QuickTime/QuickTime.h>
+#import <QTKit/QTKit.h>
 
 #define TEXT_PROPORTION 35
 
@@ -13,15 +15,25 @@ typedef enum
 
 @interface JMController : NSObject
 {
-	JMLib *jm;
 	IBOutlet JMView *view;
 	IBOutlet NSImageView *errorReporter;
 	IBOutlet NSMatrix *patternStyleButtons;
 	IBOutlet NSPanel *inspectorPanel;
 	IBOutlet NSPopUpButton *styleSelect;
-	NSTimer *renderTimer;
-	BOOL showPattern;
-	pat currentPat;
+	IBOutlet NSMenuItem *recordingMenuItem;
+	
+	IBOutlet NSPanel *movieExportPanel;
+	IBOutlet NSPopUpButton *movieExportSelection;
+	IBOutlet NSButton *exportButton;
+	
+	@private
+		JMLib *jm;
+		NSTimer *renderTimer;
+		BOOL showPattern;
+		BOOL isRecording;
+		QTMovie *movie;
+		pat currentPat;
+		DataHandler mDataHandlerRef;
 }
 
 - (IBAction)showInspector:(id)sender;
@@ -30,6 +42,8 @@ typedef enum
 - (IBAction)setSpeed:(id)sender;
 - (IBAction)toggleShowPattern:(id)sender;
 - (IBAction)setPatternStyle:(id)sender;
+- (IBAction)toggleRecording:(id)sender;
+- (IBAction)endExportSheet:(id)sender;
 
 - (void)setFrame:(NSRect)frameRect;
 

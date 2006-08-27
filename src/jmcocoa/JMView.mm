@@ -30,13 +30,13 @@
 {
 	[[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:self];
 	
-	[sender setData:[[self frameGrab] TIFFRepresentation] forType:NSTIFFPboardType];
+	[[NSPasteboard generalPasteboard] setData:[[self frameGrab] TIFFRepresentation] forType:NSTIFFPboardType];
 }
 
 - (NSImage *)frameGrab
 {
-	NSImage *image = [[NSImage alloc] initWithSize:[self frame].size];
-		
+	NSImage *image = [[[NSImage alloc] initWithSize:[self frame].size] autorelease];
+	
 	[image lockFocus];
 	[self drawRect:[self frame]];
 	[image unlockFocus];
@@ -119,16 +119,10 @@
 }
 
 - (void)pasteboard:(NSPasteboard *)sender provideDataForType:(NSString *)type
-{
-	NSImage *image = [[NSImage alloc] initWithSize:[self frame].size];
-	
+{	
 	if ([type isEqualTo:NSTIFFPboardType])
 	{
-		[image lockFocus];
-		[self drawRect:[self frame]];
-		[image unlockFocus];
-		
-		[sender setData:[image TIFFRepresentation] forType:NSTIFFPboardType];
+		[[NSPasteboard generalPasteboard] setData:[[self frameGrab] TIFFRepresentation] forType:NSTIFFPboardType];
 	}
 }
 

@@ -6,8 +6,13 @@
 	<string>449 4 356 240 0 0 1280 778 </string>
 	<key>IBFramework Version</key>
 	<string>446.1</string>
+	<key>IBLockedObjects</key>
+	<array>
+		<integer>78</integer>
+	</array>
 	<key>IBOpenObjects</key>
 	<array>
+		<integer>78</integer>
 		<integer>7</integer>
 	</array>
 	<key>IBSystem Version</key>

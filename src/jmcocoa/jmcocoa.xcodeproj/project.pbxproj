@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1FD17BB90A9BD85500668490 /* JMController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1FD17BB80A9BD85500668490 /* JMController.mm */; };
+		1F16C6030A9F71AB002CDC4A /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F16C5D10A9F71AB002CDC4A /* QTKit.framework */; };
+		1F16C6040A9F71AB002CDC4A /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F16C5D20A9F71AB002CDC4A /* QuickTime.framework */; };
+		1F16C6140A9F71BB002CDC4A /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F16C6050A9F71BB002CDC4A /* CoreServices.framework */; };
+		1F9AEC310A9F7487004BB7E4 /* JMController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F9AEC300A9F7487004BB7E4 /* JMController.mm */; };
+		1F9AEC740A9F7636004BB7E4 /* QTMovieExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F16C58F0A9F691E002CDC4A /* QTMovieExtensions.m */; };
+		1F9AF0480AA2495B004BB7E4 /* emptyMovie.mov in Resources */ = {isa = PBXBuildFile; fileRef = 1F9AF0470AA2495B004BB7E4 /* emptyMovie.mov */; };
 		1FD17BBC0A9BD85D00668490 /* JMView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1FD17BBA0A9BD85D00668490 /* JMView.mm */; };
 		1FD17CC50A9BFCCF00668490 /* JMInspector.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1FD17CC40A9BFCCF00668490 /* JMInspector.nib */; };
 		1FD17D970A9C838A00668490 /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD17D960A9C838A00668490 /* error.png */; };
@@ -30,6 +35,13 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		1F16C58E0A9F691E002CDC4A /* QTMovieExtensions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QTMovieExtensions.h; sourceTree = "<group>"; };
+		1F16C58F0A9F691E002CDC4A /* QTMovieExtensions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = QTMovieExtensions.m; sourceTree = "<group>"; };
+		1F16C5D10A9F71AB002CDC4A /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		1F16C5D20A9F71AB002CDC4A /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
+		1F16C6050A9F71BB002CDC4A /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		1F9AEC300A9F7487004BB7E4 /* JMController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = JMController.mm; sourceTree = "<group>"; };
+		1F9AF0470AA2495B004BB7E4 /* emptyMovie.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = emptyMovie.mov; sourceTree = "<group>"; };
 		1FD17B350A9BD45800668490 /* jmlib.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = jmlib.cpp; sourceTree = "<group>"; };
 		1FD17B360A9BD45800668490 /* jmlib.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = jmlib.h; sourceTree = "<group>"; };
 		1FD17B370A9BD45800668490 /* jmlib_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = jmlib_types.h; sourceTree = "<group>"; };
@@ -45,7 +57,6 @@
 		1FD17B430A9BD45800668490 /* validator.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = validator.cpp; sourceTree = "<group>"; };
 		1FD17B440A9BD45800668490 /* validator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = validator.h; sourceTree = "<group>"; };
 		1FD17BB70A9BD85500668490 /* JMController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = JMController.h; sourceTree = "<group>"; };
-		1FD17BB80A9BD85500668490 /* JMController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = JMController.mm; sourceTree = "<group>"; };
 		1FD17BBA0A9BD85D00668490 /* JMView.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = JMView.mm; sourceTree = "<group>"; };
 		1FD17BBB0A9BD85D00668490 /* JMView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = JMView.h; sourceTree = "<group>"; };
 		1FD17CC40A9BFCCF00668490 /* JMInspector.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = JMInspector.nib; sourceTree = "<group>"; };
@@ -69,6 +80,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				1F16C6030A9F71AB002CDC4A /* QTKit.framework in Frameworks */,
+				1F16C6040A9F71AB002CDC4A /* QuickTime.framework in Frameworks */,
+				1F16C6140A9F71BB002CDC4A /* CoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +101,9 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1F16C6050A9F71BB002CDC4A /* CoreServices.framework */,
+				1F16C5D10A9F71AB002CDC4A /* QTKit.framework */,
+				1F16C5D20A9F71AB002CDC4A /* QuickTime.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
@@ -114,11 +131,13 @@
 			isa = PBXGroup;
 			children = (
 				1FD17BB70A9BD85500668490 /* JMController.h */,
-				1FD17BB80A9BD85500668490 /* JMController.mm */,
+				1F9AEC300A9F7487004BB7E4 /* JMController.mm */,
 				1FD17BBB0A9BD85D00668490 /* JMView.h */,
 				1FD17BBA0A9BD85D00668490 /* JMView.mm */,
 				1FD17EFD0A9CD0DA00668490 /* InstantTextField.h */,
 				1FD17EFE0A9CD0DA00668490 /* InstantTextField.m */,
+				1F16C58E0A9F691E002CDC4A /* QTMovieExtensions.h */,
+				1F16C58F0A9F691E002CDC4A /* QTMovieExtensions.m */,
 			);
 			name = jmcocoa;
 			sourceTree = "<group>";
@@ -170,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				8D1107310486CEB800E47090 /* Info.plist */,
+				1F9AF0470AA2495B004BB7E4 /* emptyMovie.mov */,
 				1FD17D960A9C838A00668490 /* error.png */,
 				1FD17F070A9CD77C00668490 /* JuggleMaster.icns */,
 				1FD17EC40A9CB6B300668490 /* error2.png */,
@@ -236,6 +256,7 @@
 				1FD17D970A9C838A00668490 /* error.png in Resources */,
 				1FD17EC50A9CB6B300668490 /* error2.png in Resources */,
 				1FD17F080A9CD77C00668490 /* JuggleMaster.icns in Resources */,
+				1F9AF0480AA2495B004BB7E4 /* emptyMovie.mov in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,7 +268,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				1FD17BB90A9BD85500668490 /* JMController.mm in Sources */,
 				1FD17BBC0A9BD85D00668490 /* JMView.mm in Sources */,
 				1FD17E410A9C8E9E00668490 /* jmlib.cpp in Sources */,
 				1FD17E420A9C8E9E00668490 /* patterns.cpp in Sources */,
@@ -256,6 +276,8 @@
 				1FD17E450A9C8E9E00668490 /* util.cpp in Sources */,
 				1FD17E460A9C8E9E00668490 /* validator.cpp in Sources */,
 				1FD17EFF0A9CD0DA00668490 /* InstantTextField.m in Sources */,
+				1F9AEC310A9F7487004BB7E4 /* JMController.mm in Sources */,
+				1F9AEC740A9F7636004BB7E4 /* QTMovieExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

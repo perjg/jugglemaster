@@ -3,12 +3,12 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
-                captureScreenshot = id; 
                 setPattern = id; 
                 setPatternStyle = id; 
                 setSpeed = id; 
                 setStyle = id; 
                 showInspector = id; 
+                toggleRecording = id; 
                 toggleShowPattern = id; 
             }; 
             CLASS = JMController; 
@@ -17,6 +17,7 @@
                 errorReporter = NSImageView; 
                 inspectorPanel = NSPanel; 
                 patternStyleButtons = NSMatrix; 
+                recordingMenuItem = NSMenuItem; 
                 styleSelect = NSPopUpButton; 
                 view = JMView; 
             }; 

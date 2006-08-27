@@ -9,20 +9,25 @@
         {CLASS = InstantTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
         {
             ACTIONS = {
-                renderToImage = id; 
+                endExportSheet = id; 
                 setPattern = id; 
                 setPatternStyle = id; 
                 setSpeed = id; 
                 setStyle = id; 
                 showInspector = id; 
+                toggleRecording = id; 
                 toggleShowPattern = id; 
             }; 
             CLASS = JMController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 errorReporter = NSImageView; 
+                exportButton = NSButton; 
                 inspectorPanel = NSPanel; 
+                movieExportPanel = NSPanel; 
+                movieExportSelection = NSPopUpButton; 
                 patternStyleButtons = NSMatrix; 
+                recordingMenuItem = NSMenuItem; 
                 styleSelect = NSPopUpButton; 
                 view = JMView; 
             }; 

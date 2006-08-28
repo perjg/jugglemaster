@@ -118,7 +118,7 @@ static JML_CHAR patterns[7][12]
 	//MovieExportComponent exporter;
 	NSEnumerator *componentEnumerator;
 	NSDictionary *currentComponentDescription;
-	NSRect panelFrame;
+	NSSavePanel *savePanel;
 	
 	if (isRecording = !isRecording)
 	{
@@ -135,33 +135,21 @@ static JML_CHAR patterns[7][12]
 		{
 			[movieExportSelection addItemWithTitle:[currentComponentDescription objectForKey:@"name"]];
 		}
-		//[movieExportSelection sizeToFit];
-		panelFrame = [movieExportPanel frame];
-		panelFrame.size.width = 109 + [movieExportSelection frame].size.width;
-		[movieExportPanel setFrame:panelFrame display:NO];
-		[NSApp beginSheet:movieExportPanel
-		   modalForWindow:[view window]
-			modalDelegate:self
-		   didEndSelector:@selector(movieExportSheetDidEnd:returnCode:contextInfo:)
-			  contextInfo:nil];
+		savePanel = [NSSavePanel savePanel];
+		[savePanel setAccessoryView:movieExportView];
+		
+		[savePanel beginSheetForDirectory:@"~/"
+									 file:nil
+						   modalForWindow:[view window]
+							modalDelegate:self
+						   didEndSelector:@selector(movieExportSheetDidEnd:returnCode:contextInfo:)
+							  contextInfo:nil];
 				
 		[recordingMenuItem setTitle:@"Start Movie Capture"];
 	}
 }
 
-- (IBAction)endExportSheet:(id)sender
-{
-	if (sender == exportButton)
-	{
-		[NSApp endSheet:movieExportPanel returnCode:NSOKButton];
-	}
-	else
-	{
-		[NSApp endSheet:movieExportPanel returnCode:NSCancelButton];
-	}
-}
-
-- (void)movieExportSheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
+- (void)movieExportSheetDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
 {
 	NSData *exportSettings;
 	NSDictionary *componentToUse;
@@ -172,7 +160,7 @@ static JML_CHAR patterns[7][12]
 	{
 		componentToUse = [[self availableComponents] objectAtIndex:[movieExportSelection indexOfSelectedItem]];
 		exportSettings = [self getExportSettingsForComponent:componentToUse];
-		[self writeMovie:movie toFile:@"/test" 
+		[self writeMovie:movie toFile:[sheet filename]
 		   withComponent:componentToUse
 	  withExportSettings:exportSettings];
 	}

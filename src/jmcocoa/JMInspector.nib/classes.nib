@@ -22,10 +22,9 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 errorReporter = NSImageView; 
-                exportButton = NSButton; 
                 inspectorPanel = NSPanel; 
-                movieExportPanel = NSPanel; 
                 movieExportSelection = NSPopUpButton; 
+                movieExportView = NSView; 
                 patternStyleButtons = NSMatrix; 
                 recordingMenuItem = NSMenuItem; 
                 styleSelect = NSPopUpButton; 

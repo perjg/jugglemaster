@@ -22,9 +22,8 @@ typedef enum
 	IBOutlet NSPopUpButton *styleSelect;
 	IBOutlet NSMenuItem *recordingMenuItem;
 	
-	IBOutlet NSPanel *movieExportPanel;
+	IBOutlet NSView *movieExportView;
 	IBOutlet NSPopUpButton *movieExportSelection;
-	IBOutlet NSButton *exportButton;
 	
 	@private
 		JMLib *jm;
@@ -43,7 +42,6 @@ typedef enum
 - (IBAction)toggleShowPattern:(id)sender;
 - (IBAction)setPatternStyle:(id)sender;
 - (IBAction)toggleRecording:(id)sender;
-- (IBAction)endExportSheet:(id)sender;
 
 - (void)setFrame:(NSRect)frameRect;
 

@@ -240,7 +240,7 @@ void JMView::PaintBuffer(CDC* pDCx) {
   }
 
   // draw balls
-  for(i=jmlib->balln-1;i>=0;i--) {
+  for(i=jmlib->numBalls()-1;i>=0;i--) {
     pDC->SelectObject(ballColorTable[i%COLOR_TABLE_LEN]->brush);
     pDC->SelectObject(ballColorTable[i%COLOR_TABLE_LEN]->pen);
 

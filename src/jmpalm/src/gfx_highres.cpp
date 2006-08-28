@@ -118,7 +118,7 @@ void GfxHighRes::doPaint() {
     }
   
     // draw balls
-    for(i=jmlib->balln-1; i >= 0 ; i--) {
+    for(i=jmlib->numBalls()-1; i >= 0 ; i--) {
       if (hasColor) {
         if (hd.uniform_color)
           WinSetForeColor(ballColors[0]); // red
@@ -163,7 +163,7 @@ void GfxHighRes::doPaint() {
     }
   
     // draw balls
-    for(i=jmlib->balln-1; i >= 0 ; i--) {
+    for(i=jmlib->numBalls()-1; i >= 0 ; i--) {
       if (hasColor) {
         if (hd.uniform_color)
           WinSetForeColor(ballColors[0]); // red

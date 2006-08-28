@@ -6,6 +6,11 @@
 
 #define TEXT_PROPORTION 35
 
+#define MOVIE_KEY @"MovieKey"
+#define FILENAME_KEY @"FilenameKey"
+#define COMPONENT_KEY @"ComponentKey"
+#define EXPORT_SETTINGS_KEY @"ExportSettingsKey"
+
 typedef enum
 {
 	normalThrow = 0,

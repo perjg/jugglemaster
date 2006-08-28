@@ -160,10 +160,35 @@ static JML_CHAR patterns[7][12]
 	{
 		componentToUse = [[self availableComponents] objectAtIndex:[movieExportSelection indexOfSelectedItem]];
 		exportSettings = [self getExportSettingsForComponent:componentToUse];
-		[self writeMovie:movie toFile:[sheet filename]
-		   withComponent:componentToUse
-	  withExportSettings:exportSettings];
+		[movie setDelegate:self];
+		[NSThread detachNewThreadSelector:@selector(doWrite:)
+								 toTarget:self
+							   withObject:
+			[NSDictionary dictionaryWithObjects:
+				[NSArray arrayWithObjects:
+					movie,
+					[sheet filename],
+					componentToUse,
+					exportSettings,
+					nil]
+										forKeys:
+				[NSArray arrayWithObjects:
+					MOVIE_KEY,
+					FILENAME_KEY,
+					COMPONENT_KEY,
+					EXPORT_SETTINGS_KEY,
+					nil]]];
 	}
+}
+
+- (void)doWrite:(NSDictionary *)writeSettings
+{
+	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
+	[self writeMovie:[writeSettings objectForKey:MOVIE_KEY]
+			  toFile:[writeSettings objectForKey:FILENAME_KEY]
+	   withComponent:[writeSettings objectForKey:COMPONENT_KEY]
+  withExportSettings:[writeSettings objectForKey:EXPORT_SETTINGS_KEY]];
+	[autoreleasePool release];
 }
 
 - (NSArray *)availableComponents

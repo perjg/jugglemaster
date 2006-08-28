@@ -29,12 +29,15 @@ typedef enum
 	
 	IBOutlet NSView *movieExportView;
 	IBOutlet NSPopUpButton *movieExportSelection;
+	IBOutlet NSProgressIndicator *movieExportProgress;
 	
 	@private
 		JMLib *jm;
 		NSTimer *renderTimer;
 		BOOL showPattern;
 		BOOL isRecording;
+		BOOL encodeSheetShown;
+		BOOL shouldCancelExport;
 		QTMovie *movie;
 		pat currentPat;
 		DataHandler mDataHandlerRef;
@@ -47,6 +50,7 @@ typedef enum
 - (IBAction)toggleShowPattern:(id)sender;
 - (IBAction)setPatternStyle:(id)sender;
 - (IBAction)toggleRecording:(id)sender;
+- (IBAction)cancelExport:(id)sender;
 
 - (void)setFrame:(NSRect)frameRect;
 

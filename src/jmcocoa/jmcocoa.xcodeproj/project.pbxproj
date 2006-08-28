@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1F0A29BF0AA26CE70052FE03 /* JMController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A29BE0AA26CE70052FE03 /* JMController.mm */; };
+		1F0A2A2D0AA352440052FE03 /* stopExport.tif in Resources */ = {isa = PBXBuildFile; fileRef = 1F0A2A2C0AA352440052FE03 /* stopExport.tif */; };
 		1F16C6030A9F71AB002CDC4A /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F16C5D10A9F71AB002CDC4A /* QTKit.framework */; };
 		1F16C6040A9F71AB002CDC4A /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F16C5D20A9F71AB002CDC4A /* QuickTime.framework */; };
 		1F16C6140A9F71BB002CDC4A /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F16C6050A9F71BB002CDC4A /* CoreServices.framework */; };
@@ -36,6 +37,7 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		1F0A29BE0AA26CE70052FE03 /* JMController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = JMController.mm; sourceTree = "<group>"; };
+		1F0A2A2C0AA352440052FE03 /* stopExport.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = stopExport.tif; sourceTree = "<group>"; };
 		1F16C58E0A9F691E002CDC4A /* QTMovieExtensions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QTMovieExtensions.h; sourceTree = "<group>"; };
 		1F16C58F0A9F691E002CDC4A /* QTMovieExtensions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = QTMovieExtensions.m; sourceTree = "<group>"; };
 		1F16C5D10A9F71AB002CDC4A /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
@@ -193,6 +195,7 @@
 				1FD17D960A9C838A00668490 /* error.png */,
 				1FD17F070A9CD77C00668490 /* JuggleMaster.icns */,
 				1FD17EC40A9CB6B300668490 /* error2.png */,
+				1F0A2A2C0AA352440052FE03 /* stopExport.tif */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				1FD17CC40A9BFCCF00668490 /* JMInspector.nib */,
@@ -257,6 +260,7 @@
 				1FD17EC50A9CB6B300668490 /* error2.png in Resources */,
 				1FD17F080A9CD77C00668490 /* JuggleMaster.icns in Resources */,
 				1F9AF0480AA2495B004BB7E4 /* emptyMovie.mov in Resources */,
+				1F0A2A2D0AA352440052FE03 /* stopExport.tif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

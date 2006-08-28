@@ -39,6 +39,7 @@ static JML_CHAR patterns[7][12]
 		
 		showPattern = NO;
 		currentPat = karaoke;
+		encodeSheetShown = NO;
 		
 		[self showInspector:self];
 		
@@ -135,6 +136,7 @@ static JML_CHAR patterns[7][12]
 		{
 			[movieExportSelection addItemWithTitle:[currentComponentDescription objectForKey:@"name"]];
 		}
+		shouldCancelExport = NO;
 		savePanel = [NSSavePanel savePanel];
 		[savePanel setAccessoryView:movieExportView];
 		
@@ -147,6 +149,11 @@ static JML_CHAR patterns[7][12]
 				
 		[recordingMenuItem setTitle:@"Start Movie Capture"];
 	}
+}
+
+- (IBAction)cancelExport:(id)sender
+{
+	shouldCancelExport = YES;
 }
 
 - (void)movieExportSheetDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo
@@ -435,6 +442,42 @@ static JML_CHAR patterns[7][12]
 - (pat)patternStyle
 {
 	return currentPat;
+}
+
+- (BOOL)movie:(QTMovie *)movie shouldContinueOperation:(NSString *)op withPhase:(QTMovieOperationPhase)phase atPercent:(NSNumber *)percent withAttributes:(NSDictionary *)attributes
+{
+	NSRect viewFrame = [view frame];
+	
+	if (phase == QTMovieOperationBeginPhase)
+	{
+		viewFrame.size.height -= 20;
+		viewFrame.origin.y += 20;
+		encodeSheetShown = YES;
+		[movieExportProgress setHidden:NO];
+		[view setFrame:viewFrame];
+		[[view window] display];
+	}
+	else if (phase == QTMovieOperationEndPhase)
+	{
+		viewFrame.size.height += 20;
+		viewFrame.origin.y -= 20;
+		encodeSheetShown = NO;
+		[movieExportProgress setHidden:YES];
+		[view setFrame:viewFrame];
+		[[view window] display];
+	}
+		
+	[movieExportProgress setDoubleValue:[percent doubleValue]];
+	[movieExportProgress display];
+	
+	if (shouldCancelExport)
+	{
+		return NO;
+	}
+	else
+	{
+		return YES;
+	}
 }
 
 @end

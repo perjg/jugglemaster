@@ -3,6 +3,7 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
+                cancelExport = id; 
                 setPattern = id; 
                 setPatternStyle = id; 
                 setSpeed = id; 
@@ -16,6 +17,9 @@
             OUTLETS = {
                 errorReporter = NSImageView; 
                 inspectorPanel = NSPanel; 
+                movieExportProgress = NSProgressIndicator; 
+                movieExportSelection = NSPopUpButton; 
+                movieExportView = NSView; 
                 patternStyleButtons = NSMatrix; 
                 recordingMenuItem = NSMenuItem; 
                 styleSelect = NSPopUpButton; 

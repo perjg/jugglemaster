@@ -46,8 +46,8 @@ class JMSiteValidator {
   static bool validateVSS(JML_CHAR* site) EXTRA_SECTION_ONE;
   static bool validateSSS(JML_CHAR* site) EXTRA_SECTION_ONE;
   static bool validateMSS(JML_CHAR* site) EXTRA_SECTION_ONE;
-  static bool transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS) EXTRA_SECTION_ONE;
  public:
+  static bool transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS) EXTRA_SECTION_ONE;
   static bool scanSite(JML_CHAR* site) EXTRA_SECTION_ONE;
   static bool validateSiteSyntax(JML_CHAR* site) EXTRA_SECTION_ONE;
   static bool validateSite(JML_CHAR* site) EXTRA_SECTION_ONE;

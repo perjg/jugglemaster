@@ -94,13 +94,13 @@ void JMOpenGLRenderer::doCoordTransform(bool flipY, bool centerOrigin) {
   JML_INT32 poly_max_y = 0;
 
   if (flipY) {
-    for (i=0; i<10; i++) { // calculate polygon height
+    for (int i=0; i<10; i++) { // calculate polygon height
       if (jmlib_handp->ly[i] > poly_max_y)
 	    poly_max_y = jmlib_handp->ly[i];
     }
   }
 
-  for (i=0; i<10; i++) {
+  for (int i=0; i<10; i++) {
     if (flipY) {
       handpoly.ry[i] = (poly_max_y - jmlib_handp->ry[i]) * scalingFactor;
 	  handpoly.ly[i] = (poly_max_y - jmlib_handp->ly[i]) * scalingFactor;
@@ -123,7 +123,7 @@ void JMOpenGLRenderer::doCoordTransform(bool flipY, bool centerOrigin) {
   ap.head_radius = jmlib_ap->hr * scalingFactor;
 
   // balls
-  for(i = jmlib->numBalls() - 1; i >= 0; i--) {
+  for(int i = jmlib->numBalls() - 1; i >= 0; i--) {
     if (flipY) b[i].gy = h - jmlib->b[i].gy;
     else       b[i].gy = jmlib->b[i].gy;
 
@@ -310,7 +310,7 @@ void JMOpenGLRenderer::draw3d() {
 
   glColor3f(1.0f,1.0f,1.0f);
 
-  for(i=0;i<5;i++){
+  for(int i=0;i<5;i++){
     glLoadIdentity();
     glTranslatef(0.0, 0.0, baseZoffset);
     doRotation(rotate);

@@ -1,4 +1,4 @@
-
+/*
  * JMDeluxe - Portable JuggleMaster based on wxWindows
  * (C) Per Johan Persson 2002, Gary Briggs 2003
  *
@@ -31,6 +31,7 @@ bool JMApp::OnInit() {
   jmlib->setWindowSize(windowx, windowy);
   jmlib->setPatternDefault();
   jmlib->setStyleDefault();
+  jmlib->setScalingMethod(SCALING_METHOD_DYNAMIC);
   jmlib->startJuggle();
 
   wxCmdLineParser cmdline(cmdLineDesc, argc, argv);
@@ -422,10 +423,10 @@ void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
   dc.SetBrush(*wxRED_BRUSH);
 
   // draw balls
-  int diam = (11*jmlib->dpm/DW)*2;
+  int diam = jmlib->getBallRadius()*2;
   for(i=jmlib->numBalls()-1;i>=0;i--) {
     if(parent->optionsMenu->IsChecked(OPTION_COLORBALLS)) {
-	dc.SetBrush(*ball_colors[i%NUMBALLCOLORS]);
+      dc.SetBrush(*ball_colors[i%NUMBALLCOLORS]);
     }
 
     dc.DrawEllipse(jmlib->b[i].gx, jmlib->b[i].gy, diam, diam);

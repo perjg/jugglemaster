@@ -34,6 +34,7 @@ static JML_CHAR patterns[7][12]
 		jm->setPatternDefault();
 		jm->setStyleDefault();
 		jm->setSpeed(1.0);
+        jm->setScalingMethod(SCALING_METHOD_DYNAMIC);
 		jm->startJuggle();
 		jm->doJuggle();
 		

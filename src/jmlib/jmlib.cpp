@@ -62,6 +62,7 @@ void JMLib::initialize(void) {
   hand_x = 0;
   hand_y = 0;
   // frameSkip = FS_DEF;
+  scalingMethod = SCALING_METHOD_CLASSIC;
   
   smode = 50.0;
   fpu = 1;
@@ -106,7 +107,13 @@ void JMLib::error(JML_CHAR* msg) {
 JML_BOOL JMLib::setWindowSize(JML_INT32 width, JML_INT32 height) {
   if (width <= 0 || height <= 0)
     return false;
-  
+
+  if (scalingMethod == SCALING_METHOD_DYNAMIC) {
+    scaleImageWidth = width;
+    scaleImageHeight = height;
+    return true;
+  }
+
   // store current status and stop juggling
   JML_INT32 oldStatus = status;
   stopJuggle();
@@ -124,6 +131,131 @@ JML_BOOL JMLib::setWindowSize(JML_INT32 width, JML_INT32 height) {
   status = oldStatus;
   
   return true;
+}
+
+void JMLib::setScalingMethod(JML_INT32 scalingMethod) {
+  // no change
+  if (this->scalingMethod == scalingMethod) return;
+
+  if (scalingMethod == SCALING_METHOD_DYNAMIC) {
+    scaleImageWidth = imageWidth;
+    scaleImageHeight = imageHeight;
+    setWindowSizeDefault();
+    this->scalingMethod = SCALING_METHOD_DYNAMIC;    
+  }
+  else { //SCALING_METHOD_CLASSIC
+    this->scalingMethod = SCALING_METHOD_CLASSIC;
+    setWindowSize(scaleImageWidth, scaleImageHeight);
+  }
+}
+
+JML_INT32 JMLib::getImageWidth() {
+  if (scalingMethod == SCALING_METHOD_CLASSIC)
+    return imageWidth;
+  else // SCALING_METHOD_DYNAMIC
+    return scaleImageWidth;
+}
+
+JML_INT32 JMLib::getImageHeight() {
+  if (scalingMethod == SCALING_METHOD_CLASSIC)
+    return imageHeight;
+  else // SCALING_METHOD_DYNAMIC
+    return scaleImageHeight;
+}
+
+JML_INT32 JMLib::getBallRadius() {
+  JML_INT32 baseRadius = 11 * dpm / DW;
+
+  if (scalingMethod == SCALING_METHOD_CLASSIC) {
+    return baseRadius;
+  }
+  else {
+    JML_FLOAT zoomFactorY = (float)scaleImageHeight / (float)imageHeight;
+    zoomFactorY *= 0.9f;
+
+    if (scaleImageWidth < scaleImageHeight)
+      zoomFactorY *= ((float)scaleImageWidth  / (float)scaleImageHeight);
+
+    return (JML_INT32)((JML_FLOAT)baseRadius * zoomFactorY);
+  }
+}
+
+
+void JMLib::doCoordTransform() {
+  JML_FLOAT zoomFactorX = (float)scaleImageWidth  / (float)imageWidth;
+  JML_FLOAT zoomFactorY = (float)scaleImageHeight / (float)imageHeight;
+
+  // adjust for aspect ratio
+  if (scaleImageWidth < scaleImageHeight)
+    zoomFactorY *= (((float)scaleImageWidth  / (float)scaleImageHeight));
+  else
+    zoomFactorX *= (((float)scaleImageHeight / (float)scaleImageWidth));
+
+  zoomFactorX *= 1.1f;
+  zoomFactorY *= 0.9f;
+
+  // Adjust coordinates
+  // head
+  ap.hx -= imageWidth/2;
+  ap.hy -= imageHeight/2;
+
+  ap.hx = (JML_INT32)((JML_FLOAT)ap.hx * zoomFactorX);
+  ap.hy = (JML_INT32)((JML_FLOAT)ap.hy * zoomFactorY);
+  ap.hr = (JML_INT32)((JML_FLOAT)ap.hr * zoomFactorY);
+
+  ap.hx += scaleImageWidth/2;
+  ap.hy += scaleImageHeight/2;
+
+  // juggler
+  for(int i=0;i<6;i++){
+    ap.rx[i] -= imageWidth/2;
+    ap.ry[i] -= imageHeight/2;
+    ap.rx[i] = (JML_INT32)((JML_FLOAT)ap.rx[i] * zoomFactorX);
+    ap.ry[i] = (JML_INT32)((JML_FLOAT)ap.ry[i] * zoomFactorY);
+    ap.rx[i] += scaleImageWidth/2;
+    ap.ry[i] += scaleImageHeight/2;
+
+    ap.lx[i] -= imageWidth/2;
+    ap.ly[i] -= imageHeight/2;
+    ap.lx[i] = (JML_INT32)((JML_FLOAT)ap.lx[i] * zoomFactorX);
+    ap.ly[i] = (JML_INT32)((JML_FLOAT)ap.ly[i] * zoomFactorY);
+    ap.lx[i] += scaleImageWidth/2;
+    ap.ly[i] += scaleImageHeight/2;
+  }
+
+  // hands
+  rhand.gx -= imageWidth/2;
+  rhand.gy -= imageHeight/2;
+  rhand.gx = (JML_INT32)((JML_FLOAT)rhand.gx * zoomFactorX);
+  rhand.gy = (JML_INT32)((JML_FLOAT)rhand.gy * zoomFactorY);
+  rhand.gx += scaleImageWidth/2;
+  rhand.gy += scaleImageHeight/2;
+
+  lhand.gx -= imageWidth/2;
+  lhand.gy -= imageHeight/2;
+  lhand.gx = (JML_INT32)((JML_FLOAT)lhand.gx * zoomFactorX);
+  lhand.gy = (JML_INT32)((JML_FLOAT)lhand.gy * zoomFactorY);
+  lhand.gx += scaleImageWidth/2;
+  lhand.gy += scaleImageHeight/2;
+
+  for (int i=0; i <= 9; i++) {
+    handpoly.rx[i] = (JML_INT32)((JML_FLOAT)handpoly_ex.rx[i] * zoomFactorX);
+    handpoly.ry[i] = (JML_INT32)((JML_FLOAT)handpoly_ex.ry[i] * zoomFactorY);
+    handpoly.lx[i] = (JML_INT32)((JML_FLOAT)handpoly_ex.lx[i] * zoomFactorX);
+    handpoly.ly[i] = (JML_INT32)((JML_FLOAT)handpoly_ex.ly[i] * zoomFactorY);
+  }
+
+  // balls
+  for(int i=numBalls()-1;i>=0;i--) {
+    b[i].gx -= imageWidth/2;
+    b[i].gy -= imageHeight/2;
+
+    b[i].gx = (JML_INT32)((JML_FLOAT)b[i].gx * zoomFactorX);
+    b[i].gy = (JML_INT32)((JML_FLOAT)b[i].gy * zoomFactorY);
+
+    b[i].gx += scaleImageWidth/2;
+    b[i].gy += scaleImageHeight/2;
+  }
 }
 
 void JMLib::setMirror(JML_BOOL mir) {
@@ -1134,6 +1266,9 @@ JML_INT32 JMLib::doJuggle(void) {
   arm_line();
   applyCorrections();
 
+  if (scalingMethod == SCALING_METHOD_DYNAMIC)
+    doCoordTransform();
+
   return tone;
 }
 
@@ -1165,13 +1300,20 @@ void JMLib::xbitset(void) {
   for(i=0;data[i+6]<99;i+=2) {
     if (j > 9) break;
     
-    handpoly.rx[j] = 11 + data[i];
-    handpoly.ry[j] = 10 + data[i+1];
+    handpoly_ex.rx[j] = 11 + data[i];
+    handpoly_ex.ry[j] = 10 + data[i+1];
     
-    handpoly.lx[j] = 12 - data[i];
-    handpoly.ly[j] = 10 + data[i+1];
+    handpoly_ex.lx[j] = 12 - data[i];
+    handpoly_ex.ly[j] = 10 + data[i+1];
     
     j++;
+  }
+
+  for (int i=0; i <= 9; i++) {
+    handpoly.rx[i] = handpoly_ex.rx[i];
+    handpoly.ry[i] = handpoly_ex.ry[i];
+    handpoly.lx[i] = handpoly_ex.lx[i];
+    handpoly.ly[i] = handpoly_ex.ly[i];
   }
 }
 

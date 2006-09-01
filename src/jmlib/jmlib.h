@@ -135,6 +135,10 @@
 #define PI 3.14159265f
 #define HALF_PI 1.570796325f
 
+// Scaling methods
+#define SCALING_METHOD_CLASSIC 1
+#define SCALING_METHOD_DYNAMIC 2
+
 typedef void (ERROR_CALLBACK)(JML_CHAR*);
 typedef void (PATTPRINT_CALLBACK)(JML_INT32,JML_INT32,JML_CHAR*,JML_BOOL);
 
@@ -229,6 +233,10 @@ class JMLib {
   ERROR_CALLBACK* cb;
   JML_BOOL use_cpp_callback;
 
+  // Scaling
+  JML_INT32 scalingMethod;
+  JML_INT32 scaleImageWidth, scaleImageHeight;
+  void doCoordTransform();
 
   // internal methods
   JML_INT32 ctod(JML_CHAR c) EXTRA_SECTION_TWO;
@@ -244,7 +252,8 @@ class JMLib {
   void doStepcalc(void);
   // The juggler class contains all data neccesary for drawing
   //Juggler juggler;
- public:
+  struct hand handpoly_ex;
+public:
   // Constructor / Destructor
   JMLib();
   JMLib(ERROR_CALLBACK* _cb);
@@ -274,11 +283,7 @@ class JMLib {
 
   JML_INT32 numBalls(void);
   
-  // toggle Z coordinate calculation on and off
-  void calculateZ(JML_BOOL flag); 
-
-  // different scaling methods
-  void setScalingMethod(/* ??? */);
+  void setScalingMethod(JML_INT32 scalingMethod);
 
   void startJuggle(void);
   void stopJuggle(void);
@@ -297,8 +302,8 @@ class JMLib {
   JML_CHAR* getPattName(void) { return pattname; }
   JML_CHAR* getStyle(void) { return stylename; }
 
-  JML_INT32 getImageWidth(void) { return imageWidth; }
-  JML_INT32 getImageHeight(void) { return imageHeight; }
+  JML_INT32 getImageWidth();
+  JML_INT32 getImageHeight();
 
   void speedUp(void);
   void speedDown(void);
@@ -324,9 +329,7 @@ class JMLib {
     return (dpm); /* FIXME */
   }
   
-  JML_INT32 getBallRadius(void) {
-  	return 11 * dpm / DW;
-  }
+  JML_INT32 getBallRadius(void);
 };
 
 #endif

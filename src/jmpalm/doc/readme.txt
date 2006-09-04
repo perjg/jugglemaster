@@ -1,6 +1,6 @@
 JMPalm - JuggleMaster for Palm OS
-Version 1.2
-01.08.2006
+Version 1.3
+04.09.2006
 
 (C) Per Johan Groland 2001-2006
 
@@ -39,6 +39,7 @@ Here is a list of some of the features of JMPalm.
 * Enter any siteswap and have JMPalm juggle it.
 * Turn the juggler on and off (glo-ball feature :)
 * Juggle in landscape or portrait mode.
+* Show the siteswap being juggled on screen with current throw highlighted.
 * Color support
 * Speed adjustment.
 * High resolution support on Palm OS 5.0 (including Sony devices)

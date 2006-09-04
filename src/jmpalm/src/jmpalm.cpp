@@ -168,7 +168,7 @@ UInt32 PilotMain(UInt16 cmd, MemPtr cmdPBP, UInt16 launchFlags) {
     MemPtr ver_str_ptr;
     MemHandle ver_str = DmGetResource(verRsc, 1);
     ver_str_ptr = MemHandleLock(ver_str);
-    StrPrintF(build_str, "Version %s (2006.08.02)", (char*)ver_str_ptr);
+    StrPrintF(build_str, "Version %s (2006.09.04)", (char*)ver_str_ptr);
     MemHandleUnlock(ver_str);
     DmReleaseResource(ver_str);
 

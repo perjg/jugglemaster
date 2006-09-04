@@ -6,6 +6,10 @@ The newest version is listed first.
 See the file todo.txt for information on features that might
 be added in a future release of JMPalm.
 
+** 1.3 (04.09.2006)
+
+- Added show siteswap on screen feature
+
 ** 1.2 (01.08.2006)
 
 - Now open source!

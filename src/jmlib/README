@@ -28,6 +28,9 @@ jm->setPatternDefault();
 jm->setStyleDefault();
 jm->startJuggle();
 
+Note that setPatternDefault and setStyleDefault are also called in the constructor,
+so you don't need to call them explicitly on startup.
+
 More generally:
 
 jm->setPattern("Pattern Name", "Siteswap");
@@ -46,10 +49,13 @@ hand* handp = &(jm->handpoly);
 
 
 Head:
+X and Y coordinates are for the center of the head.
+
 drawcircle(ap->hx, ap->hy, ap->hr); // Head X, Y, Radius
 
 Arms:
 Arms are in 5 segments.
+
 for (int i=0;i<5;i++) {
     drawline(ap->rx[i], ap->ry[i], ap->rx[i+1], ap->ry[i+1]);
     drawline(ap->lx[i], ap->ly[i], ap->lx[i+1], ap->ly[i+1]);
@@ -70,10 +76,13 @@ for (int i=0; i < 10; i++) {
 }
 
 Balls:
+X and Y coordinates are for the upper left "corner" of the ball (of an imaginary
+box enclosing the ball), so depending of the drawcircle routine, you will have
+to add the radius to the X and Y coordinates to get correct results.
 
-int diam = (11*jm->dpm/DW);
+int radius = jm->getBallRadius();
 for(int i=jm->balln-1;i>=0;i--) {
-	drawcircle(jm->b[i].gx + diam, jm->b[i].gy + diam, diam);
+	drawcircle(jm->b[i].gx + radius, jm->b[i].gy + radius, radius);
 }
 
 
@@ -116,6 +125,27 @@ x += string_pixel_width(site, diff);
 site += diff;
 draw_chars(site, strlen(site), x, y);
 
+7) Misc tips
+
+JMLib supports two different rendering modes that control how the juggler is
+scaled to fit properly on screen.
+
+Classic: This is the original mode. It doesn't work very well with small screens
+         or resolutions that are very wide or tall. Also, when resizing the
+         screen, the pattern will be re-calculated.
+Dynamic: Scales better for most resolutions, especially small screens and tall and
+         wide resolutions. When resizing the screen, the pattern will not be
+         re-calculated.
+
+For implementations where the user can change the window size, dynamic rendering
+is usually the best choice. If the screen size is fixed (such as for PDA's) using
+classic mode with special tweaks may yield the best results. Also, for low-end
+systems with slow floating point, dynamic mode might give a noticable slowdown.
+
+See jmdlx for an example of a port that uses dynamic scaling.
+See jmpalm for an example of a port that uses classic scaling with special tweaks
+to fit a fixed resulution.
+         
 
 Chunky Kibbles <chunky@icculus.org>
 Per Johan Groland <jm@jugglemaster.net>

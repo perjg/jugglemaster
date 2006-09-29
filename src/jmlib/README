@@ -81,7 +81,7 @@ box enclosing the ball), so depending of the drawcircle routine, you will have
 to add the radius to the X and Y coordinates to get correct results.
 
 int radius = jm->getBallRadius();
-for(int i=jm->balln-1;i>=0;i--) {
+for(int i = jm->numBalls() -1; i >= 0; i--) {
 	drawcircle(jm->b[i].gx + radius, jm->b[i].gy + radius, radius);
 }
 

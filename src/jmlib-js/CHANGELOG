@@ -1,0 +1,7 @@
+CHANGELOG for jmlib-js
+
+Version 0.1 (2006.10.03)
+
+- Simple canvas demo for testing (jugglemaster.js and jugglemaster.html)
+- Initial implementation of the core library (jmlib.js)
+- Initial implementation of the validator (validator.js)

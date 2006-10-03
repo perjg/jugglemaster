@@ -1,0 +1,10 @@
+TODO for jmlib-js
+
+- Add pattern loading (patterns.js and pattern_data.js)
+- Add script to convert original jugglemaster pattern file to pattern_data.js format
+- Add example flash movie implementation
+- Make validator compatible with IE
+- Add show current site div overlay
+- Make sure that all library functions have been tested
+- Test fpu = false mode and make sure it works properly, then do performance tests
+- Fix error message callback

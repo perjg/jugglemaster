@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>Validator TEST</title>
+</head>
+<body>
+<script src="../validator.js"></script>
+<script>
+
+function test_true(site) {
+  if (JMValidator.validateSite(site)) {
+    document.write("PASSED, site '" + site + "' is valid<br>");
+  }
+  else {
+    document.write("<b><i>FAILED</i></b>, site '" + site + "' should be valid<br>");
+  }
+}
+
+function test_false(site) {
+  if (JMValidator.validateSite(site)) {
+    document.write("<b><i>FAILED</i></b>, site '" + site + "' should be invalid<br>");  
+  }
+  else {
+    document.write("PASSED, site '" + site + "' is invalid<br>");
+  }
+}
+
+function test_validator() {
+  test_true("633");
+  test_true("534");
+  test_false("644");
+  test_false("6102");
+
+  test_true("[34]1");
+  test_true("[22]5[22]0[54]020");
+  test_true("[234]57");
+  test_true("[54]24522");
+  test_false("4[45]3");
+ 
+  // test invalid syntax
+  test_false("2[]3");
+  test_false("2[4]3");
+  test_false("2[345");
+  test_false("2]345");
+
+  test_true("(2,4x)(4x,2)");
+  test_true("([66x],2)(2,[66x])");
+  
+  test_false("(2x,4)(4x,2)");
+  test_false("([2x4],4)([24x],2)");
+  test_false("([2x4]4,4)([24x],2)");
+  test_false("([2x4,4)([24x],2)");
+
+  // test invalid syntax
+  test_false("(2x,4)(4x,2)7");
+  test_false("8(2x,4)(4x,2)");
+  test_false("(2x,4)6(4x,2)");
+  test_false("(2x(4),(4x,2)");
+
+  // misc  
+  test_true("44453");
+  test_false("6337");
+   
+  test_true("b");
+  test_false("a1");
+  test_true("b1");
+  test_false("c1");
+  test_true("[54]24");
+  test_true("(6x,4)(4,6x)");
+  test_false("(7,4)(4,5)");
+  test_true("(4,2x)(2x,4)");
+  test_false("(7x,2)(2,5x)");
+  test_false("spam spam spam!\"#!#?\"#?");
+  test_false("");
+  test_false(null);
+  test_false("[543]3[45][27]2");
+  test_true("(4,4)(0,4x)(4,4)(4x,0)");
+  test_true("([yxy],2)(2,[22])(2,[yxy])([22],2)");
+  test_true("(2,[62])([22],6x)([62],2)(6x,[22])");
+}
+
+test_validator();
+document.write("DONE<br>");
+</script>
+</body>
+</html>

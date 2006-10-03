@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JuggleMaster</title>
+<link rel="stylesheet" type="text/css" href="jugglemaster.css">
+<script src="jmlib-js/validator.js"></script>
+<script src="jmlib-js/jmlib.js"></script>	
+<script src="jmlib-js/jugglemaster.js"></script>
+<script src="widget_opera.js"></script>
+</head>
+<body onload="load_widget(); init_form();">
+  <div id="front">
+    <div class="canvas">    	
+      <canvas id="cv" width="260" height="240"></canvas>
+    </div>
+	<div class="site_window">
+	  <div class="site_titlebar"><div id="site_text">Enter Siteswap</div>
+	  <!-- <img class="expandButton button" id="expand" title="Expand to view more siteswap options"></img>	-->
+	  <img class="configButton button" id="flipfront" title="Configuration"></img>	
+	  </div>
+	  <div class="site_content translucent" style="background-color:#d0d0d0;">
+	  <form name="entersite">
+      Site: <input type="text" name="site" size="12" value="3">
+	  <select name="style">
+               <option value="Normal">Normal
+			   <option value="Reverse">Reverse
+               <option value="Shower">Shower
+			   <option value="Mills_Mess">Mills Mess
+               <option value="Center">Center
+			   <option value="Windmill">Windmill
+            </select>
+	  </form>
+	  </div>
+    </div>
+  </div>
+  <div id="back_site">
+    <div class="settings">
+	  <div id="about">
+        <div class="headertext">
+		<img src="icon.png" width="88" height="88"><br>
+        <b>JuggleMaster</b>
+        </div>
+        <div class="text">
+		<small>Version 0.1 (beta)</small><br>(C) Per Johan Groland 2006<br>
+        <a href="http://jugglemaster.net" target="_blank">jugglemaster.net</a>
+        </div>
+    <p class="flipbutton" id="flipback" title="Go back to juggler"></p>
+	</div>
+  </div>
+</body>
+</html>

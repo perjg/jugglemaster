@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<widget>
+  <widgetname>JuggleMaster</widgetname>
+  <description>
+    A Siteswap juggling animator
+  </description>
+  <icon>icon.png</icon>
+  <width>280</width>
+  <height>260</height>
+  <author>
+    <name>Per Johan Groland</name>
+    <email>jm@jugglemaster.net</email>
+    <link>http://jugglemaster.net</link>
+    <organization>Per Johan Groland</organization>
+  </author>
+  <id>
+    <host>my.opera.com</host>
+    <name>JuggleMaster</name>
+    <revised>2006-10-03</revised>
+  </id>
+</widget>

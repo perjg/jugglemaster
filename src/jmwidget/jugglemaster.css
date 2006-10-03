@@ -1,0 +1,213 @@
+/*
+ * jmwidget - JuggleMaster Widget
+ * Version 1.0
+ * (C) Per Johan Groland 2006
+ *
+ * Based on JMLib 2.0, (C) Per Johan Groland and Gary Briggs
+ *
+ * Based on JuggleMaster Version 1.60
+ * Copyright (c) 1995-1996 Ken Matsuoka
+ *
+ * You may redistribute and/or modify JMLib_js under the terms of the
+ * Modified BSD License as published in various places online or in the
+ * COPYING.jmlib file in the package you downloaded.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
+ * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
+ * Modified BSD License for more details.
+ */
+
+body
+{
+  width: 280px;
+  height: 260px;
+  margin: 0;
+  padding: 0;
+  font-family: Verdana;
+  background-image: url("images/background.png");
+  background-repeat: no-repeat;
+}
+
+body:hover .flipbutton {
+	opacity: 0.3;
+}
+
+body .flipbutton:hover {
+	opacity: 1.0;
+}
+
+body .flipbutton:active {
+	opacity: 1.0;
+	background-position: bottom left;	
+}
+
+.flipbutton {
+	opacity: 0.0;
+	overflow: hidden;
+	height: 16px;
+	width: 24px;
+	position: absolute;
+	background: transparent url(images/flip.png) scroll no-repeat 0 0;
+	background-position: top left;
+	right: 10px;
+	bottom: 10px;
+	margin: 0;
+	padding: 0;
+	z-index: 30;
+}
+
+div.front {
+  width: 280px;
+  height: 260px;
+  top: 0px;
+  left: 0px;
+  border:1px solid #444;    
+  position: absolute;
+  background: transparent;
+}
+
+div.canvas {
+  width: 260px;
+  height: 240px;
+  top: 10px;
+  left: 10px;
+  /*border:1px solid #444;  */
+  position: absolute;
+  /*background: transparent;*/
+}
+
+div.settings {
+  width: 260px;
+  height: 240px;
+  top: 10px;
+  left: 10px;
+  position: absolute;
+  background: transparent;
+}
+
+div.translucent {
+  opacity: 0.75;
+}
+
+/* Enter siteswap window */
+div.site_window {
+    position: absolute;
+	left: 20px; top: 90px;
+    width: 240px; height: 55px;
+    border: 1px outset gray;
+	z-index: 20;
+	visibility: hidden;
+}
+
+body:hover .site_window {
+  visibility: visible;
+}
+
+div.site_titlebar {
+    position: absolute;
+    top: 0px; height: 13px;
+    width: 230px; /* 5px padding on left and right */
+    background-color: #aaa;
+    border-bottom: groove gray 2px;
+    padding: 3px 5px 2px 5px;
+    font: bold 8pt sans-serif;
+}
+
+div.site_content {
+    position: absolute;
+    top: 20px;
+    height: 25px; /* 13px titlebar - 10px padding*/
+    width: 230px; /* 10px of padding */
+    padding: 5px;
+    overflow: auto;
+    background-color: #ffffff;
+    font: 12pt sans-serif;
+}
+
+div.site_error {
+  visibility: hidden;
+}
+
+body .site_content:hover {
+	display: block;
+	opacity: 1.0;	
+}
+
+#back_site {
+	display: none;
+}
+
+.configButton {
+    opacity: 0.1;
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	width: 15px;
+	height: 15px;
+	background: transparent url("images/configbutton15px.png") no-repeat;
+	z-index: 30;	
+}
+
+.expandButton {
+    opacity: 0.1;
+	position: absolute;
+	top: 2px;
+	right: 18px;
+	width: 15px;
+	height: 15px;
+	background: transparent url("images/expandbutton15px.png") no-repeat;
+}
+
+.foldButton {
+    opacity: 0.1;
+	position: absolute;
+	top: 2px;
+	right: 18px;
+	width: 15px;
+	height: 15px;
+	background: transparent url("images/foldbutton15px.png") no-repeat;
+}
+
+
+/* common settings for all elements belonging to the button class */
+.button:hover {
+	background-position: 0 50%;
+	opacity: 1.0;
+}
+
+.button:active {
+	opacity: 1.0;
+	background-position: 0 100%;
+}
+
+body:hover .button {
+	opacity: 1.0;
+}
+
+div#about {
+  position: absolute;
+  top: 20px;
+  width: 260px;
+  height: 220px;
+}
+
+div.headertext {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+  font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+  font-size: 20px;  
+}
+
+div.text {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+  font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+  font-size: 10px;
+}

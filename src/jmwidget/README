@@ -1,0 +1,42 @@
+README for jmwidget
+
+jmwidget is an implementation of JuggleMaster as a Widget.
+It currently runs as an Opera Widget and as a Dashboard Widget.
+
+For now, the widget files must be packaged manually. This will be
+handled by a script in due time.
+
+- Scan index.html:
+
+Replace
+<script src="../validator.js"></script>
+<script src="../jmlib.js"></script>	
+<script src="../jugglemaster.js"></script>
+
+With:
+<script src="jmlib-js/validator.js"></script>
+<script src="jmlib-js/jmlib.js"></script>	
+<script src="jmlib-js/jugglemaster.js"></script>
+
+Copy ../jmlib-js/* to jmlib-js/*
+
+Opera widget
+
+Archive JuggleMaster.zip ->
+  config.xml
+  index.html
+  jugglemaster.css
+  icon.png
+  images/*
+  jmlib-js/*
+  
+Dashboard Widget
+
+Directory JuggleMaster.wdgt ->
+  info.plist
+  index.html
+  jugglemaster.css
+  icon.png
+  images/*
+  jmlib-js/*
+

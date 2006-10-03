@@ -14,5 +14,9 @@
     <integer>280</integer>
     <key>Height</key>
     <integer>260</integer>
+    <key>CloseBoxInsetX</key>
+    <integer>10</integer>
+    <key>CloseBoxInsetY</key>
+    <integer>10</integer>    
   </dict>
 </plist>

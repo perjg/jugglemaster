@@ -22,12 +22,13 @@
 
 var canvas, ctx;
 var jmlib;
+var timerEnabled;
 
 function log(s) {
   // Safari
-  //if (window.console) { window.console.log(s); }
+  if (window.console) { window.console.log(s); }
   // Opera
-  //opera.postError(s);
+  if (opera) { opera.postError(s); }
 }
 
 function getArgs() {
@@ -48,46 +49,18 @@ function getArgs() {
   return args;
 }
 
+function enableTimer() {
+  timerEnabled = true;
+  loop();
+}
+
+function disableTimer() {
+  timerEnabled = false;
+}
+
 function loop() {
   jmlib.doJuggle();  
   ctx.clearRect(0, 0, canvas.width, canvas.height);	
-
-/*
-  // draw grid
-  ctx.lineWidth = "0.2";	
-  ctx.fillStyle = "gray";	
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(canvas.width, canvas.height);
-  ctx.closePath();
-  ctx.stroke()
-
-  ctx.beginPath();
-  ctx.moveTo(canvas.width, 0);
-  ctx.lineTo(0, canvas.height);
-  ctx.closePath();
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(0, canvas.height/2);
-  ctx.lineTo(canvas.width, canvas.height/2);
-  ctx.closePath();
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(canvas.width/2, 0);
-  ctx.lineTo(canvas.width/2, canvas.height);
-  ctx.closePath();
-  ctx.stroke();
-
-  ctx.lineWidth = "2.0";
-  ctx.beginPath();
-  ctx.moveTo(pos++, 3);
-  ctx.lineTo(pos+3, 3);
-  ctx.closePath();
-  ctx.stroke()
-*/
-
   ctx.lineWidth = "1.0";	
 
   // draw head
@@ -140,7 +113,9 @@ function loop() {
     ctx.closePath();	  
 	}
 
-  setTimeout(loop, 10);
+  if (timerEnabled) {
+    setTimeout(loop, 10);
+  }
 }
 
 function getColor(i) {
@@ -198,7 +173,7 @@ function load() {
   loop();
 }
 
-function load_widget() {
+function loadWidget() {
   //fixme: read from cookie here
   site = "3";
   style = "Normal";
@@ -216,6 +191,7 @@ function load_widget() {
   jmlib.setStyleEx(style);
   jmlib.startJuggle();
 
+  timerEnabled = true;
   loop();
 }
 

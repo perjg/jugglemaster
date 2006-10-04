@@ -37,6 +37,7 @@ Directory JuggleMaster.wdgt ->
   index.html
   jugglemaster.css
   icon.png
+  default.png
   images/*
   jmlib-js/*
 

@@ -142,10 +142,21 @@ body .site_content:hover {
     opacity: 0.1;
 	position: absolute;
 	top: 2px;
-	right: 2px;
+	right: 17px;
 	width: 15px;
 	height: 15px;
 	background: transparent url("images/configbutton15px.png") no-repeat;
+	z-index: 30;	
+}
+
+.closeButton {
+    opacity: 0.1;
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	width: 15px;
+	height: 15px;
+	background: transparent url("images/closebutton15px.png") no-repeat;
 	z-index: 30;	
 }
 
@@ -153,7 +164,7 @@ body .site_content:hover {
     opacity: 0.1;
 	position: absolute;
 	top: 2px;
-	right: 18px;
+	right: 2px;
 	width: 15px;
 	height: 15px;
 	background: transparent url("images/expandbutton15px.png") no-repeat;

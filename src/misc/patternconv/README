@@ -1,0 +1,11 @@
+README for patternconv
+
+This is a simple script that generates a pattern library file for jmlib-js
+from the pattern file found in data/patterns.jm
+
+The output file is written to this directory as patterns.js. Copy it to
+src/jmlib-js to use.
+
+The implementation uses src/jmlib/patterns.cpp and src/jmlib/validator.cpp
+
+Per Johan Groland, 2006.10.05

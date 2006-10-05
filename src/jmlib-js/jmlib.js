@@ -1,5 +1,3 @@
-// 	$Id: validator.cpp 208 2006-08-04 01:40:24Z per $	 
-
 /*
  * jmlib-js - Portable JuggleMaster Library (JavaScript Version)
  * Version 1.0
@@ -566,8 +564,7 @@ JMLib.prototype.setPattern = function(name, site, hr, dr) {
   }
 }
 
-//fixme: add support for offset
-JMLib.prototype.setStyle = function(name, length, data, offset) {
+JMLib.prototype.setStyle = function(name, length, data) {
   if (data.length > JMLib.JML_MAX_STYLELEN) {
     this.error("Style too large");
     return false;
@@ -579,9 +576,6 @@ JMLib.prototype.setStyle = function(name, length, data, offset) {
   }
   
   this.stylename = name;
-  //fixme: add support for offset
-  // for now, just copy all data
-  //memcpy(styledata, data + offset, length*4);
   this.styledata = data;
   this.style_len = length;
   
@@ -1275,7 +1269,7 @@ JMLib.prototype.set_patt = function(s) {
     
     if(s.charAt(pos) == '[') {
       flag2 = 1;
-      this.patts[pattw] = 0;
+      this.patts[this.pattw] = 0;
       pos++;
       continue;
     }

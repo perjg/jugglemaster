@@ -1,5 +1,3 @@
-// 	$Id: validator.cpp 208 2006-08-04 01:40:24Z per $	 
-
 /*
  * jmlib-js - Portable JuggleMaster Library (JavaScript Version)
  * Version 1.0
@@ -149,10 +147,14 @@ function load() {
   var args = getArgs();
   var site = null;
   var style = null;
+  var pattern = null;
+  var pattno  = null;
   
   if (args != null) {
-    var site = args["site"];
-    var style = args["style"];
+    site = args["site"];
+    style = args["style"];
+	pattern = args["pattern"];
+	pattno = args["pattno"];	
   }
 
   if (site == null)  { site = "3"; }
@@ -161,15 +163,26 @@ function load() {
   canvas = document.getElementById("cv");
   ctx = canvas.getContext("2d");
 
-  cb = function(err) { alert(err); }
+  //cb = function(err) { alert(err); }
 
-  jmlib = new JMLib(cb);
+  jmlib = new JMLib(null);
   jmlib.setScalingMethod(JMLib.SCALING_METHOD_DYNAMIC);
   jmlib.setWindowSize(canvas.width, canvas.height);
-  jmlib.setPattern(site, site, jmlib.height_ratio, jmlib.dwell_ratio);
-  jmlib.setStyleEx(style);
+  
+  if (pattern != null) {
+    PatternLoader.loadPattern(jmlib, pattern);    
+  }
+  else if (pattno != null) {
+    PatternLoader.loadPatternEx(jmlib, pattno);
+  }
+  else {
+    jmlib.setPattern(site, site, jmlib.height_ratio, jmlib.dwell_ratio);
+    jmlib.setStyleEx(style);
+  }
+  
   jmlib.startJuggle();
 
+  timerEnabled = true;
   loop();
 }
 

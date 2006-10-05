@@ -43,7 +43,7 @@ body .flipbutton:active {
 }
 
 .flipbutton {
-	opacity: 0.0;
+	opacity: 0.1;
 	overflow: hidden;
 	height: 16px;
 	width: 24px;
@@ -91,20 +91,20 @@ div.translucent {
 }
 
 /* Enter siteswap window */
-div.site_window {
+div.window {
     position: absolute;
-	left: 20px; top: 90px;
-    width: 240px; height: 55px;
+	left: 20px; top: 80px;
+    width: 240px; height: 80px;
     border: 1px outset gray;
 	z-index: 20;
 	visibility: hidden;
 }
 
-body:hover .site_window {
+body:hover .window {
   visibility: visible;
 }
 
-div.site_titlebar {
+div.titlebar {
     position: absolute;
     top: 0px; height: 13px;
     width: 230px; /* 5px padding on left and right */
@@ -117,7 +117,23 @@ div.site_titlebar {
 div.site_content {
     position: absolute;
     top: 20px;
-    height: 25px; /* 13px titlebar - 10px padding*/
+    height: 50px; /* 13px titlebar - 10px padding*/
+    width: 230px; /* 10px of padding */
+    padding: 5px;
+    overflow: auto;
+    background-color: #ffffff;
+    font: 12pt sans-serif;
+	display: none;
+}
+
+body .site_content:hover {
+	opacity: 1.0;	
+}
+
+div.pattern_content {
+    position: absolute;
+    top: 20px;
+    height: 50px; /* 13px titlebar - 10px padding*/
     width: 230px; /* 10px of padding */
     padding: 5px;
     overflow: auto;
@@ -125,13 +141,12 @@ div.site_content {
     font: 12pt sans-serif;
 }
 
-div.site_error {
-  visibility: hidden;
+body .pattern_content:hover {
+	opacity: 1.0;	
 }
 
-body .site_content:hover {
-	display: block;
-	opacity: 1.0;	
+div.site_error {
+  visibility: hidden;
 }
 
 #back_site {

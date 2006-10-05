@@ -74,6 +74,22 @@ function submitSiteHandler() {
   return false;
 }
 
+function changeCategoryHandler() {
+  var category = document.getElementById('category').value;
+  loadPatterns(category);
+  changePatternHandler();
+}
+
+function changePatternHandler() {
+  var pattern = document.getElementById('pattern').value;
+  
+  changePattern(pattern);
+}
+
+function submitPatternHandler() {
+
+}
+
 function showError(error) {
   document.getElementById('site_text').innerHTML = "Error: "+ error;
   setTimeout(hideError, 2000);
@@ -100,6 +116,47 @@ function flipWidget(to) {
   }
 }
 
+// Add categories to the category select list
+function loadCategories() {
+  var catList = document.getElementById('category');
+  if (catList == null) { return; }
+
+  for (var i = 0; i < groups.length; i++) {
+    var group = groups[i];
+	var name = group[0];
+	
+	if (name.length > 30) {
+	  name = name.substring(0, 30);
+	}
+    catList.options[catList.options.length] = new Option(name, i, false, false);
+  }
+}
+
+// Load patterns for a specific category into the pattern select list
+function loadPatterns(idx) {
+  var patternList = document.getElementById('pattern');
+  if (patternList == null) { return; }
+
+  var group = groups[idx];
+  if (group == null) { return; }
+  var from = group[1];
+  var to   = group[2];
+  
+  //alert("loading patterns from " + from + " to " + to);
+  patternList.options.length = 0;
+  
+  for (var i = from; i <= to; i++) {  
+    var pattern = patterns[i];
+	var name = pattern[0];
+	
+	if (name.length > 30) {
+	  name = name.substring(0, 30);
+	}
+	//alert("Adding pattern " + i + " " + name);
+	patternList.options[patternList.options.length] = new Option(name, i, false, false);
+  }
+}
+
 // Dashboard onhide handler
 function onhide() {
   disableTimer();
@@ -112,13 +169,22 @@ function onshow() {
 
 function initialize() {
   // set event handlers for site entry form
-  document.getElementById('site').onchange = changeSiteHandler;
-  document.getElementById('style').onchange = changeStyleHandler; 
+  document.getElementById('site').onchange      = changeSiteHandler;
+  document.getElementById('style').onchange     = changeStyleHandler; 
   document.getElementById('entersite').onsubmit = submitSiteHandler;
+  
+  // set event handlers for pattern selection form
+  document.getElementById('category').onchange      = changeCategoryHandler;
+  document.getElementById('pattern').onchange       = changePatternHandler; 
+  document.getElementById('selectpattern').onsubmit = submitPatternHandler;
   
   // set event handlers for dashboard
   if (window.widget) {
     widget.onhide = onhide;
     widget.onshow = onshow;
   }
+  
+  // load categories and patterns
+  loadCategories();
+  loadPatterns(0);
 }

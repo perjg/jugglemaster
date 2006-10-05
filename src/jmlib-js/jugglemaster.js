@@ -241,3 +241,11 @@ function getLastError() {
 function getCurrentSite() {
   return jmlib.siteswap;
 }
+
+function changePattern(idx) {
+  jmlib.stopJuggle();
+  var ret = PatternLoader.loadPatternEx(jmlib, idx);
+  jmlib.startJuggle();
+
+  return ret;
+}

@@ -4,7 +4,9 @@
 <title>JuggleMaster</title>
 <link rel="stylesheet" type="text/css" href="jugglemaster.css">
 <script src="jmlib-js/validator.js"></script>
-<script src="jmlib-js/jmlib.js"></script>	
+<script src="jmlib-js/jmlib.js"></script>
+<script src="jmlib-js/patterns.js"></script>
+<script src="jmlib-js/patternloader.js"></script>
 <script src="jmlib-js/jugglemaster.js"></script>
 <script src="widget.js"></script>
 </head>
@@ -15,22 +17,37 @@
 	  <img class="closeButton button" id="closefront" title="Close JuggleMaster"></img>
 	  <img class="configButton button" id="flipfront" title="Configuration"></img>
     </div>
-	<div class="site_window">
-	  <div class="site_titlebar"><div id="site_text">Enter Siteswap</div>
+	<div class="window">
+	  <div class="titlebar"><div id="site_text">Select Pattern</div>
 	  <!-- <img class="expandButton button" id="expand" title="Expand to view more siteswap options"></img> -->
 	  </div>
 	  <div class="site_content translucent" style="background-color:#d0d0d0;">
-	  <form name="entersite">
-      Site: <input type="text" name="site" size="8" value="3">
-	  <select name="style">
-               <option value="Normal">Normal
-			   <option value="Reverse">Reverse
-               <option value="Shower">Shower
-			   <option value="Mills_Mess">Mills Mess
-               <option value="Center">Center
-			   <option value="Windmill">Windmill
-            </select>
-	  </form>
+        <form name="entersite">
+          Site: <input type="text" name="site" size="8" value="3">
+          <select name="style">
+            <option value="Normal">Normal
+            <option value="Reverse">Reverse
+            <option value="Shower">Shower
+            <option value="Mills_Mess">Mills Mess
+            <option value="Center">Center
+            <option value="Windmill">Windmill
+          </select>
+	    </form>
+	  </div>
+	  <div class="pattern_content translucent" style="background-color:#d0d0d0;">
+        <form name="selectpattern">
+		  <table align="center">
+		  <tr>
+		  <td></td>
+          <td><select name="category">
+          </select></td>
+		  </tr>
+		  <tr>
+		  <td></td>
+          <td><select name="pattern">
+          </select></td>
+		  </table>
+	    </form>
 	  </div>
     </div>
   </div>

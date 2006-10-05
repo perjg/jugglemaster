@@ -59,6 +59,14 @@ JML_INT8 JMSiteValidator::siteChar(JML_INT32 c) {
     return -1;
 }
 
+JML_INT32 JMSiteValidator::ballCount = -1;
+
+// Returns the ball count of the last verified pattern, or -1 if the
+// pattern was invalid or no pattern has been validated yet
+JML_INT32 JMSiteValidator::getBallCount() {
+  return ballCount;
+}
+
 // Scans a MSS for valid syntax
 bool JMSiteValidator::scanMSS(JML_CHAR*& site) {
   //printf("scanMSS('%s')\n", site);
@@ -264,6 +272,8 @@ bool JMSiteValidator::validateMSS(JML_CHAR* site) {
   JML_INT32 lsLen = 0;
   JML_INT32 throwCount = 0;
 
+  ballCount = 0;
+
   if(1 == len && -1 != siteDigit(site[0])) return true;
 
   ls = new JML_CHAR[len]; // Guaranteed to be long enough
@@ -271,13 +281,15 @@ bool JMSiteValidator::validateMSS(JML_CHAR* site) {
   
   for (i = 0; i < len; i++) {
     if (site[i] == '[') {
-      while (site[++i] != ']')
-	ls[lsLen]++;
+      while (site[++i] != ']') {
+        ls[lsLen]++;
+      }
       lsLen++;
       continue;
     }
-    else
+    else {
       ls[lsLen++]++;
+    }
   }
 
   /*
@@ -289,15 +301,17 @@ bool JMSiteValidator::validateMSS(JML_CHAR* site) {
   for (i = 0; i < len; i++) {
     if (site[i] == '[') {
       while (site[++i] != ']') {
-	x = siteDigit(site[i]);
-	ls[(throwCount+x)%lsLen]--;
+        x = siteDigit(site[i]);
+        ls[(throwCount+x)%lsLen]--;
 
-	/*
-	printf("throw %d lands at position %d (%d+%d mod %d)\n", x, (throwCount+x)%lsLen,
-	       throwCount, x, lsLen);
-	for (int j = 0; j < lsLen; j++)
-	  printf("ls[%d] = %d\n", j, ls[j]);
-	*/
+        ballCount += x;
+
+        /*
+        printf("throw %d lands at position %d (%d+%d mod %d)\n", x, (throwCount+x)%lsLen,
+               throwCount, x, lsLen);
+        for (int j = 0; j < lsLen; j++)
+          printf("ls[%d] = %d\n", j, ls[j]);
+        */
       }
       throwCount++;
       continue;
@@ -305,6 +319,7 @@ bool JMSiteValidator::validateMSS(JML_CHAR* site) {
     else {
       x = siteDigit(site[i]);
       ls[(throwCount+x)%lsLen]--;
+      ballCount += x;
       
       /*
       printf("throw %d lands at position %d (%d+%d mod %d)\n", x, (throwCount+x)%lsLen,
@@ -316,6 +331,9 @@ bool JMSiteValidator::validateMSS(JML_CHAR* site) {
       throwCount++;
     }
   }
+
+  if (throwCount != 0)
+    ballCount = ballCount / throwCount;
 
   for (i = 0; i < lsLen; i++) {
     if (ls[i] != 0) {

@@ -38,6 +38,7 @@
 
 class JMSiteValidator {
  protected:
+  static JML_INT32 ballCount;
   static bool scanSSS(JML_CHAR*& site) EXTRA_SECTION_ONE;
   static bool scanMSS(JML_CHAR*& site) EXTRA_SECTION_ONE;
   static bool validateVSS(JML_CHAR* site) EXTRA_SECTION_ONE;
@@ -46,6 +47,7 @@ class JMSiteValidator {
  public:
   static JML_INT32 siteDigit(JML_INT8 s) EXTRA_SECTION_ONE;
   static JML_INT8 siteChar(JML_INT32 c) EXTRA_SECTION_ONE;
+  static JML_INT32 getBallCount() EXTRA_SECTION_ONE;
 
   static bool transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS) EXTRA_SECTION_ONE;
   static bool scanSite(JML_CHAR* site) EXTRA_SECTION_ONE;

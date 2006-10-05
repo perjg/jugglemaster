@@ -940,7 +940,7 @@ JMLib.prototype.juggle = function(/*Ball*/ d) {
     }
     else {
       if(d.bh == 1) {
-        fx = (tp - this.aw)/tw*2+1;
+        fx = (tp - this.aw) / this.tw * 2 + 1;
         y  = parseInt(this.high[1] * (1 - JMLib.jijo(fx)));
       }
       else if(d.st & JMLib.OBJECT_UNDER) {

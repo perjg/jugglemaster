@@ -19,11 +19,19 @@
     </div>
 	<div class="window">
 	  <div class="titlebar"><div id="site_text">Select Pattern</div>
-	  <!-- <img class="expandButton button" id="expand" title="Expand to view more siteswap options"></img> -->
+	  <img class="switchButton button" id="switch" title="Switch to Enter Siteswap View"></img>
 	  </div>
-	  <div class="site_content translucent" style="background-color:#d0d0d0;">
+	  <div class="site_content translucent" id="site_content" style="background-color:#d0d0d0;">
         <form name="entersite">
-          Site: <input type="text" name="site" size="8" value="3">
+        
+		  <table align="center">
+		  <tr>
+		  <td>Site:</td>
+      <td><input type="text" name="site" size="8" value="3"></td>
+		  </tr>
+		  <tr>
+		  <td>Style:</td>
+      <td>
           <select name="style">
             <option value="Normal">Normal
             <option value="Reverse">Reverse
@@ -32,10 +40,12 @@
             <option value="Center">Center
             <option value="Windmill">Windmill
           </select>
+      </td>
+		  </table>
 	    </form>
 	  </div>
-	  <div class="pattern_content translucent" style="background-color:#d0d0d0;">
-        <form name="selectpattern">
+	  <div class="pattern_content translucent" id="pattern_content" style="background-color:#d0d0d0;">
+      <form name="selectpattern">
 		  <table align="center">
 		  <tr>
 		  <td></td>

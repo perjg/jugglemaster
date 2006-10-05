@@ -30,31 +30,31 @@ body
 }
 
 body:hover .flipbutton {
-	opacity: 0.3;
+  opacity: 0.3;
 }
 
 body .flipbutton:hover {
-	opacity: 1.0;
+  opacity: 1.0;
 }
 
 body .flipbutton:active {
-	opacity: 1.0;
-	background-position: bottom left;	
+  opacity: 1.0;
+  background-position: bottom left;	
 }
 
 .flipbutton {
-	opacity: 0.1;
-	overflow: hidden;
-	height: 16px;
-	width: 24px;
-	position: absolute;
-	background: transparent url(images/flip.png) scroll no-repeat 0 0;
-	background-position: top left;
-	right: 10px;
-	bottom: 10px;
-	margin: 0;
-	padding: 0;
-	z-index: 30;
+  opacity: 0.1;
+  overflow: hidden;
+  height: 16px;
+  width: 24px;
+  position: absolute;
+  background: transparent url(images/flip.png) scroll no-repeat 0 0;
+  background-position: top left;
+  right: 10px;
+  bottom: 10px;
+  margin: 0;
+  padding: 0;
+  z-index: 30;
 }
 
 div.front {
@@ -92,12 +92,12 @@ div.translucent {
 
 /* Enter siteswap window */
 div.window {
-    position: absolute;
-	left: 20px; top: 80px;
-    width: 240px; height: 80px;
-    border: 1px outset gray;
-	z-index: 20;
-	visibility: hidden;
+  position: absolute;
+  left: 20px; top: 80px;
+  width: 240px; height: 83px;
+  border: 1px outset gray;
+  z-index: 20;
+  visibility: hidden;
 }
 
 body:hover .window {
@@ -105,44 +105,56 @@ body:hover .window {
 }
 
 div.titlebar {
-    position: absolute;
-    top: 0px; height: 13px;
-    width: 230px; /* 5px padding on left and right */
-    background-color: #aaa;
-    border-bottom: groove gray 2px;
-    padding: 3px 5px 2px 5px;
-    font: bold 8pt sans-serif;
+  position: absolute;
+  top: 0px; height: 13px;
+  width: 230px; /* 5px padding on left and right */
+  background-color: #aaa;
+  border-bottom: groove gray 2px;
+  padding: 3px 5px 2px 5px;
+  font: bold 8pt sans-serif;
 }
 
 div.site_content {
-    position: absolute;
-    top: 20px;
-    height: 50px; /* 13px titlebar - 10px padding*/
-    width: 230px; /* 10px of padding */
-    padding: 5px;
-    overflow: auto;
-    background-color: #ffffff;
-    font: 12pt sans-serif;
-	display: none;
+  position: absolute;
+  top: 20px;
+  height: 53px; /* 13px titlebar - 10px padding*/
+  width: 230px; /* 10px of padding */
+  padding: 5px;
+  overflow: auto;
+  background-color: #ffffff;
+  font: 10pt sans-serif;
+  opacity: 0.0;
+ visibility : hidden;
 }
 
 body .site_content:hover {
-	opacity: 1.0;	
+  opacity: 1.0;	
 }
 
+body:hover .site_content {
+  opacity: 0.9;	
+}
+
+
 div.pattern_content {
-    position: absolute;
-    top: 20px;
-    height: 50px; /* 13px titlebar - 10px padding*/
-    width: 230px; /* 10px of padding */
-    padding: 5px;
-    overflow: auto;
-    background-color: #ffffff;
-    font: 12pt sans-serif;
+  position: absolute;
+  top: 20px;
+  height: 53px; /* 13px titlebar - 10px padding*/
+  width: 230px; /* 10px of padding */
+  padding: 5px;
+  overflow: auto;
+  background-color: #ffffff;
+  font: 10pt sans-serif;
+  opacity: 0.0;    
+  visibility: hidden;
 }
 
 body .pattern_content:hover {
-	opacity: 1.0;	
+  opacity: 1.0;	
+}
+
+body:hover .pattern_content {
+  opacity: 0.9;	
 }
 
 div.site_error {
@@ -150,65 +162,65 @@ div.site_error {
 }
 
 #back_site {
-	display: none;
+  display: none;
 }
 
 .configButton {
-    opacity: 0.1;
-	position: absolute;
-	top: 2px;
-	right: 17px;
-	width: 15px;
-	height: 15px;
-	background: transparent url("images/configbutton15px.png") no-repeat;
-	z-index: 30;	
+  opacity: 0.1;
+  position: absolute;
+  top: 2px;
+  right: 17px;
+  width: 15px;
+  height: 15px;
+  background: transparent url("images/configbutton15px.png") no-repeat;
+  z-index: 30;	
 }
 
 .closeButton {
-    opacity: 0.1;
-	position: absolute;
-	top: 2px;
-	right: 2px;
-	width: 15px;
-	height: 15px;
-	background: transparent url("images/closebutton15px.png") no-repeat;
-	z-index: 30;	
+  opacity: 0.1;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 15px;
+  height: 15px;
+  background: transparent url("images/closebutton15px.png") no-repeat;
+  z-index: 30;	
 }
 
-.expandButton {
-    opacity: 0.1;
-	position: absolute;
-	top: 2px;
-	right: 2px;
-	width: 15px;
-	height: 15px;
-	background: transparent url("images/expandbutton15px.png") no-repeat;
+.switchButton {
+  opacity: 0.1;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 15px;
+  height: 15px;
+  background: transparent url("images/expandbutton15px.png") no-repeat;
 }
 
 .foldButton {
-    opacity: 0.1;
-	position: absolute;
-	top: 2px;
-	right: 18px;
-	width: 15px;
-	height: 15px;
-	background: transparent url("images/foldbutton15px.png") no-repeat;
+  opacity: 0.1;
+  position: absolute;
+  top: 2px;
+  right: 18px;
+  width: 15px;
+  height: 15px;
+  background: transparent url("images/foldbutton15px.png") no-repeat;
 }
 
 
 /* common settings for all elements belonging to the button class */
 .button:hover {
-	background-position: 0 50%;
-	opacity: 1.0;
+  background-position: 0 50%;
+  opacity: 1.0;
 }
 
 .button:active {
-	opacity: 1.0;
-	background-position: 0 100%;
+  opacity: 1.0;
+  background-position: 0 100%;
 }
 
 body:hover .button {
-	opacity: 1.0;
+  opacity: 1.0;
 }
 
 div#about {

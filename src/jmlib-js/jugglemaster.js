@@ -100,6 +100,7 @@ function loop() {
 
   // draw balls	
   var r = jmlib.getBallRadius();
+  if (r < 1) { r = 1; }
   for (var i = 0; i < jmlib.numBalls(); i++) {
     var ball = jmlib.b[i];
   

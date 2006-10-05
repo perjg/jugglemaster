@@ -40,15 +40,29 @@ window.addEventListener('load', function(ev) {
     window.close();
   }, false);
 
+  document.getElementById('switch').addEventListener('click', function(ev) {
+    switchHandler();
+  }, false);
+
   
 }, false);
 
 function changeSiteHandler() {
   var site = document.getElementById('site').value;
+  var style = document.getElementById('style').value;
   
+  /*
   if (!changeSite(site)) {
     showError(getLastError());  
   }
+  */
+  
+  if (changeSite(site)) {
+    changeStyle(style);
+  }
+  else {
+    showError(getLastError());
+  }  
 }
 
 function changeStyleHandler() {
@@ -92,11 +106,16 @@ function submitPatternHandler() {
 
 function showError(error) {
   document.getElementById('site_text').innerHTML = "Error: "+ error;
-  setTimeout(hideError, 2000);
+  setTimeout(setWindowHeader, 2000);
 }
 
-function hideError() {
-  document.getElementById('site_text').innerHTML = "Enter Siteswap";
+function setWindowHeader() {
+  if (switchState == "pattern_content") {
+    document.getElementById('site_text').innerHTML = "Select Pattern";
+  }
+  else {
+    document.getElementById('site_text').innerHTML = "Enter Siteswap";
+  }
 }
 
 function flipWidget(to) {
@@ -114,6 +133,25 @@ function flipWidget(to) {
     default:
       break;
   }
+}
+
+var switchState;
+
+function switchHandler() {
+  if (switchState == "pattern_content") { // switch to enter siteswap
+    document.getElementById('pattern_content').style.visibility = "hidden";
+    document.getElementById('site_content').style.visibility = "visible";
+    document.getElementById('switch').title = "Switch to Select Pattern View";
+    switchState = "site_content";
+  }
+  else { // switch to select pattern
+    document.getElementById('pattern_content').style.visibility = "visible";
+    document.getElementById('site_content').style.visibility = "hidden";
+    document.getElementById('switch').title = "Switch to Enter Siteswap View";
+    switchState = "pattern_content";
+  }
+  
+  setWindowHeader();
 }
 
 // Add categories to the category select list
@@ -177,6 +215,11 @@ function initialize() {
   document.getElementById('category').onchange      = changeCategoryHandler;
   document.getElementById('pattern').onchange       = changePatternHandler; 
   document.getElementById('selectpattern').onsubmit = submitPatternHandler;
+
+  // set initial state of pattern selector and siteswap selector
+  switchState = "pattern_content";
+  document.getElementById('pattern_content').style.visibility = "visible";
+  document.getElementById('site_content').style.visibility = "hidden";
   
   // set event handlers for dashboard
   if (window.widget) {

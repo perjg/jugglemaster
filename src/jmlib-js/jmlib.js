@@ -220,15 +220,17 @@ JMLib.ST_JUGGLE = 2;
 JMLib.KW = 0.25;
 JMLib.DW = 290;  // max of dpm
 
+/* low mem profile
 JMLib.XR = 255;   // Accuracy of x axis, set higher for large screens 255
 JMLib.BMAX = 35;  // max number of balls
 JMLib.MMAX = 11;  // Max multiplex, double+1
+*/
 
-/* high mem profile
+// high mem profile
 JMLib.XR = 1024;  // Accuracy of x axis, set higher for large screens 255
 JMLib.BMAX = 630; // max number of balls
 JMLib.MMAX = 71;  // Max multiplex, double+1
-*/
+//
 
 JMLib.LMAX = 76;   // max column of a pattern
 
@@ -312,7 +314,7 @@ JMLib.prototype.shutdown = function() {
 
 }
 
-JMLib.prototype.error = new function(msg) {
+JMLib.prototype.error = function(msg) {
   this.lastError = msg;
   // fixme: add callback
   //if (this.cb != null)

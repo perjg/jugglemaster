@@ -120,7 +120,7 @@ div.site_content {
   height: 53px; /* 13px titlebar - 10px padding*/
   width: 230px; /* 10px of padding */
   padding: 5px;
-  overflow: auto;
+  /*overflow: auto;*/
   background-color: #ffffff;
   font: 10pt sans-serif;
   opacity: 0.0;
@@ -142,7 +142,7 @@ div.pattern_content {
   height: 53px; /* 13px titlebar - 10px padding*/
   width: 230px; /* 10px of padding */
   padding: 5px;
-  overflow: auto;
+  /*overflow: auto;*/
   background-color: #ffffff;
   font: 10pt sans-serif;
   opacity: 0.0;    

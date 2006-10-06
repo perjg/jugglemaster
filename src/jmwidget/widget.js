@@ -1,5 +1,3 @@
-// 	$Id: validator.cpp 208 2006-08-04 01:40:24Z per $	 
-
 /*
  * jmwidget - JuggleMaster Widget
  * Version 1.0
@@ -163,8 +161,8 @@ function loadCategories() {
     var group = groups[i];
 	var name = group[0];
 	
-	if (name.length > 30) {
-	  name = name.substring(0, 30);
+	if (name.length > 28) {
+	  name = name.substring(0, 28);
 	}
     catList.options[catList.options.length] = new Option(name, i, false, false);
   }
@@ -187,8 +185,8 @@ function loadPatterns(idx) {
     var pattern = patterns[i];
 	var name = pattern[0];
 	
-	if (name.length > 30) {
-	  name = name.substring(0, 30);
+	if (name.length > 28) {
+	  name = name.substring(0, 28);
 	}
 	//alert("Adding pattern " + i + " " + name);
 	patternList.options[patternList.options.length] = new Option(name, i, false, false);

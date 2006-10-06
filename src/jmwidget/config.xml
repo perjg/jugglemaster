@@ -5,8 +5,8 @@
     A Siteswap juggling animator
   </description>
   <icon>icon.png</icon>
-  <width>280</width>
-  <height>260</height>
+  <width>300</width>
+  <height>340</height>
   <author>
     <name>Per Johan Groland</name>
     <email>jm@jugglemaster.net</email>

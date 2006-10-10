@@ -21,6 +21,7 @@
 var canvas, ctx;
 var jmlib;
 var timerEnabled;
+var siteonscreenEnabled;
 
 function log(s) {
   // Safari
@@ -54,6 +55,14 @@ function enableTimer() {
 
 function disableTimer() {
   timerEnabled = false;
+}
+
+function enableSiteonscreen() {
+  siteonscreenEnabled = true;
+}
+
+function disableSiteonscreen() {
+  siteonscreenEnabled = false;
 }
 
 function loop() {
@@ -112,6 +121,9 @@ function loop() {
     ctx.closePath();	  
 	}
 
+  // show siteswap
+  show_siteonscreen();
+	
   if (timerEnabled) {
     setTimeout(loop, 10);
   }
@@ -142,6 +154,44 @@ function getColor(i) {
 	default:
 	  return "red";
   }
+}
+
+// Shows the site on screen inside an element called siteonscreen
+// if the element is not found, no site is shown on screen
+function show_siteonscreen() {
+  if (!siteonscreenEnabled) { return; }
+
+  var el = document.getElementById('siteonscreen');
+  
+  if (!el) { return; }
+
+  var sitetext = "";
+  var start = jmlib.getSiteposStart();
+  var stop  = jmlib.getSiteposStop();
+  var diff = stop - start;
+  
+  // first part of string
+  if (start > 0) {
+    sitetext += jmlib.siteswap.substring(0, start);
+  }
+  
+  // active part of string
+  sitetext += '<b style="color: red; font-weight: normal;">';
+  sitetext += jmlib.siteswap.substring(start, stop);
+  sitetext += '</b>';
+  
+  // last part of string
+  sitetext += jmlib.siteswap.substring(stop);
+  
+  el.innerHTML = sitetext;
+}
+
+// chooses a random pattern and loads it
+function randomize() {
+  var pattno = Math.floor(Math.random()* (patterns.length+1));
+  jmlib.stopJuggle();
+  PatternLoader.loadPatternEx(jmlib, pattno);
+  jmlib.startJuggle();
 }
 
 function load() {
@@ -184,6 +234,7 @@ function load() {
   jmlib.startJuggle();
 
   timerEnabled = true;
+  siteonscreenEnabled = false;
   loop();
 }
 
@@ -206,6 +257,8 @@ function loadWidget() {
   jmlib.startJuggle();
 
   timerEnabled = true;
+  siteonscreenEnabled = true;
+  randomize();
   loop();
 }
 
@@ -229,7 +282,6 @@ function changeSite(site) {
 function validateSite(site) {
   return JMValidator.validateSite(site);
 }
-
 
 function changeStyle(style) {
   return jmlib.setStyleEx(style);

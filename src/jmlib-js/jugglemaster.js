@@ -234,7 +234,7 @@ function load() {
   jmlib.startJuggle();
 
   timerEnabled = true;
-  siteonscreenEnabled = false;
+  siteonscreenEnabled = true;
   loop();
 }
 

@@ -193,6 +193,25 @@ function loadPatterns(idx) {
   }
 }
 
+// Load settings options
+function loadSettings() {
+  var speed = document.getElementById('speed');
+  var randomize = document.getElementById('randomize');
+  var showsite = document.getElementById('showsite');
+  
+  speed.options[speed.options.length] = new Option("Normal", "normal", false, false);
+  speed.options[speed.options.length] = new Option("Slow", "slow", false, false);
+  speed.options[speed.options.length] = new Option("Fast", "fast", false, false);
+  
+  randomize.options[randomize.options.length] = new Option("Off", "0", false, false);
+  randomize.options[randomize.options.length] = new Option("15 sec", "15", false, false);
+  randomize.options[randomize.options.length] = new Option("30 sec", "30", false, false);
+  randomize.options[randomize.options.length] = new Option("1 min", "60", false, false);
+  
+  showsite.options[showsite.options.length] = new Option("Off", "off", false, false);
+  showsite.options[showsite.options.length] = new Option("On", "on", false, false);
+}
+
 // Dashboard onhide handler
 function onhide() {
   disableTimer();
@@ -228,4 +247,7 @@ function initialize() {
   // load categories and patterns
   loadCategories();
   loadPatterns(0);
+  
+  // load settings
+  loadSettings();
 }

@@ -17,6 +17,7 @@
       <canvas id="cv" width="260" height="240"></canvas>
 	  <img class="closeButton button" id="closefront" title="Close JuggleMaster"></img>
 	  <img class="configButton button" id="flipfront" title="Configuration"></img>
+	  <div class="siteonscreen" id="siteonscreen"></div>
     </div>
 	<div class="window">
 	  <div class="titlebar"><div id="site_text">Select Pattern</div>
@@ -24,7 +25,6 @@
 	  </div>
 	  <div class="site_content translucent" id="site_content" style="background-color:#d0d0d0;">
         <form name="entersite">
-        
 		  <table align="center">
 		  <tr>
 		  <td>Site:</td>
@@ -67,14 +67,33 @@
 	  <img class="closeButton button" id="closeback" title="Close JuggleMaster"></img>
 	  <div id="about">
         <div class="headertext">
-		<img src="icon.png" width="88" height="88"><br>
-        <b>JuggleMaster</b>
-        </div>
-        <div class="text">
-		Version 0.1 (beta) 2006.10.06<br>(C) Per Johan Groland 2006<br>
-        <a href="http://jugglemaster.net" target="_blank">jugglemaster.net</a>
-        </div>
-    <p class="flipbutton" id="flipback" title="Go back to juggler"></p>
+		<table>
+		  <tr><td><img src="icon.png" width="88" height="88"><br></td><td>
+          <b>JuggleMaster</b>
+          </div>
+          <div class="text">
+		  Version 0.2 (beta) 2006.10.16<br>(C) Per Johan Groland 2006<br>
+          <a href="http://jugglemaster.net" target="_blank">jugglemaster.net</a>
+		  </tr>
+		</table>
+		</div>
+		<div class ="text">
+		<form name="settings">
+		<table>
+		  <tr>
+		  <td>Speed:</td>
+		  <td><select name="speed"></select></td>
+		  </tr><tr>
+		  <td>Randomize:</td>
+		  <td><select name="randomize"></select></td>
+		  </tr><tr>
+		  <td>Show site:</td>
+		  <td><select name="showsite"></select></td>
+		  </tr>
+		</table>
+		</form>
+		</div>
+      <p class="flipbutton" id="flipback" title="Go back to juggler"></p>
 	</div>
   </div>
 </body>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gadget>
+    <name>JuggleMaster</name>
+    <namespace>Per.Johan.Groland</namespace>
+    <version>1.0</version>
+    <author name="Per Johan Groland">
+        <info url="http://jugglemaster.net" />
+    </author>
+    <copyright>2006</copyright>
+    <description>JuggleMaster</description>
+    <icons>
+        <icon height="88" width="88" src="icon.png" /> 
+    </icons>
+    <hosts>
+        <host name="sidebar">
+            <base type="HTML" apiVersion="1.0.0" src="index.html" />
+            <permissions>full</permissions>
+            <platform minPlatformVersion="0.3" />
+        </host>
+    </hosts>
+</gadget>

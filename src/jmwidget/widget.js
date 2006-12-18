@@ -19,30 +19,30 @@
  */ 
 
 window.addEventListener('load', function(ev) {
-  // add behavior to the flip button on the front side
-  document.getElementById('flipfront').addEventListener('click', function(ev) {
-    flipWidget("back");
-  }, false);
+  if (document.implementation.hasFeature("Events", "2.0")) {
+    // add behavior to the flip button on the front side
+    document.getElementById('flipfront').addEventListener('click', function(ev) {
+        flipWidget("back");
+    }, false);
 
-  // add behavior to the flip button on the back side
-  document.getElementById('flipback').addEventListener('click', function(ev) {
-    flipWidget("front");
-  }, false);
+    // add behavior to the flip button on the back side
+    document.getElementById('flipback').addEventListener('click', function(ev) {
+        flipWidget("front");
+    }, false);
 
-  // add behavior to the close button
-  document.getElementById('closefront').addEventListener('click', function(ev) {
-    window.close();
-  }, false);
+    // add behavior to the close button
+    document.getElementById('closefront').addEventListener('click', function(ev) {
+        window.close();
+    }, false);
 
-  document.getElementById('closeback').addEventListener('click', function(ev) {
-    window.close();
-  }, false);
+    document.getElementById('closeback').addEventListener('click', function(ev) {
+        window.close();
+    }, false);
 
-  document.getElementById('switch').addEventListener('click', function(ev) {
-    switchHandler();
-  }, false);
-
-  
+    document.getElementById('switch').addEventListener('click', function(ev) {
+        switchHandler();
+    }, false);
+  }
 }, false);
 
 function changeSiteHandler() {
@@ -222,7 +222,22 @@ function onshow() {
   enableTimer();
 }
 
+// IE specific event handlers
+function flipWidgetBack()  { flipWidget("front"); }
+function flipWidgetFront() { flipWidget("back"); }
+function closeWindow()     { window.close(); }
+
 function initialize() {
+  // IE specific event handlers
+  // DOM 2 event model compliant browsers are registered through window.addEventListener
+  if (!document.implementation.hasFeature("Events", "2.0")) {
+    document.getElementById('flipback').attachEvent('onclick', flipWidgetBack);
+    document.getElementById('flipfront').attachEvent('onclick', flipWidgetFront);
+    document.getElementById('closefront').attachEvent('onclick', closeWindow);
+    document.getElementById('closeback').attachEvent('onclick', closeWindow);
+    document.getElementById('switch').attachEvent('onclick', switchHandler);
+  }
+
   // set event handlers for site entry form
   document.getElementById('site').onchange      = changeSiteHandler;
   document.getElementById('style').onchange     = changeStyleHandler; 

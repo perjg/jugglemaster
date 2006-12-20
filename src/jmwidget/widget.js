@@ -18,8 +18,8 @@
  * Modified BSD License for more details.
  */ 
 
-window.addEventListener('load', function(ev) {
-  if (document.implementation.hasFeature("Events", "2.0")) {
+if (document.implementation.hasFeature("Events", "2.0")) {
+  window.addEventListener('load', function(ev) {
     // add behavior to the flip button on the front side
     document.getElementById('flipfront').addEventListener('click', function(ev) {
         flipWidget("back");
@@ -42,8 +42,8 @@ window.addEventListener('load', function(ev) {
     document.getElementById('switch').addEventListener('click', function(ev) {
         switchHandler();
     }, false);
-  }
-}, false);
+  }, false);
+}
 
 function changeSiteHandler() {
   var site = document.getElementById('site').value;

@@ -119,14 +119,22 @@ function setWindowHeader() {
 function flipWidget(to) {
   switch (to) {
     case "back":
+      if (typeof widget != "undefined" && widget.prepareForTransition)
+        widget.prepareForTransition("ToBack");
       document.getElementById('front').style.display = "none";
       document.getElementById('back_site').style.display = "block";
-	  disableTimer();
+      disableTimer();
+      if (typeof widget != "undefined" && widget.prepareForTransition)
+        setTimeout ('widget.performTransition();', 0);
       break;
     case "front":
+      if (typeof widget != "undefined" && widget.prepareForTransition)
+        widget.prepareForTransition("ToFront");
       document.getElementById('back_site').style.display = "none";
       document.getElementById('front').style.display = "block";
-	  enableTimer();
+      enableTimer();
+      if (typeof widget != "undefined" && widget.prepareForTransition)
+        setTimeout ('widget.performTransition();', 0);
       break;
     default:
       break;
@@ -253,10 +261,20 @@ function initialize() {
   document.getElementById('pattern_content').style.visibility = "visible";
   document.getElementById('site_content').style.visibility = "hidden";
   
-  // set event handlers for dashboard
-  if (window.widget) {
+
+  // Dashboard initialization
+  if (typeof widget != "undefined" && widget.prepareForTransition) {
     widget.onhide = onhide;
     widget.onshow = onshow;
+
+    infoButton = new AppleInfoButton(document.getElementById("infobutton"),
+                                     document.getElementById("front"),
+                                     "black", "black", flipWidgetFront);
+
+    // Get rid of the standard buttons
+    document.getElementById("closefront").style.visibility = "hidden";
+    document.getElementById("flipfront").style.visibility = "hidden";
+    document.getElementById("closeback").style.visibility = "hidden";
   }
   
   // load categories and patterns

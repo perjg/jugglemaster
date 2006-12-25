@@ -10,6 +10,9 @@
 <script src="jmlib-js/patternloader.js"></script>
 <script src="jmlib-js/jugglemaster.js"></script>
 <script src="widget.js"></script>
+<!-- Dashboard widget utility classes -->
+<script src="AppleClasses/AppleInfoButton.js" charset="utf-8"></script>
+<script src="AppleClasses/AppleAnimator.js" charset="utf-8"></script>
 </head>
 <body onload="loadWidget(); initialize();">
   <div id="front">
@@ -18,6 +21,7 @@
 	  <img class="closeButton button" id="closefront" title="Close JuggleMaster"></img>
 	  <img class="configButton button" id="flipfront" title="Configuration"></img>
 	  <div class="siteonscreen" id="siteonscreen"></div>
+	  <div id="infobutton"></div>
     </div>
 	<div class="window">
 	  <div class="titlebar"><div id="site_text">Select Pattern</div>
@@ -66,7 +70,7 @@
     <div class="settings">
 	  <img class="closeButton button" id="closeback" title="Close JuggleMaster"></img>
 	  <div id="about">
-        <div class="headertext">
+          <div class="headertext">
 		<table>
 		  <tr><td><img src="icon.png" width="88" height="88"><br></td><td>
           <b>JuggleMaster</b>
@@ -94,7 +98,7 @@
 		</form>
 		</div>
       <p class="flipbutton" id="flipback" title="Go back to juggler"></p>
-	</div>
+      </div>
   </div>
 </body>
 </html>

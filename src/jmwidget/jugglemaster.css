@@ -257,3 +257,10 @@ div.text {
   font-family: Verdana, "Bitstream Vera Sans", sans-serif;
   font-size: 10px;
 }
+
+/* Dashboard widget compatibility */
+#infobutton {
+  position:absolute;
+  bottom: 20px;
+  right: 20px;
+}

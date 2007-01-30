@@ -21,6 +21,7 @@
 var canvas, ctx;
 var jmlib;
 var timerEnabled;
+var timerInterval;
 var siteonscreenEnabled;
 
 function log(s) {
@@ -57,12 +58,33 @@ function disableTimer() {
   timerEnabled = false;
 }
 
+function setSpeed(s) {
+  if      (s == 1) { setTimerInterval(300); } // slow
+  else if (s == 2) { setTimerInterval(200); }	
+  else if (s == 3) { setTimerInterval(100); }	
+  else if (s == 4) { setTimerInterval(80); }	
+  else if (s == 5) { setTimerInterval(60); }	
+  else if (s == 6) { setTimerInterval(40); }	
+  else if (s == 7) { setTimerInterval(20); }	
+  else if (s == 8) { setTimerInterval(10); }	
+  else if (s == 9) { setTimerInterval(5); }	
+  else if (s ==10) { setTimerInterval(1); } // fast
+  else { setTimerInterval(10); } // fallback  
+}
+
+function setTimerInterval(t) {
+  //if (t < 5) { t = 5; }
+  timerInterval = t;
+}
+
 function enableSiteonscreen() {
   siteonscreenEnabled = true;
+  document.getElementById('siteonscreen').style.visibility = "visible";
 }
 
 function disableSiteonscreen() {
   siteonscreenEnabled = false;
+  document.getElementById('siteonscreen').style.visibility = "hidden";
 }
 
 function loop() {
@@ -125,7 +147,7 @@ function loop() {
   show_siteonscreen();
 	
   if (timerEnabled) {
-    setTimeout(loop, 10);
+    setTimeout(loop, timerInterval);
   }
 }
 
@@ -187,7 +209,7 @@ function show_siteonscreen() {
 }
 
 // chooses a random pattern and loads it
-function randomize() {
+function loadRandomPattern() {
   var pattno = Math.floor(Math.random()* (patterns.length+1));
   jmlib.stopJuggle();
   PatternLoader.loadPatternEx(jmlib, pattno);
@@ -233,6 +255,7 @@ function load() {
   
   jmlib.startJuggle();
 
+  timerInterval = 10;
   timerEnabled = true;
   siteonscreenEnabled = true;
   loop();
@@ -258,7 +281,6 @@ function loadWidget() {
 
   timerEnabled = true;
   siteonscreenEnabled = true;
-  randomize();
   loop();
 }
 

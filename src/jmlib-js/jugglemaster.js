@@ -210,7 +210,9 @@ function show_siteonscreen() {
 
 // chooses a random pattern and loads it
 function loadRandomPattern() {
-  var pattno = Math.floor(Math.random()* (patterns.length+1));
+  //var pattno = Math.floor(Math.random()* (patterns.length+1));
+  // don't use the /usr/dict patterns for random switching
+  var pattno = Math.floor(Math.random() * 469);
   jmlib.stopJuggle();
   PatternLoader.loadPatternEx(jmlib, pattno);
   jmlib.startJuggle();
@@ -262,6 +264,10 @@ function load() {
 }
 
 function loadWidget() {
+  loadWidgetEx(false);
+}
+
+function loadWidgetEx(randomize) {
   //fixme: read from cookie here
   site = "3";
   style = "Normal";
@@ -275,9 +281,14 @@ function loadWidget() {
   jmlib = new JMLib(null);
   jmlib.setScalingMethod(JMLib.SCALING_METHOD_DYNAMIC);
   jmlib.setWindowSize(canvas.width, canvas.height);
-  jmlib.setPattern(site, site, jmlib.height_ratio, jmlib.dwell_ratio);
-  jmlib.setStyleEx(style);
-  jmlib.startJuggle();
+  if (randomize) {
+    loadRandomPattern();
+  }
+  else {
+    jmlib.setPattern(site, site, jmlib.height_ratio, jmlib.dwell_ratio);
+    jmlib.setStyleEx(style);
+    jmlib.startJuggle();
+  }
 
   timerEnabled = true;
   siteonscreenEnabled = true;

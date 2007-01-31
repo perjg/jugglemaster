@@ -18,6 +18,10 @@
  * Modified BSD License for more details.
  */ 
 
+var speed;
+var randomize;
+var siteonscreen;
+
 if (document.implementation.hasFeature("Events", "2.0")) {
   window.addEventListener('load', function(ev) {
     // add behavior to the flip button on the front side
@@ -48,12 +52,6 @@ if (document.implementation.hasFeature("Events", "2.0")) {
 function changeSiteHandler() {
   var site = document.getElementById('site').value;
   var style = document.getElementById('style').value;
-  
-  /*
-  if (!changeSite(site)) {
-    showError(getLastError());  
-  }
-  */
   
   if (changeSite(site)) {
     changeStyle(style);
@@ -121,6 +119,7 @@ function flipWidget(to) {
     case "back":
       if (typeof widget != "undefined" && widget.prepareForTransition)
         widget.prepareForTransition("ToBack");
+	  setOptions();
       document.getElementById('front').style.display = "none";
       document.getElementById('back_site').style.display = "block";
       disableTimer();
@@ -130,6 +129,7 @@ function flipWidget(to) {
     case "front":
       if (typeof widget != "undefined" && widget.prepareForTransition)
         widget.prepareForTransition("ToFront");
+      writeOptions();
       document.getElementById('back_site').style.display = "none";
       document.getElementById('front').style.display = "block";
       enableTimer();
@@ -201,25 +201,6 @@ function loadPatterns(idx) {
   }
 }
 
-// Load settings options
-function loadSettings() {
-  var speed = document.getElementById('speed');
-  var randomize = document.getElementById('randomize');
-  var showsite = document.getElementById('showsite');
-  
-  speed.options[speed.options.length] = new Option("Normal", "normal", false, false);
-  speed.options[speed.options.length] = new Option("Slow", "slow", false, false);
-  speed.options[speed.options.length] = new Option("Fast", "fast", false, false);
-  
-  randomize.options[randomize.options.length] = new Option("Off", "0", false, false);
-  randomize.options[randomize.options.length] = new Option("15 sec", "15", false, false);
-  randomize.options[randomize.options.length] = new Option("30 sec", "30", false, false);
-  randomize.options[randomize.options.length] = new Option("1 min", "60", false, false);
-  
-  showsite.options[showsite.options.length] = new Option("Off", "off", false, false);
-  showsite.options[showsite.options.length] = new Option("On", "on", false, false);
-}
-
 // Dashboard onhide handler
 function onhide() {
   disableTimer();
@@ -228,6 +209,14 @@ function onhide() {
 // Dashboard onshow handler
 function onshow() {
   enableTimer();
+}
+
+function randomizeLoop() {
+  if (randomize == 0) { setTimeout(randomizeLoop, 15000); return; }
+  
+  loadRandomPattern();
+  
+  setTimeout(randomizeLoop, randomize*1000);
 }
 
 // IE specific event handlers
@@ -263,7 +252,7 @@ function initialize() {
   
 
   // Dashboard initialization
-  if (typeof widget != "undefined" && widget.prepareForTransition) {
+  if (typeof widget != "undefined" && typeof widget.system != "undefined") {
     widget.onhide = onhide;
     widget.onshow = onshow;
 
@@ -283,4 +272,122 @@ function initialize() {
   
   // load settings
   loadSettings();
+  
+  loadWidgetEx(randomize != 0);
+  
+  if (randomize == 0) {
+    setTimeout(randomizeLoop, 15000);
+  }
+  else {
+    setTimeout(randomizeLoop, randomize*1000);
+  }
+}
+
+// Load settings options
+function loadSettings() {
+  if (getPref("speed") == null) {
+    speed = 7;
+    randomize = 30;
+    siteonscreen = true;
+	writeSettings();
+  }
+  else {
+    readSettings();
+  }
+  
+  // randomize pattern on startup when applicable
+  //if (randomize != 0) { loadRandomPattern(); }  
+	
+  var speed_box = document.getElementById('speed');
+  var randomize_box = document.getElementById('randomize');
+  var showsite_box = document.getElementById('showsite');
+  
+  speed_box.options[speed_box.options.length] = new Option(" 1 (slowest)", "1", false, false);
+  speed_box.options[speed_box.options.length] = new Option(" 2", "2", false, false);
+  speed_box.options[speed_box.options.length] = new Option(" 3", "3", false, false);
+  speed_box.options[speed_box.options.length] = new Option(" 4", "4", false, false);
+  speed_box.options[speed_box.options.length] = new Option(" 5", "5", false, false);
+  speed_box.options[speed_box.options.length] = new Option(" 6", "6", false, false);
+  speed_box.options[speed_box.options.length] = new Option(" 7 (default)", "7", false, false);
+  speed_box.options[speed_box.options.length] = new Option(" 8", "8", false, false);
+  speed_box.options[speed_box.options.length] = new Option(" 9", "9", false, false);
+  speed_box.options[speed_box.options.length] = new Option("10 (fastest)", "10", false, false);
+  
+  randomize_box.options[randomize_box.options.length] = new Option("Off", "0", false, false);
+  randomize_box.options[randomize_box.options.length] = new Option("15 sec", "15", false, false);
+  randomize_box.options[randomize_box.options.length] = new Option("30 sec", "30", false, false);
+  randomize_box.options[randomize_box.options.length] = new Option("1 min", "60", false, false);
+  
+  showsite_box.options[showsite_box.options.length] = new Option("Off", "off", false, false);
+  showsite_box.options[showsite_box.options.length] = new Option("On", "on", false, false);
+  
+  setOptions();
+  applyOptions();
+}
+
+function setOptions() {
+  var speed_box = document.getElementById('speed');
+  var randomize_box = document.getElementById('randomize');
+  var showsite_box = document.getElementById('showsite');
+
+  speed_box.value = speed;
+  randomize_box.value = randomize+"";
+  showsite_box.value = siteonscreen ? "on" : "off";
+}
+
+function writeOptions() {
+  var speed_box = document.getElementById('speed');
+  var randomize_box = document.getElementById('randomize');
+  var showsite_box = document.getElementById('showsite');
+
+  speed = speed_box.value;
+  randomize = parseInt(randomize_box.value);
+  siteonscreen = (showsite_box.value == "on") ? true : false;
+
+  writeSettings();
+  applyOptions();
+}
+
+function applyOptions() {
+  if (siteonscreen) { enableSiteonscreen();  }
+  else              { disableSiteonscreen(); }
+  
+  setSpeed(speed);
+  //clearTimeout(randomizeLoop);
+  //setTimeout(randomizeLoop, randomize*1000);
+}
+
+function readSettings() {
+  speed = getPref("speed");
+  randomize = getPref("randomize");
+  siteonscreen = getPref("siteonscreen");
+}
+
+function writeSettings() {
+  setPref("speed", speed);  
+  setPref("randomize", randomize);  
+  setPref("siteonscreen", siteonscreen);  
+}
+
+function setPref(name, value) {
+  if (typeof widget == "undefined") { return; }
+
+  if (typeof value == "boolean" && value == true)
+    { widget.setPreferenceForKey("true", name);   }
+  else if (typeof value == "boolean" && value == false)
+    { widget.setPreferenceForKey("false", name);  }
+  else
+    { widget.setPreferenceForKey(value+"", name); }
+}
+
+function getPref(name) {
+  if (typeof widget == "undefined") { return null; }
+  
+  var v = widget.preferenceForKey(name);
+
+  if (v == "true") { return true; }
+  else if (v == "false") { return false; }
+  else if (v.match(/^[0-9]+$/)) { return parseInt(v); }
+  else if (v == "") return null;
+  return v;
 }

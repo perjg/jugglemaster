@@ -252,7 +252,7 @@ function initialize() {
   
 
   // Dashboard initialization
-  if (typeof widget != "undefined" && typeof widget.system != "undefined") {
+  if (typeof widget != "undefined" && typeof opera == "undefined") {
     widget.onhide = onhide;
     widget.onshow = onshow;
 
@@ -389,5 +389,7 @@ function getPref(name) {
   else if (v == "false") { return false; }
   else if (v.match(/^[0-9]+$/)) { return parseInt(v); }
   else if (v == "") return null;
+  else if (v == null) return null;
+  else if (v === undefined) return null;
   return v;
 }

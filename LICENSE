@@ -1,14 +1,15 @@
 In this package:
 
-src/jmlib/* and src/jmts/* are licensed under the Modified BSD License,
-please see COPYING.jmlib for further details.
+src/jmlib/*, src/jmlib-js and src/jmts/* are licensed under the Modified BSD License, please see COPYING.jmlib for further details.
 
 The following are all licenced under the GPL:
 
-JMDlx    (wxWidgets) src/jmdlx/*
-JMPocket (PocketPC)  src/jmpocket/*
-AAJM     (aalib)     src/aajm/*
-JMQT     (Qt)        src/jmqt/*
+JMDlx    (wxWidgets)  src/jmdlx/*
+JMPocket (PocketPC)   src/jmpocket/*
+JMPalm   (Palm OS)    src/jmpalm/*
+AAJM     (aalib)      src/aajm/*
+JMQT     (Qt)         src/jmqt/*
+JMWidget (javascript) src/jmwidget/*
 
 The full text of the GPL is available in COPYING
 

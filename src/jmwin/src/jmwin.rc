@@ -1,0 +1,570 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource_win.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource_win.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\jmwin.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""     // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "..\\res-win\\jmwin.ico"
+IDR_JMPOCKETTYPE        ICON                    "..\\res-win\\jmwin_doc.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "..\\res-win\\toolbar.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR  16, 16
+BEGIN
+    BUTTON      ID_FILE_SELECTPATT
+    BUTTON      ID_FILE_ENTERSITE
+    BUTTON      ID_EDIT_PREFERENCES
+    BUTTON      ID_EDIT_TOGGLEPAUSE
+    BUTTON      ID_EDIT_SPEEDUP
+    BUTTON      ID_EDIT_SPEEDDOWN
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Select Pattern...",           ID_FILE_SELECTPATT
+        MENUITEM "Enter Siteswap...",           ID_FILE_ENTERSITE
+        MENUITEM SEPARATOR
+        MENUITEM "About JMPocket...",           ID_APP_ABOUT
+    END
+    POPUP "Edit"
+    BEGIN
+        MENUITEM SEPARATOR
+        MENUITEM "Paused",                      ID_EDIT_TOGGLEPAUSE, CHECKED
+        MENUITEM "Globall Mode",                ID_EDIT_GLOBALLMODE, CHECKED
+        MENUITEM "View Quick Browser",          ID_EDIT_PATTBROWSER, CHECKED
+        MENUITEM SEPARATOR
+        MENUITEM "Speed Up",                    ID_EDIT_SPEEDUP
+        MENUITEM "Speed Down",                  ID_EDIT_SPEEDDOWN
+        MENUITEM SEPARATOR
+        MENUITEM "Preferences...",              ID_EDIT_PREFERENCES
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "E",            ID_FILE_ENTERSITE,      VIRTKEY, CONTROL, NOINVERT
+    "Q",            ID_APP_EXIT,            VIRTKEY, CONTROL, NOINVERT
+    "R",            ID_EDIT_PREFERENCES,    VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SELECTPATT,     VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ENTERSITE DIALOG  0, 0, 156, 118
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Enter Siteswap"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,33,92,35,14
+    PUSHBUTTON      "Cancel",IDCANCEL,73,92,35,14
+    LTEXT           "Site:",IDC_STATIC,7,20,17,8
+    PUSHBUTTON      "(",IDC_SHORTCUT1,32,39,14,12
+    PUSHBUTTON      ")",IDC_SHORTCUT2,49,39,14,12
+    PUSHBUTTON      "[",IDC_SHORTCUT3,65,39,14,12
+    PUSHBUTTON      "]",IDC_SHORTCUT4,81,39,14,12
+    PUSHBUTTON      ",",IDC_SHORTCUT5,97,39,14,12
+    PUSHBUTTON      "x",IDC_SHORTCUT6,113,39,14,12
+    LTEXT           "Style:",IDC_STATIC,7,58,21,10
+    COMBOBOX        IDC_STYLE,29,57,102,70,CBS_DROPDOWNLIST | CBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "DR:",IDC_STATIC,7,77,13,8
+    EDITTEXT        IDC_DR,22,75,28,12,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_SPIN_DR,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,49,75,12,12
+    LTEXT           "HR:",IDC_STATIC,75,76,12,8
+    EDITTEXT        IDC_HR,90,75,28,12,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_SPIN_HR,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,117,75,12,12
+    COMBOBOX        IDC_SITE,26,21,102,100,CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_SELECTPATT DIALOG  0, 0, 145, 153
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Select Pattern"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,35,124,38,14
+    PUSHBUTTON      "Cancel",IDCANCEL,77,124,37,14
+    LTEXT           "Category:",IDC_STATIC,7,19,34,10
+    COMBOBOX        IDC_CATEGORY,41,19,92,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_PATTERN,7,41,126,77,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Patterns:",IDC_STATIC,7,32,42,9
+END
+
+IDD_PROP_GENERAL DIALOG  0, 0, 156, 158
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "General"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    EDITTEXT        IDC_SPEED,36,88,36,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN_SPEED,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,71,88,11,12
+    DEFPUSHBUTTON   "OK",IDOK,53,118,34,14
+    PUSHBUTTON      "Cancel",IDCANCEL,91,118,33,14
+    CONTROL         "Mirror Pattern",IDC_MIRROR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,23,102,12
+    CONTROL         "Globall Mode (Hide Juggler)",IDC_GLOBALL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,35,102,11
+    CONTROL         "Beep on Throw",IDC_BEEP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,48,104,9
+    CONTROL         "Show Quick Browser Toolbar",IDC_SHOWBROWSER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,59,104,11
+    LTEXT           "Speed:",IDC_STATIC,7,89,26,11
+    CONTROL         "Color Codes in Enter Siteswap",IDC_COLORCODES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,70,111,14
+    PUSHBUTTON      "Apply",IDAPPLY,15,118,34,14
+END
+
+IDD_PROP_COLOR DIALOG  0, 0, 156, 158
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Colors"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT           "1",IDC_STATIC,14,35,10,11
+    LTEXT           "2",IDC_STATIC,14,50,10,11
+    LTEXT           "3",IDC_STATIC,14,65,10,11
+    LTEXT           "4",IDC_STATIC,14,80,10,11
+    LTEXT           "5",IDC_STATIC,14,95,10,11
+    PUSHBUTTON      "",IDC_BALLCOLOR01,25,34,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR02,25,48,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR03,25,63,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR04,25,78,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR05,25,93,18,12
+    LTEXT           "6",IDC_STATIC,53,34,10,11
+    LTEXT           "7",IDC_STATIC,53,49,10,11
+    LTEXT           "8",IDC_STATIC,53,63,10,11
+    LTEXT           "9",IDC_STATIC,53,79,10,11
+    LTEXT           "10",IDC_STATIC,53,94,11,11
+    PUSHBUTTON      "",IDC_BALLCOLOR06,65,33,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR07,65,47,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR08,65,62,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR09,65,76,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR10,65,92,18,12
+    PUSHBUTTON      "",IDC_JUGGLERCOLOR,102,35,24,12
+    PUSHBUTTON      "Reset",IDC_RESET,95,100,32,13
+    GROUPBOX        "Ball colors",IDC_STATIC,7,23,81,88
+    GROUPBOX        "Juggler",IDC_STATIC,96,23,36,33
+    DEFPUSHBUTTON   "OK",IDOK,53,118,34,14
+    PUSHBUTTON      "Cancel",IDCANCEL,91,118,33,14
+    PUSHBUTTON      "Apply",IDAPPLY,15,118,34,14
+    PUSHBUTTON      "",IDC_BGCOLOR,101,73,24,12
+    GROUPBOX        "Background",IDC_STATIC,95,60,36,33
+END
+
+IDD_COLORCHOOSER DIALOGEX 0, 0, 91, 86
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Choose Color"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    EDITTEXT        IDC_RED,39,8,26,12,ES_NUMBER
+    CONTROL         "Spin1",IDC_SPIN_RED,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,65,8,11,12
+    EDITTEXT        IDC_GREEN,39,24,26,12,ES_NUMBER
+    CONTROL         "Spin1",IDC_SPIN_GREEN,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,65,24,11,12
+    EDITTEXT        IDC_BLUE,39,40,26,12,ES_NUMBER
+    CONTROL         "Spin1",IDC_SPIN_BLUE,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,65,40,11,12
+    DEFPUSHBUTTON   "OK",IDOK,7,60,36,14
+    PUSHBUTTON      "Cancel",IDCANCEL,47,60,35,14
+    LTEXT           "Red:",IDC_STATIC,15,8,18,9
+    LTEXT           "Green:",IDC_STATIC,15,25,23,8
+    LTEXT           "Blue:",IDC_STATIC,15,41,19,8
+END
+
+IDD_QUICKBROWSER DIALOG  0, 0, 139, 21
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT           "Category:",IDC_STATIC,1,2,34,9
+    LTEXT           "Pattern:",IDC_STATIC,2,11,28,8
+    CONTROL         "Spin1",IDC_SPIN_CATEGORY,"msctls_updown32",UDS_ARROWKEYS | UDS_HORZ,121,1,16,9
+    CONTROL         "Spin1",IDC_SPIN_PATTERN,"msctls_updown32",UDS_ARROWKEYS | UDS_HORZ,121,11,16,9
+END
+
+IDD_ENTERSITE_WIDE DIALOG  0, 0, 210, 118
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Enter Siteswap"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,128,51,35,14
+    PUSHBUTTON      "Cancel",IDCANCEL,168,51,35,14
+    LTEXT           "Site:",IDC_STATIC,8,21,17,8
+    PUSHBUTTON      "(",IDC_SHORTCUT1,133,19,14,12
+    PUSHBUTTON      ")",IDC_SHORTCUT2,151,19,14,12
+    PUSHBUTTON      "[",IDC_SHORTCUT3,167,19,14,12
+    PUSHBUTTON      "]",IDC_SHORTCUT4,183,19,14,12
+    PUSHBUTTON      ",",IDC_SHORTCUT5,134,34,14,12
+    PUSHBUTTON      "x",IDC_SHORTCUT6,150,34,14,12
+    LTEXT           "Style:",IDC_STATIC,6,35,21,10
+    COMBOBOX        IDC_STYLE,29,35,97,56,CBS_DROPDOWNLIST | CBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "DR:",IDC_STATIC,7,54,13,8
+    EDITTEXT        IDC_DR,22,52,28,12,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_SPIN_DR,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,49,52,12,12
+    LTEXT           "HR:",IDC_STATIC,66,53,12,8
+    EDITTEXT        IDC_HR,81,52,28,12,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_SPIN_HR,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,108,52,12,12
+    COMBOBOX        IDC_SITE,29,20,98,86,CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_PROP_COLOR_WIDE DIALOG  0, 0, 210, 158
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Colors"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT           "1",IDC_STATIC,14,35,10,11
+    LTEXT           "2",IDC_STATIC,14,50,10,11
+    LTEXT           "3",IDC_STATIC,14,65,10,11
+    LTEXT           "4",IDC_STATIC,52,36,10,11
+    LTEXT           "5",IDC_STATIC,51,49,10,11
+    PUSHBUTTON      "",IDC_BALLCOLOR01,25,34,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR02,25,48,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR03,25,63,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR04,63,34,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR05,63,48,18,12
+    LTEXT           "6",IDC_STATIC,51,63,10,11
+    LTEXT           "7",IDC_STATIC,83,36,10,11
+    LTEXT           "8",IDC_STATIC,83,50,10,11
+    LTEXT           "9",IDC_STATIC,116,35,10,11
+    LTEXT           "10",IDC_STATIC,113,51,11,11
+    PUSHBUTTON      "",IDC_BALLCOLOR06,63,63,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR07,95,34,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR08,95,49,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR09,125,33,18,12
+    PUSHBUTTON      "",IDC_BALLCOLOR10,125,49,18,12
+    PUSHBUTTON      "",IDC_JUGGLERCOLOR,157,36,39,12
+    PUSHBUTTON      "Reset",IDC_RESET,159,85,32,13
+    GROUPBOX        "Ball colors",IDC_STATIC,7,23,139,60
+    GROUPBOX        "Juggler",IDC_STATIC,152,24,49,29
+    DEFPUSHBUTTON   "OK",IDOK,61,89,34,14
+    PUSHBUTTON      "Cancel",IDCANCEL,99,89,33,14
+    PUSHBUTTON      "Apply",IDAPPLY,23,89,34,14
+    PUSHBUTTON      "",IDC_BGCOLOR,156,66,39,12
+    GROUPBOX        "Background",IDC_STATIC,153,53,48,28
+END
+
+IDD_PROP_GENERAL_WIDE DIALOG  0, 0, 210, 158
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "General"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    EDITTEXT        IDC_SPEED,36,62,36,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN_SPEED,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,71,62,11,12
+    DEFPUSHBUTTON   "OK",IDOK,90,78,34,14
+    PUSHBUTTON      "Cancel",IDCANCEL,128,78,33,14
+    CONTROL         "Mirror Pattern",IDC_MIRROR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,23,60,12
+    CONTROL         "Globall Mode (Hide Juggler)",IDC_GLOBALL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,35,102,11
+    CONTROL         "Beep on Throw",IDC_BEEP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,48,65,11
+    CONTROL         "Show Quick Browser Toolbar",IDC_SHOWBROWSER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,85,25,104,11
+    LTEXT           "Speed:",IDC_STATIC,7,63,26,8
+    CONTROL         "Color Codes in Enter Siteswap",IDC_COLORCODES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,86,45,111,14
+    PUSHBUTTON      "Apply",IDAPPLY,52,78,34,14
+END
+
+IDD_SELECTPATT_WIDE DIALOG  0, 0, 210, 153
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Select Pattern"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,63,104,38,14
+    PUSHBUTTON      "Cancel",IDCANCEL,105,104,37,14
+    LTEXT           "Category:",IDC_STATIC,7,19,34,10
+    COMBOBOX        IDC_CATEGORY,41,19,156,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_PATTERN,7,41,190,56,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Patterns:",IDC_STATIC,7,32,42,9
+END
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 185, 142
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE 0x80000000L
+CAPTION "About JMWin"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC_1,12,12,21,20,SS_REALSIZEIMAGE
+    LTEXT           "JMWin",IDC_STATIC,37,9,115,9,SS_NOPREFIX
+    LTEXT           "(C) Per Johan Groland 2002-2006",IDC_STATIC,37,33,107,9
+    LTEXT           "Version 1.0 (2006.09.01)",IDC_STATIC,37,21,115,10
+    LTEXT           "Using JMLib 2.0\r\n(C) Per Johan Groland 2000-2006,\r\n    Gary Briggs 2003\r\n\r\nBased on JuggleMaster 1.60\r\n(C)1995-1996 Ken Matsuoka",IDC_STATIC,38,49,140,56
+    PUSHBUTTON      "&OK",IDOK,73,109,48,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,1,0,0
+ PRODUCTVERSION 1,1,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "TODO: <Company name>"
+            VALUE "FileDescription", "JMPocket - JuggleMaster for Pocket PC"
+            VALUE "FileVersion", "1.1.0."
+            VALUE "InternalName", "JMPocket.exe"
+            VALUE "LegalCopyright", "Copyright (C) 2002-2006 Per Johan Groland."
+            VALUE "OriginalFilename", "JMPocket.exe"
+            VALUE "ProductName", "JMPocket"
+            VALUE "ProductVersion", "1.1.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ENTERSITE, DIALOG
+    BEGIN
+        RIGHTMARGIN, 142
+    END
+
+    IDD_PROP_GENERAL, DIALOG
+    BEGIN
+        RIGHTMARGIN, 139
+        BOTTOMMARGIN, 157
+    END
+
+    IDD_PROP_COLOR, DIALOG
+    BEGIN
+        RIGHTMARGIN, 139
+    END
+
+    IDD_PROP_GENERAL_WIDE, DIALOG
+    BEGIN
+        RIGHTMARGIN, 206
+        BOTTOMMARGIN, 157
+    END
+
+    IDD_SELECTPATT_WIDE, DIALOG
+    BEGIN
+        RIGHTMARGIN, 145
+    END
+
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 178
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 135
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "JMPocket\n\nJMPocket\n\n\nJMPocket.Document\nJMPocket.Document"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "JMPocket"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_SAVE            "Save the active document\nSave"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_LEFT_BUTTON         "Siteswap"
+    IDS_MENU                "Menu"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_FILE                "File"
+    IDS_SELECTPATT          "Select Pattern"
+    IDS_ENTERSITE           "Enter Siteswap"
+    IDS_PREFS               "Preferences"
+    IDS_PAUSE               "Toggle Pause"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_CAP_FILE            "File"
+    ID_FILE_ENTERSITE       "Enter a new Siteswap\nEnter Siteswap"
+    ID_FILE_SELECTPATT      "Select among built-in patterns\nSelect Pattern"
+    ID_EDIT_GLOBALLMODE     "Toggle Globall mode"
+    ID_EDIT_PREFERENCES     "Preferences"
+    ID_EDIT_TOGGLEPAUSE     "Toggle Pause"
+    ID_EDIT_SITETOOLBAR     "Toggle visibility of the View Siteswap Toolbar"
+    ID_EDIT_PATTBROWSER     "Toggle visibility of the Pattern Browser"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_SPEEDUP         "Increase animation speed\nIncrease speed"
+    ID_EDIT_SPEEDDOWN       "Decrease animation speed\nDecrease speed"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_SPEEDUP             "Speed Up"
+    IDS_SPEEDDOWN           "Speed Down"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_EDIT                "Edit"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "../res-win/jmwin.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"     // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

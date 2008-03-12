@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JMWin", "JMWin.vcproj", "{6B80EF13-459B-44DA-9ABF-E95A957B8502}"
+	ProjectSection(ProjectDependencies) = postProject
+		{29020410-2B5A-4119-B75A-73EC2B4C209B} = {29020410-2B5A-4119-B75A-73EC2B4C209B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jmlib", "jmlib.vcproj", "{29020410-2B5A-4119-B75A-73EC2B4C209B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B80EF13-459B-44DA-9ABF-E95A957B8502}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6B80EF13-459B-44DA-9ABF-E95A957B8502}.Debug|Win32.Build.0 = Debug|Win32
+		{6B80EF13-459B-44DA-9ABF-E95A957B8502}.Release|Win32.ActiveCfg = Release|Win32
+		{6B80EF13-459B-44DA-9ABF-E95A957B8502}.Release|Win32.Build.0 = Release|Win32
+		{29020410-2B5A-4119-B75A-73EC2B4C209B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{29020410-2B5A-4119-B75A-73EC2B4C209B}.Debug|Win32.Build.0 = Debug|Win32
+		{29020410-2B5A-4119-B75A-73EC2B4C209B}.Release|Win32.ActiveCfg = Release|Win32
+		{29020410-2B5A-4119-B75A-73EC2B4C209B}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

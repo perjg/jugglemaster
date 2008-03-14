@@ -26,7 +26,11 @@ PocketPC                JMPocket  http://jugglemaster.net
 PalmOS                  JMPalm    http://jugglemaster.net
 Unices, DOS, Terminals  AAJM      http://icculus.org/jugglemaster/aa
 Sharp Zaurus / QT       JMQt      http://zaurus.catstar.org/jmqt/index_e.html
-Mac OS X (Cocoa)        JMCocoa   ?
+Mac OS X (Cocoa)        JMCocoa   (not completed)
+Windows/PocketPC        JMWin     (not completed)
+
+(JMPocket is for older versions of Pocket PC prior to 2003, JMWin will
+run on versions 2003 and up)
 
 The weblinks above will direct you to the proper sites to download
 binaries for the various platforms. For the source code, go to

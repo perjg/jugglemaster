@@ -362,14 +362,14 @@ JMCanvas::JMCanvas(JMFrame *p, JMLib *j) :
 		wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE ) {
 	jmlib = j;
 	parent = p;
-	ball_colors[0] = wxRED_BRUSH;
-	ball_colors[1] = wxGREEN_BRUSH;
-	ball_colors[2] = wxBLUE_BRUSH;
-	ball_colors[3] = wxWHITE_BRUSH;
-	ball_colors[4] = wxBLACK_BRUSH;
-	ball_colors[5] = wxCYAN_BRUSH;
-	ball_colors[6] = wxGREY_BRUSH;
-	ball_colors[7] = wxLIGHT_GREY_BRUSH;
+	ball_colors[0] = (wxBrush*)wxRED_BRUSH;
+	ball_colors[1] = (wxBrush*)wxGREEN_BRUSH;
+	ball_colors[2] = (wxBrush*)wxBLUE_BRUSH;
+	ball_colors[3] = (wxBrush*)wxWHITE_BRUSH;
+	ball_colors[4] = (wxBrush*)wxBLACK_BRUSH;
+	ball_colors[5] = (wxBrush*)wxCYAN_BRUSH;
+	ball_colors[6] = (wxBrush*)wxGREY_BRUSH;
+	ball_colors[7] = (wxBrush*)wxLIGHT_GREY_BRUSH;
 	backBuffer = new wxBitmap(wxGetDisplaySize().x, wxGetDisplaySize().y);
 }
 

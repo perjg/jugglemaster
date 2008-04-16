@@ -25,15 +25,80 @@ END_EVENT_TABLE()
 
 JMOpenGLCanvas::JMOpenGLCanvas(JMFrame *p, JMLib *j) : 
   wxGLCanvas((wxFrame*)p, -1, wxDefaultPosition, wxSize(480,400), wxNO_BORDER) {
-	jmlib = j;
+	jmlib = new JuggleSaver();
+  jmlib->setWindowSize(480,400);
+  jmlib->initialize();
 	parent = p;
-    renderer = new JMOpenGLRenderer();
-    renderer->initialize(j, 480, 400, JMOpenGLRenderer::RENDER_MODE_3D);
-    renderer->ballColors(parent->optionsMenu->IsChecked(OPTION_COLORBALLS));
 }
 
 JMOpenGLCanvas::~JMOpenGLCanvas() {
-    delete renderer;
+  delete renderer;
+}
+
+void JMOpenGLCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
+  wxPaintDC dc(this);
+  
+  SetCurrent();
+  jmlib->doJuggle();
+  SwapBuffers();
+}
+
+void JMOpenGLCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
+  // Should be empty
+}
+
+void JMOpenGLCanvas::OnSize(wxSizeEvent &event) {
+  wxGLCanvas::OnSize(event);
+
+  // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
+  int w, h;
+  GetClientSize(&w, &h);
+#ifndef __WXMOTIF__
+  if (GetContext())
+#endif
+  {
+    SetCurrent();
+    glViewport(0, 0, (GLint)w, (GLint)h);
+  }
+  
+  jmlib->setWindowSize(w, h);
+}
+
+void JMOpenGLCanvas::OnLMouseDown(wxMouseEvent& event) {
+  parent->togglePause();
+  event.Skip();
+}
+
+void JMOpenGLCanvas::setRenderMode3D() {}
+
+void JMOpenGLCanvas::setRenderModeFlat() {}
+
+void JMOpenGLCanvas::SetBallColor(int color) {}
+void JMOpenGLCanvas::ballColors(bool on) {}
+
+bool OpenGLSupported() {
+    return true;
+}
+
+/*
+BEGIN_EVENT_TABLE(JMOpenGLCanvas, wxGLCanvas)
+  EVT_PAINT(JMOpenGLCanvas::OnPaint)
+  EVT_ERASE_BACKGROUND(JMOpenGLCanvas::OnEraseBackground) 
+  EVT_SIZE(JMOpenGLCanvas::OnSize)
+  EVT_LEFT_DOWN(JMOpenGLCanvas::OnLMouseDown)
+END_EVENT_TABLE()
+
+JMOpenGLCanvas::JMOpenGLCanvas(JMFrame *p, JMLib *j) : 
+  wxGLCanvas((wxFrame*)p, -1, wxDefaultPosition, wxSize(480,400), wxNO_BORDER) {
+	jmlib = j;
+	parent = p;
+  renderer = new JMOpenGLRenderer();
+  renderer->initialize(j, 480, 400, JMOpenGLRenderer::RENDER_MODE_3D);
+  renderer->ballColors(parent->optionsMenu->IsChecked(OPTION_COLORBALLS));
+}
+
+JMOpenGLCanvas::~JMOpenGLCanvas() {
+  delete renderer;
 }
 
 void JMOpenGLCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
@@ -98,3 +163,4 @@ void JMOpenGLCanvas::ballColors(bool on) {
 bool OpenGLSupported() {
     return true;
 }
+*/

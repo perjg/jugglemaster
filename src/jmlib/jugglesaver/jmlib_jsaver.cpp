@@ -26,15 +26,21 @@ dofps
 #define GETTIMEOFDAY_TWO_ARGS
 
 // Constructor / Destructor
-JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2), TranslateSpeed(0.1), SpinSpeed(20.0), initialized(false), is_juggling(false) {
+JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2), TranslateSpeed(0.1), SpinSpeed(20.0),
+  initialized(false), is_juggling(false), pattern(NULL), siteswap(NULL), pattname(NULL) {
   //initialize();
 }
 
-JuggleSaver::JuggleSaver(ERROR_CALLBACK* _cb) : JuggleSpeed(2.2), TranslateSpeed(0.1), SpinSpeed(20.0), is_juggling(false) {
-  shutdown();
+JuggleSaver::JuggleSaver(ERROR_CALLBACK* _cb) {
+  JuggleSaver();
+  setErrorCallback(_cb);
 }
 
 JuggleSaver::~JuggleSaver() {
+  shutdown();
+  if (pattname != NULL) { delete pattname; }
+  if (pattern != NULL) { delete pattern; }
+  if (siteswap != NULL) { delete siteswap; }
 }
 
 // fixme: UpdatePattern is for changing a pattern randomly
@@ -42,14 +48,10 @@ JuggleSaver::~JuggleSaver() {
 //
 // InitGLSettings and ResizeGL should go in the renderer
 void JuggleSaver::initialize() {
-  MinObjects = 3;
-  MaxObjects = 8;
-  MinHeightInc = 2;
-  MaxHeightInc = 6;
-
   setWindowSizeDefault();
   InitGLSettings(&state, FALSE);
-  UpdatePattern(&state, MinObjects, MaxObjects, MinHeightInc, MaxHeightInc);
+  setPatternDefault();
+  //UpdatePattern(&state, 3, 8, 2, 6);
   ResizeGL(&state, width_, height_);
   initialized = true;
 }
@@ -57,19 +59,38 @@ void JuggleSaver::initialize() {
 void JuggleSaver::shutdown() {
 }
 
+//fixme: this should go into the base controller class
 void JuggleSaver::setErrorCallback(ERROR_CALLBACK* _cb) {
 }
 
+//fixme: this should go into the base controller class
 void JuggleSaver::setErrorCallback(void *aUData, void (*aCallback)(void *, JML_CHAR *)) {
 }
 
+//fixme: this should go into the base controller class
 void JuggleSaver::error(JML_CHAR* msg) {
 }
   
 JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
+  if (pattname != NULL) { delete pattname; }
+  pattname = new JML_CHAR[strlen(site)+1];
+  strcpy(pattname, name);
+
+  if (pattern != NULL) { delete pattern; }
+  pattern = new JML_CHAR[strlen(site)+1];
+  strcpy(pattern, site);
+
+  //fixme: siteswap should be derived from the pattern (strip all extra info)
+  if (siteswap != NULL) { delete siteswap; }
+  siteswap = new JML_CHAR[strlen(site)+1];
+  strcpy(siteswap, site);
+
+  
+  SetPattern(&state, site);
 }
 
 void JuggleSaver::setPatternDefault(void) {
+  setPattern("3 Cascade", "3c");
 }
 
 JML_INT32 JuggleSaver::numBalls(void) {
@@ -116,61 +137,49 @@ JML_INT32 JuggleSaver::doJuggle(void) {
   the data pulled by DrawGLScene
 */
 JML_INT32 JuggleSaver::doJuggle(void) {
-    /* While drawing, keep track of the rendering speed so we can adjust the
-     * animation speed so things appear consistent.  The basis of the this
-     * code comes from the frame rate counter (fps.c) but has been modified
-     * so that it reports the initial frame rate earlier (after 0.02 secs
-     * instead of 1 sec). */
+  /* While drawing, keep track of the rendering speed so we can adjust the
+  * animation speed so things appear consistent.  The basis of the this
+  * code comes from the frame rate counter (fps.c) but has been modified
+  * so that it reports the initial frame rate earlier (after 0.02 secs
+  * instead of 1 sec). */
     
-    if (FramesSinceSync >=  1 * (int) CurrentFrameRate)
-    {
-        struct timeval tvnow;
-        unsigned now;
+  if (FramesSinceSync >=  1 * (int) CurrentFrameRate) {
+    struct timeval tvnow;
+    unsigned now;
             
-        # ifdef GETTIMEOFDAY_TWO_ARGS
-            struct timezone tzp;
-            gettimeofday(&tvnow, &tzp);
-        # else
+    # ifdef GETTIMEOFDAY_TWO_ARGS
+      struct timezone tzp;
+      gettimeofday(&tvnow, &tzp);
+    # else
             gettimeofday(&tvnow);
-        # endif
+    # endif
         
-        now = (unsigned) (tvnow.tv_sec * 1000000 + tvnow.tv_usec);
-        if (FramesSinceSync == 0)
-        {
-            LastSyncTime = now;
-        }
-        else
-        {
-            unsigned Delta = now - LastSyncTime;
-            if (Delta > 20000)
-            {
-                LastSyncTime = now;
-                CurrentFrameRate = 
-                    (FramesSinceSync * 1.0e6f) / Delta;
-                FramesSinceSync = 0;
-            }
-        }
+    now = (unsigned) (tvnow.tv_sec * 1000000 + tvnow.tv_usec);
+
+    if (FramesSinceSync == 0) {
+      LastSyncTime = now;
     }
-    
-    FramesSinceSync++;
-    
-    if (state.Time > 150.0f)
-    {
-        UpdatePattern(&state, MinObjects, MaxObjects, 
-            MinHeightInc, MaxHeightInc);
+    else {
+      unsigned Delta = now - LastSyncTime;
+      if (Delta > 20000) {
+        LastSyncTime = now;
+        CurrentFrameRate = (FramesSinceSync * 1.0e6f) / Delta;
+        FramesSinceSync = 0;
+      }
     }
-    DrawGLScene(&state);
+  }
     
-    if (CurrentFrameRate > 1.0e-6f)
-    {
-        state.Time += JuggleSpeed / CurrentFrameRate;
-        state.SpinAngle += SpinSpeed / CurrentFrameRate;
-        state.TranslateAngle += 
-            TranslateSpeed / CurrentFrameRate;
-    }
+  FramesSinceSync++;
+  DrawGLScene(&state);
     
-    //if (mi->fps_p)
-    //    do_fps(mi);
+  if (CurrentFrameRate > 1.0e-6f) {
+    state.Time += JuggleSpeed / CurrentFrameRate;
+    //state.SpinAngle += SpinSpeed / CurrentFrameRate;
+    //state.TranslateAngle += TranslateSpeed / CurrentFrameRate;
+  }
+    
+  //if (mi->fps_p)
+  //    do_fps(mi);
 }
 
 //fixme: this should not call ResizeGL directly

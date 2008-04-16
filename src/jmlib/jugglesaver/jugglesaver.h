@@ -247,12 +247,16 @@ EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen);
 void InitPatternInfo(PATTERN_INFO* pPattern, const int* Site, const EXT_SITE_INFO* pExtInfo, int Len);
 int* Generate(int Len, int MaxWeight, int ObjCount);
 void InitPatternInfo(PATTERN_INFO* pPattern, const int* Site, const EXT_SITE_INFO* pExtInfo, int Len);
-void UpdatePattern(RENDER_STATE* pState, int MinBalls, int MaxBalls, int MinHeightInc, int MaxHeightInc);
 
 // render.cpp
 void InitGLSettings(RENDER_STATE* pState, int WireFrame);
 void ResizeGL(RENDER_STATE* pState, int w, int h);
 void DrawGLScene(RENDER_STATE* pState);
+
+// render.cpp -> move to engine.cpp?
+void SetPattern(RENDER_STATE* pState, char* pattern);
+void UpdatePattern(RENDER_STATE* pState, int MinBalls, int MaxBalls, int MinHeightInc, int MaxHeightInc);
+
 
 #ifdef __cplusplus
 }

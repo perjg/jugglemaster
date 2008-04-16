@@ -682,12 +682,11 @@ void SetPattern(RENDER_STATE* pState, char* pattern) {
     InitPatternInfo(pState->pPattern, NULL, pExtInfo, ExtSiteLen);
     free(pExtInfo);
 
-    pState->CameraElev = 50.0f - random() % 90;
-    pState->TranslateAngle = random() % 360;
-    pState->SpinAngle = random() % 360;
+    pState->CameraElev = 0.0f;
+    pState->TranslateAngle = 0.0f;
+    pState->SpinAngle = 0.0f;
     pState->Time = 50.0f;
     SetCamera(pState);
-
 }
 
 void UpdatePattern(
@@ -699,14 +698,6 @@ void UpdatePattern(
     
     pState->pPattern = (PATTERN_INFO*) malloc(sizeof(PATTERN_INFO));
     
-    int ExtSiteLen;
-    EXT_SITE_INFO* pExtInfo = ParsePattern("5b3b4b", &ExtSiteLen);
-    //EXT_SITE_INFO* pExtInfo = ParsePattern("5c@(-3,0,-90,0)>(0,0,90,0)*0 5c@(3,0,90,10)>(0,0,-90,0)*0", &ExtSiteLen);
-    InitPatternInfo(pState->pPattern, NULL, pExtInfo, ExtSiteLen);
-    free(pExtInfo);
-
-    
-    /*
     if ((random() % 3) == 1)
     {    
         int ExtSiteLen;
@@ -728,7 +719,6 @@ void UpdatePattern(
         InitPatternInfo(pState->pPattern, pRand, NULL, RandPatternLen);
         free(pRand);
     }
-    */
     
     pState->CameraElev = 50.0f - random() % 90;
     pState->TranslateAngle = random() % 360;

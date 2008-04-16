@@ -22,7 +22,7 @@
 #include "../jmlib.h"
 #include "jugglesaver.h"
 
-class JuggleSaver : public JMLib {
+class JuggleSaver : public AbstractJMLib {
 private:
   JML_BOOL initialized;
   JML_BOOL is_juggling;
@@ -34,7 +34,9 @@ private:
   float SpinSpeed;
   float TranslateSpeed;
   float JuggleSpeed;
-  int MinObjects, MaxObjects, MinHeightInc, MaxHeightInc;
+  JML_CHAR* pattern;  // The current pattern
+  JML_CHAR* siteswap; // The current siteswap
+  JML_CHAR* pattname; // The name of the current pattern
 public:
   // Constructor / Destructor
   JuggleSaver();
@@ -43,6 +45,8 @@ public:
 
   void initialize();
   void shutdown();
+
+  virtual engine_t getType() { return JUGGLING_ENGINE_JUGGLESAVER; }
 
   void setErrorCallback(ERROR_CALLBACK* _cb);
   void setErrorCallback(void *aUData, void (*aCallback)(void *, JML_CHAR *));
@@ -80,7 +84,7 @@ public:
 
   JML_CHAR* getSite(void) { return siteswap; }
   JML_CHAR* getPattName(void) { return pattname; }
-  JML_CHAR* getStyle(void) { return stylename; }
+  JML_CHAR* getStyle(void) { return "Normal"; }
 
   JML_INT32 getImageWidth();
   JML_INT32 getImageHeight();

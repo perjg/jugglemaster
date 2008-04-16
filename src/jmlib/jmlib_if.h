@@ -1,6 +1,6 @@
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
+ * Version 2.1
  * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
@@ -19,62 +19,71 @@
 #ifndef JMLIB_IF_H
 #define JMLIB_IF_H
 
+enum engine_t {
+  JUGGLING_ENGINE_JUGGLEMASTER = 0,
+  JUGGLING_ENGINE_JUGGLESAVER
+};
+
 // The JMLib interface
 class AbstractJMLib {
+public:
+  virtual ~AbstractJMLib() {}
   virtual void initialize() = 0;
-  virtual void shutdown();
+  virtual void shutdown() = 0;
 
-  virtual void setErrorCallback(ERROR_CALLBACK* _cb);
-  virtual void setErrorCallback(void *aUData, void (*aCallback)(void *, JML_CHAR *));
-  virtual void error(JML_CHAR* msg);
+  virtual engine_t getType() = 0;
+
+  virtual void setErrorCallback(ERROR_CALLBACK* _cb) = 0;
+  virtual void setErrorCallback(void *aUData, void (*aCallback)(void *, JML_CHAR *)) = 0;
+  virtual void error(JML_CHAR* msg) = 0;
   
-  virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
-  virtual JML_BOOL setPattern(JML_CHAR* site);
-  virtual JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0);
-  virtual JML_BOOL setStyle(JML_CHAR* name);
-  virtual JML_CHAR **getStyles(void);
-  virtual JML_INT32 numStyles();
-  virtual void setPatternDefault(void);
-  virtual void setStyleDefault(void);
+  virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF) = 0;
+  virtual JML_BOOL setPattern(JML_CHAR* site) = 0;
+  virtual JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0) = 0;
+  virtual JML_BOOL setStyle(JML_CHAR* name) = 0;
+  virtual JML_CHAR **getStyles(void) = 0;
+  virtual JML_INT32 numStyles() = 0;
+  virtual void setPatternDefault(void) = 0;
+  virtual void setStyleDefault(void) = 0;
 
-  virtual void setHR(JML_FLOAT HR);
-  virtual JML_FLOAT getHR();
-  virtual void setDR(JML_FLOAT DR);
-  virtual JML_FLOAT getDR();
+  virtual void setHR(JML_FLOAT HR) = 0;
+  virtual JML_FLOAT getHR() = 0;
+  virtual void setDR(JML_FLOAT DR) = 0;
+  virtual JML_FLOAT getDR() = 0;
 
-  virtual JML_INT32 numBalls(void);
+  virtual JML_INT32 numBalls(void) = 0;
   
   virtual void setScalingMethod(JML_INT32 scalingMethod) {}
 
-  virtual void startJuggle(void);
-  virtual void stopJuggle(void);
-  virtual void togglePause(void);
-  virtual void setPause(JML_BOOL pauseOn = true);
-  virtual JML_INT32  getStatus(void);
+  virtual void startJuggle(void) = 0;
+  virtual void stopJuggle(void) = 0;
+  virtual void togglePause(void) = 0;
+  virtual void setPause(JML_BOOL pauseOn = true) = 0;
+  virtual JML_INT32  getStatus(void) = 0;
 
-  virtual JML_INT32 doJuggle(void);
+  virtual JML_INT32 doJuggle(void) = 0;
 
-  virtual JML_BOOL setWindowSize(JML_INT32 width, JML_INT32 height);
+  virtual JML_BOOL setWindowSize(JML_INT32 width, JML_INT32 height) = 0;
   virtual void     setWindowSizeDefault() { setWindowSize(480, 400); }
-  virtual void setMirror(JML_BOOL mir = true);
+  virtual void setMirror(JML_BOOL mir = true) = 0;
 
-  virtual JML_CHAR* getSite(void);
-  virtual JML_CHAR* getPattName(void);
-  virtual JML_CHAR* getStyle(void);
+  virtual JML_CHAR* getSite(void) = 0;
+  virtual JML_CHAR* getPattName(void) = 0;
+  virtual JML_CHAR* getStyle(void) = 0;
 
-  virtual JML_INT32 getImageWidth();
-  virtual JML_INT32 getImageHeight();
+  virtual JML_INT32 getImageWidth() = 0;
+  virtual JML_INT32 getImageHeight() = 0;
 
-  virtual void speedUp(void);
-  virtual void speedDown(void);
-  virtual void speedReset(void);
-  virtual void setSpeed(float s);
-  virtual float speed(void);
+  virtual void speedUp(void) = 0;
+  virtual void speedDown(void) = 0;
+  virtual void speedReset(void) = 0;
+  virtual void setSpeed(float s) = 0;
+  virtual float speed(void) = 0;
 
-  virtual JML_CHAR  getSiteposStart(void);
-  virtual JML_CHAR  getSiteposStop(void);
-  virtual JML_INT32 getSiteposLen(void);
-  virtual JML_INT32 getBallRadius(void);
+  virtual JML_CHAR  getSiteposStart(void) = 0;
+  virtual JML_CHAR  getSiteposStop(void) = 0;
+  virtual JML_INT32 getSiteposLen(void) = 0;
+  virtual JML_INT32 getBallRadius(void) = 0;
 };
 
 #endif

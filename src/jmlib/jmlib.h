@@ -176,13 +176,14 @@ struct hand {
 // The AbstractJMLib class
 #include "jmlib_if.h"
 
-// The JMLib wrapper class
-class JMLibWrapper : public AbstractJMLib {
+// The JMLibWrapper class (rename to JMLib)
+#include "jmlib_wrapper.h"
 
-};
+// The JuggleSaver class
+#include "jugglesaver/jmlib_jsaver.h"
 
-// The JMLib class
-class JMLib /*: public AbstractJMLib*/ {
+// The JMLib class (rename to JuggleMaster)
+class JMLib : public AbstractJMLib {
  public:
   // read-only (add access methods)
   struct arm ap;
@@ -268,75 +269,77 @@ public:
   void initialize();
   void shutdown();
 
-  void setErrorCallback(ERROR_CALLBACK* _cb);
-  void setErrorCallback(void *aUData, void (*aCallback)
-				(void *, JML_CHAR *));
-  void error(JML_CHAR* msg);
-  
-  JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
-  JML_BOOL setPattern(JML_CHAR* site) { return setPattern(site, site); }
-  JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0);
-  JML_BOOL setStyle(JML_CHAR* name);
-  JML_CHAR **getStyles(void);
-  JML_INT32 numStyles();
-  void setPatternDefault(void);
-  void setStyleDefault(void);
+  virtual engine_t getType() { return JUGGLING_ENGINE_JUGGLEMASTER; }
 
-  void setHR(JML_FLOAT HR);
-  JML_FLOAT getHR();
-  void setDR(JML_FLOAT DR);
-  JML_FLOAT getDR();
+  virtual void setErrorCallback(ERROR_CALLBACK* _cb);
+  virtual void setErrorCallback(void *aUData, void (*aCallback)
+				(void *, JML_CHAR *));
+  virtual void error(JML_CHAR* msg);
+  
+  virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
+  virtual JML_BOOL setPattern(JML_CHAR* site) { return setPattern(site, site); }
+  virtual JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0);
+  virtual JML_BOOL setStyle(JML_CHAR* name);
+  virtual JML_CHAR **getStyles(void);
+  virtual JML_INT32 numStyles();
+  virtual void setPatternDefault(void);
+  virtual void setStyleDefault(void);
+
+  virtual void setHR(JML_FLOAT HR);
+  virtual JML_FLOAT getHR();
+  virtual void setDR(JML_FLOAT DR);
+  virtual JML_FLOAT getDR();
   // repeat for all toggleable settings
 
-  JML_INT32 numBalls(void);
+  virtual JML_INT32 numBalls(void);
   
-  void setScalingMethod(JML_INT32 scalingMethod);
+  virtual void setScalingMethod(JML_INT32 scalingMethod);
 
-  void startJuggle(void);
-  void stopJuggle(void);
-  void togglePause(void);
-  void setPause(JML_BOOL pauseOn = true);
-  JML_INT32  getStatus(void);
+  virtual void startJuggle(void);
+  virtual void stopJuggle(void);
+  virtual void togglePause(void);
+  virtual void setPause(JML_BOOL pauseOn = true);
+  virtual JML_INT32  getStatus(void);
 
-  JML_INT32 doJuggle(void);
+  virtual JML_INT32 doJuggle(void);
 
   // JML_BOOL setFrameskip(JML_INT32 fs);
-  JML_BOOL setWindowSize(JML_INT32 width, JML_INT32 height);
-  void     setWindowSizeDefault() { setWindowSize(480, 400); }
-  void setMirror(JML_BOOL mir = true);
+  virtual JML_BOOL setWindowSize(JML_INT32 width, JML_INT32 height);
+  virtual void     setWindowSizeDefault() { setWindowSize(480, 400); }
+  virtual void setMirror(JML_BOOL mir = true);
 
-  JML_CHAR* getSite(void) { return siteswap; }
-  JML_CHAR* getPattName(void) { return pattname; }
-  JML_CHAR* getStyle(void) { return stylename; }
+  virtual JML_CHAR* getSite(void) { return siteswap; }
+  virtual JML_CHAR* getPattName(void) { return pattname; }
+  virtual JML_CHAR* getStyle(void) { return stylename; }
 
-  JML_INT32 getImageWidth();
-  JML_INT32 getImageHeight();
+  virtual JML_INT32 getImageWidth();
+  virtual JML_INT32 getImageHeight();
 
-  void speedUp(void);
-  void speedDown(void);
-  void speedReset(void);
-  void setSpeed(float s);
-  float speed(void);
+  virtual void speedUp(void);
+  virtual void speedDown(void);
+  virtual void speedReset(void);
+  virtual void setSpeed(float s);
+  virtual float speed(void);
 
-  JML_CHAR getSiteposStart(void) {
+  virtual JML_CHAR getSiteposStart(void) {
     if (syn && time_period % 2 == 1) return steps[time_period-1];
-	return steps[time_period];
+    return steps[time_period];
   }
 
-  JML_CHAR getSiteposStop(void) {
-	if (syn && time_period % 2 == 0) return steps[time_period+2];
-	return steps[time_period+1];
+  virtual JML_CHAR getSiteposStop(void) {
+    if (syn && time_period % 2 == 0) return steps[time_period+2];
+    return steps[time_period+1];
   }
 
-  JML_INT32 getSiteposLen(void) {
+  virtual JML_INT32 getSiteposLen(void) {
     return getSiteposStop() - getSiteposStart();
   }
 
-  JML_INT32 getiterations(void) {
+  virtual JML_INT32 getiterations(void) {
     return (dpm); /* FIXME */
   }
   
-  JML_INT32 getBallRadius(void);
+  virtual JML_INT32 getBallRadius(void);
 };
 
 #endif

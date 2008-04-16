@@ -10,7 +10,6 @@
 		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
-		CB0DE1910D9F645D004A5B48 /* jmtouch.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB0DE1900D9F645D004A5B48 /* jmtouch.xib */; };
 		CB14B30A0D90155A009BD0C0 /* jmlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B2FC0D90155A009BD0C0 /* jmlib.cpp */; };
 		CB14B30B0D90155A009BD0C0 /* patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3000D90155A009BD0C0 /* patterns.cpp */; };
 		CB14B30C0D90155A009BD0C0 /* prefs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3020D90155A009BD0C0 /* prefs.cpp */; };
@@ -33,7 +32,6 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* JuggleMaster_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuggleMaster_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CB0DE1900D9F645D004A5B48 /* jmtouch.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = jmtouch.xib; sourceTree = "<group>"; };
 		CB14B2FC0D90155A009BD0C0 /* jmlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib.cpp; path = ../jmlib/jmlib.cpp; sourceTree = SOURCE_ROOT; };
 		CB14B2FD0D90155A009BD0C0 /* jmlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib.h; path = ../jmlib/jmlib.h; sourceTree = SOURCE_ROOT; };
 		CB14B2FE0D90155A009BD0C0 /* jmlib_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_types.h; path = ../jmlib/jmlib_types.h; sourceTree = SOURCE_ROOT; };
@@ -126,7 +124,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				CB0DE1900D9F645D004A5B48 /* jmtouch.xib */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -234,7 +231,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB20BCCD0D9C8D77008484A2 /* Icon.png in Resources */,
-				CB0DE1910D9F645D004A5B48 /* jmtouch.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

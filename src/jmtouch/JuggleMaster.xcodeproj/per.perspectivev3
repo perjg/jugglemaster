@@ -276,7 +276,6 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -309,14 +308,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>CB0DF0DA0D969B8700D4EEA9</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>sqlite_patterns.cpp</string>
+								<string>jmlib.h</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -324,15 +321,14 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>CB0DF0DB0D969B8700D4EEA9</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>sqlite_patterns.cpp</string>
+										<string>jmlib.h</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>CB97E3EA0DB5E70C00BD2DBA</string>
+										<string>CBC7007F0DB629190084AB64</string>
 										<key>history</key>
 										<array>
 											<string>CB17DB440D9E8A16006A2082</string>
-											<string>CBA7A96C0DABAA9700E9FAB5</string>
 											<string>CBA7A96D0DABAA9700E9FAB5</string>
 											<string>CBA7A9B60DABB70400E9FAB5</string>
 											<string>CBA7A9FD0DABBA7600E9FAB5</string>
@@ -347,7 +343,8 @@
 											<string>CBEAE5440DB501EB0019833A</string>
 											<string>CB97E3CE0DB5E67900BD2DBA</string>
 											<string>CB97E3CF0DB5E67900BD2DBA</string>
-											<string>CB97E3D00DB5E67900BD2DBA</string>
+											<string>CBC7007C0DB629190084AB64</string>
+											<string>CBC7007D0DB629190084AB64</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -368,8 +365,7 @@
 											<string>CB6ABAD60DB24FE5000FD76F</string>
 											<string>CB6ABADC0DB24FE5000FD76F</string>
 											<string>CBEAE5460DB501EB0019833A</string>
-											<string>CB97E3D10DB5E67900BD2DBA</string>
-											<string>CB97E3D20DB5E67900BD2DBA</string>
+											<string>CBC7007E0DB629190084AB64</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -409,8 +405,6 @@
 									<dict>
 										<key>Frame</key>
 										<string>{{10, 27}, {1030, 176}}</string>
-										<key>RubberWindowFrame</key>
-										<string>43 55 1237 723 0 0 1280 778 </string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
@@ -450,6 +444,8 @@
 									<string>PBXCVSModule</string>
 								</dict>
 								<dict>
+									<key>BecomeActive</key>
+									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
@@ -465,6 +461,8 @@
 									<dict>
 										<key>Frame</key>
 										<string>{{10, 27}, {1030, 176}}</string>
+										<key>RubberWindowFrame</key>
+										<string>43 55 1237 723 0 0 1280 778 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -492,11 +490,11 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>CB97E3D40DB5E67900BD2DBA</string>
+				<string>CBC7006B0DB628580084AB64</string>
 				<string>1CA23ED40692098700951B8B</string>
-				<string>CB97E3D50DB5E67900BD2DBA</string>
+				<string>CBC7006C0DB628580084AB64</string>
 				<string>CB0DF0DA0D969B8700D4EEA9</string>
-				<string>CB97E3D60DB5E67900BD2DBA</string>
+				<string>CBC7006D0DB628580084AB64</string>
 				<string>1CA23EDF0692099D00951B8B</string>
 				<string>1CA23EE00692099D00951B8B</string>
 				<string>1CA23EE10692099D00951B8B</string>
@@ -641,14 +639,14 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>CB97E3D70DB5E67900BD2DBA</string>
+				<string>CBC700800DB629190084AB64</string>
 				<string>1CCC7628064C1048000F2A68</string>
 				<string>1CCC7629064C1048000F2A68</string>
-				<string>CB97E3D80DB5E67900BD2DBA</string>
-				<string>CB97E3D90DB5E67900BD2DBA</string>
-				<string>CB97E3DA0DB5E67900BD2DBA</string>
-				<string>CB97E3DB0DB5E67900BD2DBA</string>
-				<string>CB97E3DC0DB5E67900BD2DBA</string>
+				<string>CBC700810DB629190084AB64</string>
+				<string>CBC700820DB629190084AB64</string>
+				<string>CBC700830DB629190084AB64</string>
+				<string>CBC700840DB629190084AB64</string>
+				<string>CBC700850DB629190084AB64</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -657,7 +655,7 @@
 	<key>PerspectivesBarVisible</key>
 	<true/>
 	<key>PinnedNavigatorIdentifier</key>
-	<string>CB6ABACA0DB24F05000FD76F</string>
+	<string>CBC7007A0DB629020084AB64</string>
 	<key>ShelfIsVisible</key>
 	<false/>
 	<key>SourceDescription</key>
@@ -680,7 +678,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>/Users/per/Documents/programming/jugglemaster/src/jmtouch/JuggleMaster.xcodeproj</string>
+		<string>/Users/per/Documents/programming/jugglemaster2/src/jmtouch/JuggleMaster.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>43 55 1237 723 0 0 1280 778 </string>

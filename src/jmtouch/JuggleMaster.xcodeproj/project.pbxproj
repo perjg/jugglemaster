@@ -1,0 +1,345 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		CB0DE1910D9F645D004A5B48 /* jmtouch.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB0DE1900D9F645D004A5B48 /* jmtouch.xib */; };
+		CB14B30A0D90155A009BD0C0 /* jmlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B2FC0D90155A009BD0C0 /* jmlib.cpp */; };
+		CB14B30B0D90155A009BD0C0 /* patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3000D90155A009BD0C0 /* patterns.cpp */; };
+		CB14B30C0D90155A009BD0C0 /* prefs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3020D90155A009BD0C0 /* prefs.cpp */; };
+		CB14B30D0D90155A009BD0C0 /* randompatt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3040D90155A009BD0C0 /* randompatt.cpp */; };
+		CB14B30E0D90155A009BD0C0 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3060D90155A009BD0C0 /* util.cpp */; };
+		CB14B30F0D90155A009BD0C0 /* validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3080D90155A009BD0C0 /* validator.cpp */; };
+		CB14B3380D901654009BD0C0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3340D901654009BD0C0 /* main.m */; };
+		CB20BCCD0D9C8D77008484A2 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB20BCCC0D9C8D77008484A2 /* Icon.png */; };
+		CB6ABABB0DB24B6E000FD76F /* sqlite_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABAB90DB24B6E000FD76F /* sqlite_patterns.cpp */; };
+		CB6ABAC40DB24D56000FD76F /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABAC10DB24D56000FD76F /* sqlite3.c */; };
+		CBA7A9F90DABBA5500E9FAB5 /* view_controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBA7A9F80DABBA5500E9FAB5 /* view_controller.mm */; };
+		CBF0358C0D9021EA0008B286 /* view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBF0358B0D9021EA0008B286 /* view.mm */; };
+		CBF035E60D9152450008B286 /* controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBF035E50D9152450008B286 /* controller.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1D6058910D05DD3D006BFB54 /* JuggleMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JuggleMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		32CA4F630368D1EE00C91783 /* JuggleMaster_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuggleMaster_Prefix.pch; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB0DE1900D9F645D004A5B48 /* jmtouch.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = jmtouch.xib; sourceTree = "<group>"; };
+		CB14B2FC0D90155A009BD0C0 /* jmlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib.cpp; path = ../jmlib/jmlib.cpp; sourceTree = SOURCE_ROOT; };
+		CB14B2FD0D90155A009BD0C0 /* jmlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib.h; path = ../jmlib/jmlib.h; sourceTree = SOURCE_ROOT; };
+		CB14B2FE0D90155A009BD0C0 /* jmlib_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_types.h; path = ../jmlib/jmlib_types.h; sourceTree = SOURCE_ROOT; };
+		CB14B2FF0D90155A009BD0C0 /* juggler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = juggler.h; path = ../jmlib/juggler.h; sourceTree = SOURCE_ROOT; };
+		CB14B3000D90155A009BD0C0 /* patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = patterns.cpp; path = ../jmlib/patterns.cpp; sourceTree = SOURCE_ROOT; };
+		CB14B3010D90155A009BD0C0 /* patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = patterns.h; path = ../jmlib/patterns.h; sourceTree = SOURCE_ROOT; };
+		CB14B3020D90155A009BD0C0 /* prefs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = prefs.cpp; path = ../jmlib/prefs.cpp; sourceTree = SOURCE_ROOT; };
+		CB14B3030D90155A009BD0C0 /* prefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefs.h; path = ../jmlib/prefs.h; sourceTree = SOURCE_ROOT; };
+		CB14B3040D90155A009BD0C0 /* randompatt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = randompatt.cpp; path = ../jmlib/randompatt.cpp; sourceTree = SOURCE_ROOT; };
+		CB14B3050D90155A009BD0C0 /* randompatt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = randompatt.h; path = ../jmlib/randompatt.h; sourceTree = SOURCE_ROOT; };
+		CB14B3060D90155A009BD0C0 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = ../jmlib/util.cpp; sourceTree = SOURCE_ROOT; };
+		CB14B3070D90155A009BD0C0 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = ../jmlib/util.h; sourceTree = SOURCE_ROOT; };
+		CB14B3080D90155A009BD0C0 /* validator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = validator.cpp; path = ../jmlib/validator.cpp; sourceTree = SOURCE_ROOT; };
+		CB14B3090D90155A009BD0C0 /* validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = validator.h; path = ../jmlib/validator.h; sourceTree = SOURCE_ROOT; };
+		CB14B3340D901654009BD0C0 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/main.m; sourceTree = SOURCE_ROOT; };
+		CB20BCCC0D9C8D77008484A2 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		CB6ABAB90DB24B6E000FD76F /* sqlite_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite_patterns.cpp; path = ../jmlib/sqlite_patterns.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABABA0DB24B6E000FD76F /* sqlite_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite_patterns.h; path = ../jmlib/sqlite_patterns.h; sourceTree = SOURCE_ROOT; };
+		CB6ABAC10DB24D56000FD76F /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../jmlib/sqlite/sqlite3.c; sourceTree = SOURCE_ROOT; };
+		CB6ABAC20DB24D56000FD76F /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../jmlib/sqlite/sqlite3.h; sourceTree = SOURCE_ROOT; };
+		CB6ABAC30DB24D56000FD76F /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../jmlib/sqlite/sqlite3ext.h; sourceTree = SOURCE_ROOT; };
+		CBA7A9F70DABBA5500E9FAB5 /* view_controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = view_controller.h; path = src/view_controller.h; sourceTree = SOURCE_ROOT; };
+		CBA7A9F80DABBA5500E9FAB5 /* view_controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = view_controller.mm; path = src/view_controller.mm; sourceTree = SOURCE_ROOT; };
+		CBF0358A0D9021EA0008B286 /* view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = view.h; path = src/view.h; sourceTree = SOURCE_ROOT; };
+		CBF0358B0D9021EA0008B286 /* view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = view.mm; path = src/view.mm; sourceTree = SOURCE_ROOT; };
+		CBF035E40D9152450008B286 /* controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = controller.h; path = src/controller.h; sourceTree = SOURCE_ROOT; };
+		CBF035E50D9152450008B286 /* controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = controller.mm; path = src/controller.mm; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				CBA7A9F70DABBA5500E9FAB5 /* view_controller.h */,
+				CBA7A9F80DABBA5500E9FAB5 /* view_controller.mm */,
+				CBF035E40D9152450008B286 /* controller.h */,
+				CBF035E50D9152450008B286 /* controller.mm */,
+				CBF0358A0D9021EA0008B286 /* view.h */,
+				CBF0358B0D9021EA0008B286 /* view.mm */,
+				CB14B3340D901654009BD0C0 /* main.m */,
+			);
+			name = src;
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* JuggleMaster.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				CB14B2FB0D901540009BD0C0 /* jmlib */,
+				080E96DDFE201D6D7F000001 /* src */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+				CB0DE1900D9F645D004A5B48 /* jmtouch.xib */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* JuggleMaster_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CB20BCCC0D9C8D77008484A2 /* Icon.png */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CB14B2FB0D901540009BD0C0 /* jmlib */ = {
+			isa = PBXGroup;
+			children = (
+				CB6ABAC00DB24D3F000FD76F /* sqlite */,
+				CB6ABAB90DB24B6E000FD76F /* sqlite_patterns.cpp */,
+				CB6ABABA0DB24B6E000FD76F /* sqlite_patterns.h */,
+				CB14B2FC0D90155A009BD0C0 /* jmlib.cpp */,
+				CB14B2FD0D90155A009BD0C0 /* jmlib.h */,
+				CB14B2FE0D90155A009BD0C0 /* jmlib_types.h */,
+				CB14B2FF0D90155A009BD0C0 /* juggler.h */,
+				CB14B3000D90155A009BD0C0 /* patterns.cpp */,
+				CB14B3010D90155A009BD0C0 /* patterns.h */,
+				CB14B3020D90155A009BD0C0 /* prefs.cpp */,
+				CB14B3030D90155A009BD0C0 /* prefs.h */,
+				CB14B3040D90155A009BD0C0 /* randompatt.cpp */,
+				CB14B3050D90155A009BD0C0 /* randompatt.h */,
+				CB14B3060D90155A009BD0C0 /* util.cpp */,
+				CB14B3070D90155A009BD0C0 /* util.h */,
+				CB14B3080D90155A009BD0C0 /* validator.cpp */,
+				CB14B3090D90155A009BD0C0 /* validator.h */,
+			);
+			name = jmlib;
+			sourceTree = "<group>";
+		};
+		CB6ABAC00DB24D3F000FD76F /* sqlite */ = {
+			isa = PBXGroup;
+			children = (
+				CB6ABAC10DB24D56000FD76F /* sqlite3.c */,
+				CB6ABAC20DB24D56000FD76F /* sqlite3.h */,
+				CB6ABAC30DB24D56000FD76F /* sqlite3ext.h */,
+			);
+			name = sqlite;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* JuggleMaster */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "JuggleMaster" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JuggleMaster;
+			productName = JuggleMaster;
+			productReference = 1D6058910D05DD3D006BFB54 /* JuggleMaster.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JuggleMaster" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* JuggleMaster */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB20BCCD0D9C8D77008484A2 /* Icon.png in Resources */,
+				CB0DE1910D9F645D004A5B48 /* jmtouch.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB14B30A0D90155A009BD0C0 /* jmlib.cpp in Sources */,
+				CB14B30B0D90155A009BD0C0 /* patterns.cpp in Sources */,
+				CB14B30C0D90155A009BD0C0 /* prefs.cpp in Sources */,
+				CB14B30D0D90155A009BD0C0 /* randompatt.cpp in Sources */,
+				CB14B30E0D90155A009BD0C0 /* util.cpp in Sources */,
+				CB14B30F0D90155A009BD0C0 /* validator.cpp in Sources */,
+				CB14B3380D901654009BD0C0 /* main.m in Sources */,
+				CBF0358C0D9021EA0008B286 /* view.mm in Sources */,
+				CBF035E60D9152450008B286 /* controller.mm in Sources */,
+				CBA7A9F90DABBA5500E9FAB5 /* view_controller.mm in Sources */,
+				CB6ABABB0DB24B6E000FD76F /* sqlite_patterns.cpp in Sources */,
+				CB6ABAC40DB24D56000FD76F /* sqlite3.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = JuggleMaster_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				PREBINDING = NO;
+				PRODUCT_NAME = JuggleMaster;
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = JuggleMaster_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				PREBINDING = NO;
+				PRODUCT_NAME = JuggleMaster;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=aspen*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = iphoneos2.0;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				PREBINDING = NO;
+				SDKROOT = iphoneos2.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "JuggleMaster" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JuggleMaster" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

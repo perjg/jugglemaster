@@ -1,8 +1,6 @@
-// 	$Id$	 
-
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
+ * Version 2.1
  * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
@@ -175,8 +173,16 @@ struct hand {
   JML_INT32 lx[10], ly[10]; // polygon for the left hand
 };
 
+// The AbstractJMLib class
+#include "jmlib_if.h"
+
+// The JMLib wrapper class
+class JMLibWrapper : public AbstractJMLib {
+
+};
+
 // The JMLib class
-class JMLib {
+class JMLib /*: public AbstractJMLib*/ {
  public:
   // read-only (add access methods)
   struct arm ap;
@@ -266,8 +272,9 @@ public:
   void setErrorCallback(void *aUData, void (*aCallback)
 				(void *, JML_CHAR *));
   void error(JML_CHAR* msg);
-
+  
   JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
+  JML_BOOL setPattern(JML_CHAR* site) { return setPattern(site, site); }
   JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0);
   JML_BOOL setStyle(JML_CHAR* name);
   JML_CHAR **getStyles(void);

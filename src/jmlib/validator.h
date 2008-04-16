@@ -24,35 +24,29 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "jmlib_types.h"
+class Foo {
+	int fook;
+};
 
-// For JMPalm support
-#ifndef EXTRA_SECTION_TWO
-#  ifdef __PALMOS__
-#  include "../jmpalm/src/sections.h"
-#  else
-#  define EXTRA_SECTION_ONE
-#  define EXTRA_SECTION_TWO
-#  endif
-#endif
+#include "jmlib_types.h"
 
 class JMSiteValidator {
  protected:
   static JML_INT32 ballCount;
-  static bool scanSSS(JML_CHAR*& site) EXTRA_SECTION_ONE;
-  static bool scanMSS(JML_CHAR*& site) EXTRA_SECTION_ONE;
-  static bool validateVSS(JML_CHAR* site) EXTRA_SECTION_ONE;
-  static bool validateSSS(JML_CHAR* site) EXTRA_SECTION_ONE;
-  static bool validateMSS(JML_CHAR* site) EXTRA_SECTION_ONE;
+  static bool scanSSS(JML_CHAR*& site);
+  static bool scanMSS(JML_CHAR*& site);
+  static bool validateVSS(JML_CHAR* site);
+  static bool validateSSS(JML_CHAR* site);
+  static bool validateMSS(JML_CHAR* site);
  public:
-  static JML_INT32 siteDigit(JML_INT8 s) EXTRA_SECTION_ONE;
-  static JML_INT8 siteChar(JML_INT32 c) EXTRA_SECTION_ONE;
-  static JML_INT32 getBallCount() EXTRA_SECTION_ONE;
+  static JML_INT32 siteDigit(JML_INT8 s);
+  static JML_INT8 siteChar(JML_INT32 c);
+  static JML_INT32 getBallCount();
 
-  static bool transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS) EXTRA_SECTION_ONE;
-  static bool scanSite(JML_CHAR* site) EXTRA_SECTION_ONE;
-  static bool validateSiteSyntax(JML_CHAR* site) EXTRA_SECTION_ONE;
-  static bool validateSite(JML_CHAR* site) EXTRA_SECTION_ONE;
+  static bool transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS);
+  static bool scanSite(JML_CHAR* site);
+  static bool validateSiteSyntax(JML_CHAR* site);
+  static bool validateSite(JML_CHAR* site);
 };
 
 #endif

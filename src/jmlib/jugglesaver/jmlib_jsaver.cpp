@@ -27,7 +27,9 @@ dofps
 
 // Constructor / Destructor
 JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2), TranslateSpeed(0.1), SpinSpeed(20.0),
-  initialized(false), is_juggling(false), pattern(NULL), siteswap(NULL), pattname(NULL) {
+  initialized(false), is_juggling(false), pattern(NULL), siteswap(NULL), pattname(NULL),
+  width_(480), height_(400) {
+  //setWindowSize(480,400);
   //initialize();
 }
 
@@ -48,12 +50,15 @@ JuggleSaver::~JuggleSaver() {
 //
 // InitGLSettings and ResizeGL should go in the renderer
 void JuggleSaver::initialize() {
-  setWindowSizeDefault();
+  if (initialized) return;
+  
+  setWindowSize(width_, height_);
   InitGLSettings(&state, FALSE);
-  setPatternDefault();
-  //UpdatePattern(&state, 3, 8, 2, 6);
+  //setPatternDefault(); //fixme: what if setPattern has been called before initialize?
+  applyPattern();
   ResizeGL(&state, width_, height_);
   initialized = true;
+
 }
 
 void JuggleSaver::shutdown() {
@@ -70,8 +75,16 @@ void JuggleSaver::setErrorCallback(void *aUData, void (*aCallback)(void *, JML_C
 //fixme: this should go into the base controller class
 void JuggleSaver::error(JML_CHAR* msg) {
 }
+
+//fixme: this method sucks
+JML_BOOL JuggleSaver::applyPattern() {
+  if (siteswap == NULL) setPatternDefault();
+  SetPattern(&state, siteswap);
+}
   
 JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
+  if (name == NULL || site == NULL) return 0;
+
   if (pattname != NULL) { delete pattname; }
   pattname = new JML_CHAR[strlen(site)+1];
   strcpy(pattname, name);
@@ -84,9 +97,9 @@ JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, J
   if (siteswap != NULL) { delete siteswap; }
   siteswap = new JML_CHAR[strlen(site)+1];
   strcpy(siteswap, site);
-
   
-  SetPattern(&state, site);
+  if (initialized) SetPattern(&state, site);
+  //SetPattern(&state, site);
 }
 
 void JuggleSaver::setPatternDefault(void) {
@@ -119,17 +132,6 @@ JML_INT32 JuggleSaver::getStatus(void) {
   return ST_PAUSE;
 }
 
-/*
-JML_INT32 JuggleSaver::doJuggle(void) {
-  state.Time += 0.08;
-  state.SpinAngle += 0.1;
-
-  if (state.Time > 150.0f)
-    UpdatePattern(&state, MinObjects, MaxObjects, MinHeightInc, MaxHeightInc);
-  DrawGLScene(&state);
-}
-*/
-
 /* fixme:
   separate time increase AND opengl rendering
   
@@ -137,6 +139,11 @@ JML_INT32 JuggleSaver::doJuggle(void) {
   the data pulled by DrawGLScene
 */
 JML_INT32 JuggleSaver::doJuggle(void) {
+  if (!initialized) return 0;
+  
+  //fixme: check is_juggling
+  // if not, don't increase time, but set FramesSinceSync = 0
+
   /* While drawing, keep track of the rendering speed so we can adjust the
   * animation speed so things appear consistent.  The basis of the this
   * code comes from the frame rate counter (fps.c) but has been modified

@@ -27,7 +27,8 @@ bool JMApp::OnInit() {
   windowx = min(480,wxGetDisplaySize().x);
   windowy = min(400,wxGetDisplaySize().y);
 
-  jmlib = new JMLib();
+  jmlib = JMLib::alloc_JuggleMaster();
+  //jmlib = JMLib::alloc_JuggleSaver();
   jmlib->setWindowSize(windowx, windowy);
   jmlib->setPatternDefault();
   jmlib->setStyleDefault();

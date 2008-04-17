@@ -49,7 +49,8 @@ public:
   void ballColors(bool on);
 private:
   JMFrame* parent;
-  JuggleSaver* jmlib;
+  JMLib* jmlib;
+  //JuggleSaver* jmlib;
   JMOpenGLRenderer* renderer;
   //GLuint m_gllist;
 

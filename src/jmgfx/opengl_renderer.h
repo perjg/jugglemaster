@@ -32,9 +32,9 @@
 #endif
 #endif
 
-#include <gl/gl.h>
-#include <gl/glu.h>
-#include <gl/glaux.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
 
 class JMOpenGLRenderer {
 public:

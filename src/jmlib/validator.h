@@ -24,10 +24,6 @@
 #include <stdio.h>
 #include <string.h>
 
-class Foo {
-	int fook;
-};
-
 #include "jmlib_types.h"
 
 class JMSiteValidator {

@@ -24,10 +24,35 @@ enum engine_t {
   JUGGLING_ENGINE_JUGGLESAVER
 };
 
+class JuggleMaster;
+class JuggleSaver;
+
 // The JMLib interface
-class AbstractJMLib {
+class JMLib {
 public:
-  virtual ~AbstractJMLib() {}
+  // Create an instance of JMLib that can switch automatically
+  // between the JuggleMaster and JuggleSaver engine
+  static JMLib* alloc();
+  // Create an instance of JMLib that supports JuggleMaster only
+  static JMLib* alloc_JuggleMaster();
+  // Create an instance of JMLib that supports JuggleSaver only
+  static JMLib* alloc_JuggleSaver();
+
+  // Publicly accessible attributes, added here for backward compatibility
+  // Should probably be moved elsewhere
+  struct arm ap;
+  struct ball rhand,lhand;
+  struct hand handpoly;
+  struct ball b[BMAX];
+  
+  JML_INT32 dpm;
+  JML_INT32 gx_max, gx_min, gy_max, gy_min;
+  JML_INT32 imageWidth, imageHeight;
+  // read-write
+  JML_INT32 status;
+  //--------------
+
+  virtual ~JMLib() {}
   virtual void initialize() = 0;
   virtual void shutdown() = 0;
 

@@ -22,7 +22,8 @@
 #include "../jmlib.h"
 #include "jugglesaver.h"
 
-class JuggleSaver : public AbstractJMLib {
+class JuggleSaver : public JMLib {
+  friend class JMLib;
 private:
   JML_BOOL initialized;
   JML_BOOL is_juggling;
@@ -37,10 +38,12 @@ private:
   JML_CHAR* pattern;  // The current pattern
   JML_CHAR* siteswap; // The current siteswap
   JML_CHAR* pattname; // The name of the current pattern
-public:
-  // Constructor / Destructor
+
+  JML_BOOL applyPattern();
+
   JuggleSaver();
   JuggleSaver(ERROR_CALLBACK* _cb);
+public:
   ~JuggleSaver();
 
   void initialize();

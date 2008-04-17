@@ -177,15 +177,17 @@ struct hand {
 #include "jmlib_if.h"
 
 // The JMLibWrapper class (rename to JMLib)
-#include "jmlib_wrapper.h"
+//#include "jmlib_wrapper.h"
 
 // The JuggleSaver class
 #include "jugglesaver/jmlib_jsaver.h"
 
-// The JMLib class (rename to JuggleMaster)
-class JMLib : public AbstractJMLib {
+// The JuggleMaster class
+class JuggleMaster : public JMLib {
+  friend class JMLib;
  public:
   // read-only (add access methods)
+  /*
   struct arm ap;
   struct ball rhand,lhand;
   struct hand handpoly;
@@ -195,6 +197,7 @@ class JMLib : public AbstractJMLib {
   JML_INT32 imageWidth, imageHeight;
   // read-write
   JML_INT32 status;
+  */
  protected:
   JML_INT32 balln;
   JML_INT32 bm1;
@@ -260,11 +263,12 @@ class JMLib : public AbstractJMLib {
   // The juggler class contains all data neccesary for drawing
   //Juggler juggler;
   struct hand handpoly_ex;
+
+private:
+  JuggleMaster();
+  JuggleMaster(ERROR_CALLBACK* _cb);
 public:
-  // Constructor / Destructor
-  JMLib();
-  JMLib(ERROR_CALLBACK* _cb);
-  ~JMLib();
+  ~JuggleMaster();
 
   void initialize();
   void shutdown();

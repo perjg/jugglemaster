@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB398D690DB787A6004DBEAC /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */; };
 		CB6ABB420DB2557B000FD76F /* advsite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB320DB2557B000FD76F /* advsite.cpp */; };
 		CB6ABB430DB2557B000FD76F /* choosepatt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB340DB2557B000FD76F /* choosepatt.cpp */; };
 		CB6ABB440DB2557B000FD76F /* choosestyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB360DB2557B000FD76F /* choosestyle.cpp */; };
@@ -42,13 +43,14 @@
 		CB6ABBCB0DB26998000FD76F /* libwxzlib-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABBCA0DB26998000FD76F /* libwxzlib-2.8.a */; };
 		CBEAE29A0DB37E1E0019833A /* opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE2980DB37E1E0019833A /* opengl.cpp */; };
 		CBEAE2A90DB37F5A0019833A /* opengl_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE2A80DB37F5A0019833A /* opengl_renderer.cpp */; };
-		CBEAE3000DB396390019833A /* scrap.c in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE2FF0DB396390019833A /* scrap.c */; };
 		CBEAE3040DB39ACD0019833A /* jmlib_jsaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE3020DB39ACD0019833A /* jmlib_jsaver.cpp */; };
 		CBEAE3170DB3A8D10019833A /* engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE3150DB3A8D10019833A /* engine.cpp */; };
 		CBEAE3180DB3A8D10019833A /* render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE3160DB3A8D10019833A /* render.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CB398B0A0DB64335004DBEAC /* jmlib_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_wrapper.h; path = ../../jmlib/jmlib_wrapper.h; sourceTree = SOURCE_ROOT; };
+		CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_wrapper.cpp; path = ../../jmlib/jmlib_wrapper.cpp; sourceTree = SOURCE_ROOT; };
 		CB6ABB2B0DB2551C000FD76F /* jmdlx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jmdlx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB6ABB2E0DB2551C000FD76F /* jmdlx-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "jmdlx-Info.plist"; sourceTree = "<group>"; };
 		CB6ABB320DB2557B000FD76F /* advsite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = advsite.cpp; path = ../advsite.cpp; sourceTree = SOURCE_ROOT; };
@@ -104,7 +106,6 @@
 		CBEAE2990DB37E1E0019833A /* opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opengl.h; path = ../opengl.h; sourceTree = SOURCE_ROOT; };
 		CBEAE2A80DB37F5A0019833A /* opengl_renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = opengl_renderer.cpp; path = ../../jmgfx/opengl_renderer.cpp; sourceTree = SOURCE_ROOT; };
 		CBEAE2DE0DB38F230019833A /* jugglesaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jugglesaver.h; path = ../../jmlib/jugglesaver/jugglesaver.h; sourceTree = SOURCE_ROOT; };
-		CBEAE2FF0DB396390019833A /* scrap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = scrap.c; path = ../../jmlib/jugglesaver/scrap.c; sourceTree = SOURCE_ROOT; };
 		CBEAE3020DB39ACD0019833A /* jmlib_jsaver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_jsaver.cpp; path = ../../jmlib/jugglesaver/jmlib_jsaver.cpp; sourceTree = SOURCE_ROOT; };
 		CBEAE3030DB39ACD0019833A /* jmlib_jsaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jsaver.h; path = ../../jmlib/jugglesaver/jmlib_jsaver.h; sourceTree = SOURCE_ROOT; };
 		CBEAE3150DB3A8D10019833A /* engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = engine.cpp; path = ../../jmlib/jugglesaver/engine.cpp; sourceTree = SOURCE_ROOT; };
@@ -165,9 +166,11 @@
 			isa = PBXGroup;
 			children = (
 				CBEAE2D60DB38E390019833A /* jugglesaver */,
-				CB6ABB4C0DB255A9000FD76F /* jmlib.cpp */,
 				CB6ABB4D0DB255A9000FD76F /* jmlib.h */,
+				CB6ABB4C0DB255A9000FD76F /* jmlib.cpp */,
 				CB97E3B10DB5E1FC00BD2DBA /* jmlib_if.h */,
+				CB398B0A0DB64335004DBEAC /* jmlib_wrapper.h */,
+				CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */,
 				CB6ABB4E0DB255A9000FD76F /* jmlib_types.h */,
 				CB6ABB4F0DB255A9000FD76F /* juggler.h */,
 				CB6ABB500DB255A9000FD76F /* patterns.cpp */,
@@ -215,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				CB6ABB330DB2557B000FD76F /* advsite.h */,
+				CB6ABB320DB2557B000FD76F /* advsite.cpp */,
 				CB6ABB340DB2557B000FD76F /* choosepatt.cpp */,
 				CB6ABB350DB2557B000FD76F /* choosepatt.h */,
 				CB6ABB360DB2557B000FD76F /* choosestyle.cpp */,
@@ -230,7 +234,6 @@
 				CB6ABB3F0DB2557B000FD76F /* patt.h */,
 				CB6ABB400DB2557B000FD76F /* print.cpp */,
 				CB6ABB410DB2557B000FD76F /* print.h */,
-				CB6ABB320DB2557B000FD76F /* advsite.cpp */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -242,7 +245,6 @@
 				CBEAE3160DB3A8D10019833A /* render.cpp */,
 				CBEAE3020DB39ACD0019833A /* jmlib_jsaver.cpp */,
 				CBEAE3030DB39ACD0019833A /* jmlib_jsaver.h */,
-				CBEAE2FF0DB396390019833A /* scrap.c */,
 				CBEAE2DE0DB38F230019833A /* jugglesaver.h */,
 			);
 			name = jugglesaver;
@@ -316,10 +318,10 @@
 				CB6ABB5F0DB255A9000FD76F /* validator.cpp in Sources */,
 				CBEAE29A0DB37E1E0019833A /* opengl.cpp in Sources */,
 				CBEAE2A90DB37F5A0019833A /* opengl_renderer.cpp in Sources */,
-				CBEAE3000DB396390019833A /* scrap.c in Sources */,
 				CBEAE3040DB39ACD0019833A /* jmlib_jsaver.cpp in Sources */,
 				CBEAE3170DB3A8D10019833A /* engine.cpp in Sources */,
 				CBEAE3180DB3A8D10019833A /* render.cpp in Sources */,
+				CB398D690DB787A6004DBEAC /* jmlib_wrapper.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

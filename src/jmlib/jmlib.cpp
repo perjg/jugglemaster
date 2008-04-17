@@ -1,8 +1,6 @@
-// 	$Id$	
-
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
+ * Version 2.1
  * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
@@ -20,25 +18,42 @@
 
 #include "jmlib.h"
 
-JMLib::JMLib() {
+// Create an instance of JMLib that can switch automatically
+// between the JuggleMaster and JuggleSaver engine
+JMLib* JMLib::alloc() {
+  return NULL; // new JMLibWrapper();
+}
+
+// Create an instance of JMLib that supports JuggleMaster only
+JMLib* JMLib::alloc_JuggleMaster() {
+  return new JuggleMaster();
+}
+
+// Create an instance of JMLib that supports JuggleSaver only
+JMLib* JMLib::alloc_JuggleSaver() {
+  return new JuggleSaver();
+}
+
+
+JuggleMaster::JuggleMaster() {
   initialize();
   use_cpp_callback = 0;
   cb = (ERROR_CALLBACK*)NULL;
   mCallback = NULL;
 }
 
-JMLib::JMLib(ERROR_CALLBACK* _cb) {
+JuggleMaster::JuggleMaster(ERROR_CALLBACK* _cb) {
   initialize();
   use_cpp_callback = 0;
   cb = _cb;
   mCallback = NULL;
 }
 
-JMLib::~JMLib() {
+JuggleMaster::~JuggleMaster() {
   shutdown();
 }
 
-JML_CHAR *JMLib::possible_styles[] = {
+JML_CHAR *JuggleMaster::possible_styles[] = {
 	"Normal",
 	"Reverse",
 	"Shower",
@@ -50,7 +65,11 @@ JML_CHAR *JMLib::possible_styles[] = {
 #endif
 };
 
-void JMLib::initialize(void) {
+void JuggleMaster::initialize(void) {
+  static JML_BOOL initialized = FALSE;
+  if (initialized) return;
+  initialized = TRUE;
+
   // Set default values
   ga = 9.8F;
   dwell_ratio = 0.5F;
@@ -80,21 +99,21 @@ void JMLib::initialize(void) {
   setPatternDefault();
 }
 
-void JMLib::shutdown(void) {
+void JuggleMaster::shutdown(void) {
 }
 
-void JMLib::setErrorCallback(void *aUData, void (*aCallback)
+void JuggleMaster::setErrorCallback(void *aUData, void (*aCallback)
 			(void *, JML_CHAR *)) {
   mUData = aUData;
   use_cpp_callback = 1;
   mCallback = aCallback;
 }
 
-void JMLib::setErrorCallback(ERROR_CALLBACK* _cb) {
+void JuggleMaster::setErrorCallback(ERROR_CALLBACK* _cb) {
   cb = _cb;
 }
 
-void JMLib::error(JML_CHAR* msg) {
+void JuggleMaster::error(JML_CHAR* msg) {
   if(use_cpp_callback) {
     if(mCallback != NULL) {
       mCallback(mUData, msg);
@@ -104,7 +123,7 @@ void JMLib::error(JML_CHAR* msg) {
   }
 }
 
-JML_BOOL JMLib::setWindowSize(JML_INT32 width, JML_INT32 height) {
+JML_BOOL JuggleMaster::setWindowSize(JML_INT32 width, JML_INT32 height) {
   if (width <= 0 || height <= 0)
     return false;
 
@@ -133,7 +152,7 @@ JML_BOOL JMLib::setWindowSize(JML_INT32 width, JML_INT32 height) {
   return true;
 }
 
-void JMLib::setScalingMethod(JML_INT32 scalingMethod) {
+void JuggleMaster::setScalingMethod(JML_INT32 scalingMethod) {
   // no change
   if (this->scalingMethod == scalingMethod) return;
 
@@ -149,21 +168,21 @@ void JMLib::setScalingMethod(JML_INT32 scalingMethod) {
   }
 }
 
-JML_INT32 JMLib::getImageWidth() {
+JML_INT32 JuggleMaster::getImageWidth() {
   if (scalingMethod == SCALING_METHOD_CLASSIC)
     return imageWidth;
   else // SCALING_METHOD_DYNAMIC
     return scaleImageWidth;
 }
 
-JML_INT32 JMLib::getImageHeight() {
+JML_INT32 JuggleMaster::getImageHeight() {
   if (scalingMethod == SCALING_METHOD_CLASSIC)
     return imageHeight;
   else // SCALING_METHOD_DYNAMIC
     return scaleImageHeight;
 }
 
-JML_INT32 JMLib::getBallRadius() {
+JML_INT32 JuggleMaster::getBallRadius() {
   JML_INT32 baseRadius = 11 * dpm / DW;
 
   if (scalingMethod == SCALING_METHOD_CLASSIC) {
@@ -181,7 +200,7 @@ JML_INT32 JMLib::getBallRadius() {
 }
 
 
-void JMLib::doCoordTransform() {
+void JuggleMaster::doCoordTransform() {
   JML_FLOAT zoomFactorX = (float)scaleImageWidth  / (float)imageWidth;
   JML_FLOAT zoomFactorY = (float)scaleImageHeight / (float)imageHeight;
 
@@ -258,7 +277,7 @@ void JMLib::doCoordTransform() {
   }
 }
 
-void JMLib::setMirror(JML_BOOL mir) {
+void JuggleMaster::setMirror(JML_BOOL mir) {
   // store current status and stop juggling
   JML_INT32 oldStatus = status;
   stopJuggle();
@@ -273,7 +292,7 @@ void JMLib::setMirror(JML_BOOL mir) {
   status = oldStatus;
 }
 
-JML_BOOL JMLib::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
+JML_BOOL JuggleMaster::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
   JML_INT32 jml_errno;
   
   if (strlen(site) > JML_MAX_SITELEN) {
@@ -354,7 +373,7 @@ JML_BOOL JMLib::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLO
   }
 }
 
-JML_BOOL JMLib::setStyle(JML_CHAR* name, JML_UINT8 length,
+JML_BOOL JuggleMaster::setStyle(JML_CHAR* name, JML_UINT8 length,
                      JML_INT8* data, JML_INT32 offset) {
   if (strlen((char*)data) > JML_MAX_STYLELEN) {
     error("Style too large");
@@ -373,7 +392,7 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name, JML_UINT8 length,
   return true;
 }
 
-JML_BOOL JMLib::setStyle(JML_CHAR* name) {
+JML_BOOL JuggleMaster::setStyle(JML_CHAR* name) {
 // After adding a style here, also add to possible_styles_list at line 36
   if (strcmp(name, "Reverse") == 0 || strcmp(name, "reverse") == 0) {
     JML_INT8 style[] = { 4, 0, 13, 0 };
@@ -420,26 +439,26 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name) {
   return true;
 }
 
-JML_CHAR **JMLib::getStyles(void) {
+JML_CHAR **JuggleMaster::getStyles(void) {
   return possible_styles;
 }
 
-JML_INT32 JMLib::numStyles(void) {
+JML_INT32 JuggleMaster::numStyles(void) {
   return (int)(sizeof(possible_styles)/sizeof(possible_styles[0]));
 
 }
 
-void JMLib::setPatternDefault(void) {
+void JuggleMaster::setPatternDefault(void) {
   setPattern("3 Cascade", "3", HR_DEF, DR_DEF);
   setStyleDefault();
 }
 
-void JMLib::setStyleDefault(void) {
+void JuggleMaster::setStyleDefault(void) {
   JML_INT8 defStyle[] = { 13, 0, 4, 0 };
   setStyle("Normal", 1, defStyle);
 }
 
-void JMLib::setHR(JML_FLOAT HR) {
+void JuggleMaster::setHR(JML_FLOAT HR) {
 	if (HR > HR_MAX) {
 		height_ratio = HR_MAX;
 	} else if (HR < HR_MIN) {
@@ -449,11 +468,11 @@ void JMLib::setHR(JML_FLOAT HR) {
 	}
 }
 
-JML_FLOAT JMLib::getHR() {
+JML_FLOAT JuggleMaster::getHR() {
 	return(height_ratio);
 }
 
-void JMLib::setDR(JML_FLOAT DR) {
+void JuggleMaster::setDR(JML_FLOAT DR) {
 	if (DR > DR_MAX) {
 		dwell_ratio = DR_MAX;
 	} else if (DR < DR_MIN) {
@@ -463,17 +482,17 @@ void JMLib::setDR(JML_FLOAT DR) {
 	}
 }
 
-JML_FLOAT JMLib::getDR() {
+JML_FLOAT JuggleMaster::getDR() {
 	return(dwell_ratio);
 }
 
-JML_INT32 JMLib::numBalls(void) {
+JML_INT32 JuggleMaster::numBalls(void) {
 	return balln;
 }
 
 
 // Internal functions
-void JMLib::arm_line(void){
+void JuggleMaster::arm_line(void){
   JML_INT32 mx,my;
   JML_INT32 sx,sy;
   
@@ -525,7 +544,7 @@ void JMLib::arm_line(void){
   }
 }
 
-void JMLib::applyCorrections(void) {
+void JuggleMaster::applyCorrections(void) {
   // Correct ball coordinates
   for(JML_INT32 i = balln - 1; i >= 0; i--) {
     b[i].gx += bm1;
@@ -533,7 +552,7 @@ void JMLib::applyCorrections(void) {
   }
 }
 
-void JMLib::hand_pos(JML_INT32 c, JML_INT32 h, JML_INT32* x, JML_INT32* z) {
+void JuggleMaster::hand_pos(JML_INT32 c, JML_INT32 h, JML_INT32* x, JML_INT32* z) {
   JML_UINT32 a;
   
   if(mirror){
@@ -553,7 +572,7 @@ void JMLib::hand_pos(JML_INT32 c, JML_INT32 h, JML_INT32* x, JML_INT32* z) {
   *z=styledata[a+1];
 }
 
-JML_INT32 JMLib::juggle(struct ball *d) {
+JML_INT32 JuggleMaster::juggle(struct ball *d) {
   JML_INT32 tp,flag=0,i,tpox,rpox,tpoz,rpoz;
   JML_INT32 x,y;
   
@@ -777,7 +796,7 @@ JML_INT32 JMLib::juggle(struct ball *d) {
   return flag;
 }
 
-JML_INT32 JMLib::set_ini(JML_INT32 rr) {
+JML_INT32 JuggleMaster::set_ini(JML_INT32 rr) {
   JML_INT32 i,j,k;
   JML_FLOAT tw0,aw0;
   
@@ -901,7 +920,7 @@ JML_INT32 JMLib::set_ini(JML_INT32 rr) {
 }
 
 /* original set_dpm
-   void JMLib::set_dpm(void){
+   void JuggleMaster::set_dpm(void){
    float cSpeed0;
    int i;
    
@@ -975,7 +994,7 @@ JML_INT32 JMLib::set_ini(JML_INT32 rr) {
    }
 */
 
-void JMLib::set_dpm(void) {
+void JuggleMaster::set_dpm(void) {
   JML_FLOAT cSpeed0;
   JML_INT32 i;
   
@@ -1063,7 +1082,7 @@ void JMLib::set_dpm(void) {
   cSpeed=cSpeed0;
 }
 
-JML_INT32 JMLib::set_patt(JML_CHAR* s) {
+JML_INT32 JuggleMaster::set_patt(JML_CHAR* s) {
   JML_INT32 i, l, flag = 0, flag2 = 0, a = 0;
   
   l = (JML_INT32)strlen(s);
@@ -1146,7 +1165,7 @@ JML_INT32 JMLib::set_patt(JML_CHAR* s) {
   return 0;
 }
 
-JML_INT32 JMLib::ctod(JML_CHAR c){
+JML_INT32 JuggleMaster::ctod(JML_CHAR c){
   if(c>='0' && c<='9') return c-'0';
   else if(c>='a' && c<='z') return c-'a'+10;
   else if(c>='A' && c<='Z') return c-'A'+10;
@@ -1154,7 +1173,7 @@ JML_INT32 JMLib::ctod(JML_CHAR c){
   return -1;
 }
 
-void JMLib::startJuggle(void) {
+void JuggleMaster::startJuggle(void) {
   set_dpm();
   if (set_ini(1) != 0)
     return;
@@ -1168,18 +1187,18 @@ void JMLib::startJuggle(void) {
   status = ST_JUGGLE;
 }
 
-void JMLib::stopJuggle(void) {
+void JuggleMaster::stopJuggle(void) {
   status = ST_NONE;
 }
 
-void JMLib::togglePause(void) {
+void JuggleMaster::togglePause(void) {
   if (status == ST_JUGGLE)
     status = ST_PAUSE;
   else if (status == ST_PAUSE)
     status = ST_JUGGLE;
 }
 
-void JMLib::setPause(JML_BOOL pauseOn) {
+void JuggleMaster::setPause(JML_BOOL pauseOn) {
   if (status != ST_NONE) {
     if (pauseOn)
       status = ST_PAUSE;
@@ -1188,16 +1207,16 @@ void JMLib::setPause(JML_BOOL pauseOn) {
   }
 }
 
-JML_INT32 JMLib::getStatus(void) {
+JML_INT32 JuggleMaster::getStatus(void) {
   return status;
 }
 
-JML_FLOAT JMLib::fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t) {
+JML_FLOAT JuggleMaster::fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t) {
   return (JML_FLOAT)(JML_INT32((x+t)*xpow(10,k)+.5)/xpow(10,k));
   //return (JML_FLOAT)(floor((x+t)*xpow(10,k)+.5)/xpow(10,k));
 }
 
-/* JML_BOOL JMLib::setFrameskip(JML_INT32 fs) {
+/* JML_BOOL JuggleMaster::setFrameskip(JML_INT32 fs) {
 	frameSkip = fs;
 	if(fs > FS_MAX) {
 		frameSkip = FS_MAX;
@@ -1210,33 +1229,33 @@ JML_FLOAT JMLib::fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t) {
 } */
 
 /* FIXME */
-void JMLib::speedUp(void) {
+void JuggleMaster::speedUp(void) {
 	cSpeed = SPEED_MAX;
 	set_ini(0);
 }
 
 /* FIXME */
-void JMLib::speedDown(void) {
+void JuggleMaster::speedDown(void) {
 	cSpeed = SPEED_MIN;
 	set_ini(0);
 }
 
 /* FIXME */
-void JMLib::speedReset(void) {
+void JuggleMaster::speedReset(void) {
 	cSpeed = SPEED_DEF;
 	set_ini(0);
 }
 
-void JMLib::setSpeed(float s) {
+void JuggleMaster::setSpeed(float s) {
 	cSpeed = s;
 	set_ini(0);
 }
 
-float JMLib::speed(void) {
+float JuggleMaster::speed(void) {
 	return cSpeed;
 }
 
-JML_INT32 JMLib::doJuggle(void) {
+JML_INT32 JuggleMaster::doJuggle(void) {
   JML_INT32 i;
   JML_INT32 tone = 0;
   
@@ -1273,7 +1292,7 @@ JML_INT32 JMLib::doJuggle(void) {
 }
 
 // Modify to include hand calculations
-void JMLib::xbitset(void) {
+void JuggleMaster::xbitset(void) {
   JML_INT32 i, j = 0;
   
   // DATA is used to create the hand bitmaps
@@ -1317,7 +1336,7 @@ void JMLib::xbitset(void) {
   }
 }
 
-void JMLib::doStepcalc(void) {
+void JuggleMaster::doStepcalc(void) {
   JML_INT32 i;
   /* pos: position in string
      stp: position in steps array */

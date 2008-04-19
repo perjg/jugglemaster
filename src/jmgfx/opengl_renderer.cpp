@@ -45,10 +45,10 @@ void JMOpenGLRenderer::doCoordTransform(bool flipY, bool centerOrigin) {
 
   // Flip all y coordinates and center around origin
   for(int i=0;i<=5;i++) { // arms
-	if (flipY) {
+    if (flipY) {
       ap.rarm_y[i] = h - jmlib_ap->ry[i];
       ap.larm_y[i] = h - jmlib_ap->ly[i];
-	}
+    }
     else {
       ap.rarm_y[i] = jmlib_ap->ry[i];
       ap.larm_y[i] = jmlib_ap->ly[i];
@@ -58,17 +58,17 @@ void JMOpenGLRenderer::doCoordTransform(bool flipY, bool centerOrigin) {
 
     ap.rarm_y[i] = (ap.rarm_y[i] - half_h) * scalingFactor;
     ap.larm_y[i] = (ap.larm_y[i] - half_h) * scalingFactor;
-	ap.rarm_x[i] = (ap.rarm_x[i] - half_w) * scalingFactor;
-	ap.larm_x[i] = (ap.larm_x[i] - half_w) * scalingFactor;
+    ap.rarm_x[i] = (ap.rarm_x[i] - half_w) * scalingFactor;
+    ap.larm_x[i] = (ap.larm_x[i] - half_w) * scalingFactor;
   }
 
   // Calculate z coordinates for arms
   for(int i=0;i<=5;i++) {
     if (i == 1 || i == 2)
       currentZ -= ballRadius * 3.5;
-      //fixme: to use calculateZDelta, make sure to calculate z coordinates
-      // only once each time the pattern changes.
-      //currentZ -= calculateZDelta(10.0, ap.rarm_y[i+1] - ap.rarm_y[i]);
+    //fixme: to use calculateZDelta, make sure to calculate z coordinates
+    // only once each time the pattern changes.
+    //currentZ -= calculateZDelta(10.0, ap.rarm_y[i+1] - ap.rarm_y[i]);
     ap.rarm_z[i] = currentZ;
     ap.larm_z[i] = currentZ;
   }

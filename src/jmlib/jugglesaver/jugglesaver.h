@@ -239,6 +239,20 @@ typedef struct
 
 } RENDER_STATE;
 
+/* JUGGLEMASTER_RENDER_STATE is used to transfer data from JuggleMaster to the JuggleSaver
+ * rendering engine
+ */
+typedef struct
+{
+    float TranslateAngle;
+    float SpinAngle;
+    int DLStart; // display list
+    int ballCount;
+    POS balls[630];
+    POS leftHand;
+    POS rightHand;
+} JUGGLEMASTER_RENDER_STATE;
+
 // engine.cpp
 void GetHandPosition(PATTERN_INFO* pPattern, int RightHand, float Time, POS* pPos);
 void GetObjectPosition(PATTERN_INFO* pPattern, int Obj, float Time, float HandleLen, POS* pPos);
@@ -252,6 +266,7 @@ void InitPatternInfo(PATTERN_INFO* pPattern, const int* Site, const EXT_SITE_INF
 void InitGLSettings(RENDER_STATE* pState, int WireFrame);
 void ResizeGL(RENDER_STATE* pState, int w, int h);
 void DrawGLScene(RENDER_STATE* pState);
+void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState);
 
 // render.cpp -> move to engine.cpp?
 void SetPattern(RENDER_STATE* pState, char* pattern);

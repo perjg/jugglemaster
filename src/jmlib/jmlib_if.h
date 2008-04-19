@@ -19,15 +19,24 @@
 #ifndef JMLIB_IF_H
 #define JMLIB_IF_H
 
+// Juggling engine
 enum engine_t {
   JUGGLING_ENGINE_JUGGLEMASTER = 0,
   JUGGLING_ENGINE_JUGGLESAVER
 };
 
+// Rendering engine
+enum rendering_t {
+  RENDERING_ENGINE_NONE = 0, // no internal rendering done
+  RENDERING_OPENGL_2D,       // OpenGL 2D rendering 
+  RENDERING_OPENGL_3D,       // OpenGL rendering using the JuggleSaver rendering engine
+};
+
 class JuggleMaster;
 class JuggleSaver;
+class JMLibWrapper;
 
-// The JMLib interface
+// The JMLib base class / interface
 class JMLib {
 public:
   // Create an instance of JMLib that can switch automatically
@@ -52,15 +61,45 @@ public:
   JML_INT32 status;
   //--------------
 
+  // error callback support
+  void (*mCallback)(void *, JML_CHAR *);
+  void *mUData;
+  ERROR_CALLBACK* cb;
+  JML_BOOL use_cpp_callback;
+
+  virtual void setErrorCallback(ERROR_CALLBACK* _cb) {
+    cb = _cb;
+  }
+  
+  virtual void setErrorCallback(void *aUData, void (*aCallback)(void *, JML_CHAR *)) {
+    mUData = aUData;
+    use_cpp_callback = 1;
+    mCallback = aCallback;
+  }
+
+  virtual void error(JML_CHAR* msg) {
+    if(use_cpp_callback) {
+      if(mCallback != NULL) {
+        mCallback(mUData, msg);
+      }
+    }
+    else if(cb != NULL) {
+      cb(msg);
+    }
+  }
+  // END error callback support
+
   virtual ~JMLib() {}
   virtual void initialize() = 0;
   virtual void shutdown() = 0;
 
+  // Juggling engine
   virtual engine_t getType() = 0;
-
-  virtual void setErrorCallback(ERROR_CALLBACK* _cb) = 0;
-  virtual void setErrorCallback(void *aUData, void (*aCallback)(void *, JML_CHAR *)) = 0;
-  virtual void error(JML_CHAR* msg) = 0;
+  
+  // Rendering engine
+  //virtual rendering_t getRenderingType() {}
+  //virtual void setRenderingType(rendering_t r) {}
+  virtual void render() {}
   
   virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF) = 0;
   virtual JML_BOOL setPattern(JML_CHAR* site) = 0;

@@ -118,10 +118,14 @@ void JMOpenGLCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
   
   SetCurrent();
   
+  jmlib->render();
+  /*
   if (jmlib->getType() == JUGGLING_ENGINE_JUGGLEMASTER)
     renderer->draw();
   else
-    jmlib->doJuggle();
+    jmlib->render();
+    */
+    //jmlib->doJuggle();
   //else
   //  DrawGLScene(&state);
   SwapBuffers();
@@ -149,7 +153,7 @@ void JMOpenGLCanvas::OnSize(wxSizeEvent &event) {
     glViewport(0, 0, (GLint)w, (GLint)h);
   }
   
-  if (jmlib->getType() == JUGGLING_ENGINE_JUGGLESAVER)  
+  //if (jmlib->getType() == JUGGLING_ENGINE_JUGGLESAVER)  
     jmlib->setWindowSize(w, h);
 }
 

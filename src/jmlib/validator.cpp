@@ -346,6 +346,35 @@ bool JMSiteValidator::validateMSS(JML_CHAR* site) {
   return true;
 }
 
+bool JMSiteValidator::isMSS(JML_CHAR* site) {
+  JML_INT32 len = (JML_INT32)strlen(site);
+  
+  // reject invalid site (neither vss or mss)
+  if (!validateMSS(site)) return false;
+  
+  for (int i = 0; i < len; i++) {
+    if (site[i] == '[')
+      return true; // a valid site with a bracket is a mss
+  }
+  
+  return false; // this means we have a vss
+}
+
+bool JMSiteValidator::isSSS(JML_CHAR* site) {
+  JML_INT32 len = (JML_INT32)strlen(site);
+  
+  // reject invalid site (neither vss or mss or sss)
+  if (!validateSSS(site)) return false;
+  
+  for (int i = 0; i < len; i++) {
+    if (site[i] == '(')
+      return true; // a valid site with a parenthesis is a sss
+  }
+  
+  return false; // this means we have a vss
+}
+
+
 bool JMSiteValidator::transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS) {
   JML_INT32 i, x;
   JML_INT32 len = (JML_INT32)strlen(SSS);
@@ -436,7 +465,7 @@ int main(void) {
   foo("(7,4)(4,5)");
   foo("(4,2x)(2x,4)");
   foo("(7x,2)(2,5x)");
-  foo("spam spam spam!\"#!#ค#\"#ค%");
+  foo("spam spam spam!\"#!#ยง#\"#ยง%");
   foo("");
   foo(NULL);
   foo("[543]3[45][27]2");

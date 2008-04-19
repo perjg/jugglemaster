@@ -1,8 +1,6 @@
-// 	$Id: juggler.h 208 2006-08-04 01:40:24Z per $	 
-
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
+ * Version 2.1
  * (C) Per Johan Groland 2000-2006, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60

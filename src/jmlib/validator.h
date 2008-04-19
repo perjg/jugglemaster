@@ -31,9 +31,6 @@ class JMSiteValidator {
   static JML_INT32 ballCount;
   static bool scanSSS(JML_CHAR*& site);
   static bool scanMSS(JML_CHAR*& site);
-  static bool validateVSS(JML_CHAR* site);
-  static bool validateSSS(JML_CHAR* site);
-  static bool validateMSS(JML_CHAR* site);
  public:
   static JML_INT32 siteDigit(JML_INT8 s);
   static JML_INT8 siteChar(JML_INT32 c);
@@ -42,6 +39,19 @@ class JMSiteValidator {
   static bool transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS);
   static bool scanSite(JML_CHAR* site);
   static bool validateSiteSyntax(JML_CHAR* site);
+  
+  // Check if a site is a multiplex site
+  static bool isMSS(JML_CHAR* site);
+  // Check if a site is a sync site
+  static bool isSSS(JML_CHAR* site);
+  
+  // Validate a Vanilla siteswap
+  static bool validateVSS(JML_CHAR* site);
+  // Validate a synch siteswap
+  static bool validateSSS(JML_CHAR* site);
+  // Validate a multiplex _or_ vanilla siteswap
+  static bool validateMSS(JML_CHAR* site);
+  // validate a siteswap of any type
   static bool validateSite(JML_CHAR* site);
 };
 

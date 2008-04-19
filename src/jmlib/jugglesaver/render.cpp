@@ -249,6 +249,10 @@ void SetCamera(RENDER_STATE* pState)
     d = sqrtf(ez * ez + (cy - ey) * (cy - ey));
     
     gluPerspective(FOV, pState->AspectRatio, 0.1f, d + 20.0f);
+    
+    // zoom 30 % extra in JuggleMaster mode
+    ez -= (ez * 0.30f);
+    
     gluLookAt(0.0, ey, ez, 0.0, cy, cz, 0.0, 1.0, 0.0);
 
     glMatrixMode(GL_MODELVIEW);
@@ -617,6 +621,45 @@ void DrawGLScene(RENDER_STATE* pState)
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SpecCol);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 60.0f);
 
+    float x, y;
+    const float min_y = -3.0;
+    const float max_y = 10.0;
+    const float min_x = -5.0;
+    const float max_x = 5.0;
+
+    for (int i = 1; i < 5; i++) {
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, Cols[i % nCols]);
+        glPushMatrix();
+
+        switch (i) {
+        case 1: 
+          x = min_x;
+          y = min_y;
+          break;
+        case 2:
+          x = min_x;
+          y = max_y;
+          break;
+        case 3:
+          x = max_x;
+          y = max_y;
+          break;
+        case 4:
+          x = max_x;
+          y = min_y;
+          break;
+        }
+        
+        glTranslatef(x, y, 0);  
+        //glRotatef(pState->balls[i].Rot, 0.6963f, 0.6963f, 0.1742f);
+        glCallList(DL_BALL + pState->DLStart);
+        glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, AltCols[i % nCols]);
+        glCallList(DL_BALL + pState->DLStart);  
+        
+        glPopMatrix();
+    }
+
     for (i = 0; i < pPattern->Objects; i++)
     {
         POS ObjPos;
@@ -730,3 +773,172 @@ void UpdatePattern(
 #ifdef __cplusplus
 }
 #endif
+
+void JMDrawArm(JUGGLEMASTER_RENDER_STATE* pState, int Left)
+{
+    POS Pos;
+    float x, y, len, len2, ang, ang2;
+    
+    if (Left) Pos = pState->leftHand;
+    else Pos = pState->rightHand;
+    //GetHandPosition(pState->pPattern, Left, TimePos, &Pos);
+
+    x = Pos.x + (Left ? -ShoulderPos[0] : ShoulderPos[0]);
+    y = Pos.y - ShoulderPos[1];
+
+    //x = -1.0;
+    //y = 10.0;
+
+    len = sqrtf(x * x + y * y + ShoulderPos[2] * ShoulderPos[2]);
+    len2 = sqrtf(x * x + ShoulderPos[2] * ShoulderPos[2]);
+
+    ang = (float) CosineRule(UArmLen, len, LArmLen);
+    ang2 = (float) CosineRule(UArmLen, LArmLen, len);
+
+    if (ang == 0.0 && ang2 == 0)
+        ang2 = 180.0;
+
+
+    glPushMatrix();
+        glTranslatef(Left ? ShoulderPos[0] : -ShoulderPos[0], ShoulderPos[1],
+            -ShoulderPos[2]);
+        glRotatef((float)(180.0f * asin(x / len2) / 3.14f), 0.0f, 1.0f, 0.0f);
+        glRotatef((float)(-180.f * asin(y / len) / 3.14), 1.0f, 0.0f, 0.0f);
+        glRotatef(Left ? 20.0f : -20.0f, 0.0f, 0.0f, 1.0f);
+        glRotatef((float) ang, 1.0f, 0.0f, 0.0f);
+        glCallList(DL_UPPERARM + pState->DLStart);
+
+        glRotatef((float)(ang2 - 180.0), 1.0f, 0.0f, 0.f);
+        glCallList(DL_FOREARM + pState->DLStart);
+    glPopMatrix();
+}
+
+// Render a JuggleMaster state using JuggleSaver
+//void JMDrawGLScene(JMState* state)
+//
+// need:
+// ball positions, with z coordinate:
+// 
+/*
+    float x;
+    float y;
+    float z;
+    float Rot;   - rotation of object
+    float Elev;  - for clubs only
+
+  For balls: can fake rotation by increasing it continuosly
+*/
+void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState)
+{
+    int nCols = sizeof(Cols) / sizeof(Cols[0]);
+    int i;
+
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(5.0f * sinf(pState->TranslateAngle), 0.0f, 0.0f);
+
+    //gltrackball_rotate (pState->trackball);
+
+    glRotatef(pState->SpinAngle, 0.0f, 1.0f, 0.0f);
+    glTranslatef(0.0, 0.0, -1.0f);
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, DiffCol);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SpecCol);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 60.0f);
+
+    float x, y;
+    const float min_y = -3.0;
+    const float max_y = 10.0;
+    const float min_x = -5.0;
+    const float max_x = 5.0;
+
+    for (int i = 1; i < 5; i++) {
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, Cols[i % nCols]);
+        glPushMatrix();
+
+        switch (i) {
+        case 1: 
+          x = min_x;
+          y = min_y;
+          break;
+        case 2:
+          x = min_x;
+          y = max_y;
+          break;
+        case 3:
+          x = max_x;
+          y = max_y;
+          break;
+        case 4:
+          x = max_x;
+          y = min_y;
+          break;
+        }
+        
+        glTranslatef(x, y, 0);  
+        //glRotatef(pState->balls[i].Rot, 0.6963f, 0.6963f, 0.1742f);
+        glCallList(DL_BALL + pState->DLStart);
+        glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, AltCols[i % nCols]);
+        glCallList(DL_BALL + pState->DLStart);  
+        
+        glPopMatrix();
+    }
+
+    for (i = 0; i < pState->ballCount; i++)
+    {
+        //POS ObjPos;
+        
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, Cols[i % nCols]);
+        glPushMatrix();
+
+        glTranslatef(pState->balls[i].x, pState->balls[i].y, pState->balls[i].z);  
+        glRotatef(pState->balls[i].Rot, 0.6963f, 0.6963f, 0.1742f);
+        glCallList(DL_BALL + pState->DLStart);
+        glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, AltCols[i % nCols]);
+        glCallList(DL_BALL + pState->DLStart);
+
+/*
+        switch (pPattern->pObjectInfo[i].ObjectType)
+        {
+            case OBJECT_CLUB:
+                GetObjectPosition(pPattern, i, Time, 1.0f, &ObjPos);
+                glTranslatef(ObjPos.x, ObjPos.y, ObjPos.z);
+                glRotatef(ObjPos.Rot, 0.0f, 1.0f, 0.0f);
+                glRotatef(ObjPos.Elev, -1.0f, 0.0f, 0.0f);
+                glTranslatef(0.0f, 0.0f, -1.0f);
+                glCallList(DL_CLUB + pState->DLStart);
+                break;
+
+            case OBJECT_RING:
+                GetObjectPosition(pPattern, i, Time, 1.0f, &ObjPos);
+                glTranslatef(ObjPos.x, ObjPos.y, ObjPos.z);
+                glRotatef(ObjPos.Rot, 0.0f, 1.0f, 0.0f);
+                glRotatef(ObjPos.Elev, -1.0f, 0.0f, 0.0f);
+                glCallList(DL_RING + pState->DLStart);
+                break;
+
+            default:
+                GetObjectPosition(pPattern, i, Time, 0.0f, &ObjPos);
+                glTranslatef(ObjPos.x, ObjPos.y, ObjPos.z);        
+                glRotatef(ObjPos.Rot, 0.6963f, 0.6963f, 0.1742f);
+                glCallList(DL_BALL + pState->DLStart);
+                glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+                glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, 
+                    AltCols[i % nCols]);
+                glCallList(DL_BALL + pState->DLStart);
+                break;
+        }
+        */
+
+        glPopMatrix();
+    }
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, BodyCol);
+    glCallList(DL_TORSO + pState->DLStart);
+    JMDrawArm(pState, 1);
+    JMDrawArm(pState, 0);
+}

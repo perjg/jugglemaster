@@ -16,21 +16,24 @@
  * Modified BSD License for more details.
  */ 
 
-/*
-gltrackball
-dofps
-*/
+// fixme: port gltrackball
+// fixme: port dofps
 
 #include "jmlib_jsaver.h"
 #include <sys/time.h>
 #define GETTIMEOFDAY_TWO_ARGS
 
 // Constructor / Destructor
-JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2), TranslateSpeed(0.1), SpinSpeed(20.0),
+JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2), TranslateSpeed(0.0), SpinSpeed(20.0),
   initialized(false), is_juggling(false), pattern(NULL), siteswap(NULL), pattname(NULL),
   width_(480), height_(400) {
-  //setWindowSize(480,400);
-  //initialize();
+  // NOTE:
+  // initialize cannot be called from the constructor, because it requires an OpenGL
+  // context. It must be called manually after creating the OpenGL context.
+  
+  CurrentFrameRate = 1.0f;
+  FramesSinceSync = 0;
+  LastSyncTime = 0;
 }
 
 JuggleSaver::JuggleSaver(ERROR_CALLBACK* _cb) {
@@ -64,26 +67,61 @@ void JuggleSaver::initialize() {
 void JuggleSaver::shutdown() {
 }
 
-//fixme: this should go into the base controller class
-void JuggleSaver::setErrorCallback(ERROR_CALLBACK* _cb) {
-}
-
-//fixme: this should go into the base controller class
-void JuggleSaver::setErrorCallback(void *aUData, void (*aCallback)(void *, JML_CHAR *)) {
-}
-
-//fixme: this should go into the base controller class
-void JuggleSaver::error(JML_CHAR* msg) {
-}
-
-//fixme: this method sucks
 JML_BOOL JuggleSaver::applyPattern() {
   if (siteswap == NULL) setPatternDefault();
   SetPattern(&state, siteswap);
 }
   
 JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
-  if (name == NULL || site == NULL) return 0;
+  if (name == NULL || site == NULL) return false;
+
+  /* fixme
+  if (strlen(site) > JML_MAX_SITELEN) {
+    error("Siteswap too long");
+    return false;
+  }
+  
+  if (strlen(name) > JML_MAX_NAMELEN) {
+    error("Pattern name too long");
+    return false;    
+  }
+  */
+  
+  // fixme:
+  // JuggleSaver supports:
+  //  * vanilla siteswap
+  //  * an optional c, b or r after the site to control the type of object
+  //  * a fully specified pattern
+  
+  /*
+  bool vss = JMSiteValidator::validateVSS(site);
+  bool mss = JMSiteValidator::isMSS(site);
+  bool sss = JMSiteValidator::validateSSS(site);
+  
+  if (mss) {
+    error("Multiplex siteswaps are not supported");
+    return false;
+  }
+
+  if (sss) {
+    error("Synchronous siteswaps are not supported");
+    return false;
+  }
+  */
+  
+  /*
+  // Check for valid siteswap
+  if (!JMSiteValidator::validateSite(site)) {
+    error("Invalid siteswap");
+    return false;
+  }
+  
+  // JuggleMaster only supports Vanilla Siteswap
+  if (!JMSiteValidator::validateVSS(site)) {
+    error("Invalid siteswap");
+    return false;
+  }
+  */
 
   if (pattname != NULL) { delete pattname; }
   pattname = new JML_CHAR[strlen(site)+1];
@@ -94,6 +132,7 @@ JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, J
   strcpy(pattern, site);
 
   //fixme: siteswap should be derived from the pattern (strip all extra info)
+  // e.g: 5b3c should be saved as 53
   if (siteswap != NULL) { delete siteswap; }
   siteswap = new JML_CHAR[strlen(site)+1];
   strcpy(siteswap, site);
@@ -103,11 +142,14 @@ JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, J
 }
 
 void JuggleSaver::setPatternDefault(void) {
-  setPattern("3 Cascade", "3c");
+  setPattern("3 Cascade", "3b");
 }
 
+//fixme: calculate this from the 
 JML_INT32 JuggleSaver::numBalls(void) {
-  return 3;
+  PATTERN_INFO* pPattern = state.pPattern;
+  if (pPattern) return pPattern->Objects;
+  return 0;
 }
 
 void JuggleSaver::startJuggle(void) {
@@ -132,17 +174,17 @@ JML_INT32 JuggleSaver::getStatus(void) {
   return ST_PAUSE;
 }
 
-/* fixme:
-  separate time increase AND opengl rendering
-  
-  Implement a function that converts all data from jugglemaster to
-  the data pulled by DrawGLScene
-*/
+void JuggleSaver::render() {
+  DrawGLScene(&state);
+}
+
 JML_INT32 JuggleSaver::doJuggle(void) {
   if (!initialized) return 0;
-  
-  //fixme: check is_juggling
-  // if not, don't increase time, but set FramesSinceSync = 0
+
+  if (!is_juggling) {
+    FramesSinceSync = 0;
+    return 0;
+  }
 
   /* While drawing, keep track of the rendering speed so we can adjust the
   * animation speed so things appear consistent.  The basis of the this
@@ -177,12 +219,13 @@ JML_INT32 JuggleSaver::doJuggle(void) {
   }
     
   FramesSinceSync++;
-  DrawGLScene(&state);
+  //DrawGLScene(&state);
+  //JMDrawGLScene(&state);
     
   if (CurrentFrameRate > 1.0e-6f) {
     state.Time += JuggleSpeed / CurrentFrameRate;
-    //state.SpinAngle += SpinSpeed / CurrentFrameRate;
-    //state.TranslateAngle += TranslateSpeed / CurrentFrameRate;
+    state.SpinAngle += SpinSpeed / CurrentFrameRate;
+    state.TranslateAngle += TranslateSpeed / CurrentFrameRate;
   }
     
   //if (mi->fps_p)

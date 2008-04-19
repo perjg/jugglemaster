@@ -21,7 +21,7 @@
 // Create an instance of JMLib that can switch automatically
 // between the JuggleMaster and JuggleSaver engine
 JMLib* JMLib::alloc() {
-  return NULL; // new JMLibWrapper();
+  return new JMLibWrapper();
 }
 
 // Create an instance of JMLib that supports JuggleMaster only
@@ -102,6 +102,7 @@ void JuggleMaster::initialize(void) {
 void JuggleMaster::shutdown(void) {
 }
 
+/*
 void JuggleMaster::setErrorCallback(void *aUData, void (*aCallback)
 			(void *, JML_CHAR *)) {
   mUData = aUData;
@@ -122,6 +123,7 @@ void JuggleMaster::error(JML_CHAR* msg) {
     cb(msg);
   }
 }
+*/
 
 JML_BOOL JuggleMaster::setWindowSize(JML_INT32 width, JML_INT32 height) {
   if (width <= 0 || height <= 0)

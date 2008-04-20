@@ -154,7 +154,7 @@ struct ball {
 
   JML_FLOAT prevSpin;
 
-  ball() : prevSpin(0.0f) {}
+  ball() : prevSpin(PI) {}
 
   //fixme: when holding, gradually reduce the spin towards 0
   float getSpin(int spins) {

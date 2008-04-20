@@ -256,7 +256,14 @@ void SetCamera(RENDER_STATE* pState)
     
     gluPerspective(FOV, pState->AspectRatio, 0.1f, d + 20.0f);
     
-    ez -= (ez * extraZoom);
+    // adjust the camera for JuggleMaster
+    if (extraZoom > 0) {
+      ez -= (ez * extraZoom);
+      if (extraZoom >= 0.29f)
+        cy -= 1.5f;
+      else
+        cy -= 1.0f;
+    }
     
     gluLookAt(0.0, ey, ez, 0.0, cy, cz, 0.0, 1.0, 0.0);
 

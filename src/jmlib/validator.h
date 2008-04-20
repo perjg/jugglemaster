@@ -53,6 +53,8 @@ class JMSiteValidator {
   static bool validateMSS(JML_CHAR* site);
   // validate a siteswap of any type
   static bool validateSite(JML_CHAR* site);
+  // validate a JuggleSaver pattern
+  static bool validateJSPattern(JML_CHAR* patt);
 };
 
 #endif

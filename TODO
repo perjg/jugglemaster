@@ -5,6 +5,29 @@ Command-line named pattern
 Keyboard shortcuts
 Fix OSX proxy stuff
 
+
+JMLib 2.1:
+- JuggleMaster:
+  * Speed stuff with fps counter
+- JuggleSaver:
+  * pattern loader
+  * pattern verification / parsing
+  * proper club placement (y too high?)
+  * proper random object selection
+- JuggleMaster pattern file additions:
+  * objects (c(lub), r(ing), b(all), x(random))
+  * camera zoom adjustment
+  * special camera coordinates
+  * port currently
+- OpenGL stuff:
+  * port sphere stuff
+  * fps counter and pattern stuff on screen
+  * add fish club and possibly other objects
+  * skinning for the juggler
+- Searchable sqlite pattern loader
+  * Implement :)
+
+
 JMLib:
 Speed stuff
 Stop his arms crossing?

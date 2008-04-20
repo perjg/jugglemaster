@@ -22,7 +22,7 @@
 #define GETTIMEOFDAY_TWO_ARGS
 
 JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400) ,
-  JuggleSpeed(2.2), TranslateSpeed(0.0), SpinSpeed(/*20.0*/10.0f), objectType(OBJECT_BALL)
+  JuggleSpeed(2.2), TranslateSpeed(0.0), SpinSpeed(/*20.0*/40.0f), objectType(OBJECT_BALL)
 {
   jm = JMLib::alloc_JuggleMaster();
   js = JMLib::alloc_JuggleSaver();
@@ -38,7 +38,7 @@ JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400) ,
   // i.e. setPattern called before first render is called?
   firstFrame = true;
   active = js;
-  SetCameraExtraZoom(0.25f);
+  SetCameraExtraZoom(0.3f);
  
   CurrentFrameRate = 1.0f;
   FramesSinceSync = 0;
@@ -113,13 +113,14 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
       case OBJECT_CLUB:
         jmState.objectTypes[i] = OBJECT_CLUB;
         jmState.objects[i].z = 1.2f;
+        jmState.objects[i].y -= 0.5f;
         jmState.objects[i].Elev = jm->b[i].getSpin(1) * 180 / PI;
         jmState.objects[i].Rot = 0.0f;
         break;
       case OBJECT_RING:
         //fixme: club does not match hands when held
         jmState.objectTypes[i] = OBJECT_RING;
-        jmState.objects[i].z = 1.2f;
+        jmState.objects[i].z = 1.0f;
         jmState.objects[i].Elev = 0.0f;
         jmState.objects[i].Rot = 0.0f;
         break;
@@ -129,19 +130,9 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
         jmState.objects[i].Elev = (jm->b[i].getSpin(1) * 180 / PI) / 4;
         jmState.objects[i].Rot = 0.0f;
     }
-    
-    //fixme: allow switching between different objects
-    // - random
-    // - specified in setPattern
-    // - specified in the pattern library
-    //jmState.objects[i].Rot = jmState.objects[i].Elev / 4; // ball spin
-    //jmState.objectTypes[i] = OBJECT_BALL;
-    //jmState.objectTypes[i] = OBJECT_CLUB;
-    //jmState.objects[i].z = 1.2f;
-    //jmState.objectTypes[i] = OBJECT_RING;
   }
-  //jmState.TranslateAngle = 0.0f;
-  //jmState.SpinAngle = 0.0f;
+
+  // hack: retrieve display list
   JuggleSaver* jsp = static_cast<JuggleSaver*>(js);
   jmState.DLStart = jsp->state.DLStart;
 }
@@ -161,7 +152,7 @@ JML_CHAR JMLibWrapper::getHighestThrow(JML_CHAR* site, bool is_sss) {
     else if (t >= '0' && t <= '9')
       t = t - '0';
     else if (t >= 'a' && t <= 'z')
-      t = t - 'a';
+      t = t - 'a' + 10;
     else
       continue;
     
@@ -172,40 +163,59 @@ JML_CHAR JMLibWrapper::getHighestThrow(JML_CHAR* site, bool is_sss) {
   if (highest <= 9)
     return highest + '0';
   else
-    return highest + 'a';
+    return highest - 10 + 'A'; // JuggleSaver uses 0-9, A-Z, a-z
 } 
 
+// switches automatically between JuggleMaster and JuggleSaver juggling as needed
+// Any valid siteswap is juggled using JuggleMaster.
+// Anything else is juggled using JuggleSaver providing that it is a valid pattern
+//fixme: extract site for JuggleSaver patterns
 JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
   bool vss = JMSiteValidator::validateVSS(site);
   bool mss = JMSiteValidator::isMSS(site);
   bool sss = JMSiteValidator::isSSS(site);
   
+  // fixme: Patterns from JuggleSaver's pattern library should be loaded there directly
+  
   // mss and sss are only supported by JuggleMaster
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER && (mss || sss)) {
     active = jm;
   }
-  
+  // prefer JuggleMaster for vss
+  else if (vss) {
+    active = jm;
+  }
+  // not a valid normal site, may still be a valid JuggleSaver pattern
+  // either of the form: 5c3c5r (vanilla site with 
   // check if we have a valid jugglesaver pattern
   // valid js pattern and not valid site => switch to js
   //fixme: implement
-  
-  // quick dirty trick just to allow some switching
-  for (int i = 0; i < strlen(site); i++) {
-    if (site[i] == '@') {
-      active = js;
-      break;
-    }
+  else {
+    active = js;
   }
+    
 
   if (active->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
-    objectType = (random() % 3);
-    SetCameraExtraZoom(0.25f);
-  
     // Set the JuggleSaver pattern to the highest throw in the site
     // to assure that the camera is set in a reasonable position
     JML_CHAR js_site[2];
     js_site[0] = getHighestThrow(site, sss);
     js_site[1] = 0; 
+
+    //fixme: proper randomness
+    objectType = (random() % 3) + 1;
+    objectType = OBJECT_RING;
+    
+    // fixme: low patterns should cause the camera to go slightly lower
+    if (js_site[0] >= '0' && js_site[0] <= '9')
+      SetCameraExtraZoom(0.3f);
+    else if (js_site[0] >= '6' && js_site[0] <= '9')
+      SetCameraExtraZoom(0.25f);
+    else if (js_site[0] <= 'b')
+      SetCameraExtraZoom(0.25f);
+    else
+      SetCameraExtraZoom(0.15f);
+      
     
     // fixme: should probably make a more intelligent camera placement 
     js->setPattern(js_site);

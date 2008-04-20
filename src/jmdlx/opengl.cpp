@@ -137,8 +137,8 @@ void JMOpenGLCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
 
 void JMOpenGLCanvas::OnSize(wxSizeEvent &event) {
   // Don't call jmlib->setWindowSize here, the renderer will take care of scaling
-  if (jmlib->getType() == JUGGLING_ENGINE_JUGGLEMASTER)
-    renderer->resize(event.GetSize().x, event.GetSize().y);
+  //if (jmlib->getType() == JUGGLING_ENGINE_JUGGLEMASTER)
+  //  renderer->resize(event.GetSize().x, event.GetSize().y);
 
   wxGLCanvas::OnSize(event);
 

@@ -28,7 +28,7 @@ static JML_CHAR patterns[7][12]
 {
 	if (self = [super init])
 	{
-		jm = new JMLib();
+    jm = JMLib::alloc_JuggleMaster();
 		
 		jm->setWindowSize([view frame].size.width, [view frame].size.height);
 		jm->setPatternDefault();

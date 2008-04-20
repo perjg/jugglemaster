@@ -142,7 +142,7 @@ JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, J
 }
 
 void JuggleSaver::setPatternDefault(void) {
-  setPattern("3 Cascade", "3b");
+  setPattern("3 Cascade", "3c");
 }
 
 //fixme: calculate this from the 

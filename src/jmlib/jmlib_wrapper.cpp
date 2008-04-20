@@ -22,7 +22,7 @@
 #define GETTIMEOFDAY_TWO_ARGS
 
 JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400) ,
-  JuggleSpeed(2.2), TranslateSpeed(0.0), SpinSpeed(/*20.0*/0.0)
+  JuggleSpeed(2.2), TranslateSpeed(0.0), SpinSpeed(/*20.0*/10.0f), objectType(OBJECT_BALL)
 {
   jm = JMLib::alloc_JuggleMaster();
   js = JMLib::alloc_JuggleSaver();
@@ -30,7 +30,15 @@ JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400) ,
   jmState.TranslateAngle = 0.0f;
   jmState.SpinAngle = 0.0f;
 
-  active = jm;
+  // active must always start in JuggleSaver mode to ensure complete
+  // initialization of the rendering engine
+  // rendering will switch to JuggleMaster automatically on drawing
+  // the first frame
+  //fixme: how about if the pattern is JuggleSaver only?
+  // i.e. setPattern called before first render is called?
+  firstFrame = true;
+  active = js;
+  SetCameraExtraZoom(0.25f);
  
   CurrentFrameRate = 1.0f;
   FramesSinceSync = 0;
@@ -53,7 +61,7 @@ void JMLibWrapper::shutdown() {
 // Transform JuggleMaster coordinates to JuggleSaver coordinates
 void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   float scalingFactorX = 0.25f / jm->getBallRadius();
-  float scalingFactorY = 0.2f / jm->getBallRadius();
+  float scalingFactorY = 0.25f / jm->getBallRadius();
 
   arm*  jmlib_ap    = &(jm->ap);
   ball* jmlib_rhand = &(jm->rhand);
@@ -79,25 +87,6 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   int radius = jm->getBallRadius();
   ballRadius = jm->getBallRadius() * scalingFactorX;
 
-/*
-  // right and left hand
-  if (flipY) {
-    jmState.rightHand.y = h - jmlib_lhand->gy;
-    jmState.leftHand.y =  h - jmlib_rhand->gy;
-  }
-  else {
-    jmState.rightHand.y = jmlib_lhand->gy;
-    jmState.leftHand.y  = jmlib_rhand->gy;
-  }
-
-  jmState.rightHand.y = (jmState.rightHand.y - half_h) * scalingFactorY;
-  jmState.leftHand.y =  (jmState.leftHand.y  - half_h) * scalingFactorY;
-  jmState.rightHand.x = (jmlib_lhand->gx - half_w) * scalingFactorX + ballRadius;
-  jmState.leftHand.x =  (jmlib_rhand->gx - half_w) * scalingFactorX + ballRadius;
-  jmState.rightHand.z = 0;
-  jmState.leftHand.z = 0;
-  */
-
   // left hand
   if (flipY) jmState.leftHand.y = h - jmlib_rhand->gy;
   else       jmState.leftHand.y = jmlib_rhand->gy;
@@ -112,17 +101,45 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   jmState.rightHand.x = (jmlib_lhand->gx - half_w) * scalingFactorX + ballRadius;
 
 
-  jmState.ballCount = jm->numBalls();
+  jmState.objectCount = jm->numBalls();
   for(int i = jm->numBalls() - 1; i >= 0; i--) {
-    if (flipY) jmState.balls[i].y = h - jm->b[i].gy;
-    else       jmState.balls[i].y = jm->b[i].gy;
+    if (flipY) jmState.objects[i].y = h - jm->b[i].gy;
+    else       jmState.objects[i].y = jm->b[i].gy;
 
-    //jmState.balls[i].y = (jmState.balls[i].y - half_h) * scalingFactor + 1.0f;
-    jmState.balls[i].y = ((jmState.balls[i].y - half_h) + h*0.2f) * scalingFactorY;
-	  jmState.balls[i].x = (jm->b[i].gx - half_w) * scalingFactorX + ballRadius;
-	  jmState.balls[i].z = 0.0f;
+    jmState.objects[i].y = ((jmState.objects[i].y - half_h) + h*0.2f) * scalingFactorY;
+	  jmState.objects[i].x = (jm->b[i].gx - half_w) * scalingFactorX + ballRadius;
+    
+    switch (objectType) {
+      case OBJECT_CLUB:
+        jmState.objectTypes[i] = OBJECT_CLUB;
+        jmState.objects[i].z = 1.2f;
+        jmState.objects[i].Elev = jm->b[i].getSpin(1) * 180 / PI;
+        jmState.objects[i].Rot = 0.0f;
+        break;
+      case OBJECT_RING:
+        //fixme: club does not match hands when held
+        jmState.objectTypes[i] = OBJECT_RING;
+        jmState.objects[i].z = 1.2f;
+        jmState.objects[i].Elev = 0.0f;
+        jmState.objects[i].Rot = 0.0f;
+        break;
+      default: // ball
+        jmState.objectTypes[i] = OBJECT_BALL;
+        jmState.objects[i].z = 0.0f;
+        jmState.objects[i].Elev = (jm->b[i].getSpin(1) * 180 / PI) / 4;
+        jmState.objects[i].Rot = 0.0f;
+    }
+    
+    //fixme: allow switching between different objects
+    // - random
+    // - specified in setPattern
+    // - specified in the pattern library
+    //jmState.objects[i].Rot = jmState.objects[i].Elev / 4; // ball spin
+    //jmState.objectTypes[i] = OBJECT_BALL;
+    //jmState.objectTypes[i] = OBJECT_CLUB;
+    //jmState.objects[i].z = 1.2f;
+    //jmState.objectTypes[i] = OBJECT_RING;
   }
-  
   //jmState.TranslateAngle = 0.0f;
   //jmState.SpinAngle = 0.0f;
   JuggleSaver* jsp = static_cast<JuggleSaver*>(js);
@@ -171,8 +188,19 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
   // check if we have a valid jugglesaver pattern
   // valid js pattern and not valid site => switch to js
   //fixme: implement
+  
+  // quick dirty trick just to allow some switching
+  for (int i = 0; i < strlen(site); i++) {
+    if (site[i] == '@') {
+      active = js;
+      break;
+    }
+  }
 
   if (active->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
+    objectType = (random() % 3);
+    SetCameraExtraZoom(0.25f);
+  
     // Set the JuggleSaver pattern to the highest throw in the site
     // to assure that the camera is set in a reasonable position
     JML_CHAR js_site[2];
@@ -181,9 +209,13 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
     
     // fixme: should probably make a more intelligent camera placement 
     js->setPattern(js_site);
+    jm->setPattern(name, site, hr, dr);
   }
-  
-  active->setPattern(name, site, hr, dr);
+  else {
+    SetCameraExtraZoom(0);
+    js->setPattern(site);
+    jm->setPattern(name, site, hr, dr); //fixme: what about js patterns that don't work in jm
+  }
   
  // fixme:
  // - scan site:
@@ -261,11 +293,13 @@ JML_INT32 JMLibWrapper::numBalls(void) {
 }
 
 void JMLibWrapper::startJuggle(void) {
-  active->startJuggle();
+  jm->startJuggle();
+  js->startJuggle();
 }
 
 void JMLibWrapper::stopJuggle(void) {
-  active->stopJuggle();
+  jm->stopJuggle();
+  js->startJuggle();
 }
 
 void JMLibWrapper::togglePause(void) {
@@ -283,12 +317,20 @@ JML_INT32 JMLibWrapper::getStatus(void) {
 }
 
 void JMLibWrapper::render() {
+  if (firstFrame) {
+    firstFrame = false;
+    active = jm;
+    return;
+  }
+
+
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER) {
     active->render();
   }
   else {
     doCoordTransform(true, true);
     JMDrawGLScene(&jmState);
+    //js->render();
     
     //fixme render JuggleMaster pattern using JuggleSaver engine
     //fixme: should also support flat JuggleMaster rendering
@@ -297,11 +339,15 @@ void JMLibWrapper::render() {
 
 JML_INT32 JMLibWrapper::doJuggle(void) {
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER) {
+    FramesSinceSync = 0;
     active->doJuggle();
     return 0;
   }
 
+  // fixme: doJuggle should be changed to use frame rate counter
+  // also, all three systems should be unified
   jm->doJuggle();
+  //js->doJuggle();
 
   /*
   if (!is_juggling) {
@@ -343,11 +389,8 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
   }
     
   FramesSinceSync++;
-  //DrawGLScene(&state);
-  //JMDrawGLScene(&state);
     
   if (CurrentFrameRate > 1.0e-6f) {
-    //jmState.Time += JuggleSpeed / CurrentFrameRate;
     jmState.SpinAngle += SpinSpeed / CurrentFrameRate;
     jmState.TranslateAngle += TranslateSpeed / CurrentFrameRate;
   }

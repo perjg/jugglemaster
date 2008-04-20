@@ -152,9 +152,48 @@ struct ball {
   JML_INT32 st;       // object status (OBJECT_HAND etc.)
   JML_FLOAT t;        // for spin calculation
 
+  JML_FLOAT prevSpin;
+
+  ball() : prevSpin(0.0f) {}
+
+  //fixme: when holding, gradually reduce the spin towards 0
   float getSpin(int spins) {
-    if (isHolding()) return HALF_PI;
-    else return (HALF_PI + (float)t * PI) * ((spins * bh - 1) / 2);
+    float spin;
+
+    if (isHolding()) {
+      return prevSpin;
+    }
+    else {
+      spin = (PI + (float)t * PI) * ((spins * bh - 1) / 2);
+
+      if (bh == -2) spin = 0; // 2x throws in sync patterns have no spin
+
+      prevSpin = spin;
+    }
+    
+    return spin;
+    
+    /*
+    static float prevSpin = 0.0f;
+    float spin = 0.0f;
+    
+    // when holding, gradually reduce the spin towards 0
+    if (isHolding()) {
+      if (prevSpin > 0.0f)
+        prevSpin -= PI;
+      if (prevSpin < 0) prevSpin = 0;
+      spin = prevSpin;
+    }
+    else {
+      spin = (HALF_PI + (float)t * PI) * ((spins * bh - 1) / 2);
+      prevSpin = spin;
+    }
+    
+    return spin;
+    */
+  
+    //if (isHolding()) return 0;
+    //else return (HALF_PI + (float)t * PI) * ((spins * bh - 1) / 2);
   }
 
   JML_BOOL isHolding() {

@@ -247,8 +247,9 @@ typedef struct
     float TranslateAngle;
     float SpinAngle;
     int DLStart; // display list
-    int ballCount;
-    POS balls[630];
+    int objectCount;
+    POS objects[630];
+    int objectTypes[630]; // 0 - ball, 1 - ring, 2 - club
     POS leftHand;
     POS rightHand;
 } JUGGLEMASTER_RENDER_STATE;
@@ -272,6 +273,8 @@ void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState);
 void SetPattern(RENDER_STATE* pState, char* pattern);
 void UpdatePattern(RENDER_STATE* pState, int MinBalls, int MaxBalls, int MinHeightInc, int MaxHeightInc);
 
+// JuggleMaster need extra zoom for the camera
+void SetCameraExtraZoom(float f);
 
 #ifdef __cplusplus
 }

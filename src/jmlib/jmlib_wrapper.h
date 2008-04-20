@@ -68,7 +68,10 @@ private:
 
   JML_CHAR getHighestThrow(JML_CHAR* site, bool is_sss);
   void doCoordTransform(bool flipY = true, bool centerOrigin = false);
+  
+  int objectType;
 
+  bool firstFrame;
 public:
   void initialize();
   void shutdown();

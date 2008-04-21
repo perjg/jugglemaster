@@ -32,26 +32,6 @@ private:
  
   // OpenGL coordinates for JuggleMaster
   JUGGLEMASTER_RENDER_STATE jmState;
-  
-  struct GLBall {
-    float gx, gy, gz;
-  };
-
-  struct GLBody {
-    float rarm_x[6], rarm_y[6], rarm_z[6];     // coordinates of the right arm
-    float larm_x[6], larm_y[6], larm_z[6];     // coordinates of the left arm
-    float head_x, head_y, head_z, head_radius; // coordinates of the head
-  };
-
-  struct GLHand {
-    JML_INT32 rx[10], ry[10]; // polygon for the right hand
-    JML_INT32 lx[10], ly[10]; // polygon for the left hand
-  };
-
-  struct GLBody ap;      // body
-  struct GLBall b[BMAX]; // balls
-  struct GLBall rhand,lhand;
-  struct GLHand handpoly;
 
   float ballRadius;
   float zoomFactorX, zoomFactorY;
@@ -70,7 +50,6 @@ private:
   void doCoordTransform(bool flipY = true, bool centerOrigin = false);
   
   int objectType;
-
   bool firstFrame;
 public:
   void initialize();
@@ -85,6 +64,7 @@ public:
 
   virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
   virtual JML_BOOL setPattern(JML_CHAR* site) { return setPattern(site, site); }
+  // fixme: Add a JuggleSaver style to force a pattern to juggle in JuggleSaver mode
   virtual JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0);
   virtual JML_BOOL setStyle(JML_CHAR* name);
   virtual JML_CHAR **getStyles(void);

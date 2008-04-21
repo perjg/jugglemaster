@@ -75,54 +75,11 @@ JML_BOOL JuggleSaver::applyPattern() {
 JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
   if (name == NULL || site == NULL) return false;
 
-  /* fixme
-  if (strlen(site) > JML_MAX_SITELEN) {
-    error("Siteswap too long");
+  if (!JSValidator::validateJSPattern(site)) {
+    error("Invalid pattern");
     return false;
   }
   
-  if (strlen(name) > JML_MAX_NAMELEN) {
-    error("Pattern name too long");
-    return false;    
-  }
-  */
-  
-  // fixme:
-  // JuggleSaver supports:
-  //  * vanilla siteswap
-  //  * an optional c, b or r after the site to control the type of object
-  //  * a fully specified pattern
-  
-  /*
-  bool vss = JMSiteValidator::validateVSS(site);
-  bool mss = JMSiteValidator::isMSS(site);
-  bool sss = JMSiteValidator::validateSSS(site);
-  
-  if (mss) {
-    error("Multiplex siteswaps are not supported");
-    return false;
-  }
-
-  if (sss) {
-    error("Synchronous siteswaps are not supported");
-    return false;
-  }
-  */
-  
-  /*
-  // Check for valid siteswap
-  if (!JMSiteValidator::validateSite(site)) {
-    error("Invalid siteswap");
-    return false;
-  }
-  
-  // JuggleMaster only supports Vanilla Siteswap
-  if (!JMSiteValidator::validateVSS(site)) {
-    error("Invalid siteswap");
-    return false;
-  }
-  */
-
   if (pattname != NULL) { delete pattname; }
   pattname = new JML_CHAR[strlen(site)+1];
   strcpy(pattname, name);

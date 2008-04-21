@@ -1,7 +1,7 @@
 /*
  * JMLib - Portable JuggleMaster Library
  * Version 2.1
- * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
+ * (C) Per Johan Groland 2000-2008, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
@@ -21,8 +21,8 @@
 #include <sys/time.h>
 #define GETTIMEOFDAY_TWO_ARGS
 
-JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400),
-  JuggleSpeed(2.2), TranslateSpeed(0.0), SpinSpeed(/*20.0*/40.0f), objectType(OBJECT_BALL)
+JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), 
+  JuggleSpeed(2.2), TranslateSpeed(0.0), SpinSpeed(20.0f), objectType(OBJECT_BALL)
 {
   jm = JMLib::alloc_JuggleMaster();
   js = JMLib::alloc_JuggleSaver();
@@ -93,13 +93,14 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   jmState.leftHand.y = ((jmState.leftHand.y - half_h) + h*0.2f) * scalingFactorY;
   jmState.leftHand.x = (jmlib_rhand->gx - half_w) * scalingFactorX + ballRadius;
 
+  // right hand
   if (flipY) jmState.rightHand.y = h - jmlib_lhand->gy;
   else       jmState.rightHand.y = jmlib_lhand->gy;
 
   jmState.rightHand.y = ((jmState.rightHand.y - half_h) + h*0.2f) * scalingFactorY;
   jmState.rightHand.x = (jmlib_lhand->gx - half_w) * scalingFactorX + ballRadius;
 
-
+  // balls
   jmState.objectCount = jm->numBalls();
   for(int i = jm->numBalls() - 1; i >= 0; i--) {
     if (flipY) jmState.objects[i].y = h - jm->b[i].gy;
@@ -130,7 +131,7 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
     }
   }
 
-  // hack: retrieve display list
+  // hack: need display list
   JuggleSaver* jsp = static_cast<JuggleSaver*>(js);
   jmState.DLStart = jsp->state.DLStart;
 }
@@ -179,15 +180,11 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER && (mss || sss)) {
     active = jm;
   }
-  // prefer JuggleMaster for vss
-  else if (vss) {
+  // use JuggleMaster for any valid site
+  else if (vss || mss || sss) {
     active = jm;
   }
   // not a valid normal site, may still be a valid JuggleSaver pattern
-  // either of the form: 5c3c5r (vanilla site with 
-  // check if we have a valid jugglesaver pattern
-  // valid js pattern and not valid site => switch to js
-  //fixme: implement
   else {
     bool js_valid = JSValidator::validateJSPattern(site);
     
@@ -198,8 +195,8 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
     
     active = js;
   }
-    
-
+  
+  
   if (active->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
     // Set the JuggleSaver pattern to the highest throw in the site
     // to assure that the camera is set in a reasonable position
@@ -209,9 +206,10 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
 
     //fixme: proper randomness
     objectType = (random() % 3) + 1;
-    objectType = OBJECT_RING;
     
-    // fixme: low patterns should cause the camera to go slightly lower
+    // tune camera placement
+    // fixme: not quite there yet... should also tune based on window size and aspect ratio
+    // also consider making a special camera placement routine for JuggleMaster patterns
     if (js_site[0] >= '0' && js_site[0] <= '9')
       SetCameraExtraZoom(0.3f);
     else if (js_site[0] >= '6' && js_site[0] <= '9')
@@ -221,70 +219,43 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
     else
       SetCameraExtraZoom(0.15f);
       
-    
-    // fixme: should probably make a more intelligent camera placement 
     js->setPattern(js_site);
     jm->setPattern(name, site, hr, dr);
   }
-  else { //JuggleSaver
+  else { // JuggleSaver
     SetCameraExtraZoom(0);
     js->setPattern(site);
     
     char* s = GetCurrentSite();
-    jm->setPattern(name, s, hr, dr); //fixme: what about js patterns that don't work in jm
+    jm->setPattern(s);
   }
   
   return true;
-  
- // fixme:
- // - scan site:
- //   Vanilla siteswap: use currently active engine -or- JuggleMaster
-//if "prefer JM engine" is selected
- //   Sync/Multi siteswap: JuggleMaster only
- //   JuggleSaver pattern: JuggleSaver only
- //   Siteswap with number of balls higher than JuggleSaver max:
- //   JuggleMaster only
- //
- //
- // also consider:
- //  - Vanilla siteswap to JuggleSaver should add b, c or r after name
- //    (how about vanilla siteswaps that contain b, c or r?)
- //  - JuggleMaster patterns that use the JuggleSaver rendering
- //    engine, should have some way
- //    of signalling what kind of objects to use (ball, ring, club)
- //  -
- //
 }
 
-// fixme: only JuggleMaster cares about styles, in JuggleSaver, style
-// is embedded into the pattern
-// see if calling like this has any negative implication (e.g. when switching)
-// perhaps all calls here should always call both setStyle (same for
-// setPattern when compatible)
+// Only JuggleMaster cares about styles
 JML_BOOL JMLibWrapper::setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset) {
-  active->setStyle(name, length, data, offset);
+  jm->setStyle(name, length, data, offset);
 }
 
-//fixme: Built-in styles should probably be supported in JuggleSaver as well
-// e.g. add a default styling for Normal, Reverse, Mills Mess etc.
+// Only JuggleMaster cares about styles
 JML_BOOL JMLibWrapper::setStyle(JML_CHAR* name) {
-  active->setStyle(name);
+  jm->setStyle(name);
 }
 
-//fixme: This is probably used inside UI code, so returning NULL might
-// have implications
+// Only JuggleMaster cares about styles
 JML_CHAR** JMLibWrapper::getStyles(void) {
-  return active->getStyles();
+  return jm->getStyles();
 }
 
+// Only JuggleMaster cares about styles
 JML_INT32 JMLibWrapper::numStyles() {
-  return active->numStyles();
+  return jm->numStyles();
 }
 
 void JMLibWrapper::setPatternDefault(void) {
   jm->setPatternDefault();
   js->setPatternDefault();
-  //active->setPatternDefault();
 }
 
 void JMLibWrapper::setStyleDefault(void) {
@@ -349,13 +320,13 @@ void JMLibWrapper::render() {
   else {
     doCoordTransform(true, true);
     JMDrawGLScene(&jmState);
-    //js->render();
     
-    //fixme render JuggleMaster pattern using JuggleSaver engine
     //fixme: should also support flat JuggleMaster rendering
   }
 }
 
+//fixme: currently JuggleSaver has its own frames counter, JuggleMaster has none.
+// these should all be unified
 JML_INT32 JMLibWrapper::doJuggle(void) {
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER) {
     FramesSinceSync = 0;
@@ -364,16 +335,8 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
   }
 
   // fixme: doJuggle should be changed to use frame rate counter
-  // also, all three systems should be unified
   jm->doJuggle();
   //js->doJuggle();
-
-  /*
-  if (!is_juggling) {
-    FramesSinceSync = 0;
-    return 0;
-  }
-  */
 
   /* While drawing, keep track of the rendering speed so we can adjust the
   * animation speed so things appear consistent.  The basis of the this
@@ -410,8 +373,10 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
   FramesSinceSync++;
     
   if (CurrentFrameRate > 1.0e-6f) {
-    jmState.SpinAngle += SpinSpeed / CurrentFrameRate;
-    jmState.TranslateAngle += TranslateSpeed / CurrentFrameRate;
+    if (jm->getStatus() == ST_JUGGLE) {
+      jmState.SpinAngle += SpinSpeed / CurrentFrameRate;
+      jmState.TranslateAngle += TranslateSpeed / CurrentFrameRate;
+    }
   }
 }
 
@@ -437,8 +402,9 @@ JML_CHAR* JMLibWrapper::getPattName(void) {
  return active->getPattName();
 }
 
+// Only JuggleMaster cares about styles
 JML_CHAR* JMLibWrapper::getStyle(void) {
- return active->getStyle();
+ return jm->getStyle();
 }
 
 JML_INT32 JMLibWrapper::getImageWidth() {

@@ -56,8 +56,8 @@ public:
 
   JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
   JML_BOOL setPattern(JML_CHAR* site) { return setPattern(site, site); }
-  JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0) {}
-  JML_BOOL setStyle(JML_CHAR* name) {}
+  JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0) { return TRUE; }
+  JML_BOOL setStyle(JML_CHAR* name) { return TRUE; }
   JML_CHAR **getStyles(void) { return NULL; }
   JML_INT32 numStyles() { return 0; }
   void setPatternDefault(void);

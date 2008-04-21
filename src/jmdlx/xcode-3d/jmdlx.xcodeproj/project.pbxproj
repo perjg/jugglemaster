@@ -73,7 +73,6 @@
 		CB6ABB4C0DB255A9000FD76F /* jmlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib.cpp; path = ../../jmlib/jmlib.cpp; sourceTree = SOURCE_ROOT; };
 		CB6ABB4D0DB255A9000FD76F /* jmlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib.h; path = ../../jmlib/jmlib.h; sourceTree = SOURCE_ROOT; };
 		CB6ABB4E0DB255A9000FD76F /* jmlib_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_types.h; path = ../../jmlib/jmlib_types.h; sourceTree = SOURCE_ROOT; };
-		CB6ABB4F0DB255A9000FD76F /* juggler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = juggler.h; path = ../../jmlib/juggler.h; sourceTree = SOURCE_ROOT; };
 		CB6ABB500DB255A9000FD76F /* patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = patterns.cpp; path = ../../jmlib/patterns.cpp; sourceTree = SOURCE_ROOT; };
 		CB6ABB510DB255A9000FD76F /* patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = patterns.h; path = ../../jmlib/patterns.h; sourceTree = SOURCE_ROOT; };
 		CB6ABB520DB255A9000FD76F /* prefs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = prefs.cpp; path = ../../jmlib/prefs.cpp; sourceTree = SOURCE_ROOT; };
@@ -178,7 +177,6 @@
 				CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */,
 				CB398B0A0DB64335004DBEAC /* jmlib_wrapper.h */,
 				CB6ABB4E0DB255A9000FD76F /* jmlib_types.h */,
-				CB6ABB4F0DB255A9000FD76F /* juggler.h */,
 				CB6ABB500DB255A9000FD76F /* patterns.cpp */,
 				CB6ABB510DB255A9000FD76F /* patterns.h */,
 				CB6ABB520DB255A9000FD76F /* prefs.cpp */,

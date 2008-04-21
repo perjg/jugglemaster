@@ -1,5 +1,7 @@
-/* JMConterller */
+/* JMController */
 
+//#import "JMView.h"
+#import "JMOpenGLView.h"
 #import <Cocoa/Cocoa.h>
 #import <QuickTime/QuickTime.h>
 #import <QTKit/QTKit.h>
@@ -20,7 +22,7 @@ typedef enum
 
 @interface JMController : NSObject
 {
-	IBOutlet JMView *view;
+	IBOutlet JMOpenGLView *view;
 	IBOutlet NSImageView *errorReporter;
 	IBOutlet NSMatrix *patternStyleButtons;
 	IBOutlet NSPanel *inspectorPanel;

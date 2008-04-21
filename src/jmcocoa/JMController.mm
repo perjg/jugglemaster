@@ -1,5 +1,5 @@
 #import "QTMovieExtensions.h"
-#import "JMView.h"
+#import "JMOpenGLView.h"
 #include "jmlib.h"
 #include "validator.h"
 #import "JMController.h"
@@ -126,7 +126,7 @@ static JML_CHAR patterns[7][12]
 	{
 		[recordingMenuItem setTitle:@"Stop Movie Capture"];
 		//movie = [[QTMovie qtMovieWithDataHandler:&mDataHandlerRef] retain];
-		movie = [[QTMovie movieForAddingImagesWithFirstFrame:[view frameGrab]] retain];
+		//movie = [[QTMovie movieForAddingImagesWithFirstFrame:[view frameGrab]] retain];
 	}
 	else
 	{
@@ -328,10 +328,12 @@ static JML_CHAR patterns[7][12]
 {
 	jm->doJuggle();
 	[view setNeedsDisplay:YES];
+  /*
 	if (isRecording)
 	{
 		[movie addImageToMovie:[view frameGrab]];
 	}
+  */
 }
 
 - (BOOL)shouldShowPattern

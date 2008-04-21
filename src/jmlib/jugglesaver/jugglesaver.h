@@ -15,6 +15,11 @@
 #include <OpenGL/glu.h>
 #include <OpenGL/glext.h>
 
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+#include <time.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

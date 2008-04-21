@@ -258,6 +258,7 @@ typedef struct
 void GetHandPosition(PATTERN_INFO* pPattern, int RightHand, float Time, POS* pPos);
 void GetObjectPosition(PATTERN_INFO* pPattern, int Obj, float Time, float HandleLen, POS* pPos);
 void ReleasePatternInfo(PATTERN_INFO* pPattern);
+char* GetCurrentSite();
 EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen);
 void InitPatternInfo(PATTERN_INFO* pPattern, const int* Site, const EXT_SITE_INFO* pExtInfo, int Len);
 int* Generate(int Len, int MaxWeight, int ObjCount);

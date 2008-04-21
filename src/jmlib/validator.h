@@ -1,8 +1,6 @@
-// 	$Id$	 
-
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
+ * Version 2.1
  * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
@@ -53,8 +51,6 @@ class JMSiteValidator {
   static bool validateMSS(JML_CHAR* site);
   // validate a siteswap of any type
   static bool validateSite(JML_CHAR* site);
-  // validate a JuggleSaver pattern
-  static bool validateJSPattern(JML_CHAR* patt);
 };
 
 #endif

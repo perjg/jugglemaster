@@ -49,6 +49,7 @@
 #include "jmlib_types.h"
 #include "util.h"
 #include "validator.h"
+#include "jugglesaver/js_validator.h"
 
 // PPC and Palm OS have custom pattern loading
 #ifndef _WIN32_WCE

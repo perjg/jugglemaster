@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		CB398D690DB787A6004DBEAC /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */; };
-		CB3990A60DB8EE91004DBEAC /* render_jm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3990A50DB8EE91004DBEAC /* render_jm.cpp */; };
 		CB6ABB420DB2557B000FD76F /* advsite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB320DB2557B000FD76F /* advsite.cpp */; };
 		CB6ABB430DB2557B000FD76F /* choosepatt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB340DB2557B000FD76F /* choosepatt.cpp */; };
 		CB6ABB440DB2557B000FD76F /* choosestyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB360DB2557B000FD76F /* choosestyle.cpp */; };
@@ -42,6 +41,7 @@
 		CB6ABB9D0DB2569F000FD76F /* libwxtiff-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB820DB2569E000FD76F /* libwxtiff-2.8.a */; };
 		CB6ABBC80DB26137000FD76F /* libwxpng-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABBC70DB26137000FD76F /* libwxpng-2.8.a */; };
 		CB6ABBCB0DB26998000FD76F /* libwxzlib-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABBCA0DB26998000FD76F /* libwxzlib-2.8.a */; };
+		CBA2DFF80DBBB26F00618F0B /* js_validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2DFF60DBBB26F00618F0B /* js_validator.cpp */; };
 		CBEAE29A0DB37E1E0019833A /* opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE2980DB37E1E0019833A /* opengl.cpp */; };
 		CBEAE2A90DB37F5A0019833A /* opengl_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE2A80DB37F5A0019833A /* opengl_renderer.cpp */; };
 		CBEAE3040DB39ACD0019833A /* jmlib_jsaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE3020DB39ACD0019833A /* jmlib_jsaver.cpp */; };
@@ -52,7 +52,6 @@
 /* Begin PBXFileReference section */
 		CB398B0A0DB64335004DBEAC /* jmlib_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_wrapper.h; path = ../../jmlib/jmlib_wrapper.h; sourceTree = SOURCE_ROOT; };
 		CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_wrapper.cpp; path = ../../jmlib/jmlib_wrapper.cpp; sourceTree = SOURCE_ROOT; };
-		CB3990A50DB8EE91004DBEAC /* render_jm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render_jm.cpp; path = ../../jmlib/jugglesaver/render_jm.cpp; sourceTree = SOURCE_ROOT; };
 		CB3991060DB9A4CF004DBEAC /* opengl_renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opengl_renderer.h; path = ../../jmgfx/opengl_renderer.h; sourceTree = SOURCE_ROOT; };
 		CB3991AD0DB9B026004DBEAC /* jmlib_jugglemaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jugglemaster.h; path = ../../jmlib/jmlib_jugglemaster.h; sourceTree = SOURCE_ROOT; };
 		CB6ABB2B0DB2551C000FD76F /* jmdlx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jmdlx.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +105,8 @@
 		CB6ABBC70DB26137000FD76F /* libwxpng-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxpng-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwxpng-2.8.a"; sourceTree = SOURCE_ROOT; };
 		CB6ABBCA0DB26998000FD76F /* libwxzlib-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxzlib-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwxzlib-2.8.a"; sourceTree = SOURCE_ROOT; };
 		CB97E3B10DB5E1FC00BD2DBA /* jmlib_if.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_if.h; path = ../../jmlib/jmlib_if.h; sourceTree = SOURCE_ROOT; };
+		CBA2DFF60DBBB26F00618F0B /* js_validator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = js_validator.cpp; path = ../../jmlib/jugglesaver/js_validator.cpp; sourceTree = SOURCE_ROOT; };
+		CBA2DFF70DBBB26F00618F0B /* js_validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_validator.h; path = ../../jmlib/jugglesaver/js_validator.h; sourceTree = SOURCE_ROOT; };
 		CBEAE2980DB37E1E0019833A /* opengl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = opengl.cpp; path = ../opengl.cpp; sourceTree = SOURCE_ROOT; };
 		CBEAE2990DB37E1E0019833A /* opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opengl.h; path = ../opengl.h; sourceTree = SOURCE_ROOT; };
 		CBEAE2A80DB37F5A0019833A /* opengl_renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = opengl_renderer.cpp; path = ../../jmgfx/opengl_renderer.cpp; sourceTree = SOURCE_ROOT; };
@@ -247,7 +248,8 @@
 		CBEAE2D60DB38E390019833A /* jugglesaver */ = {
 			isa = PBXGroup;
 			children = (
-				CB3990A50DB8EE91004DBEAC /* render_jm.cpp */,
+				CBA2DFF60DBBB26F00618F0B /* js_validator.cpp */,
+				CBA2DFF70DBBB26F00618F0B /* js_validator.h */,
 				CBEAE3150DB3A8D10019833A /* engine.cpp */,
 				CBEAE3160DB3A8D10019833A /* render.cpp */,
 				CBEAE3020DB39ACD0019833A /* jmlib_jsaver.cpp */,
@@ -329,7 +331,7 @@
 				CBEAE3170DB3A8D10019833A /* engine.cpp in Sources */,
 				CBEAE3180DB3A8D10019833A /* render.cpp in Sources */,
 				CB398D690DB787A6004DBEAC /* jmlib_wrapper.cpp in Sources */,
-				CB3990A60DB8EE91004DBEAC /* render_jm.cpp in Sources */,
+				CBA2DFF80DBBB26F00618F0B /* js_validator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

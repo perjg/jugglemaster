@@ -429,26 +429,6 @@ bool JMSiteValidator::transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS) {
   return true;
 }
 
-/* examples of JuggleSaver patterns
- *
- * 5c, 5c3b4r - vanilla siteswap with object designation
- * 9b@(-2.5,0,-70,40)>(2.5,0,70)*2 1b@(1,0,10)>(-1,0,-10)
- *
- * Each element:
- * throw
- * b|c|r|<null>
- * @(x,y,z,v)>(x,y,z,v)[*n]
- *
- * Parses a well-formed pattern
- * EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen)
- *
- * Need: check validitiy
- */
-bool JMSiteValidator::validateJSPattern(JML_CHAR* patt) {
-
-  return true;
-}
-
 #ifdef VALIDATOR_STANDALONE
 void foo(char* site) {
   printf("Site '%s' is ", site);

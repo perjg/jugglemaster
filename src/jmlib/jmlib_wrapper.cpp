@@ -21,7 +21,7 @@
 #include <sys/time.h>
 #define GETTIMEOFDAY_TWO_ARGS
 
-JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400) ,
+JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400),
   JuggleSpeed(2.2), TranslateSpeed(0.0), SpinSpeed(/*20.0*/40.0f), objectType(OBJECT_BALL)
 {
   jm = JMLib::alloc_JuggleMaster();
@@ -75,7 +75,6 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   float currentZ = 0.0f;
 
   if (centerOrigin) {
-    //half_h = h / 2;
     half_h = h / 4;
     half_w = w / 2;
   }
@@ -118,7 +117,6 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
         jmState.objects[i].Rot = 0.0f;
         break;
       case OBJECT_RING:
-        //fixme: club does not match hands when held
         jmState.objectTypes[i] = OBJECT_RING;
         jmState.objects[i].z = 1.0f;
         jmState.objects[i].Elev = 0.0f;
@@ -191,6 +189,13 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
   // valid js pattern and not valid site => switch to js
   //fixme: implement
   else {
+    bool js_valid = JSValidator::validateJSPattern(site);
+    
+    if (!js_valid) {
+      error("Invalid pattern");
+      return false;
+    }
+    
     active = js;
   }
     
@@ -221,11 +226,15 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
     js->setPattern(js_site);
     jm->setPattern(name, site, hr, dr);
   }
-  else {
+  else { //JuggleSaver
     SetCameraExtraZoom(0);
     js->setPattern(site);
-    jm->setPattern(name, site, hr, dr); //fixme: what about js patterns that don't work in jm
+    
+    char* s = GetCurrentSite();
+    jm->setPattern(name, s, hr, dr); //fixme: what about js patterns that don't work in jm
   }
+  
+  return true;
   
  // fixme:
  // - scan site:

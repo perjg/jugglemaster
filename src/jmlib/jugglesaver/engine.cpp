@@ -794,9 +794,13 @@ int* Generate(int Len, int MaxWeight, int ObjCount)
  * need to be beefed up. */
 
 /* The position text looks something like (x,y,z[,rot[,elev]])
- * where the stuff in square brackets is optional */
-
-unsigned char ParsePositionText(const char** ppch, POS* pPos)
+ * where the stuff in square brackets is optional
+ *
+ * There are two types:
+ *  (x,y[,rot[,elev]]) for throw and catch position
+ *  (x,y) for snatch
+ */
+unsigned char ParsePositionText(const char** ppch, POS* pPos, int min, int max)
 {
     const char* pch = *ppch;
     unsigned char OK;
@@ -804,6 +808,7 @@ unsigned char ParsePositionText(const char** ppch, POS* pPos)
     char* pOut;
     float* Nums[4];
     int i;
+    int counter = 0;
     
     Nums[0] = &pPos->x;
     Nums[1] = &pPos->y;
@@ -829,7 +834,10 @@ unsigned char ParsePositionText(const char** ppch, POS* pPos)
         *pOut = '\0';
 
         if (szTemp[0] != '\0')
+        {
             *Nums[i] = (float) atof(szTemp);
+            counter++;
+        }
 
         while (*pch == ' ')
             pch++;
@@ -857,12 +865,26 @@ unsigned char ParsePositionText(const char** ppch, POS* pPos)
 
     *ppch = pch;
 
+    if (counter < min || counter > max) OK = 0;
+
     return OK;
 }
 
+/* helper macros for pattern parsing */
+#define IS_VALID_THROW(t) ( ((t) >= '0' && (t) <= '9') || ((t) >= 'a' && (t) <= 'z') || ((t) >= 'A' && (t) <= 'Z') )
+
+/* store the current siteswap being parsed with all style info stripped */
+static char* vss = NULL;
+
+char* GetCurrentSite() { return strdup(vss); }
 
 EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen)
 {
+    if (vss != NULL) free(vss);
+    vss = (char*)malloc (strlen(Site)+1 * sizeof(char));
+    memset(vss, 0, strlen(Site)+1);
+    char* cur_throw = vss;
+
     const char* pch = Site;
     int Len = 0;
     EXT_SITE_INFO* pInfo = NULL;
@@ -877,8 +899,18 @@ EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen)
 
         OK = *pch != '\0';
 
-        if (OK)
-            Info.Weight = *pch >= 'A' ? *pch + 10 - 'A' : *pch - '0';
+        /* parse throw */
+        if (OK) {
+          if (IS_VALID_THROW(*pch))
+          {
+              *cur_throw++ = *pch;
+              Info.Weight = *pch >= 'A' ? *pch + 10 - 'A' : *pch - '0';
+          }
+          else
+          {
+              OK = 0;
+          }
+        }
 
         /* parse object type */
         if (OK)
@@ -908,9 +940,15 @@ EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen)
             }
             else
             {
-                Info.ObjectType = OBJECT_DEFAULT;
+                /* No object found, next item must be either site digit or @ */
+                if (IS_VALID_THROW(*pch) || *pch == '@')
+                    Info.ObjectType = OBJECT_DEFAULT;
+                else if (*pch != NULL)
+                    OK = 0;
             }
         }
+        
+        int HasFromPosition = 0;
 
         /* Parse from position */
         if (OK)
@@ -918,27 +956,39 @@ EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen)
             while (*pch == ' ') pch++;
             if (*pch == '@')
             {
+                HasFromPosition = 1;
                 pch++;
                 GetDefaultFromPosition(Len % 2, Info.Weight, &Info.FromPos);
                 Info.Flags |= HAS_FROM_POS;
-                OK = ParsePositionText(&pch, &Info.FromPos);
+                OK = ParsePositionText(&pch, &Info.FromPos, 2, 4);
             }
         }
 
-        /* Parse to position */
+        /* Parse to position (must be present if there is a from position) */
         if (OK)
         {
             while (*pch == ' ') pch++;
             if (*pch == '>')
             {
-                pch++;
-                GetDefaultToPosition(Len % 2, Info.Weight, &Info.ToPos);
-                Info.Flags |= HAS_TO_POS;
-                OK = ParsePositionText(&pch, &Info.ToPos);
+                if (!HasFromPosition)
+                {
+                    OK = 0;
+                }
+                else
+                {
+                    pch++;
+                    GetDefaultToPosition(Len % 2, Info.Weight, &Info.ToPos);
+                    Info.Flags |= HAS_TO_POS;
+                    OK = ParsePositionText(&pch, &Info.ToPos, 2, 4);
+                }
+            }
+            else if (HasFromPosition)
+            {
+                OK = 0;
             }
         }
 
-        /* Parse snatch */
+        /* Parse snatch (optional) */
         if (OK)
         {
             while (*pch == ' ') pch++;
@@ -947,13 +997,13 @@ EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen)
                 POS Snatch;
                 pch++;
                 Info.Flags |= HAS_SNATCH;
-                OK = ParsePositionText(&pch, &Snatch);
+                OK = ParsePositionText(&pch, &Snatch, 2, 2);
                 Info.SnatchX = Snatch.x;
                 Info.SnatchY = Snatch.y;
             }
         }
 
-        /* Parse Spins */
+        /* Parse Spins (optional) */
         if (OK)
         {
             while (*pch == ' ') pch++;

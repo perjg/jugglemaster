@@ -67,6 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="OPENGL32.LIB GLU32.LIB GLAUX.LIB"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -222,6 +223,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\jmgfx\opengl_renderer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\patternloader.cpp"
 				>
 			</File>
@@ -317,6 +322,10 @@
 			</File>
 			<File
 				RelativePath="..\src\MFCUtil.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\jmgfx\opengl_renderer.h"
 				>
 			</File>
 			<File

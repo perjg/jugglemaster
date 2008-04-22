@@ -685,7 +685,7 @@ void InitPatternInfo(PATTERN_INFO* pPattern,
             }
             else
             {
-                pPattern->pObjectInfo[Objects].ObjectType = (1 + random() % 3);
+                pPattern->pObjectInfo[Objects].ObjectType = (1 + rand() % 3);
             }
         }
 
@@ -740,7 +740,7 @@ int* Generate(int Len, int MaxWeight, int ObjCount)
                 Options[nOpts++] = j;
         }
 
-        Used[Options[random() % nOpts]] = -2;
+        Used[Options[rand() % nOpts]] = -2;
         ObjCount--;
     }
     
@@ -767,7 +767,7 @@ int* Generate(int Len, int MaxWeight, int ObjCount)
                     Options[nOpts++] = j;
             }
             
-            w = Options[random() % nOpts];
+            w = Options[rand() % nOpts];
             Weight[i] = w;
             
             /* For starting throws make position available for a throw to land.

@@ -18,11 +18,11 @@
 
 #include "jmlib.h"
 #include "jugglesaver/jugglesaver.h"
-#include <sys/time.h>
-#define GETTIMEOFDAY_TWO_ARGS
+#include <time.h>
+//#include <sys/time.h>
 
-JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), 
-  JuggleSpeed(2.2), TranslateSpeed(0.0), SpinSpeed(20.0f), objectType(OBJECT_BALL)
+JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400),
+  JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL)
 {
   jm = JMLib::alloc_JuggleMaster();
   js = JMLib::alloc_JuggleSaver();
@@ -87,15 +87,14 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   ballRadius = jm->getBallRadius() * scalingFactorX;
 
   // left hand
-  if (flipY) jmState.leftHand.y = h - jmlib_rhand->gy;
-  else       jmState.leftHand.y = jmlib_rhand->gy;
+  if (flipY) jmState.leftHand.y = (float)(h - jmlib_rhand->gy);
+  else       jmState.leftHand.y = (float)jmlib_rhand->gy;
 
   jmState.leftHand.y = ((jmState.leftHand.y - half_h) + h*0.2f) * scalingFactorY;
   jmState.leftHand.x = (jmlib_rhand->gx - half_w) * scalingFactorX + ballRadius;
 
-  // right hand
-  if (flipY) jmState.rightHand.y = h - jmlib_lhand->gy;
-  else       jmState.rightHand.y = jmlib_lhand->gy;
+  if (flipY) jmState.rightHand.y = (float)(h - jmlib_lhand->gy);
+  else       jmState.rightHand.y = (float)jmlib_lhand->gy;
 
   jmState.rightHand.y = ((jmState.rightHand.y - half_h) + h*0.2f) * scalingFactorY;
   jmState.rightHand.x = (jmlib_lhand->gx - half_w) * scalingFactorX + ballRadius;
@@ -103,8 +102,8 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   // balls
   jmState.objectCount = jm->numBalls();
   for(int i = jm->numBalls() - 1; i >= 0; i--) {
-    if (flipY) jmState.objects[i].y = h - jm->b[i].gy;
-    else       jmState.objects[i].y = jm->b[i].gy;
+    if (flipY) jmState.objects[i].y = (float)(h - jm->b[i].gy);
+    else       jmState.objects[i].y = (float)jm->b[i].gy;
 
     jmState.objects[i].y = ((jmState.objects[i].y - half_h) + h*0.2f) * scalingFactorY;
 	  jmState.objects[i].x = (jm->b[i].gx - half_w) * scalingFactorX + ballRadius;
@@ -205,7 +204,7 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
     js_site[1] = 0; 
 
     //fixme: proper randomness
-    objectType = (random() % 3) + 1;
+    objectType = (rand() % 3) + 1;
     
     // tune camera placement
     // fixme: not quite there yet... should also tune based on window size and aspect ratio
@@ -235,12 +234,12 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
 
 // Only JuggleMaster cares about styles
 JML_BOOL JMLibWrapper::setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset) {
-  jm->setStyle(name, length, data, offset);
+  return jm->setStyle(name, length, data, offset);
 }
 
 // Only JuggleMaster cares about styles
 JML_BOOL JMLibWrapper::setStyle(JML_CHAR* name) {
-  jm->setStyle(name);
+  return jm->setStyle(name);
 }
 
 // Only JuggleMaster cares about styles
@@ -344,7 +343,7 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
   * so that it reports the initial frame rate earlier (after 0.02 secs
   * instead of 1 sec). */
     
-  if (FramesSinceSync >=  1 * (int) CurrentFrameRate) {
+  if (FramesSinceSync >=  1 * (unsigned int) CurrentFrameRate) {
     struct timeval tvnow;
     unsigned now;
             
@@ -352,7 +351,7 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
       struct timezone tzp;
       gettimeofday(&tvnow, &tzp);
     # else
-            gettimeofday(&tvnow);
+      gettimeofday(&tvnow);
     # endif
         
     now = (unsigned) (tvnow.tv_sec * 1000000 + tvnow.tv_usec);
@@ -378,6 +377,8 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
       jmState.TranslateAngle += TranslateSpeed / CurrentFrameRate;
     }
   }
+
+	return 1;
 }
 
 //fixme: jm should always use default window size
@@ -387,6 +388,7 @@ JML_BOOL JMLibWrapper::setWindowSize(JML_INT32 width, JML_INT32 height) {
 
   //jm->setWindowSize(width, height);
   js->setWindowSize(width, height);
+	return 1;
 }
 
 void JMLibWrapper::setMirror(JML_BOOL mir) {
@@ -419,7 +421,7 @@ void JMLibWrapper::speedUp(void) {}
 void JMLibWrapper::speedDown(void) {}
 void JMLibWrapper::speedReset(void) {}
 void JMLibWrapper::setSpeed(float s) {}
-float JMLibWrapper::speed(void) {}
+float JMLibWrapper::speed(void) { return 1.0f; }
 
 JML_CHAR  JMLibWrapper::getSiteposStart(void) { return active->getSiteposStart(); }
 JML_CHAR  JMLibWrapper::getSiteposStop(void)  { return active->getSiteposStop();  }

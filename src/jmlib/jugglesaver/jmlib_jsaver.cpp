@@ -20,11 +20,10 @@
 // fixme: port dofps
 
 #include "jmlib_jsaver.h"
-#include <sys/time.h>
-#define GETTIMEOFDAY_TWO_ARGS
+#include <time.h>
 
 // Constructor / Destructor
-JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2), TranslateSpeed(0.0), SpinSpeed(20.0),
+JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f),
   initialized(false), is_juggling(false), pattern(NULL), siteswap(NULL), pattname(NULL),
   width_(480), height_(400) {
   // NOTE:
@@ -70,6 +69,7 @@ void JuggleSaver::shutdown() {
 JML_BOOL JuggleSaver::applyPattern() {
   if (siteswap == NULL) setPatternDefault();
   SetPattern(&state, siteswap);
+	return 1;
 }
   
 JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
@@ -96,6 +96,8 @@ JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, J
   
   if (initialized) SetPattern(&state, site);
   //SetPattern(&state, site);
+
+	return 1;
 }
 
 void JuggleSaver::setPatternDefault(void) {
@@ -149,7 +151,7 @@ JML_INT32 JuggleSaver::doJuggle(void) {
   * so that it reports the initial frame rate earlier (after 0.02 secs
   * instead of 1 sec). */
     
-  if (FramesSinceSync >=  1 * (int) CurrentFrameRate) {
+  if (FramesSinceSync >=  1 * (unsigned int) CurrentFrameRate) {
     struct timeval tvnow;
     unsigned now;
             
@@ -187,6 +189,8 @@ JML_INT32 JuggleSaver::doJuggle(void) {
     
   //if (mi->fps_p)
   //    do_fps(mi);
+
+	return 1;
 }
 
 //fixme: this should not call ResizeGL directly
@@ -210,20 +214,20 @@ JML_INT32 JuggleSaver::getImageHeight() {
 // to the internal doJuggle correspond to default speed when
 // JuggleSpeed = 2.2
 void JuggleSaver::speedUp(void) {
-  if (JuggleSpeed <= 10.0) JuggleSpeed++;
+  if (JuggleSpeed <= 10.0f) JuggleSpeed++;
 }
 
 void JuggleSaver::speedDown(void) {
-  if (JuggleSpeed >= 0.1) JuggleSpeed--;
+  if (JuggleSpeed >= 0.1f) JuggleSpeed--;
 }
 
 void JuggleSaver::speedReset(void) {
-  JuggleSpeed = 2.2;
+  JuggleSpeed = 2.2f;
 }
 
 void JuggleSaver::setSpeed(float s) {
-  if (s < 0.1) s= 0.1;
-  if (s > 10.0) s = 10.0;
+  if (s < 0.1) s= 0.1f;
+  if (s > 10.0) s = 10.0f;
   JuggleSpeed = s;
 }
 

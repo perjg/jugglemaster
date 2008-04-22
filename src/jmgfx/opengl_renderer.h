@@ -30,9 +30,20 @@
 #endif
 #endif
 
+#ifdef WIN32
+#ifdef JMWIN
+#include "../jmwin/src/stdafx.h"
+#endif
+#include <gl/gl.h>
+#include <gl/glu.h>
+#include <gl/glaux.h>
+#else
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <OpenGL/glext.h>
+#endif
+
+#include <math.h>
 
 class JMOpenGLRenderer {
 public:

@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "test1.h"
 
 #include "doc.h"
 #include "view_opengl.h"

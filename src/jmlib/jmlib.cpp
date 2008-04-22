@@ -34,6 +34,29 @@ JMLib* JMLib::alloc_JuggleSaver() {
   return new JuggleSaver();
 }
 
+#ifdef _WIN32
+// Wrapper for gettimeofday functionality on windows
+
+//From January 1, 1601 (UTC). to January 1,1970
+#define FACTOR 0x19db1ded53e8000
+
+int gettimeofday(struct timeval *tp) {
+	FILETIME f;
+	ULARGE_INTEGER ifreq;
+	LONGLONG res;
+	GetSystemTimeAsFileTime(&f);
+	ifreq.HighPart = f.dwHighDateTime;
+	ifreq.LowPart = f.dwLowDateTime;
+
+	res = ifreq.QuadPart - FACTOR;
+	tp->tv_sec = (long)((LONGLONG)res/10000000);
+	tp->tv_usec = (long)((LONGLONG)res% 10000000000);
+
+	return 0;
+}
+#else
+#define GETTIMEOFDAY_TWO_ARGS
+#endif
 
 JuggleMaster::JuggleMaster() {
   initialize();

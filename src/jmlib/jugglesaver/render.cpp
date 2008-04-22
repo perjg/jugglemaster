@@ -124,7 +124,7 @@ int InitGLDisplayLists(void);
 
 void InitGLSettings(RENDER_STATE* pState, int WireFrame)
 {
-    srandom(time(NULL));
+    srand((unsigned int)time(NULL));
 
     memset(pState, 0, sizeof(RENDER_STATE));
     
@@ -724,7 +724,7 @@ void DrawGLScene(RENDER_STATE* pState)
 
 int RandInRange(int Min, int Max)
 {
-    return Min + random() % (1 + Max - Min);
+    return Min + rand() % (1 + Max - Min);
 }
 
 
@@ -755,10 +755,10 @@ void UpdatePattern(
     
     pState->pPattern = (PATTERN_INFO*) malloc(sizeof(PATTERN_INFO));
     
-    if ((random() % 3) == 1)
+    if ((rand() % 3) == 1)
     {    
         int ExtSiteLen;
-        int n = random() % (sizeof(PatternText) / sizeof(PatternText[0]));
+        int n = rand() % (sizeof(PatternText) / sizeof(PatternText[0]));
         EXT_SITE_INFO* pExtInfo = ParsePattern(PatternText[n], &ExtSiteLen);
         InitPatternInfo(pState->pPattern, NULL, pExtInfo, ExtSiteLen);
         free(pExtInfo);
@@ -777,9 +777,9 @@ void UpdatePattern(
         free(pRand);
     }
     
-    pState->CameraElev = 50.0f - random() % 90;
-    pState->TranslateAngle = random() % 360;
-    pState->SpinAngle = random() % 360;
+    pState->CameraElev = 50.0f - rand() % 90;
+    pState->TranslateAngle = (float)(rand() % 360);
+    pState->SpinAngle = (float)(rand() % 360);
     pState->Time = 50.0f;
     SetCamera(pState);
 }

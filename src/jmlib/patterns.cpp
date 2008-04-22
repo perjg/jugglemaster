@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include "./patterns.h"
+#include "patterns.h"
 
 
 /*

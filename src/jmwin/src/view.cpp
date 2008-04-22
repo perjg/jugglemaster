@@ -142,7 +142,8 @@ int JMView::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 		return -1;
 
   // Initialize jmlib here
-  jmlib = new JMLib(messageCallback);
+  //jmlib = new JMLib(messageCallback);
+	jmlib = JMLib::alloc_JuggleMaster();
 	jmlib->setScalingMethod(SCALING_METHOD_DYNAMIC);
 
   jmlib->setMirror(mirror ? true : false);

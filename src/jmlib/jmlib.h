@@ -19,9 +19,9 @@
 #ifndef JM__HDR_
 #define JM__HDR_
 
-//#include <stdlib.h>
+#include <stdlib.h>
 #include <stdio.h>
-//#include <math.h>
+#include <math.h>
 #include <string.h>
 
 // time.h is not available for PPC,
@@ -32,6 +32,16 @@
 // No time.h on Palm OS
 #else
 #include <time.h>
+#endif
+
+// gettimeofday functions are unavailable on Windows, provide replacements
+#ifdef _WIN32
+struct timeval {
+	long tv_sec;
+	long tv_usec;	
+};
+
+int gettimeofday(struct timeval *tp);
 #endif
 
 // For JMPalm support

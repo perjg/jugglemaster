@@ -50,6 +50,7 @@ struct timezone {
 int gettimeofday(struct timeval *tv, struct timezone *tz);
 #else
 //fixme: add other platforms as needed here
+#include <sys/time.h>
 #define GETTIMEOFDAY_TWO_ARGS
 #endif
 

@@ -943,7 +943,7 @@ EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen)
                 /* No object found, next item must be either site digit or @ */
                 if (IS_VALID_THROW(*pch) || *pch == '@')
                     Info.ObjectType = OBJECT_DEFAULT;
-                else if (*pch != NULL)
+                else if (*pch != 0)
                     OK = 0;
             }
         }

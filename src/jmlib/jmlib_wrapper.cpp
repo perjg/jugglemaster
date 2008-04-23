@@ -21,7 +21,7 @@
 #include <time.h>
 //#include <sys/time.h>
 
-JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400),
+JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern(NULL),
   JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL)
 {
   jm = JMLib::alloc_JuggleMaster();
@@ -57,6 +57,19 @@ void JMLibWrapper::shutdown() {
  jm->shutdown();
  js->shutdown();
 }
+
+JML_CHAR *JMLibWrapper::possible_styles[] = {
+	"Normal",
+	"Reverse",
+	"Shower",
+	"Mills Mess",
+	"Center",
+	"Windmill"
+#ifndef __PALMOS__
+	,"Random"
+#endif
+  ,"JuggleSaver"
+};
 
 // Transform JuggleMaster coordinates to JuggleSaver coordinates
 void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
@@ -231,27 +244,45 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
 		free(s);
   }
   
+  if (currentPattern != NULL) delete[] currentPattern;
+  currentPattern = new JML_CHAR[ strlen(site) + 1];
+  strcpy(currentPattern, site);
+  
   return true;
 }
 
-// Only JuggleMaster cares about styles
 JML_BOOL JMLibWrapper::setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset) {
+  if (strcmp(name, "JuggleSaver") == 0 &&
+      active->getType() == JUGGLING_ENGINE_JUGGLEMASTER)
+    return setStyle(name);
   return jm->setStyle(name, length, data, offset);
 }
 
-// Only JuggleMaster cares about styles
 JML_BOOL JMLibWrapper::setStyle(JML_CHAR* name) {
+  // if style is set to JuggleSaver, switch to JuggleSaver mode iff the current
+  // pattern is a valid JS pattern.
+  if (strcmp(name, "JuggleSaver") == 0 &&
+      active->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
+    if (JSValidator::validateJSPattern(currentPattern)) {
+      active = js;
+      
+      // camera placement will be different, so it is neccesary to set the pattern again
+      SetCameraExtraZoom(0);
+      js->setPattern(currentPattern);
+            
+      return TRUE;
+    }
+  }
+
   return jm->setStyle(name);
 }
 
-// Only JuggleMaster cares about styles
-JML_CHAR** JMLibWrapper::getStyles(void) {
-  return jm->getStyles();
+JML_CHAR **JMLibWrapper::getStyles(void) {
+  return possible_styles;
 }
 
-// Only JuggleMaster cares about styles
-JML_INT32 JMLibWrapper::numStyles() {
-  return jm->numStyles();
+JML_INT32 JMLibWrapper::numStyles(void) {
+  return (int)(sizeof(possible_styles)/sizeof(possible_styles[0]));
 }
 
 void JMLibWrapper::setPatternDefault(void) {
@@ -260,7 +291,7 @@ void JMLibWrapper::setPatternDefault(void) {
 }
 
 void JMLibWrapper::setStyleDefault(void) {
-  active->setStyleDefault();
+  jm->setStyleDefault();
 }
 
 void JMLibWrapper::setHR(JML_FLOAT HR) {
@@ -394,29 +425,33 @@ JML_BOOL JMLibWrapper::setWindowSize(JML_INT32 width, JML_INT32 height) {
 }
 
 void JMLibWrapper::setMirror(JML_BOOL mir) {
- jm->setMirror(mir);
- js->setMirror(mir);
+  jm->setMirror(mir);
+  js->setMirror(mir);
 }
 
 JML_CHAR* JMLibWrapper::getSite(void) {
- return active->getSite();
+  return active->getSite();
 }
 
 JML_CHAR* JMLibWrapper::getPattName(void) {
- return active->getPattName();
+  return active->getPattName();
 }
 
 // Only JuggleMaster cares about styles
+// fixme: return
 JML_CHAR* JMLibWrapper::getStyle(void) {
- return jm->getStyle();
+  if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER)
+    return "JuggleSaver";
+  else
+    return jm->getStyle();
 }
 
 JML_INT32 JMLibWrapper::getImageWidth() {
- return active->getImageWidth();
+  return active->getImageWidth();
 }
 
 JML_INT32 JMLibWrapper::getImageHeight() {
- return active->getImageHeight();
+  return active->getImageHeight();
 }
 
 void JMLibWrapper::speedUp(void) {}

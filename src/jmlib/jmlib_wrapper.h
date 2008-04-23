@@ -45,12 +45,14 @@ private:
   float SpinSpeed;
   float TranslateSpeed;
   float JuggleSpeed;
+  JML_CHAR* currentPattern;
 
   JML_CHAR getHighestThrow(JML_CHAR* site, bool is_sss);
   void doCoordTransform(bool flipY = true, bool centerOrigin = false);
   
   int objectType;
   bool firstFrame;
+  static JML_CHAR *possible_styles[]; // Contains list of all possible styles
 public:
   void initialize();
   void shutdown();

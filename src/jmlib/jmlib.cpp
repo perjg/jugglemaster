@@ -495,7 +495,6 @@ JML_CHAR **JuggleMaster::getStyles(void) {
 
 JML_INT32 JuggleMaster::numStyles(void) {
   return (int)(sizeof(possible_styles)/sizeof(possible_styles[0]));
-
 }
 
 void JuggleMaster::setPatternDefault(void) {

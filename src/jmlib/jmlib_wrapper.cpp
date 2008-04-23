@@ -195,30 +195,31 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
     active = js;
   }
   
-  
   if (active->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
-    // Set the JuggleSaver pattern to the highest throw in the site
-    // to assure that the camera is set in a reasonable position
-    JML_CHAR js_site[2];
-    js_site[0] = getHighestThrow(site, sss);
-    js_site[1] = 0; 
+    JML_CHAR high[2];
+    high[0] = getHighestThrow(site, sss);
+    high[1] = 0; 
 
-    //fixme: proper randomness
+		//fixme: proper randomness
     objectType = (rand() % 3) + 1;
     
     // tune camera placement
     // fixme: not quite there yet... should also tune based on window size and aspect ratio
     // also consider making a special camera placement routine for JuggleMaster patterns
-    if (js_site[0] >= '0' && js_site[0] <= '9')
-      SetCameraExtraZoom(0.3f);
-    else if (js_site[0] >= '6' && js_site[0] <= '9')
+    if (high[0] >= '0' && high[0] <= '9')
       SetCameraExtraZoom(0.25f);
-    else if (js_site[0] <= 'b')
+    else if (high[0] >= '6' && high[0] <= '9')
+      SetCameraExtraZoom(0.25f);
+    else if (high[0] <= 'b')
       SetCameraExtraZoom(0.25f);
     else
       SetCameraExtraZoom(0.15f);
-      
-    js->setPattern(js_site);
+    
+    // For sites that are incompatible with JuggleSaver set
+		// the pattern to be the highest throw in the site
+		// this ought to ensure a reasonable camera position
+		if (vss) js->setPattern(site);
+		else js->setPattern(high);
     jm->setPattern(name, site, hr, dr);
   }
   else { // JuggleSaver
@@ -227,6 +228,7 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
     
     char* s = GetCurrentSite();
     jm->setPattern(s);
+		free(s);
   }
   
   return true;
@@ -428,3 +430,6 @@ JML_CHAR  JMLibWrapper::getSiteposStop(void)  { return active->getSiteposStop();
 JML_INT32 JMLibWrapper::getSiteposLen(void)   { return active->getSiteposLen();   }
 JML_INT32 JMLibWrapper::getBallRadius(void)   { return active->getBallRadius();   }
 
+JML_BOOL JMLibWrapper::isValidPattern(char* patt) {
+	return JMSiteValidator::validateSite(patt) || JSValidator::validateJSPattern(patt);
+}

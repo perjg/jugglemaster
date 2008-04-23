@@ -148,6 +148,8 @@ public:
   virtual JML_CHAR  getSiteposStop(void) = 0;
   virtual JML_INT32 getSiteposLen(void) = 0;
   virtual JML_INT32 getBallRadius(void) = 0;
+
+	virtual JML_BOOL isValidPattern(char* patt) = 0;
 };
 
 #endif

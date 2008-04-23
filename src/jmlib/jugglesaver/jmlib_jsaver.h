@@ -39,6 +39,7 @@ private:
   JML_CHAR* pattern;  // The current pattern
   JML_CHAR* siteswap; // The current siteswap
   JML_CHAR* pattname; // The name of the current pattern
+  static JML_CHAR *possible_styles[];
 
   JML_BOOL applyPattern();
 
@@ -58,8 +59,8 @@ public:
   JML_BOOL setPattern(JML_CHAR* site) { return setPattern(site, site); }
   JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0) { return TRUE; }
   JML_BOOL setStyle(JML_CHAR* name) { return TRUE; }
-  JML_CHAR **getStyles(void) { return NULL; }
-  JML_INT32 numStyles() { return 0; }
+  JML_CHAR **getStyles(void);
+  JML_INT32 numStyles();
   void setPatternDefault(void);
   void setStyleDefault(void) {}
 
@@ -102,6 +103,7 @@ public:
   JML_INT32 getSiteposLen(void) { return 0; }
   JML_INT32 getiterations(void) { return 0; } // fixme  
   JML_INT32 getBallRadius(void);
+	JML_BOOL isValidPattern(char* patt);
 };
 
 #endif // JMLIB_JSAVER

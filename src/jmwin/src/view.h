@@ -28,7 +28,7 @@
 #include "regprefs.h"
 #include "colorentry.h"
 
-#include "../../jmgfx/opengl_renderer.h"
+//#include "../../jmgfx/opengl_renderer.h"
 #include "gl/gl.h"
 #include "gl/glu.h"
 #include "gl/glaux.h"
@@ -73,7 +73,7 @@ protected:
   JMPatternLoader* pl;
   bool patternLibraryLoaded;
   JMRegPreferences* prefs;
-	JMOpenGLRenderer* renderer;
+	//JMOpenGLRenderer* renderer;
 
   // Color table
   JMColorEntry* jugglerColor;

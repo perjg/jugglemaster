@@ -174,6 +174,7 @@ public:
   }
   
   virtual JML_INT32 getBallRadius(void);
+	virtual JML_BOOL isValidPattern(char* patt);
 };
 
 #endif

@@ -99,7 +99,7 @@ JMView::~JMView() {
   prefs->savePreferences();
   delete prefs;
   delete jmlib;
-	delete renderer;
+	//delete renderer;
 }
 
 BOOL JMView::PreCreateWindow(CREATESTRUCT& cs) {
@@ -117,7 +117,8 @@ void JMView::OnDraw(CDC* pDC) {
 
   //PaintBuffer(pDC);
   wglMakeCurrent(m_myhDC,m_myhRC);
-  renderer->draw();
+  //renderer->draw();
+	jmlib->render();
 	SwapBuffers(m_myhDC);
 	//Invalidate(FALSE);
 }
@@ -141,14 +142,15 @@ int JMView::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	if (CWnd ::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-  // Initialize jmlib here
-  //jmlib = new JMLib(messageCallback);
-	jmlib = JMLib::alloc_JuggleMaster();
-	jmlib->setScalingMethod(SCALING_METHOD_DYNAMIC);
+	//jmlib = JMLib::alloc_JuggleMaster();
+	//jmlib = JMLib::alloc_JuggleSaver();
+	jmlib = JMLib::alloc();
 
+  jmlib->setPatternDefault();
+  jmlib->setStyleDefault();
+  //jmlib->setScalingMethod(SCALING_METHOD_DYNAMIC);
   jmlib->setMirror(mirror ? true : false);
-  //jmlib = new JMLib();
-  //jmlib->setErrorCallback(messageCallback);
+  jmlib->startJuggle();
 
 	// Setup OpenGL
 	SetupPixelFormat();
@@ -156,13 +158,6 @@ int JMView::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	
   //int width  = ::GetSystemMetrics(SM_CXSCREEN);
   //int height = ::GetSystemMetrics(SM_CYSCREEN);
-
-  /* This only seems to work from within CMainFrame
-  CRect rect;
-  GetClientRect(&rect);
-  int width = rect.Width();
-  int height = rect.Height();
-  */
 
   // load pattern library
   //***fixme: do not use absolute path. Allow configuration of path
@@ -194,12 +189,6 @@ int JMView::OnCreate(LPCREATESTRUCT lpCreateStruct) {
   //fixme add quickbrowser support
   //if (patternLibraryLoaded)
   //  ((JMFrame*)(AfxGetApp()->m_pMainWnd))->initQuickBrowserData(this, jmlib, pl, prefs);
-
-  //***fixme: Load previous pattern here
-  jmlib->setPattern("3-Cascade", "534", 0.2F, 0.5F);
-  jmlib->setStyleDefault();
-  jmlib->setScalingMethod(SCALING_METHOD_DYNAMIC);
-  jmlib->startJuggle();
   
   SetTimer(1, curSpeed, 0);
   
@@ -456,10 +445,10 @@ void JMView::OnSize(UINT nType, int cx, int cy) {
   glViewport(0, 0, cx, cy);
   m_height= cy;
   m_width = cx;
-	renderer->resize(cx, cy);
+	//renderer->resize(cx, cy);
 
-  //if (cx != 0 && cy != 0)
-  //  jmlib->setWindowSize(cx, cy);
+  if (cx != 0 && cy != 0)
+    jmlib->setWindowSize(cx, cy);
 }
 
 void JMView::OnUpdateFileSelectpatt(CCmdUI* pCmdUI) {
@@ -604,9 +593,10 @@ BOOL JMView::SetupPixelFormat()
 	// Now that the screen is setup we can 
 	// initialize OpenGL();
 
-	renderer = new JMOpenGLRenderer();
-  renderer->initialize(jmlib, 100, 100, JMOpenGLRenderer::RENDER_MODE_FLAT);
+	//renderer = new JMOpenGLRenderer();
+  //renderer->initialize(jmlib, 100, 100, JMOpenGLRenderer::RENDER_MODE_FLAT);
 	//GLInit();
+	jmlib->initialize();
 	
 	return true;
 	

@@ -35,27 +35,52 @@ JMLib* JMLib::alloc_JuggleSaver() {
 }
 
 #ifdef _WIN32
+
 // Wrapper for gettimeofday functionality on windows
-
-//From January 1, 1601 (UTC). to January 1,1970
-#define FACTOR 0x19db1ded53e8000
-
-int gettimeofday(struct timeval *tp) {
-	FILETIME f;
-	ULARGE_INTEGER ifreq;
-	LONGLONG res;
-	GetSystemTimeAsFileTime(&f);
-	ifreq.HighPart = f.dwHighDateTime;
-	ifreq.LowPart = f.dwLowDateTime;
-
-	res = ifreq.QuadPart - FACTOR;
-	tp->tv_sec = (long)((LONGLONG)res/10000000);
-	tp->tv_usec = (long)((LONGLONG)res% 10000000000);
-
-	return 0;
+#include <windows.h>
+#include <time.h>
+     
+#if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
+  #define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
+#else
+  #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
+#endif
+ 
+int gettimeofday(struct timeval *tv, struct timezone *tz) {
+  FILETIME ft;
+  unsigned __int64 tmpres = 0;
+  static int tzflag;
+ 
+  if (NULL != tv)
+  {
+    GetSystemTimeAsFileTime(&ft);
+ 
+    tmpres |= ft.dwHighDateTime;
+    tmpres <<= 32;
+    tmpres |= ft.dwLowDateTime;
+ 
+    /*converting file time to unix epoch*/
+    tmpres /= 10;  /*convert into microseconds*/
+    tmpres -= DELTA_EPOCH_IN_MICROSECS; 
+    tv->tv_sec = (long)(tmpres / 1000000UL);
+    tv->tv_usec = (long)(tmpres % 1000000UL);
+  }
+ 
+  if (NULL != tz)
+  {
+    if (!tzflag)
+    {
+      _tzset();
+      tzflag++;
+    }
+    tz->tz_minuteswest = _timezone / 60;
+    tz->tz_dsttime = _daylight;
+  }
+ 
+  return 0;
 }
 #else
-#define GETTIMEOFDAY_TWO_ARGS
+#include <sys/time.h>
 #endif
 
 JuggleMaster::JuggleMaster() {
@@ -1415,4 +1440,8 @@ void JuggleMaster::doStepcalc(void) {
       }
     }
   }
+}
+
+JML_BOOL JuggleMaster::isValidPattern(char* patt) {
+	return JMSiteValidator::validateSite(patt);
 }

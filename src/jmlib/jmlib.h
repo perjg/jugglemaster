@@ -36,12 +36,21 @@
 
 // gettimeofday functions are unavailable on Windows, provide replacements
 #ifdef _WIN32
+#define GETTIMEOFDAY_TWO_ARGS
 struct timeval {
 	long tv_sec;
 	long tv_usec;	
 };
 
-int gettimeofday(struct timeval *tp);
+struct timezone {
+  int  tz_minuteswest; // minutes W of Greenwich
+  int  tz_dsttime;     // type of dst correction
+};
+
+int gettimeofday(struct timeval *tv, struct timezone *tz);
+#else
+//fixme: add other platforms as needed here
+#define GETTIMEOFDAY_TWO_ARGS
 #endif
 
 // For JMPalm support

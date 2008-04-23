@@ -219,7 +219,7 @@ void JMEnterSiteDlg::OnOK() {
   char* csite = W2A(site.GetBuffer(0));
 
   // Validate site
-  if (!JMSiteValidator::validateSite(csite)) {
+	if (!jmlib->isValidPattern(csite)) {
     AfxMessageBox(_T("Invalid siteswap"));
     site.ReleaseBuffer();
     return;
@@ -279,7 +279,7 @@ void JMEnterSiteDlg::OnEditchangeSite() {
   char* csite = W2A(site.GetBuffer(0));
 
   // Validate site
-  if (JMSiteValidator::validateSite(csite)) {
+	if (jmlib->isValidPattern(csite)) {
     activeColor = greenColor;
     activeBrush = &greenBrush;
   }

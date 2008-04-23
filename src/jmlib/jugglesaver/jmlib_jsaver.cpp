@@ -22,6 +22,10 @@
 #include "jmlib_jsaver.h"
 #include <time.h>
 
+JML_CHAR *JuggleSaver::possible_styles[] = {
+	"JuggleSaver",
+};
+
 // Constructor / Destructor
 JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f),
   initialized(false), is_juggling(false), pattern(NULL), siteswap(NULL), pattname(NULL),
@@ -47,10 +51,7 @@ JuggleSaver::~JuggleSaver() {
   if (siteswap != NULL) { delete siteswap; }
 }
 
-// fixme: UpdatePattern is for changing a pattern randomly
-// move this to loadPattern etc.
-//
-// InitGLSettings and ResizeGL should go in the renderer
+// fixme: InitGLSettings and ResizeGL should go in the renderer
 void JuggleSaver::initialize() {
   if (initialized) return;
   
@@ -79,25 +80,25 @@ JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, J
     error("Invalid pattern");
     return false;
   }
-  
-  if (pattname != NULL) { delete pattname; }
-  pattname = new JML_CHAR[strlen(site)+1];
+
+  if (pattname != NULL) { delete[] pattname; }
+  pattname = new JML_CHAR[strlen(name)+1];
   strcpy(pattname, name);
 
-  if (pattern != NULL) { delete pattern; }
+  if (pattern != NULL) { delete[] pattern; }
   pattern = new JML_CHAR[strlen(site)+1];
   strcpy(pattern, site);
 
-  //fixme: siteswap should be derived from the pattern (strip all extra info)
-  // e.g: 5b3c should be saved as 53
-  if (siteswap != NULL) { delete siteswap; }
-  siteswap = new JML_CHAR[strlen(site)+1];
-  strcpy(siteswap, site);
+	// get the site
+	char* s = GetCurrentSite();
+  if (siteswap != NULL) { delete[] siteswap; }
+  siteswap = new JML_CHAR[strlen(s)+1];
+  strcpy(siteswap, s);
+	free(s);
   
   if (initialized) SetPattern(&state, site);
-  //SetPattern(&state, site);
 
-	return 1;
+	return true;
 }
 
 void JuggleSaver::setPatternDefault(void) {
@@ -238,4 +239,17 @@ float JuggleSaver::speed(void) {
 // fixme
 JML_INT32 JuggleSaver::getBallRadius(void) {
   return 1;
+}
+
+JML_CHAR **JuggleSaver::getStyles(void) {
+  return possible_styles;
+}
+
+JML_INT32 JuggleSaver::numStyles(void) {
+  return (int)(sizeof(possible_styles)/sizeof(possible_styles[0]));
+
+}
+
+JML_BOOL JuggleSaver::isValidPattern(char* patt) {
+	return JSValidator::validateJSPattern(patt);
 }

@@ -107,6 +107,7 @@ public:
   virtual JML_CHAR  getSiteposStop(void);
   virtual JML_INT32 getSiteposLen(void);
   virtual JML_INT32 getBallRadius(void);
+	virtual JML_BOOL isValidPattern(char* patt);
 };
 
 #endif

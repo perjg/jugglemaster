@@ -25,6 +25,8 @@
 #include <OpenGL/glext.h>
 #endif
 
+#include "gltrackball.h"
+
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
@@ -249,7 +251,7 @@ typedef struct
     float TranslateAngle;
     float SpinAngle;
     
-    //trackball_state *trackball;
+    trackball_state *trackball;
     int button_down_p;
 
 } RENDER_STATE;
@@ -267,6 +269,7 @@ typedef struct
     int objectTypes[630]; // 0 - ball, 1 - ring, 2 - club
     POS leftHand;
     POS rightHand;
+    trackball_state *trackball;
 } JUGGLEMASTER_RENDER_STATE;
 
 // engine.cpp

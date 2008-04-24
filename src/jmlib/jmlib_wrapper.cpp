@@ -51,6 +51,7 @@ JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern
 void JMLibWrapper::initialize() {
  jm->initialize();
  js->initialize();
+ jmState.trackball = gltrackball_init();
 }
 
 void JMLibWrapper::shutdown() {
@@ -269,6 +270,7 @@ JML_BOOL JMLibWrapper::setStyle(JML_CHAR* name) {
       // camera placement will be different, so it is neccesary to set the pattern again
       SetCameraExtraZoom(0);
       js->setPattern(currentPattern);
+      js->startJuggle();
             
       return TRUE;
     }
@@ -286,8 +288,12 @@ JML_INT32 JMLibWrapper::numStyles(void) {
 }
 
 void JMLibWrapper::setPatternDefault(void) {
-  jm->setPatternDefault();
-  js->setPatternDefault();
+  jm->setPattern("3 Cascade", "3");
+  js->setPattern("3 Cascade", "3b");
+  
+  if (currentPattern != NULL) delete[] currentPattern;
+  currentPattern = new JML_CHAR[ 2];
+  strcpy(currentPattern, "3");
 }
 
 void JMLibWrapper::setStyleDefault(void) {

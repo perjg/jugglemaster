@@ -43,6 +43,8 @@
 		CB6ABBCB0DB26998000FD76F /* libwxzlib-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABBCA0DB26998000FD76F /* libwxzlib-2.8.a */; };
 		CBA2DFF80DBBB26F00618F0B /* js_validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2DFF60DBBB26F00618F0B /* js_validator.cpp */; };
 		CBA2E2CE0DBCD83C00618F0B /* js_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E2CC0DBCD83C00618F0B /* js_patterns.cpp */; };
+		CBA2E4850DC0DB2D00618F0B /* gltrackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E4830DC0DB2D00618F0B /* gltrackball.cpp */; };
+		CBA2E4860DC0DB2D00618F0B /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E4840DC0DB2D00618F0B /* trackball.cpp */; };
 		CBEAE29A0DB37E1E0019833A /* opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE2980DB37E1E0019833A /* opengl.cpp */; };
 		CBEAE2A90DB37F5A0019833A /* opengl_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE2A80DB37F5A0019833A /* opengl_renderer.cpp */; };
 		CBEAE3040DB39ACD0019833A /* jmlib_jsaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE3020DB39ACD0019833A /* jmlib_jsaver.cpp */; };
@@ -109,6 +111,10 @@
 		CBA2DFF70DBBB26F00618F0B /* js_validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_validator.h; path = ../../jmlib/jugglesaver/js_validator.h; sourceTree = SOURCE_ROOT; };
 		CBA2E2CC0DBCD83C00618F0B /* js_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = js_patterns.cpp; path = ../../jmlib/jugglesaver/js_patterns.cpp; sourceTree = SOURCE_ROOT; };
 		CBA2E2CD0DBCD83C00618F0B /* js_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_patterns.h; path = ../../jmlib/jugglesaver/js_patterns.h; sourceTree = SOURCE_ROOT; };
+		CBA2E4770DC0D8A500618F0B /* gltrackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gltrackball.h; path = ../../jmlib/jugglesaver/gltrackball.h; sourceTree = SOURCE_ROOT; };
+		CBA2E4790DC0D8A500618F0B /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = ../../jmlib/jugglesaver/trackball.h; sourceTree = SOURCE_ROOT; };
+		CBA2E4830DC0DB2D00618F0B /* gltrackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gltrackball.cpp; path = ../../jmlib/jugglesaver/gltrackball.cpp; sourceTree = SOURCE_ROOT; };
+		CBA2E4840DC0DB2D00618F0B /* trackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = trackball.cpp; path = ../../jmlib/jugglesaver/trackball.cpp; sourceTree = SOURCE_ROOT; };
 		CBEAE2980DB37E1E0019833A /* opengl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = opengl.cpp; path = ../opengl.cpp; sourceTree = SOURCE_ROOT; };
 		CBEAE2990DB37E1E0019833A /* opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opengl.h; path = ../opengl.h; sourceTree = SOURCE_ROOT; };
 		CBEAE2A80DB37F5A0019833A /* opengl_renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = opengl_renderer.cpp; path = ../../jmgfx/opengl_renderer.cpp; sourceTree = SOURCE_ROOT; };
@@ -249,6 +255,10 @@
 		CBEAE2D60DB38E390019833A /* jugglesaver */ = {
 			isa = PBXGroup;
 			children = (
+				CBA2E4830DC0DB2D00618F0B /* gltrackball.cpp */,
+				CBA2E4840DC0DB2D00618F0B /* trackball.cpp */,
+				CBA2E4770DC0D8A500618F0B /* gltrackball.h */,
+				CBA2E4790DC0D8A500618F0B /* trackball.h */,
 				CBA2E2CC0DBCD83C00618F0B /* js_patterns.cpp */,
 				CBA2E2CD0DBCD83C00618F0B /* js_patterns.h */,
 				CBA2DFF60DBBB26F00618F0B /* js_validator.cpp */,
@@ -336,6 +346,8 @@
 				CB398D690DB787A6004DBEAC /* jmlib_wrapper.cpp in Sources */,
 				CBA2DFF80DBBB26F00618F0B /* js_validator.cpp in Sources */,
 				CBA2E2CE0DBCD83C00618F0B /* js_patterns.cpp in Sources */,
+				CBA2E4850DC0DB2D00618F0B /* gltrackball.cpp in Sources */,
+				CBA2E4860DC0DB2D00618F0B /* trackball.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

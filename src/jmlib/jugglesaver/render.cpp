@@ -128,8 +128,8 @@ void InitGLSettings(RENDER_STATE* pState, int WireFrame)
 
     memset(pState, 0, sizeof(RENDER_STATE));
     
-    //pState->trackball = gltrackball_init ();
-
+    pState->trackball = gltrackball_init();
+    
     if (WireFrame)
         glPolygonMode(GL_FRONT, GL_LINE);
     
@@ -624,7 +624,7 @@ void DrawGLScene(RENDER_STATE* pState)
     glLoadIdentity();
     glTranslatef(5.0f * sinf(pState->TranslateAngle), 0.0f, 0.0f);
 
-    //gltrackball_rotate (pState->trackball);
+    gltrackball_rotate (pState->trackball);
 
     glRotatef(pState->SpinAngle, 0.0f, 1.0f, 0.0f);
     glTranslatef(0.0, 0.0, -1.0f);
@@ -839,7 +839,7 @@ void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState)
     glLoadIdentity();
     glTranslatef(5.0f * sinf(pState->TranslateAngle), 0.0f, 0.0f);
 
-    //gltrackball_rotate (pState->trackball);
+    gltrackball_rotate (pState->trackball);
 
     glRotatef(pState->SpinAngle, 0.0f, 1.0f, 0.0f);
     glTranslatef(0.0, 0.0, -1.0f);

@@ -164,6 +164,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\jmlib\sqlite_patterns.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\jmlib\util.cpp"
 				>
 			</File>
@@ -243,6 +247,10 @@
 			</File>
 			<File
 				RelativePath="..\..\jmlib\randompatt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\jmlib\sqlite_patterns.h"
 				>
 			</File>
 			<File

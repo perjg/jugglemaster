@@ -28,6 +28,14 @@ public:
   
   void search(char* name);
   void search(char* name, char* site, char* style, int balls); 
+
+
+	/*
+	 * @param out   File pointer for writing the sqlite database
+	 * @param inJM  JuggleMaster file
+	 * @param inJS  JuggleSaver file
+	 */
+	static void initializeDatabase(FILE* out, FILE* inJM, FILE* inJS);
 private:
   char* filename_;
   void init();

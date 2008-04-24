@@ -67,6 +67,12 @@ bool JSValidator::validateVSS(char* site) {
 
   for (i = 0; i < len; i++) {
     x = siteDigit(site[i]);
+
+		if (x == -1) {
+			delete ls;	
+			return false;
+		}
+
     ls[(i+x)%len]--;
   }
   

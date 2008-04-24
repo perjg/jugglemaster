@@ -20,3 +20,48 @@
 #include "sqlite_patterns.h"
 #include "patterns.h"
 
+/*
+ * Pattern:
+ * name, pattern, dr, hr, object-style, style, 
+ *
+ */
+
+
+void PatternLoader::initializeDatabase(FILE* out, FILE* inJM, FILE* inJS) {
+	groups_t jm_groups;
+	styles_t jm_styles;
+	groups_t js_groups;
+
+	if (!out) return;
+	if (!inJM && !inJS) return;
+
+	if (inJM) {
+		int result = ParsePatterns(inJM, &jm_groups, &jm_styles);
+
+		pattern_group_t* groups = jm_groups.first;
+		pattern_t* patterns = NULL;
+
+		while (groups) {
+			patterns = groups->first_patt;
+
+			while (patterns) {
+
+				patterns = patterns->next;
+			}
+
+			groups = groups->next;
+		}
+
+		style_t* styles = jm_styles.first;
+
+		while (styles) {
+
+			styles = styles->next;
+		}
+	}
+
+	if (inJS) {
+		js_groups;
+	}
+}
+

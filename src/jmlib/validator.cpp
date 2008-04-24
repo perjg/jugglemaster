@@ -216,7 +216,7 @@ bool JMSiteValidator::validateSite(JML_CHAR* site) {
  */
 bool JMSiteValidator::validateVSS(JML_CHAR* site) {
   JML_INT32 i, x;
-  JML_INT32 len = (JML_INT32)strlen(site);
+  JML_INT32 len = (JML_INT32)strlen(site)+1;
   JML_CHAR* ls;
   bool ret = true;
 
@@ -227,6 +227,12 @@ bool JMSiteValidator::validateVSS(JML_CHAR* site) {
 
   for (i = 0; i < len; i++) {
     x = siteDigit(site[i]);
+
+		if (x == -1) {
+			delete ls;	
+			return false;
+		}
+
     ls[(i+x)%len]--;
   }
   

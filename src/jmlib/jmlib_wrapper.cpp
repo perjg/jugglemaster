@@ -211,6 +211,8 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
     active = js;
   }
   
+	resetCamera();
+
   if (active->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
     JML_CHAR high[2];
     high[0] = getHighestThrow(site, sss);
@@ -480,16 +482,19 @@ JML_BOOL JMLibWrapper::isValidPattern(char* patt) {
 #include "jugglesaver/gltrackball.h"
 
 void JMLibWrapper::trackballStart(JML_INT32 x, JML_INT32 y) {
-	gltrackball_start(trackball, x, y, imageWidth, imageHeight);
+	js->trackballStart(x, y);
+	//gltrackball_start(trackball, x, y, imageWidth, imageHeight);
 	SpinSpeed = 0.0f;
 }
 
 void JMLibWrapper::trackballTrack(JML_INT32 x, JML_INT32 y) {
-	gltrackball_track(trackball, x, y, imageWidth, imageHeight);
+	//gltrackball_track(trackball, x, y, imageWidth, imageHeight);
+	js->trackballTrack(x, y);
 }
 
 void JMLibWrapper::trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal) {
-	gltrackball_mousewheel(trackball, 4, percent, horizontal);
+	js->trackballMousewheel(percent, horizontal);
+	//gltrackball_mousewheel(trackball, 4, percent, horizontal);
 }
 
 void JMLibWrapper::resetCamera() {

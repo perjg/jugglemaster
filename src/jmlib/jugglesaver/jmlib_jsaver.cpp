@@ -98,7 +98,10 @@ JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, J
   strcpy(siteswap, s);
 	free(s);
   
-  if (initialized) SetPattern(&state, site);
+	if (initialized) {
+		resetCamera();
+		SetPattern(&state, site);
+	}
 
 	return true;
 }

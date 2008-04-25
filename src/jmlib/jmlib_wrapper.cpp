@@ -22,7 +22,8 @@
 //#include <sys/time.h>
 
 JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern(NULL),
-  JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL)
+  JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL),
+	trackball(NULL)
 {
   jm = JMLib::alloc_JuggleMaster();
   js = JMLib::alloc_JuggleSaver();
@@ -51,7 +52,8 @@ JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern
 void JMLibWrapper::initialize() {
  jm->initialize();
  js->initialize();
- jmState.trackball = gltrackball_init();
+ jmState.trackball = static_cast<JuggleSaver*>(js)->state.trackball;
+ trackball = jmState.trackball;
 }
 
 void JMLibWrapper::shutdown() {
@@ -473,4 +475,22 @@ JML_INT32 JMLibWrapper::getBallRadius(void)   { return active->getBallRadius(); 
 
 JML_BOOL JMLibWrapper::isValidPattern(char* patt) {
 	return JMSiteValidator::validateSite(patt) || JSValidator::validateJSPattern(patt);
+}
+
+#include "jugglesaver/gltrackball.h"
+
+void JMLibWrapper::trackballStart(JML_INT32 x, JML_INT32 y) {
+	gltrackball_start(trackball, x, y, imageWidth, imageHeight);
+}
+
+void JMLibWrapper::trackballTrack(JML_INT32 x, JML_INT32 y) {
+	gltrackball_track(trackball, x, y, imageWidth, imageHeight);
+}
+
+void JMLibWrapper::trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal) {
+	gltrackball_mousewheel(trackball, 4, percent, horizontal);
+}
+
+void JMLibWrapper::resetCamera() {
+
 }

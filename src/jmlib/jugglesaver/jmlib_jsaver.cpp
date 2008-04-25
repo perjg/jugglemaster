@@ -29,7 +29,7 @@ JML_CHAR *JuggleSaver::possible_styles[] = {
 // Constructor / Destructor
 JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f),
   initialized(false), is_juggling(false), pattern(NULL), siteswap(NULL), pattname(NULL),
-  width_(480), height_(400) {
+  width_(480), height_(400), trackball(NULL) {
   // NOTE:
   // initialize cannot be called from the constructor, because it requires an OpenGL
   // context. It must be called manually after creating the OpenGL context.
@@ -57,6 +57,8 @@ void JuggleSaver::initialize() {
   
   setWindowSize(width_, height_);
   InitGLSettings(&state, FALSE);
+	state.trackball = gltrackball_init();
+	trackball = state.trackball;
   //setPatternDefault(); //fixme: what if setPattern has been called before initialize?
   applyPattern();
   ResizeGL(&state, width_, height_);
@@ -252,4 +254,22 @@ JML_INT32 JuggleSaver::numStyles(void) {
 
 JML_BOOL JuggleSaver::isValidPattern(char* patt) {
 	return JSValidator::validateJSPattern(patt);
+}
+
+#include "gltrackball.h"
+
+void JuggleSaver::trackballStart(JML_INT32 x, JML_INT32 y) {
+	gltrackball_start(trackball, x, y, width_, height_);
+}
+
+void JuggleSaver::trackballTrack(JML_INT32 x, JML_INT32 y) {
+	gltrackball_track(trackball, x, y, width_, height_);
+}
+
+void JuggleSaver::trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal) {
+	gltrackball_mousewheel(trackball, 4, percent, horizontal);
+}
+
+void JuggleSaver::resetCamera() {
+	//fixme
 }

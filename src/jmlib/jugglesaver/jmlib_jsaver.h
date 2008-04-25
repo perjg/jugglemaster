@@ -30,6 +30,7 @@ private:
   JML_BOOL is_juggling;
   int width_, height_;
   RENDER_STATE state;
+	trackball_state* trackball;
   float CurrentFrameRate;
   unsigned FramesSinceSync;
   unsigned LastSyncTime;
@@ -106,6 +107,12 @@ public:
   JML_INT32 getiterations(void) { return 0; } // fixme  
   JML_INT32 getBallRadius(void);
 	JML_BOOL isValidPattern(char* patt);
+
+	// trackball support
+	virtual void trackballStart(JML_INT32 x, JML_INT32 y);
+	virtual void trackballTrack(JML_INT32 x, JML_INT32 y);
+	virtual void trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal = false);
+	virtual void resetCamera();
 };
 
 #endif // JMLIB_JSAVER

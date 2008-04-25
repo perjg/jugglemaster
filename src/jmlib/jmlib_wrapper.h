@@ -32,6 +32,7 @@ private:
  
   // OpenGL coordinates for JuggleMaster
   JUGGLEMASTER_RENDER_STATE jmState;
+	trackball_state* trackball;
 
   float ballRadius;
   float zoomFactorX, zoomFactorY;
@@ -110,6 +111,12 @@ public:
   virtual JML_INT32 getSiteposLen(void);
   virtual JML_INT32 getBallRadius(void);
 	virtual JML_BOOL isValidPattern(char* patt);
+
+	// trackball support
+	virtual void trackballStart(JML_INT32 x, JML_INT32 y);
+	virtual void trackballTrack(JML_INT32 x, JML_INT32 y);
+	virtual void trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal = false);
+	virtual void resetCamera();
 };
 
 #endif

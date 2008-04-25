@@ -62,7 +62,7 @@ bool JSValidator::validateVSS(char* site) {
 
   if(1 == len && -1 != siteDigit(site[0])) return true;
 
-  ls = new char[len];
+  ls = new char[len+1];
   memset(ls, 1, len);
 
   for (i = 0; i < len; i++) {

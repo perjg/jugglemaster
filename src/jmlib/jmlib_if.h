@@ -150,6 +150,12 @@ public:
   virtual JML_INT32 getBallRadius(void) = 0;
 
 	virtual JML_BOOL isValidPattern(char* patt) = 0;
+
+	// trackball support
+	virtual void trackballStart(JML_INT32 x, JML_INT32 y) {}
+	virtual void trackballTrack(JML_INT32 x, JML_INT32 y) {}
+	virtual void trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal = false) {}
+	virtual void resetCamera() {}
 };
 
 #endif

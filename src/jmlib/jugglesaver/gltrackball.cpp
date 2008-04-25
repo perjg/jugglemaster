@@ -10,6 +10,16 @@
  * implied warranty.
  */
 
+#ifdef _WIN32
+#ifdef JMWIN
+// required to compile when using MFC
+#include "../../jmwin/src/stdafx.h"
+#endif
+#include <gl/gl.h>
+#else
+#include <OpenGL/gl.h>
+#endif
+
 extern "C" {
 
 #include <math.h>
@@ -18,8 +28,6 @@ extern "C" {
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-
-# include <OpenGL/gl.h>
 
 #include "trackball.h"
 #include "gltrackball.h"
@@ -61,10 +69,10 @@ gltrackball_track (trackball_state *ts, int x, int y, int w, int h)
 {
   float q2[4];
   trackball (q2,
-             (2.0 * ts->x - w) / w,
-             (h - 2.0 * ts->y) / h,
-             (2.0 * x - w) / w,
-             (h - 2.0 * y) / h);
+             (2.0f * ts->x - w) / w,
+             (h - 2.0f * ts->y) / h,
+             (2.0f * x - w) / w,
+             (h - 2.0f * y) / h);
   ts->x = x;
   ts->y = y;
   add_quats (q2, ts->q, ts->q);
@@ -110,9 +118,9 @@ gltrackball_mousewheel (trackball_state *ts,
 
   gltrackball_start (ts, 50, 50, 100, 100);
   if (horizontal_p)
-    gltrackball_track (ts, 50*move, 50, 100, 100);
+    gltrackball_track (ts, (int)(50*move), 50, 100, 100);
   else
-    gltrackball_track (ts, 50, 50*move, 100, 100);
+    gltrackball_track (ts, 50, (int)(50*move), 100, 100);
 }
 
 void

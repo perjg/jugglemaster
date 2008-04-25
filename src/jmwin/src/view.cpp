@@ -46,6 +46,10 @@ IMPLEMENT_DYNCREATE(JMView, CView)
 BEGIN_MESSAGE_MAP(JMView, CView)
 	ON_WM_CREATE()
   ON_WM_TIMER()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
+	ON_WM_MOUSEWHEEL()
+	ON_WM_LBUTTONDBLCLK()
 	//ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
   ON_COMMAND(ID_FILE_NEW, OnLeftButton)
 	ON_COMMAND(ID_FILE_ENTERSITE, OnFileEnterSite)
@@ -205,6 +209,26 @@ void JMView::OnTimer(UINT nIDEvent) {
   UpdateWindow();
 	
 	CWnd::OnTimer(nIDEvent);
+}
+
+void JMView::OnLButtonDown(UINT nFlags, CPoint point) {
+	jmlib->trackballStart(point.x, point.y);
+}
+
+void JMView::OnMouseMove(UINT nFlags, CPoint point) {
+	if (nFlags & MK_LBUTTON) {
+		jmlib->trackballTrack(point.x, point.y);
+	}
+}
+
+// zDelta is a multiple of 120. Assume each zDelta equals 10 % rotation
+BOOL JMView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) {
+  jmlib->trackballMousewheel(zDelta / 120 * 10, nFlags & MK_CONTROL);
+	return true;
+}
+
+void JMView::OnLButtonDblClk(UINT nFlags, CPoint point) {
+	jmlib->resetCamera();
 }
 
 /*

@@ -127,9 +127,7 @@ void InitGLSettings(RENDER_STATE* pState, int WireFrame)
     srand((unsigned int)time(NULL));
 
     memset(pState, 0, sizeof(RENDER_STATE));
-    
-    pState->trackball = gltrackball_init();
-    
+        
     if (WireFrame)
         glPolygonMode(GL_FRONT, GL_LINE);
     

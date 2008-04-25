@@ -184,6 +184,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\jmlib\jugglesaver\gltrackball.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\jmlib\jugglesaver\gltrackball.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\jmlib\jugglesaver\jmlib_jsaver.cpp"
 				>
 			</File>
@@ -205,6 +213,14 @@
 			</File>
 			<File
 				RelativePath="..\..\jmlib\jugglesaver\render.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\jmlib\jugglesaver\trackball.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\jmlib\jugglesaver\trackball.h"
 				>
 			</File>
 		</Filter>

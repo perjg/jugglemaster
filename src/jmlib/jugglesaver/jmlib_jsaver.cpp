@@ -104,7 +104,7 @@ JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, J
 }
 
 void JuggleSaver::setPatternDefault(void) {
-  setPattern("3 Cascade", "3c");
+  setPattern("3 Cascade", "3");
 }
 
 //fixme: calculate this from the 
@@ -184,10 +184,10 @@ JML_INT32 JuggleSaver::doJuggle(void) {
   //DrawGLScene(&state);
   //JMDrawGLScene(&state);
     
-  if (CurrentFrameRate > 1.0e-6f) {
+  if (CurrentFrameRate > 0.001f /*1.0e-6f*/) {
     state.Time += JuggleSpeed / CurrentFrameRate;
-    state.SpinAngle += SpinSpeed / CurrentFrameRate;
-    state.TranslateAngle += TranslateSpeed / CurrentFrameRate;
+		state.SpinAngle += SpinSpeed / CurrentFrameRate;
+		state.TranslateAngle += TranslateSpeed / CurrentFrameRate;
   }
     
   //if (mi->fps_p)
@@ -260,6 +260,7 @@ JML_BOOL JuggleSaver::isValidPattern(char* patt) {
 
 void JuggleSaver::trackballStart(JML_INT32 x, JML_INT32 y) {
 	gltrackball_start(trackball, x, y, width_, height_);
+	SpinSpeed = 0.0f;
 }
 
 void JuggleSaver::trackballTrack(JML_INT32 x, JML_INT32 y) {
@@ -271,5 +272,16 @@ void JuggleSaver::trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal) {
 }
 
 void JuggleSaver::resetCamera() {
-	//fixme
+	gltrackball_reset(trackball);
+	ResetZoom(&state);
+	SpinSpeed = 20.0f;
+}
+
+void JuggleSaver::zoom(float zoom) {
+	Zoom(&state, zoom);
+}
+
+void JuggleSaver::move(float deltaX, float deltaY) {
+	SpinSpeed = 0.0f;
+	Move(&state, deltaX, deltaY);
 }

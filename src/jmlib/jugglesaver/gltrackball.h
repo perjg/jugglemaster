@@ -22,6 +22,9 @@ typedef struct trackball_state trackball_state;
  */
 extern trackball_state *gltrackball_init (void);
 
+/* Reset a trackball_state object */
+extern void gltrackball_reset(trackball_state *ts);
+
 /* Begin tracking the mouse: Call this when the mouse button goes down.
    x and y are the mouse position relative to the window.
    w and h are the size of the window.

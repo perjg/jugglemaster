@@ -49,6 +49,12 @@ gltrackball_init (void)
   return ts;
 }
 
+/* Reset a trackball_state object */
+void gltrackball_reset(trackball_state *ts)
+{
+	trackball (ts->q, 0, 0, 0, 0);
+}
+
 /* Begin tracking the mouse: Call this when the mouse button goes down.
    x and y are the mouse position relative to the window.
    w and h are the size of the window.

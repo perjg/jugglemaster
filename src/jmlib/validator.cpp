@@ -355,6 +355,9 @@ bool JMSiteValidator::validateMSS(JML_CHAR* site) {
 bool JMSiteValidator::isMSS(JML_CHAR* site) {
   JML_INT32 len = (JML_INT32)strlen(site);
   
+  if (!validateSiteSyntax(site)) return false;
+  if (site[0] == '(') return false;
+
   // reject invalid site (neither vss or mss)
   if (!validateMSS(site)) return false;
   

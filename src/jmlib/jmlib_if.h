@@ -151,11 +151,13 @@ public:
 
 	virtual JML_BOOL isValidPattern(char* patt) = 0;
 
-	// trackball support
+	// camera placement functionality
 	virtual void trackballStart(JML_INT32 x, JML_INT32 y) {}
 	virtual void trackballTrack(JML_INT32 x, JML_INT32 y) {}
 	virtual void trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal = false) {}
 	virtual void resetCamera() {}
+	virtual void zoom(float zoom) {}
+	virtual void move(float deltaX, float deltaY) {}
 };
 
 #endif

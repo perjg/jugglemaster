@@ -47,6 +47,7 @@ BEGIN_MESSAGE_MAP(JMView, CView)
 	ON_WM_CREATE()
   ON_WM_TIMER()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_RBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEWHEEL()
 	ON_WM_LBUTTONDBLCLK()
@@ -211,18 +212,42 @@ void JMView::OnTimer(UINT nIDEvent) {
 	CWnd::OnTimer(nIDEvent);
 }
 
+static CPoint p;
+
 void JMView::OnLButtonDown(UINT nFlags, CPoint point) {
 	jmlib->trackballStart(point.x, point.y);
 }
 
+void JMView::OnRButtonDown(UINT nFlags, CPoint point) {
+	p = point;
+}
+
 void JMView::OnMouseMove(UINT nFlags, CPoint point) {
+	// rotate
 	if (nFlags & MK_LBUTTON) {
 		jmlib->trackballTrack(point.x, point.y);
+	}
+	// move camera
+	else if (nFlags & MK_RBUTTON) {
+		float dx = -(point.x - p.x)*10.0f / m_width;
+		float dy = (point.y - p.y)*10.0f / m_height;
+
+		jmlib->move(dx, dy);
+		p = point;
 	}
 }
 
 // zDelta is a multiple of 120. Assume each zDelta equals 10 % rotation
+// or 5 % zoom
 BOOL JMView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) {
+	// Shift: zoom in/out
+	if (nFlags & MK_SHIFT) {
+		jmlib->zoom( (zDelta / 120 * 5) / 100.0f);
+		return true;
+	}
+
+	// Control: horizontal rotation
+	// No modifier: vertical rotation
   jmlib->trackballMousewheel(zDelta / 120 * 10, nFlags & MK_CONTROL);
 	return true;
 }

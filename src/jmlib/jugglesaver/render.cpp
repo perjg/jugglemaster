@@ -151,10 +151,19 @@ void InitGLSettings(RENDER_STATE* pState, int WireFrame)
 }
 
 static float extraZoom = 0.0f;
+static float resetZoom = 0.0f;
+static float cameraHeightAdjustment = 0.0f;
+static int adjustCameraHeight = 0;
+static float deltaX = 0.0f;
+static float deltaY = 0.0f;
 
 void SetCameraExtraZoom(float f)
 {
   extraZoom = f;
+	resetZoom = f;
+	adjustCameraHeight = 1;
+	deltaX = 0.0f;
+	deltaY = 0.0f;
 }
 
 void SetCamera(RENDER_STATE* pState)
@@ -257,13 +266,19 @@ void SetCamera(RENDER_STATE* pState)
     // adjust the camera for JuggleMaster
     if (extraZoom > 0) {
       ez -= (ez * extraZoom);
-      if (extraZoom >= 0.29f)
-        cy -= 1.5f;
-      else
-        cy -= 1.0f;
+
+			if (adjustCameraHeight) {
+				if (extraZoom >= 0.29f)
+					cameraHeightAdjustment = 1.5f;
+				else
+					cameraHeightAdjustment = 1.0f;
+			}
+
+			cy -= cameraHeightAdjustment;
     }
     
-    gluLookAt(0.0, ey, ez, 0.0, cy, cz, 0.0, 1.0, 0.0);
+		gluLookAt(0.0, ey, ez, deltaX, deltaY + cy, cz, 0.0, 1.0, 0.0);
+    //gluLookAt(0.0, ey, ez, 0.0, cy, cz, 0.0, 1.0, 0.0);
 
     glMatrixMode(GL_MODELVIEW);
 }
@@ -276,6 +291,24 @@ void ResizeGL(RENDER_STATE* pState, int w, int h)
     SetCamera(pState);
 }
 
+void Zoom(RENDER_STATE* pState, float zoom) {
+	extraZoom += zoom;
+	adjustCameraHeight = 0;
+	if (extraZoom >= 0.9f) extraZoom = 0.9f;
+	if (extraZoom <= 0.0f) extraZoom = 0.01f;
+	SetCamera(pState);
+}
+
+void ResetZoom(RENDER_STATE* pState) {
+	SetCameraExtraZoom(resetZoom);
+	SetCamera(pState);
+}
+
+void Move(RENDER_STATE* pState, float deltaX_, float deltaY_) {
+	deltaX += deltaX_;
+	deltaY += deltaY_;
+	SetCamera(pState);
+}
 
 /* Determine the angle at the vertex of a triangle given the length of the
  * three sides. */

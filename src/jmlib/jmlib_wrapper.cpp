@@ -141,8 +141,8 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
       default: // ball
         jmState.objectTypes[i] = OBJECT_BALL;
         jmState.objects[i].z = 0.0f;
-        jmState.objects[i].Elev = (jm->b[i].getSpin(1) * 180 / PI) / 4;
-        jmState.objects[i].Rot = 0.0f;
+        jmState.objects[i].Elev = 0.0f;
+        jmState.objects[i].Rot = (jm->b[i].getSpin(1) * 180 / PI) / 4;
     }
   }
 
@@ -412,7 +412,7 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
     
   FramesSinceSync++;
     
-  if (CurrentFrameRate > 1.0e-6f) {
+  if (CurrentFrameRate > 0.001f /*1.0e-6f*/) {
     if (jm->getStatus() == ST_JUGGLE) {
       jmState.SpinAngle += SpinSpeed / CurrentFrameRate;
       jmState.TranslateAngle += TranslateSpeed / CurrentFrameRate;
@@ -481,6 +481,7 @@ JML_BOOL JMLibWrapper::isValidPattern(char* patt) {
 
 void JMLibWrapper::trackballStart(JML_INT32 x, JML_INT32 y) {
 	gltrackball_start(trackball, x, y, imageWidth, imageHeight);
+	SpinSpeed = 0.0f;
 }
 
 void JMLibWrapper::trackballTrack(JML_INT32 x, JML_INT32 y) {
@@ -492,5 +493,15 @@ void JMLibWrapper::trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal) {
 }
 
 void JMLibWrapper::resetCamera() {
+	js->resetCamera();
+	SpinSpeed = 20.0f;
+}
 
+void JMLibWrapper::zoom(float zoom) {
+	js->zoom(zoom);
+}
+
+void JMLibWrapper::move(float deltaX, float deltaY) {
+	SpinSpeed = 0.0f;
+	js->move(deltaX, deltaY);
 }

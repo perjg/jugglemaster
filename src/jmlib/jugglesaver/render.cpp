@@ -304,7 +304,7 @@ void ResetZoom(RENDER_STATE* pState) {
 	SetCamera(pState);
 }
 
-void Move(RENDER_STATE* pState, float deltaX_, float deltaY_) {
+void MoveCamera(RENDER_STATE* pState, float deltaX_, float deltaY_) {
 	deltaX += deltaX_;
 	deltaY += deltaY_;
 	SetCamera(pState);

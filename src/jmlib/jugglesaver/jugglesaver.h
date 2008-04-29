@@ -287,7 +287,7 @@ void InitGLSettings(RENDER_STATE* pState, int WireFrame);
 void ResizeGL(RENDER_STATE* pState, int w, int h);
 void Zoom(RENDER_STATE* pState, float zoom);
 void ResetZoom(RENDER_STATE* pState);
-void Move(RENDER_STATE* pState, float deltaX_, float deltaY_);
+void MoveCamera(RENDER_STATE* pState, float deltaX_, float deltaY_);
 void DrawGLScene(RENDER_STATE* pState);
 void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState);
 

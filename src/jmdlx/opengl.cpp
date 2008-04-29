@@ -90,11 +90,21 @@ BEGIN_EVENT_TABLE(JMOpenGLCanvas, wxGLCanvas)
   EVT_ERASE_BACKGROUND(JMOpenGLCanvas::OnEraseBackground) 
   EVT_SIZE(JMOpenGLCanvas::OnSize)
   EVT_LEFT_DOWN(JMOpenGLCanvas::OnLMouseDown)
+  EVT_LEFT_UP(JMOpenGLCanvas::OnLMouseUp)
+  EVT_RIGHT_DOWN(JMOpenGLCanvas::OnRMouseDown)
+  EVT_LEFT_DCLICK(JMOpenGLCanvas::OnLMouseDClick)
+  EVT_MOTION(JMOpenGLCanvas::OnMouseMove)
+  EVT_MOUSEWHEEL(JMOpenGLCanvas::OnMouseWheel)
+  EVT_KEY_DOWN(JMOpenGLCanvas::OnKeyDown)
 END_EVENT_TABLE()
 
 JMOpenGLCanvas::JMOpenGLCanvas(JMFrame *p, JMLib *j) : 
   wxGLCanvas((wxFrame*)p, -1, wxDefaultPosition, wxSize(480,400), wxNO_BORDER) {
 	jmlib = j;
+  
+  cur_x = 0;
+  cur_y = 0;
+  toggleRotate = false;
   
   //jmlib = JMLib::alloc_JuggleSaver();
   //jmlib->setWindowSize(480,400);
@@ -158,8 +168,94 @@ void JMOpenGLCanvas::OnSize(wxSizeEvent &event) {
 }
 
 void JMOpenGLCanvas::OnLMouseDown(wxMouseEvent& event) {
-  parent->togglePause();
+  jmlib->trackballStart(event.GetX(), event.GetY());
+  toggleRotate = true;
   event.Skip();
+}
+
+void JMOpenGLCanvas::OnLMouseUp(wxMouseEvent &event) {
+  if (toggleRotate)
+    jmlib->toggleAutoRotate();  
+}
+
+void JMOpenGLCanvas::OnRMouseDown(wxMouseEvent& event) {
+  cur_x = event.GetX();
+  cur_y = event.GetY();
+}
+
+void JMOpenGLCanvas::OnLMouseDClick(wxMouseEvent& event) {
+  jmlib->resetCamera();
+}
+
+void JMOpenGLCanvas::OnMouseMove(wxMouseEvent& event) {
+  if (event.LeftIsDown()) {
+    toggleRotate = false;
+    jmlib->trackballTrack(event.GetX(), event.GetY());
+  }
+  // move camera
+  else if (event.RightIsDown()) {
+    int w, h;
+    GetClientSize(&w, &h);
+  
+    float dx = -(event.m_x - cur_x)*10.0f / w;
+    float dy = (event.m_y - cur_y)*10.0f / h;
+
+    jmlib->setAutoRotate(false);
+    jmlib->move(dx, dy);
+    cur_x = event.GetX();
+    cur_y = event.GetY();
+  }
+}
+
+void JMOpenGLCanvas::OnMouseWheel(wxMouseEvent& event) {
+  int rotation = event.GetWheelRotation();
+  //int delta = event.GetWheelDelta();
+
+  // Shift: zoom in/out
+  if (event.ShiftDown())
+    jmlib->zoom( (rotation * 5) / 100.0f);
+  // Control: horizontal rotation
+  // No modifier: vertical rotation
+  else
+    jmlib->trackballMousewheel(rotation * 10, event.ControlDown());
+}
+
+void JMOpenGLCanvas::OnKeyDown(wxKeyEvent& event) {
+  int keycode = event.GetKeyCode();
+  if (keycode != WXK_UP && keycode != WXK_DOWN && keycode != WXK_RIGHT && keycode != WXK_LEFT)
+    return;
+  
+  // zoom in/out
+  if (event.ShiftDown()) {
+    if (keycode == WXK_UP || keycode == WXK_RIGHT)
+      jmlib->zoom( 0.05f);
+    else if (keycode == WXK_DOWN || keycode == WXK_LEFT)
+      jmlib->zoom(-0.05f);
+  }
+  // move
+  else if (!event.ControlDown()) {
+    int w, h;
+    GetClientSize(&w, &h);
+            
+    float dx = 0.4f;
+    float dy = 0.4f;
+    
+    //float dx = -(event.m_x - cur_x)*10.0f / w;
+    //float dy = (event.m_y - cur_y)*10.0f / h;
+  
+    if (keycode == WXK_UP)
+      jmlib->move(0.0f, dy * -1.0f);
+    else if (keycode == WXK_DOWN)
+      jmlib->move(0.0f, dy);
+    else if (keycode == WXK_LEFT)
+      jmlib->move(dx, 0.0f);
+    else if (keycode == WXK_RIGHT)
+      jmlib->move(dx * -1.0f, 0.0f);
+  }
+  // rotate
+  else {
+    jmlib->trackballMousewheel(10, event.ControlDown());  
+  }
 }
 
 void JMOpenGLCanvas::setRenderMode3D() {

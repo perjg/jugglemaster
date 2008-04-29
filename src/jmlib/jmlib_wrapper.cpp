@@ -23,7 +23,7 @@
 
 JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern(NULL),
   JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL),
-	trackball(NULL)
+	trackball(NULL), spin(TRUE), SavedSpinSpeed(20.0f), SavedTranslateSpeed(0.0f)
 {
   jm = JMLib::alloc_JuggleMaster();
   js = JMLib::alloc_JuggleSaver();
@@ -483,23 +483,20 @@ JML_BOOL JMLibWrapper::isValidPattern(char* patt) {
 
 void JMLibWrapper::trackballStart(JML_INT32 x, JML_INT32 y) {
 	js->trackballStart(x, y);
-	//gltrackball_start(trackball, x, y, imageWidth, imageHeight);
-	SpinSpeed = 0.0f;
 }
 
 void JMLibWrapper::trackballTrack(JML_INT32 x, JML_INT32 y) {
-	//gltrackball_track(trackball, x, y, imageWidth, imageHeight);
 	js->trackballTrack(x, y);
 }
 
 void JMLibWrapper::trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal) {
 	js->trackballMousewheel(percent, horizontal);
-	//gltrackball_mousewheel(trackball, 4, percent, horizontal);
 }
 
 void JMLibWrapper::resetCamera() {
 	js->resetCamera();
-	SpinSpeed = 20.0f;
+  SpinSpeed = SavedSpinSpeed;
+  TranslateSpeed = SavedTranslateSpeed;
 }
 
 void JMLibWrapper::zoom(float zoom) {
@@ -507,6 +504,42 @@ void JMLibWrapper::zoom(float zoom) {
 }
 
 void JMLibWrapper::move(float deltaX, float deltaY) {
-	SpinSpeed = 0.0f;
 	js->move(deltaX, deltaY);
+}
+
+void JMLibWrapper::toggleAutoRotate() {
+  spin = !spin;
+  setAutoRotate(spin);
+}
+
+void JMLibWrapper::setAutoRotate(JML_BOOL on) {
+  spin = on;
+
+  if (on) {
+    SpinSpeed = SavedSpinSpeed;
+    TranslateSpeed = SavedTranslateSpeed;
+  }
+  else {
+    SpinSpeed = 0.0f;
+    TranslateSpeed = 0.0f;
+  }
+}
+
+void JMLibWrapper::setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT translateSpeed) {
+  spin = on;
+
+  if (spinSpeed < 0) spinSpeed = 0.0f;
+  if (translateSpeed < 0) translateSpeed = 0.0f;
+
+  SavedSpinSpeed = spinSpeed;
+  SavedTranslateSpeed = translateSpeed;
+
+  if (on) {
+    SpinSpeed = SavedSpinSpeed;
+    TranslateSpeed = SavedTranslateSpeed;
+  }
+  else {
+    SpinSpeed = 0.0f;
+    TranslateSpeed = 0.0f;
+  }
 }

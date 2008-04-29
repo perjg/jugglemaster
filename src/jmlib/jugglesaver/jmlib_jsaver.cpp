@@ -29,7 +29,8 @@ JML_CHAR *JuggleSaver::possible_styles[] = {
 // Constructor / Destructor
 JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f),
   initialized(false), is_juggling(false), pattern(NULL), siteswap(NULL), pattname(NULL),
-  width_(480), height_(400), trackball(NULL) {
+  width_(480), height_(400), trackball(NULL), spin(TRUE), SavedSpinSpeed(20.0f),
+  SavedTranslateSpeed(0.0f) {
   // NOTE:
   // initialize cannot be called from the constructor, because it requires an OpenGL
   // context. It must be called manually after creating the OpenGL context.
@@ -263,7 +264,6 @@ JML_BOOL JuggleSaver::isValidPattern(char* patt) {
 
 void JuggleSaver::trackballStart(JML_INT32 x, JML_INT32 y) {
 	gltrackball_start(trackball, x, y, width_, height_);
-	SpinSpeed = 0.0f;
 }
 
 void JuggleSaver::trackballTrack(JML_INT32 x, JML_INT32 y) {
@@ -277,7 +277,8 @@ void JuggleSaver::trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal) {
 void JuggleSaver::resetCamera() {
 	gltrackball_reset(trackball);
 	ResetZoom(&state);
-	SpinSpeed = 20.0f;
+  SpinSpeed = SavedSpinSpeed;
+  TranslateSpeed = SavedTranslateSpeed;
 }
 
 void JuggleSaver::zoom(float zoom) {
@@ -285,6 +286,42 @@ void JuggleSaver::zoom(float zoom) {
 }
 
 void JuggleSaver::move(float deltaX, float deltaY) {
-	SpinSpeed = 0.0f;
-	Move(&state, deltaX, deltaY);
+	MoveCamera(&state, deltaX, deltaY);
+}
+
+void JuggleSaver::toggleAutoRotate() {
+  spin = !spin;
+  setAutoRotate(spin);
+}
+
+void JuggleSaver::setAutoRotate(JML_BOOL on) {
+  spin = on;
+
+  if (on) {
+    SpinSpeed = SavedSpinSpeed;
+    TranslateSpeed = SavedTranslateSpeed;
+  }
+  else {
+    SpinSpeed = 0.0f;
+    TranslateSpeed = 0.0f;
+  }
+}
+
+void JuggleSaver::setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT translateSpeed) {
+  spin = on;
+
+  if (spinSpeed < 0) spinSpeed = 0.0f;
+  if (translateSpeed < 0) translateSpeed = 0.0f;
+
+  SavedSpinSpeed = spinSpeed;
+  SavedTranslateSpeed = translateSpeed;
+
+  if (on) {
+    SpinSpeed = SavedSpinSpeed;
+    TranslateSpeed = SavedTranslateSpeed;
+  }
+  else {
+    SpinSpeed = 0.0f;
+    TranslateSpeed = 0.0f;
+  }
 }

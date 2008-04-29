@@ -39,6 +39,12 @@ public:
   void OnEraseBackground(wxEraseEvent& event);
   void OnSize(wxSizeEvent &event);
   void OnLMouseDown(wxMouseEvent &event);
+  void OnLMouseUp(wxMouseEvent &event);
+  void OnRMouseDown(wxMouseEvent &event);
+  void OnLMouseDClick(wxMouseEvent& event);
+  void OnMouseMove(wxMouseEvent& event);
+  void OnMouseWheel(wxMouseEvent& event);
+  void OnKeyDown(wxKeyEvent& event);
 
   void setRenderMode3D();
   void setRenderModeFlat();
@@ -53,6 +59,10 @@ private:
   //JuggleSaver* jmlib;
   JMOpenGLRenderer* renderer;
   //GLuint m_gllist;
+
+  long cur_x;
+  long cur_y;
+  bool toggleRotate;
 
   void SetBallColor(int color);
   DECLARE_EVENT_TABLE()

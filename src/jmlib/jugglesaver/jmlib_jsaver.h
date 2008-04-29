@@ -36,6 +36,9 @@ private:
   unsigned LastSyncTime;
   float SpinSpeed;
   float TranslateSpeed;
+  float SavedSpinSpeed;
+  float SavedTranslateSpeed;
+  JML_BOOL spin;
   float JuggleSpeed;
   JML_CHAR* pattern;  // The current pattern
   JML_CHAR* siteswap; // The current siteswap
@@ -115,6 +118,9 @@ public:
 	virtual void resetCamera();
 	virtual void zoom(float zoom);
 	virtual void move(float deltaX, float deltaY);
+  virtual void toggleAutoRotate();
+  virtual void setAutoRotate(JML_BOOL on);
+  virtual void setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT translateSpeed);
 };
 
 #endif // JMLIB_JSAVER

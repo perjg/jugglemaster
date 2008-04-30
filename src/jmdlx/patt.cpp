@@ -150,7 +150,7 @@ int PatternLoader::ParseFile() {
   }
 
   FILE* f= fopen((const char *)targetfilename,"r");
-  ParseJSPatterns(f,&groups);
+  return ParseJSPatterns(f,&groups);
 
 	return ParsePatterns(patternfile,&groups,&styles);
 }

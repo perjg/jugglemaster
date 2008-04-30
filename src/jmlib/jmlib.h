@@ -233,6 +233,23 @@ struct hand {
   JML_INT32 lx[10], ly[10]; // polygon for the left hand
 };
 
+// holds internal data neccesary to re-create the current camera position
+struct camera {
+  camera(JML_FLOAT spinAngle_, JML_FLOAT translateAngle_, JML_FLOAT extraZoom_, JML_FLOAT deltaX_,
+         JML_FLOAT deltaY_, JML_BOOL spin_, trackball_state* trackball_) {
+    spinAngle = spinAngle_; translateAngle = translateAngle_; extraZoom = extraZoom_;
+    deltaX = deltaX_; deltaY = deltaY_; spin = spin_; trackball = trackball_;
+  }
+private:
+  JML_FLOAT spinAngle;
+  JML_FLOAT translateAngle;
+  JML_FLOAT extraZoom;
+  JML_FLOAT deltaX;
+  JML_FLOAT deltaY;
+  JML_BOOL spin;
+	trackball_state* trackball;
+};
+
 // The JMLib base class
 #include "jmlib_if.h"
 

@@ -157,23 +157,14 @@ static int adjustCameraHeight = 0;
 static float deltaX = 0.0f;
 static float deltaY = 0.0f;
 
-void SetCameraExtraZoom(float f)
-{
-  extraZoom = f;
-	resetZoom = f;
-	adjustCameraHeight = 1;
-	deltaX = 0.0f;
-	deltaY = 0.0f;
-}
-
 void SetCamera(RENDER_STATE* pState)
 {
     /* Try to work out a sensible place to put the camera so that more or less
      * the whole juggling pattern fits into the screen. We assume that the
-	 * pattern is height limited (i.e. if we get the height right then the width
-	 * will be OK).  This is a pretty good assumption given that the screen
-	 * tends to wider than high, and that a juggling pattern is normally much
-	 * higher than wide.
+     * pattern is height limited (i.e. if we get the height right then the width
+     * will be OK).  This is a pretty good assumption given that the screen
+     * tends to wider than high, and that a juggling pattern is normally much
+     * higher than wide.
      *
      * If I could draw a diagram here then it would be much easier to
      * understand but my ASCII-art skills just aren't up to it.  
@@ -283,6 +274,29 @@ void SetCamera(RENDER_STATE* pState)
     glMatrixMode(GL_MODELVIEW);
 }
 
+/*
+void SetCameraFixed(RENDER_STATE* pState, float eyeY, float eyeZ, float deltaX, float deltaY,
+                    float centerY, float centerZ, float zoom, ) {
+    extraZoom = zoom;
+    adjustCameraHeight = 0;
+    if (extraZoom >= 0.9f) extraZoom = 0.9f;
+    if (extraZoom <= 0.0f) extraZoom = 0.01f;
+                    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+		gluLookAt(0.0, eyeY, eyeZ, deltaX, deltaY + centerY, centerZ, 0.0, 1.0, 0.0);
+    glMatrixMode(GL_MODELVIEW);
+}
+*/
+
+void SetCameraExtraZoom(float f)
+{
+    extraZoom = f;
+    resetZoom = f;
+    adjustCameraHeight = 1;
+    deltaX = 0.0f;
+    deltaY = 0.0f;
+}
 
 void ResizeGL(RENDER_STATE* pState, int w, int h)
 {
@@ -292,22 +306,22 @@ void ResizeGL(RENDER_STATE* pState, int w, int h)
 }
 
 void Zoom(RENDER_STATE* pState, float zoom) {
-	extraZoom += zoom;
-	adjustCameraHeight = 0;
-	if (extraZoom >= 0.9f) extraZoom = 0.9f;
-	if (extraZoom <= 0.0f) extraZoom = 0.01f;
-	SetCamera(pState);
+    extraZoom += zoom;
+    adjustCameraHeight = 0;
+    if (extraZoom >= 0.9f) extraZoom = 0.9f;
+    if (extraZoom <= 0.0f) extraZoom = 0.01f; 
+    SetCamera(pState);
 }
 
 void ResetZoom(RENDER_STATE* pState) {
-	SetCameraExtraZoom(resetZoom);
-	SetCamera(pState);
+    SetCameraExtraZoom(resetZoom);
+    SetCamera(pState);
 }
 
 void MoveCamera(RENDER_STATE* pState, float deltaX_, float deltaY_) {
-	deltaX += deltaX_;
-	deltaY += deltaY_;
-	SetCamera(pState);
+    deltaX += deltaX_;
+    deltaY += deltaY_;
+    SetCamera(pState);
 }
 
 /* Determine the angle at the vertex of a triangle given the length of the

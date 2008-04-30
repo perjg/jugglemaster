@@ -161,6 +161,11 @@ public:
   virtual void toggleAutoRotate() {}
   virtual void setAutoRotate(JML_BOOL on) {}
   virtual void setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT translateSpeed) {}
+  
+  // camera save and load support
+  virtual camera* getCamera() { return NULL; }
+  virtual void setCamera(camera* cam) {}
+  virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, camera* cam, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF) { return FALSE; }
 };
 
 #endif

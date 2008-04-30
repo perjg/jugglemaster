@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CB398D690DB787A6004DBEAC /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */; };
+		CB3EDB870DC82AFD004F2E1A /* sqlite_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDB850DC82AFD004F2E1A /* sqlite_patterns.cpp */; };
 		CB6ABB420DB2557B000FD76F /* advsite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB320DB2557B000FD76F /* advsite.cpp */; };
 		CB6ABB430DB2557B000FD76F /* choosepatt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB340DB2557B000FD76F /* choosepatt.cpp */; };
 		CB6ABB440DB2557B000FD76F /* choosestyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB360DB2557B000FD76F /* choosestyle.cpp */; };
@@ -57,6 +58,8 @@
 		CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_wrapper.cpp; path = ../../jmlib/jmlib_wrapper.cpp; sourceTree = SOURCE_ROOT; };
 		CB3991060DB9A4CF004DBEAC /* opengl_renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opengl_renderer.h; path = ../../jmgfx/opengl_renderer.h; sourceTree = SOURCE_ROOT; };
 		CB3991AD0DB9B026004DBEAC /* jmlib_jugglemaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jugglemaster.h; path = ../../jmlib/jmlib_jugglemaster.h; sourceTree = SOURCE_ROOT; };
+		CB3EDB850DC82AFD004F2E1A /* sqlite_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite_patterns.cpp; path = ../../jmlib/sqlite_patterns.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDB860DC82AFD004F2E1A /* sqlite_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite_patterns.h; path = ../../jmlib/sqlite_patterns.h; sourceTree = SOURCE_ROOT; };
 		CB6ABB2B0DB2551C000FD76F /* jmdlx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jmdlx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB6ABB2E0DB2551C000FD76F /* jmdlx-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "jmdlx-Info.plist"; sourceTree = "<group>"; };
 		CB6ABB320DB2557B000FD76F /* advsite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = advsite.cpp; path = ../advsite.cpp; sourceTree = SOURCE_ROOT; };
@@ -192,6 +195,8 @@
 				CB6ABB530DB255A9000FD76F /* prefs.h */,
 				CB6ABB540DB255A9000FD76F /* randompatt.cpp */,
 				CB6ABB550DB255A9000FD76F /* randompatt.h */,
+				CB3EDB850DC82AFD004F2E1A /* sqlite_patterns.cpp */,
+				CB3EDB860DC82AFD004F2E1A /* sqlite_patterns.h */,
 				CB6ABB560DB255A9000FD76F /* util.cpp */,
 				CB6ABB570DB255A9000FD76F /* util.h */,
 				CB6ABB580DB255A9000FD76F /* validator.cpp */,
@@ -348,6 +353,7 @@
 				CBA2E2CE0DBCD83C00618F0B /* js_patterns.cpp in Sources */,
 				CBA2E4850DC0DB2D00618F0B /* gltrackball.cpp in Sources */,
 				CBA2E4860DC0DB2D00618F0B /* trackball.cpp in Sources */,
+				CB3EDB870DC82AFD004F2E1A /* sqlite_patterns.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

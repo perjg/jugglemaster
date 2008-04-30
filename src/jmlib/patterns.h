@@ -61,6 +61,9 @@ struct styles_t {
 
 /* groups and styles better both exist and be allocated.
    If you pass it null pointers, it will instantly, silently, bail. */
+int ParseAllPatterns(FILE *jm_input, FILE* js_input, 
+	struct groups_t *groups, struct styles_t *styles);
+   
 int ParsePatterns(FILE *input,
 	struct groups_t *groups, struct styles_t *styles);
 

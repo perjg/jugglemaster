@@ -5,39 +5,52 @@ Command-line named pattern
 Keyboard shortcuts
 Fix OSX proxy stuff
 
-
-JMLib 2.1:
-- JuggleMaster:
-  * Speed stuff with fps counter
-- JuggleSaver:
-  * pattern loader
-  * pattern verification / parsing
-  * proper club placement (y too high?)
-  * proper random object selection
-- JuggleMaster pattern file additions:
-  * objects (c(lub), r(ing), b(all), x(random))
-  * camera zoom adjustment
-  * special camera coordinates
-  * port currently
-- OpenGL stuff:
-  * port sphere stuff
-  * fps counter and pattern stuff on screen
-  * add fish club and possibly other objects
-  * skinning for the juggler
-- Searchable sqlite pattern loader
-  * Implement :)
-
-
-JMLib:
-Speed stuff
-Stop his arms crossing?
-Add "bugger up" feature where dude drops all the balls.
-Add a sync-de-sync option
-
 AAJM:
 Find more stupid uses and add to webpage
 
-PocketPC:
+JMLib 2.1:
 
-JMQt:
-Fix it :-)
+BUGS
+
+JuggleSaver
+* Cannot toggle spin on and off for JuggleSaver
+* Some JuggleSaver patterns are loaded twice
+* Pattern parsing: * -1 not parsed correctly
+
+JuggleMaster
+* Club spinning is strange while holding for certain patterns
+* Clubs are held too low for certain patterns
+* Balls should continue spinning when held
+
+CLEANUP
+
+* Add JUGGLESAVER_SUPPORT #define
+* Clean up virtual keyword in headers
+* Add documentation to headers
+* Remove juggler class
+
+NOT YET IMPLEMENTED
+
+* Mixed object type
+* Select object type when loading pattern
+* Load / Save camera stuff
+* JuggleMaster pattern file additions:
+  - Object types: Mixed, Balls, Rings, Clubs
+  - camera placement
+  - Embed JuggleSaver patterns
+* Switch to random pattern
+* sqlite pattern loading / search
+* Currently active throw for JuggleSaver
+* fps counter
+* Currently active pattern info on screen
+* Bounce juggler's head for JuggleMaster patterns
+
+STUFF FOR THE FUTURE
+
+* Add fish club and other objects
+* Skinning for the juggler
+* Stop the juggler's arms crossing
+* Add "bugger up" feature where dude drops all the balls.
+* Add a sync-de-sync option (?)
+
+

@@ -26,6 +26,7 @@
 #include <wx/wfstream.h>
 
 #define DEFAULT_PATTERNFILE "patterns.jm"
+#define DEFAULT_JUGGLESAVER_PATTERNFILE "moresites.txt"
 #define DEFAULT_SEMAPHOREFILE "semaphore.jm"
 
 #define WEB_PREFIX "http://icculus.org/jugglemaster/"
@@ -33,11 +34,12 @@
 class PatternLoader {
 	protected:
 		FILE *patternfile;
+    FILE *patternfile_js;
 		wxWindow *parent;
 		int can_use;
-		int OpenFile(const char *,int);
-		int ParseFile();
-		int CloseFile();
+		FILE* OpenFile(const char *,int);
+		int ParseFiles();
+		int CloseFiles();
 		struct groups_t groups;
 		struct styles_t styles;
 		struct pattern_group_t *current_group;
@@ -47,7 +49,8 @@ class PatternLoader {
 	public:
 		//PatternLoader(wxWindow *p = NULL, int redownload=0);
 		//PatternLoader(const char *filename, wxWindow *p = NULL, int redownload=0);
-        PatternLoader(wxWindow *p = NULL, const char *filename = DEFAULT_PATTERNFILE, int redownload=0);
+    PatternLoader(wxWindow *p = NULL, const char *filename = DEFAULT_PATTERNFILE,
+                  const char *js_filename = NULL, int redownload=0);
 		~PatternLoader();
 		int Usable();
 		void PrintStyles();

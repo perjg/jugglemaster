@@ -43,6 +43,32 @@ From the default patterns.jm:
 #MR=0           ;Switch right and left (n=0,1)
 */
 
+
+#include "jugglesaver/js_patterns.h"
+
+// parse and combine JuggleMaster and JuggleSaver patterns
+int ParseAllPatterns(FILE *jm_input, FILE* js_input, 
+	struct groups_t *groups, struct styles_t *styles) {
+  int jm = ParsePatterns(jm_input, groups, styles);
+  if (!jm) return 0;
+  
+  if (!js_input) return 1;
+  
+  struct pattern_group_t* last = groups->first;
+  
+  while (last->next != NULL) last = last->next;
+  
+  struct groups_t *js_groups = new groups_t;
+  js_groups->first = NULL;
+  
+  int js = ParseJSPatterns(js_input, js_groups);
+  if (!js) { delete js_groups; return 0; }
+  
+  last->next = js_groups->first;
+  delete js_groups;
+  return 1;
+}
+
 int ParsePatterns(FILE *input, 
 	struct groups_t *groups, struct styles_t *styles) {
 

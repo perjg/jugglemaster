@@ -102,8 +102,8 @@ private:
 public:
   ~JuggleMaster();
 
-  void initialize();
-  void shutdown();
+  virtual void initialize();
+  virtual void shutdown();
 
   virtual engine_t getType() { return JUGGLING_ENGINE_JUGGLEMASTER; }
   

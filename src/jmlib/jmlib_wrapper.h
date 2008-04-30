@@ -58,8 +58,8 @@ private:
   bool firstFrame;
   static JML_CHAR *possible_styles[]; // Contains list of all possible styles
 public:
-  void initialize();
-  void shutdown();
+  virtual void initialize();
+  virtual void shutdown();
 
   virtual engine_t getType();
 

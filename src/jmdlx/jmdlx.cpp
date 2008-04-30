@@ -177,7 +177,7 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 #endif
 
   // Initialise Pattern Loader
-  patterns = new PatternLoader();
+  patterns = new PatternLoader(NULL, DEFAULT_PATTERNFILE, DEFAULT_JUGGLESAVER_PATTERNFILE);
   semaphores = new PatternLoader(NULL, DEFAULT_SEMAPHOREFILE);
 
 }
@@ -199,8 +199,8 @@ void JMFrame::changeMirror(wxCommandEvent& WXUNUSED(event)) {
 void JMFrame::reDownload(wxCommandEvent& WXUNUSED(event)) {
 	delete patterns;
 	delete semaphores;
-	patterns = new PatternLoader(this, DEFAULT_PATTERNFILE, 1);
-	semaphores = new PatternLoader(this, DEFAULT_SEMAPHOREFILE, 1);
+	patterns = new PatternLoader(this, DEFAULT_PATTERNFILE, DEFAULT_JUGGLESAVER_PATTERNFILE, 1);
+	semaphores = new PatternLoader(this, DEFAULT_SEMAPHOREFILE, NULL, 1);
 }
 
 void JMFrame::setPause() {

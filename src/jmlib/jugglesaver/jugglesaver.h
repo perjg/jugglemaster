@@ -11,18 +11,24 @@
 #ifndef JUGGLESAVER_H
 #define JUGGLESAVER_H
 
-#ifdef _WIN32
 #ifdef JMWIN
 // required to compile when using MFC
 #include "../../jmwin/src/stdafx.h"
 #endif
-#include <gl/gl.h>
-#include <gl/glu.h>
-#include <gl/glaux.h>
-#else
+
+//fixme: add other applicable platforms here
+#ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <OpenGL/glext.h>
+#elif defined(TARGET_IPHONE)
+#include <OpenGLES/EAGL.h>
+#include <OpenGLES/ES1/gl.h>
+#include <OpenGLES/ES1/glext.h>
+#else
+#include <gl/gl.h>
+#include <gl/glu.h>
+#include <gl/glaux.h>
 #endif
 
 #include "gltrackball.h"

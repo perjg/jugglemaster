@@ -47,7 +47,7 @@
 
 //Refactored constructor
 PatternLoader::PatternLoader(wxWindow *p, const char *filename,
-		int redownload) :
+    const char *js_filename, int redownload) :
 				parent(p),
 				can_use(0),
 				current_group(NULL),
@@ -55,18 +55,20 @@ PatternLoader::PatternLoader(wxWindow *p, const char *filename,
 				current_pattern(NULL) {
     styles.first = NULL;
     groups.first = NULL;
-    if(OpenFile(filename,redownload)) {
-        can_use = ParseFile();
-        CloseFile();
-    }
+    
+    patternfile = OpenFile(filename, redownload);
+    if (js_filename) patternfile_js = OpenFile(js_filename, redownload);    
 
+    can_use = ParseFiles();
+    CloseFiles();
 }
+
 
 int PatternLoader::Usable() {
 	return(can_use);
 }
 
-int PatternLoader::OpenFile(const char *filename, int redownload) {
+FILE* PatternLoader::OpenFile(const char *filename, int redownload) {
 	wxString targetfilename;
 	struct stat buf;
 	targetfilename = wxGetHomeDir();
@@ -83,12 +85,10 @@ int PatternLoader::OpenFile(const char *filename, int redownload) {
 	}
 
 	if(stat((const char *)targetfilename,&buf) != -1 && !redownload) {
-		patternfile = fopen((const char *)targetfilename,"r");
-		return(patternfile != NULL);
+		return fopen((const char *)targetfilename,"r");
 	} else if(stat(filename,&buf) != -1 && !redownload) {
 		wxCopyFile(filename,targetfilename);
-		patternfile = fopen((const char *)targetfilename,"r");
-		return(patternfile != NULL);
+		return fopen((const char *)targetfilename,"r");
 	} else {
 		wxString fullurl(WEB_PREFIX);
 		wxString proxy;
@@ -127,14 +127,14 @@ int PatternLoader::OpenFile(const char *filename, int redownload) {
 			wxMessageDialog errordlg(parent,"An error occured while downloading","Error",wxOK|wxICON_ERROR);
 			errordlg.ShowModal();
 		}
-		patternfile = fopen((const char *)targetfilename,"r");
-		return(patternfile != NULL);
+		return fopen((const char *)targetfilename,"r");
 	}
 }
 
 #include "../jmlib/jugglesaver/js_patterns.h"
 
-int PatternLoader::ParseFile() {
+int PatternLoader::ParseFiles() {
+/*
 // js test stuff
 	wxString targetfilename;
 	struct stat buf;
@@ -151,12 +151,17 @@ int PatternLoader::ParseFile() {
 
   FILE* f= fopen((const char *)targetfilename,"r");
   return ParseJSPatterns(f,&groups);
+  */
 
-	return ParsePatterns(patternfile,&groups,&styles);
+	return ParseAllPatterns(patternfile, patternfile_js, &groups, &styles);
 }
 
-int PatternLoader::CloseFile() {
-	return fclose(patternfile);
+int PatternLoader::CloseFiles() {
+  int r1 = true;
+  int r2 = true;
+  if (patternfile) r1 = fclose(patternfile);
+  if (patternfile_js) r2 = fclose(patternfile_js);
+  return r1 && r2;
 }
 
 PatternLoader::~PatternLoader() {

@@ -22,15 +22,7 @@
 //#include <errno.h>
 #include "patterns.h"
 
-
-/* fixme:
- *
- * 
- *
- */
-
 /*
-
 From the default patterns.jm:
 #GA=9.8         ;Gravity (0<f<=98) [meter/second^2]
 #DR=0.50        ;Dwell ratio (0.10<=f<=0.90)
@@ -43,15 +35,17 @@ From the default patterns.jm:
 #MR=0           ;Switch right and left (n=0,1)
 */
 
-
+#ifdef JUGGLESAVER_SUPPORT
 #include "jugglesaver/js_patterns.h"
+#endif
 
 // parse and combine JuggleMaster and JuggleSaver patterns
 int ParseAllPatterns(FILE *jm_input, FILE* js_input, 
 	struct groups_t *groups, struct styles_t *styles) {
   int jm = ParsePatterns(jm_input, groups, styles);
   if (!jm) return 0;
-  
+
+#ifdef JUGGLESAVER_SUPPORT  
   if (!js_input) return 1;
   
   struct pattern_group_t* last = groups->first;
@@ -66,6 +60,7 @@ int ParseAllPatterns(FILE *jm_input, FILE* js_input,
   
   last->next = js_groups->first;
   delete js_groups;
+#endif
   return 1;
 }
 

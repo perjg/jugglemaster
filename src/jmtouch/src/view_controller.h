@@ -25,7 +25,7 @@
 
 @class JMView;
 
-@interface JMViewController : UIViewController <UINavigationBarDelegate, UIModalViewDelegate>
+@interface JMViewController : UIViewController <UINavigationBarDelegate>
 {
     JMView *jugglerView;
 

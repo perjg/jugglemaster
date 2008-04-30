@@ -131,28 +131,7 @@ FILE* PatternLoader::OpenFile(const char *filename, int redownload) {
 	}
 }
 
-#include "../jmlib/jugglesaver/js_patterns.h"
-
 int PatternLoader::ParseFiles() {
-/*
-// js test stuff
-	wxString targetfilename;
-	struct stat buf;
-	targetfilename = wxGetHomeDir();
-	if(targetfilename.Len() > 0) {
-		targetfilename += "/.jugglemaster/";
-		if(!wxDirExists(targetfilename)) {
-			if(!wxMkdir(targetfilename,0755)) {
-				targetfilename = "";
-			}
-		}
-		targetfilename += "moresites.txt";
-  }
-
-  FILE* f= fopen((const char *)targetfilename,"r");
-  return ParseJSPatterns(f,&groups);
-  */
-
 	return ParseAllPatterns(patternfile, patternfile_js, &groups, &styles);
 }
 

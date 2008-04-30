@@ -80,7 +80,7 @@
 	[jugglerView setBackgroundColor:[UIColor lightGrayColor]];
 	[self.view addSubview: jugglerView];
 	
-	jm = new JMLib();
+	jm = JMLib::alloc();
 	
 	jm->setWindowSize([jugglerView frame].size.width, [jugglerView frame].size.height);
 	jm->setSpeed(1.0);
@@ -124,6 +124,7 @@
 	[styleAlert release];
 }
 
+/*
 - (void)modalView:(UIModalView *)modalView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	switch (buttonIndex)
@@ -139,6 +140,7 @@
 			break;
 	}
 }
+*/
 
 - (void)doRender:(NSTimer*) timer
 {

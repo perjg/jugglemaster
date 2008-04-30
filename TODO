@@ -1,12 +1,16 @@
 JMDlx:
-OS9 - Find a build box
-Fix The Timing/ Speed up/ slow down/ pause [speed in jmlib]
-Command-line named pattern
-Keyboard shortcuts
-Fix OSX proxy stuff
+* OS9 - Find a build box
+* Fix The Timing/ Speed up/ slow down/ pause [speed in jmlib]
+* Command-line named pattern
+* Keyboard shortcuts
+* Fix OSX proxy stuff
+* 
 
 AAJM:
-Find more stupid uses and add to webpage
+* Find more stupid uses and add to webpage
+
+JMCocoa:
+* Finish it
 
 JMLib 2.1:
 
@@ -21,6 +25,7 @@ JuggleMaster
 * Club spinning is strange while holding for certain patterns
 * Clubs are held too low for certain patterns
 * Balls should continue spinning when held
+* Pattern parsing not safe for incorrect pattern files
 
 CLEANUP
 
@@ -31,6 +36,7 @@ CLEANUP
 
 NOT YET IMPLEMENTED
 
+* Flat OpenGL rendering for JuggleMaster
 * Mixed object type
 * Select object type when loading pattern
 * Load / Save camera stuff

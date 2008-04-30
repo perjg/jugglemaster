@@ -21,7 +21,11 @@
 // Create an instance of JMLib that can switch automatically
 // between the JuggleMaster and JuggleSaver engine
 JMLib* JMLib::alloc() {
+#ifdef JUGGLESAVER_SUPPORT
   return new JMLibWrapper();
+#else
+  return new JuggleMaster();
+#endif
 }
 
 // Create an instance of JMLib that supports JuggleMaster only
@@ -31,7 +35,11 @@ JMLib* JMLib::alloc_JuggleMaster() {
 
 // Create an instance of JMLib that supports JuggleSaver only
 JMLib* JMLib::alloc_JuggleSaver() {
+#ifdef JUGGLESAVER_SUPPORT
   return new JuggleSaver();
+#else
+  return new JuggleMaster();
+#endif
 }
 
 #ifdef _WIN32

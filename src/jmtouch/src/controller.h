@@ -21,8 +21,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface JMController : NSObject <UIApplicationDelegate, UIModalViewDelegate> {
-    UIWindow *window;
+@interface JMController : NSObject <UIApplicationDelegate> {
+  UIWindow *window;
 	UINavigationController *navigationController;
 }
 

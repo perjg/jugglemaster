@@ -38,9 +38,9 @@
     [window setBackgroundColor:[UIColor lightGrayColor]];
 	
 	// Set up main view navigation controller
-    JMViewController *navController = [[JMViewController alloc] init];
+  JMViewController *navController = [[JMViewController alloc] init];
 	navigationController = [[UINavigationController alloc] initWithRootViewController:navController];
-	navigationController.navigationBarStyle = UIBarStyleDefault;	
+	navigationController.navigationBar.barStyle = UIBarStyleDefault;
 	[navController release];
 	
 	// Add the navigation controller's view to the window

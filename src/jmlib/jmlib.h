@@ -69,7 +69,9 @@ int gettimeofday(struct timeval *tv, struct timezone *tz);
 #include "jmlib_types.h"
 #include "util.h"
 #include "validator.h"
+#ifdef JUGGLESAVER_SUPPORT
 #include "jugglesaver/js_validator.h"
+#endif
 
 // PPC and Palm OS have custom pattern loading
 #ifndef _WIN32_WCE
@@ -233,6 +235,12 @@ struct hand {
   JML_INT32 lx[10], ly[10]; // polygon for the left hand
 };
 
+#ifndef JUGGLESAVER_SUPPORT
+struct trackball_state {
+  int dummy;
+};
+#endif
+
 // holds internal data neccesary to re-create the current camera position
 struct camera {
   camera(JML_FLOAT spinAngle_, JML_FLOAT translateAngle_, JML_FLOAT extraZoom_, JML_FLOAT deltaX_,
@@ -254,12 +262,16 @@ private:
 #include "jmlib_if.h"
 
 // The JuggleSaver class
+#ifdef JUGGLESAVER_SUPPORT
 #include "jugglesaver/jmlib_jsaver.h"
+#endif
 
 // The JuggleMaster class
 #include "jmlib_jugglemaster.h"
 
 // The JMLib class
+#ifdef JUGGLESAVER_SUPPORT
 #include "jmlib_wrapper.h"
+#endif
 
 #endif

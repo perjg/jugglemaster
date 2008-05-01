@@ -18,10 +18,24 @@
 		CB14B30F0D90155A009BD0C0 /* validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3080D90155A009BD0C0 /* validator.cpp */; };
 		CB14B3380D901654009BD0C0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3340D901654009BD0C0 /* main.m */; };
 		CB20BCCD0D9C8D77008484A2 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB20BCCC0D9C8D77008484A2 /* Icon.png */; };
+		CB3EDE920DC8BF44004F2E1A /* EAGLTrackBallView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDE8E0DC8BF44004F2E1A /* EAGLTrackBallView.mm */; };
+		CB3EDE930DC8BF44004F2E1A /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDE900DC8BF44004F2E1A /* EAGLView.m */; };
+		CB3EDF810DC8C092004F2E1A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB3EDF800DC8C092004F2E1A /* OpenGLES.framework */; };
+		CB3EDF840DC8C0AA004F2E1A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB3EDF830DC8C0AA004F2E1A /* QuartzCore.framework */; };
+		CB3EDF940DC8C0CE004F2E1A /* engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF860DC8C0CE004F2E1A /* engine.cpp */; };
+		CB3EDF950DC8C0CE004F2E1A /* gltrackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF870DC8C0CE004F2E1A /* gltrackball.cpp */; };
+		CB3EDF960DC8C0CE004F2E1A /* jmlib_jsaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF890DC8C0CE004F2E1A /* jmlib_jsaver.cpp */; };
+		CB3EDF970DC8C0CE004F2E1A /* js_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF8B0DC8C0CE004F2E1A /* js_patterns.cpp */; };
+		CB3EDF980DC8C0CE004F2E1A /* js_validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF8D0DC8C0CE004F2E1A /* js_validator.cpp */; };
+		CB3EDF9A0DC8C0CE004F2E1A /* render_jm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF910DC8C0CE004F2E1A /* render_jm.cpp */; };
+		CB3EDF9B0DC8C0CE004F2E1A /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF920DC8C0CE004F2E1A /* trackball.cpp */; };
+		CB3EDFA10DC8C0E4004F2E1A /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF9F0DC8C0E4004F2E1A /* jmlib_wrapper.cpp */; };
+		CB3EDFC90DC8CBC7004F2E1A /* render_opengles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDFC80DC8CBC7004F2E1A /* render_opengles.cpp */; };
+		CB3EDFE80DC8DB6D004F2E1A /* glues.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDFE60DC8DB6D004F2E1A /* glues.cpp */; };
+		CB3EE0A70DC8E0C1004F2E1A /* view_gl.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB3EE0A60DC8E0C1004F2E1A /* view_gl.mm */; };
 		CB6ABABB0DB24B6E000FD76F /* sqlite_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABAB90DB24B6E000FD76F /* sqlite_patterns.cpp */; };
 		CB6ABAC40DB24D56000FD76F /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABAC10DB24D56000FD76F /* sqlite3.c */; };
 		CBA7A9F90DABBA5500E9FAB5 /* view_controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBA7A9F80DABBA5500E9FAB5 /* view_controller.mm */; };
-		CBF0358C0D9021EA0008B286 /* view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBF0358B0D9021EA0008B286 /* view.mm */; };
 		CBF035E60D9152450008B286 /* controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBF035E50D9152450008B286 /* controller.mm */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +61,36 @@
 		CB14B3090D90155A009BD0C0 /* validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = validator.h; path = ../jmlib/validator.h; sourceTree = SOURCE_ROOT; };
 		CB14B3340D901654009BD0C0 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/main.m; sourceTree = SOURCE_ROOT; };
 		CB20BCCC0D9C8D77008484A2 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		CB3EDE8D0DC8BF44004F2E1A /* EAGLTrackBallView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAGLTrackBallView.h; path = src/EAGLTrackBallView.h; sourceTree = SOURCE_ROOT; };
+		CB3EDE8E0DC8BF44004F2E1A /* EAGLTrackBallView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = EAGLTrackBallView.mm; path = src/EAGLTrackBallView.mm; sourceTree = SOURCE_ROOT; };
+		CB3EDE8F0DC8BF44004F2E1A /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAGLView.h; path = src/EAGLView.h; sourceTree = SOURCE_ROOT; };
+		CB3EDE900DC8BF44004F2E1A /* EAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAGLView.m; path = src/EAGLView.m; sourceTree = SOURCE_ROOT; };
+		CB3EDE910DC8BF44004F2E1A /* OpenGL_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGL_Internal.h; path = src/OpenGL_Internal.h; sourceTree = SOURCE_ROOT; };
+		CB3EDF800DC8C092004F2E1A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		CB3EDF830DC8C0AA004F2E1A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CB3EDF860DC8C0CE004F2E1A /* engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = engine.cpp; path = ../jmlib/jugglesaver/engine.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDF870DC8C0CE004F2E1A /* gltrackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gltrackball.cpp; path = ../jmlib/jugglesaver/gltrackball.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDF880DC8C0CE004F2E1A /* gltrackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gltrackball.h; path = ../jmlib/jugglesaver/gltrackball.h; sourceTree = SOURCE_ROOT; };
+		CB3EDF890DC8C0CE004F2E1A /* jmlib_jsaver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_jsaver.cpp; path = ../jmlib/jugglesaver/jmlib_jsaver.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDF8A0DC8C0CE004F2E1A /* jmlib_jsaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jsaver.h; path = ../jmlib/jugglesaver/jmlib_jsaver.h; sourceTree = SOURCE_ROOT; };
+		CB3EDF8B0DC8C0CE004F2E1A /* js_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = js_patterns.cpp; path = ../jmlib/jugglesaver/js_patterns.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDF8C0DC8C0CE004F2E1A /* js_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_patterns.h; path = ../jmlib/jugglesaver/js_patterns.h; sourceTree = SOURCE_ROOT; };
+		CB3EDF8D0DC8C0CE004F2E1A /* js_validator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = js_validator.cpp; path = ../jmlib/jugglesaver/js_validator.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDF8E0DC8C0CE004F2E1A /* js_validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_validator.h; path = ../jmlib/jugglesaver/js_validator.h; sourceTree = SOURCE_ROOT; };
+		CB3EDF8F0DC8C0CE004F2E1A /* jugglesaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jugglesaver.h; path = ../jmlib/jugglesaver/jugglesaver.h; sourceTree = SOURCE_ROOT; };
+		CB3EDF910DC8C0CE004F2E1A /* render_jm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render_jm.cpp; path = ../jmlib/jugglesaver/render_jm.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDF920DC8C0CE004F2E1A /* trackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = trackball.cpp; path = ../jmlib/jugglesaver/trackball.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDF930DC8C0CE004F2E1A /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = ../jmlib/jugglesaver/trackball.h; sourceTree = SOURCE_ROOT; };
+		CB3EDF9C0DC8C0E4004F2E1A /* jmlib_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_base.h; path = ../jmlib/jmlib_base.h; sourceTree = SOURCE_ROOT; };
+		CB3EDF9D0DC8C0E4004F2E1A /* jmlib_if.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_if.h; path = ../jmlib/jmlib_if.h; sourceTree = SOURCE_ROOT; };
+		CB3EDF9E0DC8C0E4004F2E1A /* jmlib_jugglemaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jugglemaster.h; path = ../jmlib/jmlib_jugglemaster.h; sourceTree = SOURCE_ROOT; };
+		CB3EDF9F0DC8C0E4004F2E1A /* jmlib_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_wrapper.cpp; path = ../jmlib/jmlib_wrapper.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDFA00DC8C0E4004F2E1A /* jmlib_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_wrapper.h; path = ../jmlib/jmlib_wrapper.h; sourceTree = SOURCE_ROOT; };
+		CB3EDFC80DC8CBC7004F2E1A /* render_opengles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render_opengles.cpp; path = ../jmlib/jugglesaver/render_opengles.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDFE60DC8DB6D004F2E1A /* glues.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glues.cpp; path = ../jmlib/jugglesaver/glues.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDFE70DC8DB6D004F2E1A /* glues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glues.h; path = ../jmlib/jugglesaver/glues.h; sourceTree = SOURCE_ROOT; };
+		CB3EE0A50DC8E0C1004F2E1A /* view_gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = view_gl.h; path = src/view_gl.h; sourceTree = SOURCE_ROOT; };
+		CB3EE0A60DC8E0C1004F2E1A /* view_gl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = view_gl.mm; path = src/view_gl.mm; sourceTree = SOURCE_ROOT; };
 		CB6ABAB90DB24B6E000FD76F /* sqlite_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite_patterns.cpp; path = ../jmlib/sqlite_patterns.cpp; sourceTree = SOURCE_ROOT; };
 		CB6ABABA0DB24B6E000FD76F /* sqlite_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite_patterns.h; path = ../jmlib/sqlite_patterns.h; sourceTree = SOURCE_ROOT; };
 		CB6ABAC10DB24D56000FD76F /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../jmlib/sqlite/sqlite3.c; sourceTree = SOURCE_ROOT; };
@@ -54,8 +98,6 @@
 		CB6ABAC30DB24D56000FD76F /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../jmlib/sqlite/sqlite3ext.h; sourceTree = SOURCE_ROOT; };
 		CBA7A9F70DABBA5500E9FAB5 /* view_controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = view_controller.h; path = src/view_controller.h; sourceTree = SOURCE_ROOT; };
 		CBA7A9F80DABBA5500E9FAB5 /* view_controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = view_controller.mm; path = src/view_controller.mm; sourceTree = SOURCE_ROOT; };
-		CBF0358A0D9021EA0008B286 /* view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = view.h; path = src/view.h; sourceTree = SOURCE_ROOT; };
-		CBF0358B0D9021EA0008B286 /* view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = view.mm; path = src/view.mm; sourceTree = SOURCE_ROOT; };
 		CBF035E40D9152450008B286 /* controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = controller.h; path = src/controller.h; sourceTree = SOURCE_ROOT; };
 		CBF035E50D9152450008B286 /* controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = controller.mm; path = src/controller.mm; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -68,6 +110,8 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */,
+				CB3EDF810DC8C092004F2E1A /* OpenGLES.framework in Frameworks */,
+				CB3EDF840DC8C0AA004F2E1A /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,12 +121,17 @@
 		080E96DDFE201D6D7F000001 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				CB3EE0A50DC8E0C1004F2E1A /* view_gl.h */,
+				CB3EE0A60DC8E0C1004F2E1A /* view_gl.mm */,
+				CB3EDE8D0DC8BF44004F2E1A /* EAGLTrackBallView.h */,
+				CB3EDE8E0DC8BF44004F2E1A /* EAGLTrackBallView.mm */,
+				CB3EDE8F0DC8BF44004F2E1A /* EAGLView.h */,
+				CB3EDE900DC8BF44004F2E1A /* EAGLView.m */,
+				CB3EDE910DC8BF44004F2E1A /* OpenGL_Internal.h */,
 				CBA7A9F70DABBA5500E9FAB5 /* view_controller.h */,
 				CBA7A9F80DABBA5500E9FAB5 /* view_controller.mm */,
 				CBF035E40D9152450008B286 /* controller.h */,
 				CBF035E50D9152450008B286 /* controller.mm */,
-				CBF0358A0D9021EA0008B286 /* view.h */,
-				CBF0358B0D9021EA0008B286 /* view.mm */,
 				CB14B3340D901654009BD0C0 /* main.m */,
 			);
 			name = src;
@@ -92,6 +141,8 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CB3EDF830DC8C0AA004F2E1A /* QuartzCore.framework */,
+				CB3EDF800DC8C092004F2E1A /* OpenGLES.framework */,
 				1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -156,12 +207,18 @@
 		CB14B2FB0D901540009BD0C0 /* jmlib */ = {
 			isa = PBXGroup;
 			children = (
+				CB3EDE8C0DC8BF25004F2E1A /* jugglesaver */,
 				CB6ABAC00DB24D3F000FD76F /* sqlite */,
 				CB6ABAB90DB24B6E000FD76F /* sqlite_patterns.cpp */,
 				CB6ABABA0DB24B6E000FD76F /* sqlite_patterns.h */,
 				CB14B2FC0D90155A009BD0C0 /* jmlib.cpp */,
 				CB14B2FD0D90155A009BD0C0 /* jmlib.h */,
 				CB14B2FE0D90155A009BD0C0 /* jmlib_types.h */,
+				CB3EDF9C0DC8C0E4004F2E1A /* jmlib_base.h */,
+				CB3EDF9D0DC8C0E4004F2E1A /* jmlib_if.h */,
+				CB3EDF9E0DC8C0E4004F2E1A /* jmlib_jugglemaster.h */,
+				CB3EDF9F0DC8C0E4004F2E1A /* jmlib_wrapper.cpp */,
+				CB3EDFA00DC8C0E4004F2E1A /* jmlib_wrapper.h */,
 				CB14B3000D90155A009BD0C0 /* patterns.cpp */,
 				CB14B3010D90155A009BD0C0 /* patterns.h */,
 				CB14B3020D90155A009BD0C0 /* prefs.cpp */,
@@ -174,6 +231,29 @@
 				CB14B3090D90155A009BD0C0 /* validator.h */,
 			);
 			name = jmlib;
+			sourceTree = "<group>";
+		};
+		CB3EDE8C0DC8BF25004F2E1A /* jugglesaver */ = {
+			isa = PBXGroup;
+			children = (
+				CB3EDFE60DC8DB6D004F2E1A /* glues.cpp */,
+				CB3EDFE70DC8DB6D004F2E1A /* glues.h */,
+				CB3EDF860DC8C0CE004F2E1A /* engine.cpp */,
+				CB3EDF870DC8C0CE004F2E1A /* gltrackball.cpp */,
+				CB3EDF880DC8C0CE004F2E1A /* gltrackball.h */,
+				CB3EDF890DC8C0CE004F2E1A /* jmlib_jsaver.cpp */,
+				CB3EDF8A0DC8C0CE004F2E1A /* jmlib_jsaver.h */,
+				CB3EDF8B0DC8C0CE004F2E1A /* js_patterns.cpp */,
+				CB3EDF8C0DC8C0CE004F2E1A /* js_patterns.h */,
+				CB3EDF8D0DC8C0CE004F2E1A /* js_validator.cpp */,
+				CB3EDF8E0DC8C0CE004F2E1A /* js_validator.h */,
+				CB3EDF8F0DC8C0CE004F2E1A /* jugglesaver.h */,
+				CB3EDFC80DC8CBC7004F2E1A /* render_opengles.cpp */,
+				CB3EDF910DC8C0CE004F2E1A /* render_jm.cpp */,
+				CB3EDF920DC8C0CE004F2E1A /* trackball.cpp */,
+				CB3EDF930DC8C0CE004F2E1A /* trackball.h */,
+			);
+			name = jugglesaver;
 			sourceTree = "<group>";
 		};
 		CB6ABAC00DB24D3F000FD76F /* sqlite */ = {
@@ -246,11 +326,23 @@
 				CB14B30E0D90155A009BD0C0 /* util.cpp in Sources */,
 				CB14B30F0D90155A009BD0C0 /* validator.cpp in Sources */,
 				CB14B3380D901654009BD0C0 /* main.m in Sources */,
-				CBF0358C0D9021EA0008B286 /* view.mm in Sources */,
 				CBF035E60D9152450008B286 /* controller.mm in Sources */,
 				CBA7A9F90DABBA5500E9FAB5 /* view_controller.mm in Sources */,
 				CB6ABABB0DB24B6E000FD76F /* sqlite_patterns.cpp in Sources */,
 				CB6ABAC40DB24D56000FD76F /* sqlite3.c in Sources */,
+				CB3EDE920DC8BF44004F2E1A /* EAGLTrackBallView.mm in Sources */,
+				CB3EDE930DC8BF44004F2E1A /* EAGLView.m in Sources */,
+				CB3EDF940DC8C0CE004F2E1A /* engine.cpp in Sources */,
+				CB3EDF950DC8C0CE004F2E1A /* gltrackball.cpp in Sources */,
+				CB3EDF960DC8C0CE004F2E1A /* jmlib_jsaver.cpp in Sources */,
+				CB3EDF970DC8C0CE004F2E1A /* js_patterns.cpp in Sources */,
+				CB3EDF980DC8C0CE004F2E1A /* js_validator.cpp in Sources */,
+				CB3EDF9A0DC8C0CE004F2E1A /* render_jm.cpp in Sources */,
+				CB3EDF9B0DC8C0CE004F2E1A /* trackball.cpp in Sources */,
+				CB3EDFA10DC8C0E4004F2E1A /* jmlib_wrapper.cpp in Sources */,
+				CB3EDFC90DC8CBC7004F2E1A /* render_opengles.cpp in Sources */,
+				CB3EDFE80DC8DB6D004F2E1A /* glues.cpp in Sources */,
+				CB3EE0A70DC8E0C1004F2E1A /* view_gl.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +387,10 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=aspen*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					JUGGLESAVER_SUPPORT,
+					__IPHONE__,
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;

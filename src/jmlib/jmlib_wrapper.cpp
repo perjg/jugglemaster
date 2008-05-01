@@ -145,7 +145,7 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
         jmState.objectTypes[i] = OBJECT_BALL;
         jmState.objects[i].z = 0.0f;
         jmState.objects[i].Elev = 0.0f;
-        jmState.objects[i].Rot = (jm->b[i].getSpin(1) * 180 / PI) / 4;
+        jmState.objects[i].Rot = jm->b[i].getBallSpin() * 180 / PI;
     }
   }
 

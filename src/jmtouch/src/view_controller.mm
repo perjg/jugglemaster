@@ -75,21 +75,39 @@
 	navItem.customRightView = button3;
 
 	
-    // Set up content view
+  // Set up content view
+  /*
 	jugglerView = [[[JMView alloc] initWithFrame:self.view.bounds] autorelease];
 	[jugglerView setBackgroundColor:[UIColor lightGrayColor]];
 	[self.view addSubview: jugglerView];
+  */
+	glView = [[EAGLTrackBallView alloc] initWithFrame:self.view.bounds pixelFormat:kEAGLPixelFormat_RGBA8888_D24];
+	[self.view addSubview: glView];
 	
-	jm = JMLib::alloc();
+  /*
+  	//Enable required OpenGL states
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	
+	//Set the OpenGL projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	//glOrthof(-rect.size.width / 2, rect.size.width / 2, -rect.size.height / 2, rect.size.height / 2, -1, 1);
+  */
+  
+  jm = JMLib::alloc();
+  //jm = JMLib::alloc_JuggleMaster();
+  //jm = JMLib::alloc_JuggleSaver();
 	jm->setWindowSize([jugglerView frame].size.width, [jugglerView frame].size.height);
-	jm->setSpeed(1.0);
-	jm->setScalingMethod(SCALING_METHOD_DYNAMIC);
-	//jm->setPatternDefault();
-	//jm->setStyleDefault();
-	jm->setPattern("534");
-	jm->startJuggle();
-	jm->doJuggle();
+  jm->setPatternDefault();
+  jm->setStyleDefault();
+  jm->setScalingMethod(SCALING_METHOD_DYNAMIC);
+  jm->startJuggle();
+
+  jm->initialize();
 
 	[jugglerView setJMLib:jm];
 }
@@ -202,7 +220,10 @@
 */
 
 	if (jm) jm->doJuggle();
-	[jugglerView setNeedsDisplay];
+  if (jm) jm->render();
+	//[jugglerView setNeedsDisplay];
+  //[glView setNeedsDisplay];
+ 	[glView swapBuffers];
 }
 
 #pragma mark UIViewController delegates

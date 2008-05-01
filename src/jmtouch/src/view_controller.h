@@ -23,11 +23,14 @@
 #include "jmlib.h"
 #include "validator.h"
 
+#import "EAGLTrackBallView.h"
+
 @class JMView;
 
 @interface JMViewController : UIViewController <UINavigationBarDelegate>
 {
-    JMView *jugglerView;
+  JMView* jugglerView;
+ 	EAGLTrackBallView* glView;
 
 	@private
 		JMLib* jm;

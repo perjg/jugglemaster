@@ -10,14 +10,20 @@
  * implied warranty.
  */
 
-#ifdef _WIN32
 #ifdef JMWIN
 // required to compile when using MFC
 #include "../../jmwin/src/stdafx.h"
 #endif
-#include <gl/gl.h>
+
+#ifdef __APPLE__
+#  ifdef __IPHONE__
+#    include <OpenGLES/EAGL.h>
+#    include <OpenGLES/ES1/gl.h>
+#  else
+#    include <OpenGL/gl.h>
+#  endif
 #else
-#include <OpenGL/gl.h>
+#  include <gl/gl.h>
 #endif
 
 extern "C" {

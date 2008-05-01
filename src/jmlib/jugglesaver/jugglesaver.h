@@ -18,17 +18,20 @@
 
 //fixme: add other applicable platforms here
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
-#elif defined(TARGET_IPHONE)
-#include <OpenGLES/EAGL.h>
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
+#  ifdef __IPHONE__
+#    include <OpenGLES/EAGL.h>
+#    include <OpenGLES/ES1/gl.h>
+#    include <OpenGLES/ES1/glext.h>
+#    define OPENGL_ES_SUPPORT
+#  else
+#    include <OpenGL/gl.h>
+#    include <OpenGL/glu.h>
+#    include <OpenGL/glext.h>
+#  endif
 #else
-#include <gl/gl.h>
-#include <gl/glu.h>
-#include <gl/glaux.h>
+#  include <gl/gl.h>
+#  include <gl/glu.h>
+#  include <gl/glaux.h>
 #endif
 
 #include "gltrackball.h"

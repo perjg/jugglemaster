@@ -182,6 +182,10 @@ struct ball {
 
   ball() : prevSpin(PI) {}
 
+  float getBallSpin() {
+    return (PI + (float)t * PI) * ((bh - 1) / 2) / 6;
+  }
+
   //fixme: when holding, gradually reduce the spin towards 0
   float getSpin(int spins) {
     float spin;

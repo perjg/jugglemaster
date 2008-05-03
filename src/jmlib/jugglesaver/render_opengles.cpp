@@ -251,11 +251,14 @@ void SetCamera(RENDER_STATE* pState)
     if (extraZoom > 0) {
       ez -= (ez * extraZoom);
 
+      float multiplier = pState->AspectRatio > 1 ? 1.0f : 1.5f;
+      if (pState->AspectRatio < 0.75f) multiplier = 2.0f;
+
 			if (adjustCameraHeight) {
 				if (extraZoom >= 0.29f)
-					cameraHeightAdjustment = 1.5f;
+					cameraHeightAdjustment = 1.5f * multiplier;
 				else
-					cameraHeightAdjustment = 1.0f;
+					cameraHeightAdjustment = 1.0f * multiplier;
 			}
 
 			cy -= cameraHeightAdjustment;

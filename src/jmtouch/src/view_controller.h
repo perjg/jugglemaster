@@ -27,7 +27,7 @@
 
 @class JMView;
 
-@interface JMViewController : UIViewController <UINavigationBarDelegate>
+@interface JMViewController : UIViewController <UINavigationBarDelegate, UIActionSheetDelegate>
 {
   JMView* jugglerView;
  	EAGLTrackBallView* glView;

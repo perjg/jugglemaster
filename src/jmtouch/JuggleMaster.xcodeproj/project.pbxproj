@@ -10,6 +10,7 @@
 		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		CB05139A0DCC49A10088A2D2 /* glues.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB0513980DCC49A10088A2D2 /* glues.cpp */; };
 		CB14B30A0D90155A009BD0C0 /* jmlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B2FC0D90155A009BD0C0 /* jmlib.cpp */; };
 		CB14B30B0D90155A009BD0C0 /* patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3000D90155A009BD0C0 /* patterns.cpp */; };
 		CB14B30C0D90155A009BD0C0 /* prefs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB14B3020D90155A009BD0C0 /* prefs.cpp */; };
@@ -31,7 +32,6 @@
 		CB3EDF9B0DC8C0CE004F2E1A /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF920DC8C0CE004F2E1A /* trackball.cpp */; };
 		CB3EDFA10DC8C0E4004F2E1A /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF9F0DC8C0E4004F2E1A /* jmlib_wrapper.cpp */; };
 		CB3EDFC90DC8CBC7004F2E1A /* render_opengles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDFC80DC8CBC7004F2E1A /* render_opengles.cpp */; };
-		CB3EDFE80DC8DB6D004F2E1A /* glues.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDFE60DC8DB6D004F2E1A /* glues.cpp */; };
 		CB3EE0A70DC8E0C1004F2E1A /* view_gl.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB3EE0A60DC8E0C1004F2E1A /* view_gl.mm */; };
 		CB6ABABB0DB24B6E000FD76F /* sqlite_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABAB90DB24B6E000FD76F /* sqlite_patterns.cpp */; };
 		CB6ABAC40DB24D56000FD76F /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABAC10DB24D56000FD76F /* sqlite3.c */; };
@@ -46,6 +46,8 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* JuggleMaster_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuggleMaster_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB0513980DCC49A10088A2D2 /* glues.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glues.cpp; path = ../jmlib/jugglesaver/opengl_es/glues.cpp; sourceTree = SOURCE_ROOT; };
+		CB0513990DCC49A10088A2D2 /* glues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glues.h; path = ../jmlib/jugglesaver/opengl_es/glues.h; sourceTree = SOURCE_ROOT; };
 		CB14B2FC0D90155A009BD0C0 /* jmlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib.cpp; path = ../jmlib/jmlib.cpp; sourceTree = SOURCE_ROOT; };
 		CB14B2FD0D90155A009BD0C0 /* jmlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib.h; path = ../jmlib/jmlib.h; sourceTree = SOURCE_ROOT; };
 		CB14B2FE0D90155A009BD0C0 /* jmlib_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_types.h; path = ../jmlib/jmlib_types.h; sourceTree = SOURCE_ROOT; };
@@ -87,8 +89,6 @@
 		CB3EDF9F0DC8C0E4004F2E1A /* jmlib_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_wrapper.cpp; path = ../jmlib/jmlib_wrapper.cpp; sourceTree = SOURCE_ROOT; };
 		CB3EDFA00DC8C0E4004F2E1A /* jmlib_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_wrapper.h; path = ../jmlib/jmlib_wrapper.h; sourceTree = SOURCE_ROOT; };
 		CB3EDFC80DC8CBC7004F2E1A /* render_opengles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render_opengles.cpp; path = ../jmlib/jugglesaver/render_opengles.cpp; sourceTree = SOURCE_ROOT; };
-		CB3EDFE60DC8DB6D004F2E1A /* glues.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glues.cpp; path = ../jmlib/jugglesaver/glues.cpp; sourceTree = SOURCE_ROOT; };
-		CB3EDFE70DC8DB6D004F2E1A /* glues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glues.h; path = ../jmlib/jugglesaver/glues.h; sourceTree = SOURCE_ROOT; };
 		CB3EE0A50DC8E0C1004F2E1A /* view_gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = view_gl.h; path = src/view_gl.h; sourceTree = SOURCE_ROOT; };
 		CB3EE0A60DC8E0C1004F2E1A /* view_gl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = view_gl.mm; path = src/view_gl.mm; sourceTree = SOURCE_ROOT; };
 		CB6ABAB90DB24B6E000FD76F /* sqlite_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite_patterns.cpp; path = ../jmlib/sqlite_patterns.cpp; sourceTree = SOURCE_ROOT; };
@@ -236,8 +236,8 @@
 		CB3EDE8C0DC8BF25004F2E1A /* jugglesaver */ = {
 			isa = PBXGroup;
 			children = (
-				CB3EDFE60DC8DB6D004F2E1A /* glues.cpp */,
-				CB3EDFE70DC8DB6D004F2E1A /* glues.h */,
+				CB0513980DCC49A10088A2D2 /* glues.cpp */,
+				CB0513990DCC49A10088A2D2 /* glues.h */,
 				CB3EDF860DC8C0CE004F2E1A /* engine.cpp */,
 				CB3EDF870DC8C0CE004F2E1A /* gltrackball.cpp */,
 				CB3EDF880DC8C0CE004F2E1A /* gltrackball.h */,
@@ -341,8 +341,8 @@
 				CB3EDF9B0DC8C0CE004F2E1A /* trackball.cpp in Sources */,
 				CB3EDFA10DC8C0E4004F2E1A /* jmlib_wrapper.cpp in Sources */,
 				CB3EDFC90DC8CBC7004F2E1A /* render_opengles.cpp in Sources */,
-				CB3EDFE80DC8DB6D004F2E1A /* glues.cpp in Sources */,
 				CB3EE0A70DC8E0C1004F2E1A /* view_gl.mm in Sources */,
+				CB05139A0DCC49A10088A2D2 /* glues.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

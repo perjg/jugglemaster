@@ -6,6 +6,9 @@
  * notice and this permission notice appear in supporting documentation.  No
  * representations are made about the suitability of this software for any
  * purpose.  It is provided "as is" without express or implied warranty.
+ *
+ * OpenGL|ES compatible rendering for jmlib
+ * Per Johan Groland 2008
  */
 
 #include "jugglesaver.h"
@@ -466,7 +469,7 @@ void DrawCylinder(bool outside, float baseRadius, float topRadius, float height,
         return;
     }
 
-    /* Compute length (needed for normal calculations) */
+    // Compute length (needed for normal calculations)
     deltaRadius = baseRadius - topRadius;
     length = sqrt(deltaRadius*deltaRadius + height*height);
     if (length == 0.0) {
@@ -512,7 +515,9 @@ void DrawCylinder(bool outside, float baseRadius, float topRadius, float height,
             normal_arr[normal_offset++] = sinCache2[i];
             normal_arr[normal_offset++] = cosCache2[i];
             normal_arr[normal_offset++] = zNormal;
-            
+            normal_arr[normal_offset++] = sinCache2[i];
+            normal_arr[normal_offset++] = cosCache2[i];
+            normal_arr[normal_offset++] = zNormal;            
         
             if (outside) {
                 //glVertex3f(radiusLow * sinCache[i], radiusLow * cosCache[i], zLow);
@@ -537,8 +542,8 @@ void DrawCylinder(bool outside, float baseRadius, float topRadius, float height,
         }
         //glEnd();
         glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
         glVertexPointer(3, GL_FLOAT , 0, vertex_arr);
+        glEnableClientState(GL_NORMAL_ARRAY);
         glNormalPointer(GL_FLOAT, 0, normal_arr);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, offset/3);
     }
@@ -577,10 +582,10 @@ void DrawPartialDisk(bool outside, GLfloat innerRadius,
         slices2 = slices + 1;
     }
 
-    /* Compute length (needed for normal calculations) */
+    // Compute length (needed for normal calculations)
     deltaRadius = outerRadius - innerRadius;
 
-    /* Cache is the vertex locations cache */
+    // Cache is the vertex locations cache
 
     angleOffset = startAngle / 180.0 * PI;
     for (i = 0; i <= slices; i++) {
@@ -597,22 +602,10 @@ void DrawPartialDisk(bool outside, GLfloat innerRadius,
     int normal_offset = 0;
     int offset = 0;
 
-    if (outside) {
-        //glNormal3f(0.0, 0.0, 1.0);
-        normal_arr[normal_offset++] = 0.0f;
-        normal_arr[normal_offset++] = 0.0f;
-        normal_arr[normal_offset++] = 1.0f;        
-    }
-    else {
-        //glNormal3f(0.0, 0.0, -1.0);
-        normal_arr[normal_offset++] = 0.0f;
-        normal_arr[normal_offset++] = 0.0f;
-        normal_arr[normal_offset++] = -1.0f;        
-    }
 
     if (innerRadius == 0.0) {
         finish = loops - 1;
-        /* Triangle strip for inner polygons */
+        // Triangle strip for inner polygons
         //glBegin(GL_TRIANGLE_FAN);
         offset = 0;
         
@@ -620,6 +613,9 @@ void DrawPartialDisk(bool outside, GLfloat innerRadius,
         vertex_arr[offset++] = 0.0;
         vertex_arr[offset++] = 0.0;
         vertex_arr[offset++] = 0.0;
+        normal_arr[normal_offset++] = 0.0f;
+        normal_arr[normal_offset++] = 0.0f;
+        normal_arr[normal_offset++] = outside ? 1.0f : -1.0f;        
 
         radiusLow = outerRadius - deltaRadius * ((float) (loops-1) / loops);
 
@@ -629,6 +625,9 @@ void DrawPartialDisk(bool outside, GLfloat innerRadius,
                 vertex_arr[offset++] = radiusLow * sinCache[i];
                 vertex_arr[offset++] = radiusLow * cosCache[i];
                 vertex_arr[offset++] = 0.0;
+                normal_arr[normal_offset++] = 0.0f;
+                normal_arr[normal_offset++] = 0.0f;
+                normal_arr[normal_offset++] = outside ? 1.0f : -1.0f;        
             }
         }
         else {
@@ -637,6 +636,9 @@ void DrawPartialDisk(bool outside, GLfloat innerRadius,
                 vertex_arr[offset++] = radiusLow * sinCache[i];
                 vertex_arr[offset++] = radiusLow * cosCache[i];
                 vertex_arr[offset++] = 0.0;
+                normal_arr[normal_offset++] = 0.0f;
+                normal_arr[normal_offset++] = 0.0f;
+                normal_arr[normal_offset++] = outside ? 1.0f : -1.0f;        
             }
         }
         
@@ -684,9 +686,10 @@ void DrawPartialDisk(bool outside, GLfloat innerRadius,
         
         //glEnd();
         glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
         glVertexPointer(3, GL_FLOAT , 0, vertex_arr);
-        glNormalPointer(GL_FLOAT, 0, normal_arr);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        //glEnableClientState(GL_NORMAL_ARRAY);
+        //glNormalPointer(GL_FLOAT, 0, normal_arr);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, offset/3);
     }
 }

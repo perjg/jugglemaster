@@ -6,6 +6,9 @@
  * notice and this permission notice appear in supporting documentation.  No
  * representations are made about the suitability of this software for any
  * purpose.  It is provided "as is" without express or implied warranty.
+ *
+ * Changes for jmlib
+ * Per Johan Groland 2008
  */
 
 #include "jugglesaver.h"

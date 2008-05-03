@@ -24,28 +24,30 @@ static JML_CHAR patterns[7][12]
 	= {"Normal", "Reverse", "Shower", "Mills Mess",
 	   "Center", "Windmill", "Random"};
 	
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+  jm = JMLib::alloc();
+	jm->setWindowSize([view frame].size.width, [view frame].size.height);
+  jm->setPatternDefault();
+  jm->setStyleDefault();
+  jm->setScalingMethod(SCALING_METHOD_DYNAMIC);
+  jm->startJuggle();
+  jm->initialize();
+
+ 	[view setJMLib:jm];
+  
+	renderTimer = [[NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(doRender:) userInfo:nil repeats:YES] retain];
+}
+
 - (id)init
 {
 	if (self = [super init])
 	{
-    jm = JMLib::alloc_JuggleMaster();
-		
-		jm->setWindowSize([view frame].size.width, [view frame].size.height);
-		jm->setPatternDefault();
-		jm->setStyleDefault();
-		jm->setSpeed(1.0);
-        jm->setScalingMethod(SCALING_METHOD_DYNAMIC);
-		jm->startJuggle();
-		jm->doJuggle();
-		
 		showPattern = NO;
 		currentPat = karaoke;
 		encodeSheetShown = NO;
 		
 		[self showInspector:self];
-		
-		renderTimer = [[NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(doRender:) userInfo:nil repeats:YES] retain];
-	}
+  }
 	
 	return self;
 }
@@ -77,7 +79,8 @@ static JML_CHAR patterns[7][12]
 	NSString *pattern = [sender stringValue];
 	JML_CHAR *pat = (JML_CHAR *)[pattern cString];
 	
-	if (JMSiteValidator::validateSite(pat))
+  if (jm->isValidPattern(pat))
+	//if (JMSiteValidator::validateSite(pat))
 	{
 		[errorReporter setHidden:YES];
 		jm->stopJuggle();
@@ -87,7 +90,7 @@ static JML_CHAR patterns[7][12]
 	else
 	{
 		[errorReporter setHidden:NO];
-		jm->stopJuggle();
+		//jm->stopJuggle();
 	}
 }
 

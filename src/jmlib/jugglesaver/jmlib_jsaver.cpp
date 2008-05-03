@@ -30,7 +30,7 @@ JML_CHAR *JuggleSaver::possible_styles[] = {
 };
 
 // Constructor / Destructor
-JuggleSaver::JuggleSaver()  : JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f),
+JuggleSaver::JuggleSaver()  : JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed(20.0f),
   initialized(false), is_juggling(false), pattern(NULL), siteswap(NULL), pattname(NULL),
   width_(480), height_(400), trackball(NULL), spin(TRUE), SavedSpinSpeed(20.0f),
   SavedTranslateSpeed(0.0f) {
@@ -134,7 +134,7 @@ void JuggleSaver::togglePause(void) {
 }
 
 void JuggleSaver::setPause(JML_BOOL pauseOn) {
-  is_juggling = pauseOn;
+  is_juggling = !pauseOn;
 }
 
 JML_INT32 JuggleSaver::getStatus(void) {
@@ -191,7 +191,8 @@ JML_INT32 JuggleSaver::doJuggle(void) {
   //DrawGLScene(&state);
   //JMDrawGLScene(&state);
     
-  if (CurrentFrameRate > 0.001f /*1.0e-6f*/) {
+  //if (CurrentFrameRate > 0.001f /*1.0e-6f*/) {
+  if (CurrentFrameRate > 1.0e-6f) {
     state.Time += JuggleSpeed / CurrentFrameRate;
 		state.SpinAngle += SpinSpeed / CurrentFrameRate;
 		state.TranslateAngle += TranslateSpeed / CurrentFrameRate;
@@ -208,6 +209,7 @@ JML_BOOL JuggleSaver::setWindowSize(JML_INT32 width, JML_INT32 height) {
   width_ = width;
   height_ = height;
   if (initialized) ResizeGL(&state, width_, height_);
+  FramesSinceSync = 0;
   return TRUE;
 }
 

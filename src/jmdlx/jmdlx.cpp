@@ -504,7 +504,7 @@ JMTimer::JMTimer(JMCanvas *c, JMOpenGLCanvas* glc, JMLib *j) : wxTimer() {
 	canvas = c;
 	glCanvas = glc;
 	jmlib = j;
-	current_delay = 30;
+	current_delay = 1;
 	Start(current_delay);
 }
 #else

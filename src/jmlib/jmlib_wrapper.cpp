@@ -25,7 +25,7 @@
 //#include <sys/time.h>
 
 JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern(NULL),
-  JuggleSpeed(2.2f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL),
+  JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL),
 	trackball(NULL), spin(TRUE), SavedSpinSpeed(20.0f), SavedTranslateSpeed(0.0f)
 {
   jm = JMLib::alloc_JuggleMaster();
@@ -82,16 +82,14 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   float scalingFactorX = 0.25f / jm->getBallRadius();
   float scalingFactorY = 0.25f / jm->getBallRadius();
 
-  arm*  jmlib_ap    = &(jm->ap);
+  //arm*  jmlib_ap    = &(jm->ap);
   ball* jmlib_rhand = &(jm->rhand);
   ball* jmlib_lhand = &(jm->lhand);
-  hand* jmlib_handp = &(jm->handpoly);
+  //hand* jmlib_handp = &(jm->handpoly);
 
   JML_INT32 w = jm->getImageWidth();
   JML_INT32 h = jm->getImageHeight();
   JML_INT32 half_h, half_w;
-
-  float currentZ = 0.0f;
 
   if (centerOrigin) {
     half_h = h / 4;
@@ -102,7 +100,6 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
     half_w = 0;
   }
 
-  int radius = jm->getBallRadius();
   ballRadius = jm->getBallRadius() * scalingFactorX;
 
   // left hand
@@ -373,6 +370,8 @@ void JMLibWrapper::render() {
 //fixme: currently JuggleSaver has its own frames counter, JuggleMaster has none.
 // these should all be unified
 JML_INT32 JMLibWrapper::doJuggle(void) {
+  static float timeDelta = 0;
+
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER) {
     FramesSinceSync = 0;
     active->doJuggle();
@@ -380,7 +379,7 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
   }
 
   // fixme: doJuggle should be changed to use frame rate counter
-  jm->doJuggle();
+  //jm->doJuggle();
   //js->doJuggle();
 
   /* While drawing, keep track of the rendering speed so we can adjust the
@@ -417,8 +416,16 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
     
   FramesSinceSync++;
     
-  if (CurrentFrameRate > 0.001f /*1.0e-6f*/) {
+  //if (CurrentFrameRate > 0.001f /*1.0e-6f*/) {
+  if (CurrentFrameRate > 1.0e-6f) {
     if (jm->getStatus() == ST_JUGGLE) {
+      timeDelta += JuggleSpeed / CurrentFrameRate;
+
+      if (timeDelta > 0.06f) {
+        jm->doJuggle();
+        timeDelta = 0;
+      }
+        
       jmState.SpinAngle += SpinSpeed / CurrentFrameRate;
       jmState.TranslateAngle += TranslateSpeed / CurrentFrameRate;
     }
@@ -431,6 +438,9 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
 JML_BOOL JMLibWrapper::setWindowSize(JML_INT32 width, JML_INT32 height) {
   imageWidth = width;
   imageHeight = height;
+  
+  FramesSinceSync = 0;
+  CurrentFrameRate = 0;
 
   //jm->setWindowSize(width, height);
   js->setWindowSize(width, height);

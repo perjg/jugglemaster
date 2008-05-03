@@ -29,6 +29,9 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		CB1AD77F0DCB51900047D6B9 /* gltrackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB1AD7790DCB51900047D6B9 /* gltrackball.cpp */; };
+		CB1AD7800DCB51900047D6B9 /* js_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB1AD77B0DCB51900047D6B9 /* js_patterns.cpp */; };
+		CB1AD7810DCB51900047D6B9 /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB1AD77D0DCB51900047D6B9 /* trackball.cpp */; };
 		CBA2E1480DBCC20900618F0B /* engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1410DBCC20900618F0B /* engine.cpp */; };
 		CBA2E1490DBCC20900618F0B /* jmlib_jsaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1420DBCC20900618F0B /* jmlib_jsaver.cpp */; };
 		CBA2E14A0DBCC20900618F0B /* js_validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1440DBCC20900618F0B /* js_validator.cpp */; };
@@ -78,6 +81,12 @@
 		32CA4F630368D1EE00C91783 /* jmcocoa_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmcocoa_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Juggle Master.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Juggle Master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB1AD7790DCB51900047D6B9 /* gltrackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gltrackball.cpp; path = jugglesaver/gltrackball.cpp; sourceTree = "<group>"; };
+		CB1AD77A0DCB51900047D6B9 /* gltrackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gltrackball.h; path = jugglesaver/gltrackball.h; sourceTree = "<group>"; };
+		CB1AD77B0DCB51900047D6B9 /* js_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = js_patterns.cpp; path = jugglesaver/js_patterns.cpp; sourceTree = "<group>"; };
+		CB1AD77C0DCB51900047D6B9 /* js_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_patterns.h; path = jugglesaver/js_patterns.h; sourceTree = "<group>"; };
+		CB1AD77D0DCB51900047D6B9 /* trackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = trackball.cpp; path = jugglesaver/trackball.cpp; sourceTree = "<group>"; };
+		CB1AD77E0DCB51900047D6B9 /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = jugglesaver/trackball.h; sourceTree = "<group>"; };
 		CBA2E1410DBCC20900618F0B /* engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = engine.cpp; path = jugglesaver/engine.cpp; sourceTree = "<group>"; };
 		CBA2E1420DBCC20900618F0B /* jmlib_jsaver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_jsaver.cpp; path = jugglesaver/jmlib_jsaver.cpp; sourceTree = "<group>"; };
 		CBA2E1430DBCC20900618F0B /* jmlib_jsaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jsaver.h; path = jugglesaver/jmlib_jsaver.h; sourceTree = "<group>"; };
@@ -242,6 +251,12 @@
 		CBA2E13F0DBCC1D600618F0B /* jugglesaver */ = {
 			isa = PBXGroup;
 			children = (
+				CB1AD7790DCB51900047D6B9 /* gltrackball.cpp */,
+				CB1AD77A0DCB51900047D6B9 /* gltrackball.h */,
+				CB1AD77B0DCB51900047D6B9 /* js_patterns.cpp */,
+				CB1AD77C0DCB51900047D6B9 /* js_patterns.h */,
+				CB1AD77D0DCB51900047D6B9 /* trackball.cpp */,
+				CB1AD77E0DCB51900047D6B9 /* trackball.h */,
 				CBA2E1410DBCC20900618F0B /* engine.cpp */,
 				CBA2E1420DBCC20900618F0B /* jmlib_jsaver.cpp */,
 				CBA2E1430DBCC20900618F0B /* jmlib_jsaver.h */,
@@ -330,6 +345,9 @@
 				CBA2E14B0DBCC20900618F0B /* render.cpp in Sources */,
 				CBA2E1510DBCC24000618F0B /* jmlib_wrapper.cpp in Sources */,
 				CBA2E1780DBCC63C00618F0B /* JMOpenGLView.mm in Sources */,
+				CB1AD77F0DCB51900047D6B9 /* gltrackball.cpp in Sources */,
+				CB1AD7800DCB51900047D6B9 /* js_patterns.cpp in Sources */,
+				CB1AD7810DCB51900047D6B9 /* trackball.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,6 +432,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = JUGGLESAVER_SUPPORT;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;

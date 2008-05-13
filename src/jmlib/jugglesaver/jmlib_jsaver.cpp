@@ -19,7 +19,8 @@
  * Modified BSD License for more details.
  */ 
 
-// fixme: port gltrackball
+#ifdef JUGGLESAVER_SUPPORT
+
 // fixme: port dofps
 
 #include "jmlib_jsaver.h"
@@ -330,3 +331,5 @@ void JuggleSaver::setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT tran
     TranslateSpeed = 0.0f;
   }
 }
+
+#endif // JUGGLESAVER_SUPPORT

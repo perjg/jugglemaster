@@ -46,15 +46,15 @@ void JMOpenGLRenderer::doCoordTransform(bool flipY, bool centerOrigin) {
   // Flip all y coordinates and center around origin
   for(int i=0;i<=5;i++) { // arms
     if (flipY) {
-      ap.rarm_y[i] = h - jmlib_ap->ry[i];
-      ap.larm_y[i] = h - jmlib_ap->ly[i];
+      ap.rarm_y[i] = (JML_FLOAT)(h - jmlib_ap->ry[i]);
+      ap.larm_y[i] = (JML_FLOAT)(h - jmlib_ap->ly[i]);
     }
     else {
-      ap.rarm_y[i] = jmlib_ap->ry[i];
-      ap.larm_y[i] = jmlib_ap->ly[i];
+      ap.rarm_y[i] = (JML_FLOAT)jmlib_ap->ry[i];
+      ap.larm_y[i] = (JML_FLOAT)jmlib_ap->ly[i];
     }
-    ap.rarm_x[i] = jmlib_ap->rx[i];
-    ap.larm_x[i] = jmlib_ap->lx[i];
+    ap.rarm_x[i] = (JML_FLOAT)jmlib_ap->rx[i];
+    ap.larm_x[i] = (JML_FLOAT)jmlib_ap->lx[i];
 
     ap.rarm_y[i] = (ap.rarm_y[i] - half_h) * scalingFactor;
     ap.larm_y[i] = (ap.larm_y[i] - half_h) * scalingFactor;
@@ -65,7 +65,7 @@ void JMOpenGLRenderer::doCoordTransform(bool flipY, bool centerOrigin) {
   // Calculate z coordinates for arms
   for(int i=0;i<=5;i++) {
     if (i == 1 || i == 2)
-      currentZ -= ballRadius * 3.5;
+      currentZ -= ballRadius * 3.5f;
     //fixme: to use calculateZDelta, make sure to calculate z coordinates
     // only once each time the pattern changes.
     //currentZ -= calculateZDelta(10.0, ap.rarm_y[i+1] - ap.rarm_y[i]);
@@ -75,12 +75,12 @@ void JMOpenGLRenderer::doCoordTransform(bool flipY, bool centerOrigin) {
 
   // right and left hand
   if (flipY) {
-    rhand.gy = h - jmlib_rhand->gy;
-    lhand.gy = h - jmlib_lhand->gy;
+    rhand.gy = (JML_FLOAT)(h - jmlib_rhand->gy);
+    lhand.gy = (JML_FLOAT)(h - jmlib_lhand->gy);
   }
   else {
-    rhand.gy = jmlib_rhand->gy;
-    lhand.gy = jmlib_lhand->gy;
+    rhand.gy = (JML_FLOAT)jmlib_rhand->gy;
+    lhand.gy = (JML_FLOAT)jmlib_lhand->gy;
   }
 
   rhand.gy = (rhand.gy - half_h) * scalingFactor;
@@ -102,20 +102,20 @@ void JMOpenGLRenderer::doCoordTransform(bool flipY, bool centerOrigin) {
 
   for (int i=0; i<10; i++) {
     if (flipY) {
-      handpoly.ry[i] = (poly_max_y - jmlib_handp->ry[i]) * scalingFactor;
-	  handpoly.ly[i] = (poly_max_y - jmlib_handp->ly[i]) * scalingFactor;
+      handpoly.ry[i] = (JML_INT32)((poly_max_y - jmlib_handp->ry[i]) * scalingFactor);
+			handpoly.ly[i] = (JML_INT32)((poly_max_y - jmlib_handp->ly[i]) * scalingFactor);
     }
     else {
-      handpoly.ry[i] = jmlib_handp->ry[i] * scalingFactor;
-	  handpoly.ly[i] = jmlib_handp->ly[i] * scalingFactor;
+      handpoly.ry[i] = (JML_INT32)(jmlib_handp->ry[i] * scalingFactor);
+			handpoly.ly[i] = (JML_INT32)(jmlib_handp->ly[i] * scalingFactor);
     }
-    handpoly.rx[i] = jmlib_handp->rx[i] * scalingFactor;
-	handpoly.lx[i] = jmlib_handp->lx[i] * scalingFactor;
+    handpoly.rx[i] = (JML_INT32)(jmlib_handp->rx[i] * scalingFactor);
+		handpoly.lx[i] = (JML_INT32)(jmlib_handp->lx[i] * scalingFactor);
   }
 
   // head
-  if (flipY) ap.head_y = h - jmlib_ap->hy;
-  else       ap.head_y = jmlib_ap->hy;
+  if (flipY) ap.head_y = (JML_FLOAT)(h - jmlib_ap->hy);
+  else       ap.head_y = (JML_FLOAT)jmlib_ap->hy;
 
   ap.head_y = (ap.head_y   - half_h) * scalingFactor;
   ap.head_x = (jmlib_ap->hx - half_w) * scalingFactor;
@@ -124,8 +124,8 @@ void JMOpenGLRenderer::doCoordTransform(bool flipY, bool centerOrigin) {
 
   // balls
   for(int i = jmlib->numBalls() - 1; i >= 0; i--) {
-    if (flipY) b[i].gy = h - jmlib->b[i].gy;
-    else       b[i].gy = jmlib->b[i].gy;
+    if (flipY) b[i].gy = (JML_FLOAT)(h - jmlib->b[i].gy);
+    else       b[i].gy = (JML_FLOAT)jmlib->b[i].gy;
 
 	b[i].gy = (b[i].gy        - half_h) * scalingFactor;
 	b[i].gx = (jmlib->b[i].gx - half_w) * scalingFactor;
@@ -275,7 +275,7 @@ void JMOpenGLRenderer::draw3d() {
   static float rotate = 0.0;
   static int multiplier = 1;
 
-  if (autoRotate) rotate += 0.5 * multiplier;
+  if (autoRotate) rotate += 0.5f * multiplier;
   else            rotate = 0.0;
 
   glViewport(0, 0, width, height);

@@ -19,6 +19,8 @@
  * Modified BSD License for more details.
  */
 
+#ifdef JUGGLESAVER_SUPPORT
+
 #include "jmlib.h"
 #include "jugglesaver/jugglesaver.h"
 #include <time.h>
@@ -556,3 +558,6 @@ void JMLibWrapper::setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT tra
     TranslateSpeed = 0.0f;
   }
 }
+
+#endif // JUGGLESAVER_SUPPORT
+

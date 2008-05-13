@@ -40,10 +40,12 @@
 // gettimeofday functions are unavailable on Windows, provide replacements
 #ifdef _WIN32
 #define GETTIMEOFDAY_TWO_ARGS
+//#ifndef JMWIN // workaround for compiling JMWin
 struct timeval {
 	long tv_sec;
 	long tv_usec;	
 };
+//#endif
 
 struct timezone {
   int  tz_minuteswest; // minutes W of Greenwich

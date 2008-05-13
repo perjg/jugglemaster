@@ -103,7 +103,7 @@ int legal_pattern_first_char(char c);
 
 
 /* MSVC++ doesn't have strcasecmp, so add our own version that wraps _stricmp */
-#ifdef WIN32 ///FIX ME - DO THIS RIGHT
+#ifdef _WIN32
     #define strcasecmp(a, b) _stricmp(a, b)
 #endif
 

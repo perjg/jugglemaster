@@ -11276,6 +11276,9 @@ typedef struct VdbeOp Op;
 */
 typedef unsigned char Bool;
 
+/* Compile fix for wxwidgets: Cursor redefined error message */
+#define Cursor Cursor_foo
+
 /*
 ** A cursor is a pointer into a single BTree within a database file.
 ** The cursor can seek to a BTree entry with a particular key, or

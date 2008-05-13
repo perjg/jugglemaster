@@ -20,29 +20,37 @@
  */ 
 
 #include "patterns.h"
+extern "C" {
 #include "sqlite/sqlite3.h"
+}
 
 class SearchResult;
 
-class PatternLoader {
+class JMPatterns {
   friend class SearchResult;
 public:
-  PatternLoader(char* filename);
+  JMPatterns() : filename_(NULL), db_(NULL) {}
   
   void search(char* name);
   void search(char* name, char* site, char* style, int balls); 
-
 
 	/*
 	 * @param out   File pointer for writing the sqlite database
 	 * @param inJM  JuggleMaster file
 	 * @param inJS  JuggleSaver file
 	 */
-	static void initializeDatabase(FILE* out, FILE* inJM, FILE* inJS);
+	void initializeDatabase(FILE* out, FILE* inJM, FILE* inJS);
 private:
+  void createDB();
+  void closeDB();
+  void queryDB(const char* query);
+  void addCategory(pattern_group_t* group);
+  void addPattern(pattern_t* patt, pattern_group_t* group);
+  void addStyle(style_t* style);
+
   char* filename_;
   void init();
-  
+  sqlite3* db_;
 };
 
 class SearchResult {

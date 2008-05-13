@@ -39,6 +39,7 @@
 		CBA2E1510DBCC24000618F0B /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E14F0DBCC24000618F0B /* jmlib_wrapper.cpp */; };
 		CBA2E16A0DBCC37500618F0B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBA2E1690DBCC37500618F0B /* OpenGL.framework */; };
 		CBA2E1780DBCC63C00618F0B /* JMOpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1770DBCC63C00618F0B /* JMOpenGLView.mm */; };
+		CBBC40E70DCEDE9F00FBC66E /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = CBBC40E40DCEDE9F00FBC66E /* sqlite3.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,7 +57,6 @@
 		1FD17B350A9BD45800668490 /* jmlib.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = jmlib.cpp; sourceTree = "<group>"; };
 		1FD17B360A9BD45800668490 /* jmlib.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = jmlib.h; sourceTree = "<group>"; };
 		1FD17B370A9BD45800668490 /* jmlib_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = jmlib_types.h; sourceTree = "<group>"; };
-		1FD17B380A9BD45800668490 /* juggler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = juggler.h; sourceTree = "<group>"; };
 		1FD17B3A0A9BD45800668490 /* patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = patterns.cpp; sourceTree = "<group>"; };
 		1FD17B3B0A9BD45800668490 /* patterns.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = patterns.h; sourceTree = "<group>"; };
 		1FD17B3C0A9BD45800668490 /* prefs.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = prefs.cpp; sourceTree = "<group>"; };
@@ -102,6 +102,9 @@
 		CBA2E1690DBCC37500618F0B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		CBA2E1760DBCC63C00618F0B /* JMOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMOpenGLView.h; sourceTree = "<group>"; };
 		CBA2E1770DBCC63C00618F0B /* JMOpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JMOpenGLView.mm; sourceTree = "<group>"; };
+		CBBC40E40DCEDE9F00FBC66E /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = sqlite/sqlite3.c; sourceTree = "<group>"; };
+		CBBC40E50DCEDE9F00FBC66E /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = sqlite/sqlite3.h; sourceTree = "<group>"; };
+		CBBC40E60DCEDE9F00FBC66E /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = sqlite/sqlite3ext.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +179,7 @@
 		1FD17B340A9BD45800668490 /* jmlib */ = {
 			isa = PBXGroup;
 			children = (
+				CBBC40E80DCEDEA200FBC66E /* sqlite */,
 				CBA2E13F0DBCC1D600618F0B /* jugglesaver */,
 				CBA2E14C0DBCC24000618F0B /* jmlib_base.h */,
 				CBA2E14D0DBCC24000618F0B /* jmlib_if.h */,
@@ -185,7 +189,6 @@
 				1FD17B350A9BD45800668490 /* jmlib.cpp */,
 				1FD17B360A9BD45800668490 /* jmlib.h */,
 				1FD17B370A9BD45800668490 /* jmlib_types.h */,
-				1FD17B380A9BD45800668490 /* juggler.h */,
 				1FD17B3A0A9BD45800668490 /* patterns.cpp */,
 				1FD17B3B0A9BD45800668490 /* patterns.h */,
 				1FD17B3C0A9BD45800668490 /* prefs.cpp */,
@@ -268,6 +271,16 @@
 			name = jugglesaver;
 			sourceTree = "<group>";
 		};
+		CBBC40E80DCEDEA200FBC66E /* sqlite */ = {
+			isa = PBXGroup;
+			children = (
+				CBBC40E40DCEDE9F00FBC66E /* sqlite3.c */,
+				CBBC40E50DCEDE9F00FBC66E /* sqlite3.h */,
+				CBBC40E60DCEDE9F00FBC66E /* sqlite3ext.h */,
+			);
+			name = sqlite;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -348,6 +361,7 @@
 				CB1AD77F0DCB51900047D6B9 /* gltrackball.cpp in Sources */,
 				CB1AD7800DCB51900047D6B9 /* js_patterns.cpp in Sources */,
 				CB1AD7810DCB51900047D6B9 /* trackball.cpp in Sources */,
+				CBBC40E70DCEDE9F00FBC66E /* sqlite3.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

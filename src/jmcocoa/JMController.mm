@@ -20,9 +20,9 @@
 
 @implementation JMController
 
-static JML_CHAR patterns[7][12]
+static JML_CHAR patterns[8][12]
 	= {"Normal", "Reverse", "Shower", "Mills Mess",
-	   "Center", "Windmill", "Random"};
+	   "Center", "Windmill", "Random", "JuggleSaver"};
 	
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   jm = JMLib::alloc();
@@ -80,7 +80,6 @@ static JML_CHAR patterns[7][12]
 	JML_CHAR *pat = (JML_CHAR *)[pattern cString];
 	
   if (jm->isValidPattern(pat))
-	//if (JMSiteValidator::validateSite(pat))
 	{
 		[errorReporter setHidden:YES];
 		jm->stopJuggle();
@@ -90,7 +89,6 @@ static JML_CHAR patterns[7][12]
 	else
 	{
 		[errorReporter setHidden:NO];
-		//jm->stopJuggle();
 	}
 }
 
@@ -101,9 +99,9 @@ static JML_CHAR patterns[7][12]
 
 - (IBAction)setSpeed:(id)sender
 {
-	jm->stopJuggle();
+	//jm->stopJuggle();
 	jm->setSpeed([sender floatValue]);
-	jm->startJuggle();
+	//jm->startJuggle();
 }
 
 - (IBAction)toggleShowPattern:(id)sender

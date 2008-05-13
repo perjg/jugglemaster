@@ -131,7 +131,20 @@ FILE* PatternLoader::OpenFile(const char *filename, int redownload) {
 	}
 }
 
+#include "sqlite_patterns.h"
+
 int PatternLoader::ParseFiles() {
+  static bool testsql = true;
+
+  if (testsql) {
+    JMPatterns* p = new JMPatterns();
+  
+    p->initializeDatabase(NULL, patternfile, patternfile_js);
+    rewind(patternfile);
+    rewind(patternfile_js);
+    testsql = false;
+  }
+
 	return ParseAllPatterns(patternfile, patternfile_js, &groups, &styles);
 }
 

@@ -31,8 +31,10 @@ class JMPatterns {
 public:
   JMPatterns() : filename_(NULL), db_(NULL) {}
   
-  void search(char* name);
-  void search(char* name, char* site, char* style, int balls); 
+  pattern_t* search(const char* name);
+  pattern_t* search(const char* name, const char* site, const char* style, int balls);
+
+	void freeSearchResult(pattern_t* patterns);
 
 	/*
 	 * @param out   File pointer for writing the sqlite database
@@ -47,6 +49,7 @@ private:
   void addCategory(pattern_group_t* group);
   void addPattern(pattern_t* patt, pattern_group_t* group);
   void addStyle(style_t* style);
+	pattern_t* searchQuery(const char* query);
 
   char* filename_;
   void init();

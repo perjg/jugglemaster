@@ -39,7 +39,7 @@ void JMPatterns::createDB() {
                     "CREATE TABLE Category (name PRIMARY KEY);"
                     "DROP TABLE IF EXISTS Pattern;"
                     "CREATE TABLE Pattern (name PRIMARY KEY, data NOT NULL, category REFERENCES Category, style NOT NULL,"
-                      "author, hr, dr, cameradata REFERENCES CameraData);"
+                      "author, hr, dr, object_count, cameradata REFERENCES CameraData);"
                     "DROP TABLE IF EXISTS Style;"
                     "CREATE TABLE Style (name PRIMARY KEY, data NOT NULL, length NOT NULL);";
   
@@ -82,8 +82,21 @@ void JMPatterns::addCategory(pattern_group_t* group) {
 }
 
 void JMPatterns::addPattern(pattern_t* patt, pattern_group_t* group) {
-  char* sql = sqlite3_mprintf("INSERT INTO Pattern VALUES (%Q, %Q, %Q, %Q, %Q, %f, %f, NULL)",
-          patt->name, patt->data, group->name, patt->style, patt->author, patt->hr, patt->dr);
+	int object_count = -1;
+
+	if (strcmp(patt->style, "JuggleSaver") == 0) {
+		//fixme: get object count of pattern for JuggleSaver
+		// currently: the site for a JuggleSaver pattern is parsed in ParsePattern in engine.cpp
+		// rewrite this to be non-desructive for GetCurrentSite
+	}
+	// for JuggleMaster, we already have the raw site
+	else {
+		JML_BOOL valid = JMSiteValidator::validateSSS(patt->data);
+		if (valid) object_count = JMSiteValidator::getBallCount();
+	}
+
+  char* sql = sqlite3_mprintf("INSERT INTO Pattern VALUES (%Q, %Q, %Q, %Q, %Q, %f, %f, %d NULL)",
+          patt->name, patt->data, group->name, patt->style, patt->author, patt->hr, patt->dr, object_count);
   queryDB(sql);
   sqlite3_free(sql);
 }
@@ -145,72 +158,35 @@ void JMPatterns::initializeDatabase(FILE* out, FILE* inJM, FILE* inJS) {
 	}
 }
 
-/*
-#include "sqlite/sqlite3.h"
-#include "unicode.h"
-#include "db.h"
-
-#include <stdio.h>
-
-void zidict_version(sqlite3_context* ctx, int nargs, sqlite3_value** values) {
-  sqlite3_result_int(ctx, 1);
+pattern_t* JMPatterns::search(const char* name) {
+	return searchQuery(NULL);
 }
 
-int test_collation(void* data, int len1, const void* d1, int len2, const void* d2) {
-  static int tests = 0;
-  unichar cur1, cur2;
-  int read1, read2;
-  u8char* str1 = (u8char*)d1;
-  u8char* str2 = (u8char*)d2;
-
-  *(str1+len1) = 0;
-  *(str2+len2) = 0;
-
-  do {
-    cur1 = u8_iterate(str1, &read1);
-    str1 += read1;
-
-    cur2 = u8_iterate(str2, &read2);
-    str2 += read2;
-
-    if (cur1 != cur2) return (cur2-cur1);
-  } while (read1 > 0 && read2 > 0);
-
-  if (read1 == 0 && read2 != 0)
-    return -1;
-  if (read2 == 0 && read1 != 0)
-    return 1;
-  return 0;
-  //printf("Comparing %s with %s (%d)\n", (char*)str1, (char*)str2, tests++);
-  //return 1;
+pattern_t* JMPatterns::search(const char* name, const char* site, const char* style, int balls) {
+	return searchQuery(NULL);
 }
 
-void db_register_extensions(sqlite3 *db) {
-  sqlite3_create_function(db, "zidict_version", 0, SQLITE_ANY , NULL,
-                          zidict_version, NULL, NULL);
+pattern_t* JMPatterns::searchQuery(const char* query) {
+	if (!query || query[0] == '\0') return NULL;
 
-  sqlite3_create_collation(db, "TEST", SQLITE_UTF8, NULL, test_collation);
+	pattern_t* patt = new pattern_t;
+
+	return patt;
 }
 
-int execute(sqlite3 *db, const char* sql, ...) {
-  int rc;
-  char *err, *tmp;
 
-  va_list ap;
-  va_start(ap, sql);
-  tmp = sqlite3_vmprintf(sql, ap);
-  va_end(ap);
+void JMPatterns::freeSearchResult(pattern_t* patt) {
+	struct pattern_t *tmppatt = NULL;
+	struct pattern_group_t *group = NULL;
+	struct pattern_group_t *tmpgroup = NULL;
 
-  rc = sqlite3_exec(db, tmp, NULL, NULL, &err);
-  if(rc != SQLITE_OK) {
-    if (err != NULL) {
-      //fprintf(stdout, "execute() : Error %i : %s\n", rc, err);
-      sqlite3_free(err);
-    }
-  }
-  sqlite3_free(tmp);
-  return rc;
+	while (patt) {
+		if(patt->name != NULL) delete patt->name;
+		if(patt->data != NULL) delete patt->data;
+		if(patt->style != NULL) delete patt->style;
+		if(patt->author != NULL) delete patt->author;
+		tmppatt = patt;
+		patt = patt->next;
+		delete tmppatt;
+	}
 }
-
-*/
-

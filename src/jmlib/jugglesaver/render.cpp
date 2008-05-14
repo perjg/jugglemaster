@@ -7,7 +7,7 @@
  * representations are made about the suitability of this software for any
  * purpose.  It is provided "as is" without express or implied warranty.
  *
- * Changes for jmlib
+ * Changes for jmlib and OpenGL ES compatibility
  * Per Johan Groland 2008
  */
 

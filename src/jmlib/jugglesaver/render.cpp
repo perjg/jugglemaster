@@ -8,10 +8,13 @@
  * purpose.  It is provided "as is" without express or implied warranty.
  *
  * Changes for jmlib and OpenGL ES compatibility
- * Per Johan Groland 2008
+ * Per Johan Groland, (C) 2008
  */
 
 #include "jugglesaver.h"
+#ifdef OPENGL_ES_SUPPORT
+#include "glues.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -122,18 +125,23 @@ static const float Cols[][4] =
     {0.0f, 0.45f, 0.9f, 1.0f}, /* 11 */
 };
 
+#ifndef OPENGL_ES_SUPPORT
 int InitGLDisplayLists(void);
-
+#endif
 
 void InitGLSettings(RENDER_STATE* pState, int WireFrame)
 {
     srand((unsigned int)time(NULL));
 
     memset(pState, 0, sizeof(RENDER_STATE));
-        
+
+#ifdef OPENGL_ES_SUPPORT
+    WireFrame; // No wireframe support in OpenGL ES
+#else        
     if (WireFrame)
         glPolygonMode(GL_FRONT, GL_LINE);
-    
+#endif
+
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     glLightfv(GL_LIGHT0, GL_POSITION, LightPos);
@@ -150,7 +158,11 @@ void InitGLSettings(RENDER_STATE* pState, int WireFrame)
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
     
+#ifdef OPENGL_ES_SUPPORT
+    pState->DLStart = -1; // No display list support in OpenGL ES
+#else
     pState->DLStart = InitGLDisplayLists();
+#endif
 }
 
 static float extraZoom = 0.0f;
@@ -261,11 +273,19 @@ void SetCamera(RENDER_STATE* pState)
     if (extraZoom > 0) {
       ez -= (ez * extraZoom);
 
+#ifdef OPENGL_ES_SUPPORT
+      /* Zoom the camera a bit extra for OpenGL ES, assuming a smaller screen size */
+      float multiplier = pState->AspectRatio > 1 ? 1.0f : 1.5f;
+      if (pState->AspectRatio < 0.75f) multiplier = 2.0f;
+#else
+      float multiplier = 1.0f;
+#endif
+
 			if (adjustCameraHeight) {
 				if (extraZoom >= 0.29f)
-					cameraHeightAdjustment = 1.5f;
+					cameraHeightAdjustment = 1.5f * multiplier;
 				else
-					cameraHeightAdjustment = 1.0f;
+					cameraHeightAdjustment = 1.0f * multiplier;
 			}
 
 			cy -= cameraHeightAdjustment;
@@ -357,18 +377,35 @@ void InterpolateVertex(
     result[2] = v1[2] * (1.0f - t) + v2[2] * t;
 }
 
+/* Arrays used to store vertices and normals.
+ * All glNormal and glVertex calls originally in juggler3d have been
+ * rewritten using vertex and normal arrays for OpenGL ES compatibility
+ */
+float vertex_arr[256];
+float normal_arr[256];
 
-void SetGLVertex(const float* v, float rad)
+void SetGLVertex(const float* v, float rad, int* offset, int* normal_offset)
 {
     float Len = sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 
     if (Len >= 1.0e-10f)
     {
-        glNormal3f(v[0] / Len, v[1] / Len, v[2] / Len);
-        glVertex3f(rad * v[0] / Len, rad * v[1] / Len, rad * v[2] / Len);
+        //glNormal3f(v[0] / Len, v[1] / Len, v[2] / Len);
+        normal_arr[(*normal_offset)++] = v[0] / Len;
+        normal_arr[(*normal_offset)++] = v[1] / Len;
+        normal_arr[(*normal_offset)++] = v[2] / Len;
+        //glVertex3f(rad * v[0] / Len, rad * v[1] / Len, rad * v[2] / Len);
+        vertex_arr[(*offset)++] = rad * v[0] / Len;
+        vertex_arr[(*offset)++] = rad * v[1] / Len;
+        vertex_arr[(*offset)++] = rad * v[2] / Len;
     }
     else
-        glVertex3fv(v);
+    {
+        //glVertex3fv(v);
+        vertex_arr[(*offset)++] = v[0];
+        vertex_arr[(*offset)++] = v[1];
+        vertex_arr[(*offset)++] = v[2];
+    }
 }
 
 
@@ -376,6 +413,8 @@ void SphereSegment(
     const float* v1, const float* v2, const float* v3, float r, int Levels)
 {
     int i, j;
+    int offset = 0;
+    int normal_offset = 0;
 
     for (i = 0; i < Levels; i++)
     {
@@ -386,25 +425,32 @@ void SphereSegment(
         InterpolateVertex(v3, v2, (float)(i + 1) / Levels, B);
         InterpolateVertex(v3, v2, (float) i / Levels, C);
 
-        glBegin(GL_TRIANGLE_STRIP);
+        //glBegin(GL_TRIANGLE_STRIP);
+        offset = 0;
+        normal_offset = 0;
 
-        SetGLVertex(B, r);
-        SetGLVertex(C, r);
+        SetGLVertex(B, r, &offset, &normal_offset);
+        SetGLVertex(C, r, &offset, &normal_offset);
         
         for (j = 1; j <= i; j++)
         {
             float v[3];
 
             InterpolateVertex(B, A, (float) j / (i + 1), v);
-            SetGLVertex(v, r);
+            SetGLVertex(v, r, &offset, &normal_offset);
 
             InterpolateVertex(C, D, (float) j / i, v);
-            SetGLVertex(v, r);
+            SetGLVertex(v, r, &offset, &normal_offset);
         }
 
-        SetGLVertex(A, r);
+        SetGLVertex(A, r, &offset, &normal_offset);
         
-        glEnd();
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glVertexPointer(3, GL_FLOAT , 0, vertex_arr);
+        glNormalPointer(GL_FLOAT, 0, normal_arr);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, offset/3);
+        //glEnd();
     }
 }
 
@@ -434,36 +480,264 @@ void DrawSphere(float rad)
     SphereSegment(v1, v2, v3, rad, Levels);
 }
 
+#define CACHE_SIZE	240
+
+/* Draws a cylinder. Based on the sgi reference OpenGL implementation
+ * rewritten for OpenGL ES compatibility
+ */
+void DrawCylinder(bool outside, float baseRadius, float topRadius, float height, GLint slices, GLint stacks)
+{
+    GLint i,j;
+    GLfloat sinCache[CACHE_SIZE];
+    GLfloat cosCache[CACHE_SIZE];
+    GLfloat sinCache2[CACHE_SIZE];
+    GLfloat cosCache2[CACHE_SIZE];
+    GLfloat angle;
+    GLfloat zLow, zHigh;
+    GLfloat length;
+    GLfloat deltaRadius;
+    GLfloat zNormal;
+    GLfloat xyNormalRatio;
+    GLfloat radiusLow, radiusHigh;
+
+    if (slices >= CACHE_SIZE) slices = CACHE_SIZE-1;
+
+    if (slices < 2 || stacks < 1 || baseRadius < 0.0 || topRadius < 0.0 || height < 0.0) {
+        return;
+    }
+
+    // Compute length (needed for normal calculations)
+    deltaRadius = baseRadius - topRadius;
+    length = sqrt(deltaRadius*deltaRadius + height*height);
+    if (length == 0.0) {
+        return;
+    }
+
+    zNormal = deltaRadius / length;
+    xyNormalRatio = height / length;
+
+    for (i = 0; i < slices; i++) {
+        angle = 2 * PI * i / slices;
+        if (outside) {
+            sinCache2[i] = xyNormalRatio * sin(angle);
+            cosCache2[i] = xyNormalRatio * cos(angle);
+        }
+        else {
+            sinCache2[i] = -xyNormalRatio * sin(angle);
+            cosCache2[i] = -xyNormalRatio * cos(angle);
+        }
+        sinCache[i] = sin(angle);
+        cosCache[i] = cos(angle);
+    }
+
+
+    sinCache[slices] = sinCache[0];
+    cosCache[slices] = cosCache[0];
+    sinCache2[slices] = sinCache2[0];
+    cosCache2[slices] = cosCache2[0];
+
+    for (j = 0; j < stacks; j++) {
+        zLow = j * height / stacks;
+        zHigh = (j + 1) * height / stacks;
+        radiusLow = baseRadius - deltaRadius * ((float) j / stacks);
+        radiusHigh = baseRadius - deltaRadius * ((float) (j + 1) / stacks);
+
+        int offset = 0;
+        int normal_offset = 0;
+        
+        for (i = 0; i <= slices; i++) {
+            normal_arr[normal_offset++] = sinCache2[i];
+            normal_arr[normal_offset++] = cosCache2[i];
+            normal_arr[normal_offset++] = zNormal;
+            normal_arr[normal_offset++] = sinCache2[i];
+            normal_arr[normal_offset++] = cosCache2[i];
+            normal_arr[normal_offset++] = zNormal;            
+        
+            if (outside) {
+                vertex_arr[offset++] = radiusLow * sinCache[i];
+                vertex_arr[offset++] = radiusLow * cosCache[i];
+                vertex_arr[offset++] = zLow;
+                vertex_arr[offset++] = radiusHigh * sinCache[i];
+                vertex_arr[offset++] = radiusHigh * cosCache[i];
+                vertex_arr[offset++] = zHigh;
+            }
+            else {
+                vertex_arr[offset++] = radiusHigh * sinCache[i];
+                vertex_arr[offset++] = radiusHigh * cosCache[i];
+                vertex_arr[offset++] = zHigh;
+                vertex_arr[offset++] = radiusLow * sinCache[i];
+                vertex_arr[offset++] = radiusLow * cosCache[i];
+                vertex_arr[offset++] = zLow;
+            }
+        }
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT , 0, vertex_arr);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glNormalPointer(GL_FLOAT, 0, normal_arr);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, offset/3);
+    }
+}
+
+/* Draws a disk. Based on the sgi reference OpenGL implementation
+ * rewritten for OpenGL ES compatibility
+ */
+void DrawPartialDisk(bool outside, GLfloat innerRadius, 
+		   GLfloat outerRadius, GLint slices, GLint loops,
+		   GLfloat startAngle, GLfloat sweepAngle)
+{
+    GLint i,j;
+    GLfloat sinCache[CACHE_SIZE];
+    GLfloat cosCache[CACHE_SIZE];
+    GLfloat angle;
+    GLfloat deltaRadius;
+    GLfloat radiusLow, radiusHigh;
+    GLfloat angleOffset;
+    GLint slices2;
+    GLint finish;
+
+    if (slices >= CACHE_SIZE) slices = CACHE_SIZE-1;
+    if (slices < 2 || loops < 1 || outerRadius <= 0.0 || innerRadius < 0.0 || innerRadius > outerRadius) {
+      return;
+    }
+
+    if (sweepAngle < -360.0) sweepAngle = 360.0;
+    if (sweepAngle > 360.0) sweepAngle = 360.0;
+    if (sweepAngle < 0) {
+        startAngle += sweepAngle;
+        sweepAngle = -sweepAngle;
+    }
+
+    if (sweepAngle == 360.0) {
+        slices2 = slices;
+    }
+    else {
+        slices2 = slices + 1;
+    }
+
+    // Compute length (needed for normal calculations)
+    deltaRadius = outerRadius - innerRadius;
+
+    // Cache is the vertex locations cache
+
+    angleOffset = startAngle / 180.0 * PI;
+    for (i = 0; i <= slices; i++) {
+        angle = angleOffset + ((PI * sweepAngle) / 180.0) * i / slices;
+        sinCache[i] = sin(angle);
+        cosCache[i] = cos(angle);
+    }
+
+    if (sweepAngle == 360.0) {
+        sinCache[slices] = sinCache[0];
+        cosCache[slices] = cosCache[0];
+    }
+
+    int normal_offset = 0;
+    int offset = 0;
+
+
+    if (innerRadius == 0.0) {
+        finish = loops - 1;
+        offset = 0;
+        
+        vertex_arr[offset++] = 0.0;
+        vertex_arr[offset++] = 0.0;
+        vertex_arr[offset++] = 0.0;
+        normal_arr[normal_offset++] = 0.0f;
+        normal_arr[normal_offset++] = 0.0f;
+        normal_arr[normal_offset++] = outside ? 1.0f : -1.0f;        
+
+        radiusLow = outerRadius - deltaRadius * ((float) (loops-1) / loops);
+
+        if (outside) {
+            for (i = slices; i >= 0; i--) {
+                vertex_arr[offset++] = radiusLow * sinCache[i];
+                vertex_arr[offset++] = radiusLow * cosCache[i];
+                vertex_arr[offset++] = 0.0;
+                normal_arr[normal_offset++] = 0.0f;
+                normal_arr[normal_offset++] = 0.0f;
+                normal_arr[normal_offset++] = outside ? 1.0f : -1.0f;        
+            }
+        }
+        else {
+            for (i = 0; i <= slices; i++) {
+                vertex_arr[offset++] = radiusLow * sinCache[i];
+                vertex_arr[offset++] = radiusLow * cosCache[i];
+                vertex_arr[offset++] = 0.0;
+                normal_arr[normal_offset++] = 0.0f;
+                normal_arr[normal_offset++] = 0.0f;
+                normal_arr[normal_offset++] = outside ? 1.0f : -1.0f;        
+            }
+        }
+        
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glVertexPointer(3, GL_FLOAT , 0, vertex_arr);
+        glNormalPointer(GL_FLOAT, 0, normal_arr);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, offset/3);
+    }
+    else {
+        finish = loops;
+    }
+    
+    for (j = 0; j < finish; j++) {
+        radiusLow = outerRadius - deltaRadius * ((float) j / loops);
+        radiusHigh = outerRadius - deltaRadius * ((float) (j + 1) / loops);
+        
+        offset = 0;
+        
+        for (i = 0; i <= slices; i++) {
+            if (outside) {
+                vertex_arr[offset++] = radiusLow * sinCache[i];
+                vertex_arr[offset++] = radiusLow * cosCache[i];
+                vertex_arr[offset++] = 0.0f;
+                vertex_arr[offset++] = radiusHigh * sinCache[i];
+                vertex_arr[offset++] = radiusHigh * cosCache[i];
+                vertex_arr[offset++] = 0.0f;
+            }
+            else {
+                vertex_arr[offset++] = radiusHigh * sinCache[i];
+                vertex_arr[offset++] = radiusHigh * cosCache[i];
+                vertex_arr[offset++] = 0.0f;
+                vertex_arr[offset++] = radiusLow * sinCache[i];
+                vertex_arr[offset++] = radiusLow * cosCache[i];
+                vertex_arr[offset++] = 0.0f;
+            }
+        }
+        
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT , 0, vertex_arr);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, offset/3);
+    }
+}
+
+void DrawDisk(bool outside, GLfloat innerRadius, GLfloat outerRadius, GLint slices, GLint loops)
+{
+    DrawPartialDisk(outside, innerRadius, outerRadius, slices, loops, 0.0, 360.0);
+}
 
 void DrawRing(void)
 {
     const int Facets = 22;
     const float w = 0.1f;
-    GLUquadric* pQuad = gluNewQuadric();
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
     glTranslatef(0.0f, 0.0f, -w / 2.0f);
 
-    gluCylinder(pQuad, 1.0f, 1.0f, w, Facets, 1);
-    gluQuadricOrientation(pQuad, GLU_INSIDE);
-
-    gluCylinder(pQuad, 0.7f, 0.7f, w, Facets, 1);
-    gluQuadricOrientation(pQuad, GLU_OUTSIDE);
+    DrawCylinder(true, 1.0f, 1.0f, w, Facets, 1);
+    DrawCylinder(false, 0.7f, 0.7f, w, Facets, 1);
 
     glTranslatef(0.0f, 0.0f, w);
-    gluDisk(pQuad, 0.7, 1.0f, Facets, 1);
+    DrawDisk(true, 0.7, 1.0f, Facets, 1);
 
     glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
     glTranslatef(0.0f, 0.0f, w);
-    gluDisk(pQuad, 0.7, 1.0f, Facets, 1);
-
-    gluDeleteQuadric(pQuad);
+    DrawDisk(true, 0.7, 1.0f, Facets, 1);
 }
 
 
 /* The club follows a 'circus club' design i.e. it has stripes running down the
  * body.  The club is draw such that the one stripe uses the current material
  * and the second stripe the standard silver colour. */
-
 void DrawClub(void)
 {
     const float r[4] = {0.06f, 0.1f, 0.34f, 0.34f / 2.0f};
@@ -471,146 +745,160 @@ void DrawClub(void)
     float na[4];
     const int n = 18;
     int i, j;
-    GLUquadric* pQuad;
 
     na[0] = (float) atan((r[1] - r[0]) / (z[1] - z[0]));
     na[1] = (float) atan((r[2] - r[1]) / (z[2] - z[1]));
     na[2] = (float) atan((r[3] - r[1]) / (z[3] - z[1]));
     na[3] = (float) atan((r[3] - r[2]) / (z[3] - z[2]));
+  
+    int offset = 0;
+    int normal_offset = 0;
 
     for (i = 0; i < n; i += 2)
     {
         float a1 = i * PI * 2.0f / n;
         float a2 = (i + 1) * PI * 2.0f / n;
 
-        glBegin(GL_TRIANGLE_STRIP);
+        //glBegin(GL_TRIANGLE_STRIP);
             for (j = 1; j < 4; j++)
             {
-                glNormal3f(cosf(na[j]) * cosf(a1),
-                    cosf(na[j]) * sinf(a1), sinf(na[j]));
+                //glNormal3f(cosf(na[j]) * cosf(a1), cosf(na[j]) * sinf(a1), sinf(na[j]));
+                normal_arr[normal_offset++] = cosf(na[j]) * cosf(a1);
+                normal_arr[normal_offset++] = cosf(na[j]) * sinf(a1);
+                normal_arr[normal_offset++] = sinf(na[j]);                
 
-                glVertex3f(r[j] * cosf(a1), r[j] * sinf(a1), z[j]);
+                //glVertex3f(r[j] * cosf(a1), r[j] * sinf(a1), z[j]);
+                vertex_arr[offset++] = r[j] * cosf(a1);
+                vertex_arr[offset++] = r[j] * sinf(a1);
+                vertex_arr[offset++] = z[j];
 
-                glNormal3f(cosf(na[j]) * cosf(a2),
-                    cosf(na[j]) * sinf(a2),    sinf(na[j]));
+                //glNormal3f(cosf(na[j]) * cosf(a2), cosf(na[j]) * sinf(a2), sinf(na[j]));
+                normal_arr[normal_offset++] = cosf(na[j]) * cosf(a2);
+                normal_arr[normal_offset++] = cosf(na[j]) * sinf(a2);
+                normal_arr[normal_offset++] = sinf(na[j]);
 
-                glVertex3f(r[j] * cosf(a2), r[j] * sinf(a2), z[j]);
+                //glVertex3f(r[j] * cosf(a2), r[j] * sinf(a2), z[j]);
+                vertex_arr[offset++] = r[j] * cosf(a2);
+                vertex_arr[offset++] = r[j] * sinf(a2);
+                vertex_arr[offset++] = z[j];
             }
-        glEnd();
+        //glEnd();
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glVertexPointer(3, GL_FLOAT , 0, vertex_arr);
+        glNormalPointer(GL_FLOAT, 0, normal_arr);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, offset/3);
     }
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, HandleCol);
+
+    offset = 0;
+    normal_offset = 0;
 
     for (i = 1; i < n; i += 2)
     {
         float a1 = i * PI * 2.0f / n;
         float a2 = (i + 1) * PI * 2.0f / n;
 
-        glBegin(GL_TRIANGLE_STRIP);
+        //glBegin(GL_TRIANGLE_STRIP);
             for (j = 1; j < 4; j++)
             {
-                glNormal3f(cosf(na[j]) * cosf(a1),
-                    cosf(na[j]) * sinf(a1),    sinf(na[j]));
+                //glNormal3f(cosf(na[j]) * cosf(a1), cosf(na[j]) * sinf(a1),    sinf(na[j]));
+                normal_arr[normal_offset++] = cosf(na[j]) * cosf(a1);
+                normal_arr[normal_offset++] = cosf(na[j]) * sinf(a1);
+                normal_arr[normal_offset++] = sinf(na[j]);                
 
-                glVertex3f(r[j] * cosf(a1), r[j] * sinf(a1), z[j]);
+                //glVertex3f(r[j] * cosf(a1), r[j] * sinf(a1), z[j]);
+                vertex_arr[offset++] = r[j] * cosf(a1);
+                vertex_arr[offset++] = r[j] * sinf(a1);
+                vertex_arr[offset++] = z[j];
 
-                glNormal3f(cosf(na[j]) * cosf(a2),
-                    cosf(na[j]) * sinf(a2), sinf(na[j]));
+                //glNormal3f(cosf(na[j]) * cosf(a2), cosf(na[j]) * sinf(a2), sinf(na[j]));
+                normal_arr[normal_offset++] = cosf(na[j]) * cosf(a2);
+                normal_arr[normal_offset++] = cosf(na[j]) * sinf(a2);
+                normal_arr[normal_offset++] = sinf(na[j]);
 
-                glVertex3f(r[j] * cosf(a2), r[j] * sinf(a2), z[j]);
+                //glVertex3f(r[j] * cosf(a2), r[j] * sinf(a2), z[j]);
+                vertex_arr[offset++] = r[j] * cosf(a2);
+                vertex_arr[offset++] = r[j] * sinf(a2);
+                vertex_arr[offset++] = z[j];
             }
-        glEnd();
+        //glEnd();
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glVertexPointer(3, GL_FLOAT , 0, vertex_arr);
+        glNormalPointer(GL_FLOAT, 0, normal_arr);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, offset/3);
     }
 
-    pQuad = gluNewQuadric();
     glTranslatef(0.0f, 0.0f, z[0]);
-    gluCylinder(pQuad, r[0], r[1], z[1] - z[0], n, 1);
+    DrawCylinder(true, r[0], r[1], z[1] - z[0], n, 1);
 
     glTranslatef(0.0f, 0.0f, z[3] - z[0]);
-    gluDisk(pQuad, 0.0, r[3], n, 1);
+    DrawDisk(true, 0.0, r[3], n, 1);
     glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
     glTranslatef(0.0f, 0.0f, z[3] - z[0]);
-    gluDisk(pQuad, 0.0, r[0], n, 1);
-    gluDeleteQuadric(pQuad);
+    DrawDisk(true, 0.0, r[0], n, 1);
 }
 
-
-/* In total 6 display lists are used.  There are created based on the DL_
- * constants defined earlier.  The function returns the index of the first
- * display list, all others can be calculated based on an offset from there. */
-
-int InitGLDisplayLists(void)
+void DrawTorso()
 {
-    int s = glGenLists(6);
-    GLUquadric* pQuad;
+    glPushMatrix();
+        glTranslatef(ShoulderPos[0], ShoulderPos[1], -ShoulderPos[2]);
+        glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
+        DrawCylinder(true, 0.3, 0.3, ShoulderPos[0] * 2, 18, 1);
+    glPopMatrix();
 
-    glNewList(s + DL_BALL, GL_COMPILE);
-    DrawSphere(BallRad);
-    glEndList();
-
-    glNewList(s + DL_CLUB, GL_COMPILE);
-    DrawClub();
-    glEndList();
-
-    glNewList(s + DL_RING, GL_COMPILE);
-    DrawRing();
-    glEndList();
-    
-    pQuad =  gluNewQuadric();
-    gluQuadricNormals(pQuad, GLU_SMOOTH);    
-    
-    glNewList(s + DL_TORSO, GL_COMPILE);
-        glPushMatrix();
-            glTranslatef(ShoulderPos[0], ShoulderPos[1], -ShoulderPos[2]);
-            glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
-            gluCylinder(pQuad, 0.3, 0.3, ShoulderPos[0] * 2, 18, 1);
-        glPopMatrix();
-
-        glPushMatrix();
-            glTranslatef(0.0f, -1.0f, -ShoulderPos[2]);
-            glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
-            gluCylinder(pQuad, 0.3, 0.3, ShoulderPos[1] + 1.0f, 18, 1);
-            glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-            gluDisk(pQuad, 0.0, 0.3, 18, 1);
-        glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0.0f, -1.0f, -ShoulderPos[2]);
+        glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+        DrawCylinder(true, 0.3, 0.3, ShoulderPos[1] + 1.0f, 18, 1);
+        glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+        DrawDisk(true, 0.0, 0.3, 18, 1);
+    glPopMatrix();
         
-        /* draw the head */
-        glPushMatrix();
-            glTranslatef(0.0f, ShoulderPos[1] + 1.0f, -ShoulderPos[2]);
-            glRotatef(-30.0f, 1.0f, 0.0f, 0.0f);
-            gluCylinder(pQuad, 0.5, 0.5, 0.3, 15, 1);
+    /* draw the head */
+    glPushMatrix();
+        glTranslatef(0.0f, ShoulderPos[1] + 1.0f, -ShoulderPos[2]);
+        glRotatef(-30.0f, 1.0f, 0.0f, 0.0f);
+        DrawCylinder(true, 0.5, 0.5, 0.3, 15, 1);
             
-            glPushMatrix();
-                glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-                glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
-                gluDisk(pQuad, 0.0, 0.5, 15, 1);
-            glPopMatrix(); 
+        glPushMatrix();
+            glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+            glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
+            DrawDisk(true, 0.0, 0.5, 15, 1);
+        glPopMatrix(); 
                 
-            glTranslatef(0.0f, 0.0f, .3f);
-            gluDisk(pQuad, 0.0, 0.5, 15, 1);
-        glPopMatrix();        
-    glEndList();
-    
-    glNewList(s + DL_UPPERARM, GL_COMPILE);
-        gluQuadricNormals(pQuad, GLU_SMOOTH);
-        gluQuadricDrawStyle(pQuad, GLU_FILL);
-        gluSphere(pQuad, 0.3, 12, 8);
-
-        gluCylinder(pQuad, 0.3, 0.3, UArmLen, 12, 1); 
-        glTranslatef(0.0f, 0.0f, UArmLen);
-        gluSphere(pQuad, 0.3, 12, 8);
-    glEndList();
-
-    glNewList(s + DL_FOREARM, GL_COMPILE);
-        gluCylinder(pQuad, 0.3, 0.3 / 2.0f, LArmLen, 12, 1);
-        glTranslatef(0.0f, 0.0f, LArmLen);
-        gluDisk(pQuad, 0, 0.3 / 2.0f, 18, 1);
-    glEndList();
-
-    gluDeleteQuadric(pQuad);
-    return s;
+        glTranslatef(0.0f, 0.0f, .3f);
+        DrawDisk(true, 0.0, 0.5, 15, 1);
+    glPopMatrix();
 }
 
+void DrawUpperArm()
+{
+    glPushMatrix();
+        DrawSphere(0.3f);
+        glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+        DrawSphere(0.3f);
+    glPopMatrix();
+
+    DrawCylinder(true, 0.3, 0.3, UArmLen, 12, 1); 
+
+    glTranslatef(0.0f, 0.0f, UArmLen);
+    
+    glPushMatrix();
+        DrawSphere(0.3f);
+        glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+        DrawSphere(0.3f);
+    glPopMatrix();
+}
+
+void DrawForearm()
+{
+    DrawCylinder(true, 0.3, 0.3 / 2.0f, LArmLen, 12, 1);
+    glTranslatef(0.0f, 0.0f, LArmLen);
+    DrawDisk(true, 0, 0.3 / 2.0f, 18, 1);
+}
 
 /* Drawing the arm requires connecting the upper and fore arm between the
  * shoulder and hand position.  Thinking about things kinematically by treating
@@ -650,13 +938,60 @@ void DrawArm(RENDER_STATE* pState, float TimePos, int Left)
         glRotatef((float)(-180.f * asin(y / len) / 3.14), 1.0f, 0.0f, 0.0f);
         glRotatef(Left ? 20.0f : -20.0f, 0.0f, 0.0f, 1.0f);
         glRotatef((float) ang, 1.0f, 0.0f, 0.0f);
+#ifdef OPENGL_ES_SUPPORT
+        DrawUpperArm();
+#else
         glCallList(DL_UPPERARM + pState->DLStart);
+#endif
 
         glRotatef((float)(ang2 - 180.0), 1.0f, 0.0f, 0.f);
+#ifdef OPENGL_ES_SUPPORT
+        DrawForearm();
+#else
         glCallList(DL_FOREARM + pState->DLStart);
+#endif
+
     glPopMatrix();
 }
 
+
+#ifndef OPENGL_ES_SUPPORT
+
+/* In total 6 display lists are used.  There are created based on the DL_
+ * constants defined earlier.  The function returns the index of the first
+ * display list, all others can be calculated based on an offset from there. */
+
+int InitGLDisplayLists(void)
+{
+    int s = glGenLists(6);
+
+    glNewList(s + DL_BALL, GL_COMPILE);
+      DrawSphere(BallRad);
+    glEndList();
+
+    glNewList(s + DL_CLUB, GL_COMPILE);
+      DrawClub();
+    glEndList();
+
+    glNewList(s + DL_RING, GL_COMPILE);
+      DrawRing();
+    glEndList();
+    
+    glNewList(s + DL_TORSO, GL_COMPILE);
+      DrawTorso();
+    glEndList();
+    
+    glNewList(s + DL_UPPERARM, GL_COMPILE);
+      DrawUpperArm();
+    glEndList();
+
+    glNewList(s + DL_FOREARM, GL_COMPILE);
+      DrawForearm();
+    glEndList();
+
+    return s;
+}
+#endif
 
 void DrawGLScene(RENDER_STATE* pState)
 {
@@ -681,47 +1016,6 @@ void DrawGLScene(RENDER_STATE* pState)
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SpecCol);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 60.0f);
 
-    /* draw test objects
-    float x, y;
-    const float min_y = -3.0;
-    const float max_y = 10.0;
-    const float min_x = -5.0;
-    const float max_x = 5.0;
-
-    for (int i = 1; i < 5; i++) {
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, Cols[i % nCols]);
-        glPushMatrix();
-
-        switch (i) {
-        case 1: 
-          x = min_x;
-          y = min_y;
-          break;
-        case 2:
-          x = min_x;
-          y = max_y;
-          break;
-        case 3:
-          x = max_x;
-          y = max_y;
-          break;
-        case 4:
-          x = max_x;
-          y = min_y;
-          break;
-        }
-        
-        glTranslatef(x, y, 0);  
-        //glRotatef(pState->balls[i].Rot, 0.6963f, 0.6963f, 0.1742f);
-        glCallList(DL_BALL + pState->DLStart);
-        glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, AltCols[i % nCols]);
-        glCallList(DL_BALL + pState->DLStart);  
-        
-        glPopMatrix();
-    }
-    */
-
     for (i = 0; i < pPattern->Objects; i++)
     {
         POS ObjPos;
@@ -737,7 +1031,11 @@ void DrawGLScene(RENDER_STATE* pState)
                 glRotatef(ObjPos.Rot, 0.0f, 1.0f, 0.0f);
                 glRotatef(ObjPos.Elev, -1.0f, 0.0f, 0.0f);
                 glTranslatef(0.0f, 0.0f, -1.0f);
+#ifdef OPENGL_ES_SUPPORT
+                DrawClub();
+#else
                 glCallList(DL_CLUB + pState->DLStart);
+#endif
                 break;
 
             case OBJECT_RING:
@@ -745,18 +1043,30 @@ void DrawGLScene(RENDER_STATE* pState)
                 glTranslatef(ObjPos.x, ObjPos.y, ObjPos.z);
                 glRotatef(ObjPos.Rot, 0.0f, 1.0f, 0.0f);
                 glRotatef(ObjPos.Elev, -1.0f, 0.0f, 0.0f);
+#ifdef OPENGL_ES_SUPPORT
+                DrawRing();
+#else
                 glCallList(DL_RING + pState->DLStart);
+#endif
                 break;
 
             default:
                 GetObjectPosition(pPattern, i, Time, 0.0f, &ObjPos);
                 glTranslatef(ObjPos.x, ObjPos.y, ObjPos.z);        
                 glRotatef(ObjPos.Rot, 0.6963f, 0.6963f, 0.1742f);
+#ifdef OPENGL_ES_SUPPORT
+                DrawSphere(BallRad);
+#else
                 glCallList(DL_BALL + pState->DLStart);
+#endif
                 glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
                 glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, 
                     AltCols[i % nCols]);
+#ifdef OPENGL_ES_SUPPORT
+                DrawSphere(BallRad);
+#else
                 glCallList(DL_BALL + pState->DLStart);
+#endif
                 break;
         }
 
@@ -764,7 +1074,11 @@ void DrawGLScene(RENDER_STATE* pState)
     }
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, BodyCol);
+#ifdef OPENGL_ES_SUPPORT
+    DrawTorso();
+#else
     glCallList(DL_TORSO + pState->DLStart);
+#endif
     DrawArm(pState, Time, 1);
     DrawArm(pState, Time, 0);
 }
@@ -868,10 +1182,18 @@ void JMDrawArm(JUGGLEMASTER_RENDER_STATE* pState, int Left)
         glRotatef((float)(-180.f * asin(y / len) / 3.14), 1.0f, 0.0f, 0.0f);
         glRotatef(Left ? 20.0f : -20.0f, 0.0f, 0.0f, 1.0f);
         glRotatef((float) ang, 1.0f, 0.0f, 0.0f);
+#ifdef OPENGL_ES_SUPPORT
+        DrawUpperArm();
+#else
         glCallList(DL_UPPERARM + pState->DLStart);
+#endif
 
         glRotatef((float)(ang2 - 180.0), 1.0f, 0.0f, 0.f);
+#ifdef OPENGL_ES_SUPPORT
+        DrawForearm();
+#else
         glCallList(DL_FOREARM + pState->DLStart);
+#endif
     glPopMatrix();
 }
 
@@ -928,10 +1250,13 @@ void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState)
         
         glTranslatef(x, y, 0);  
         //glRotatef(pState->balls[i].Rot, 0.6963f, 0.6963f, 0.1742f);
-        glCallList(DL_BALL + pState->DLStart);
+
+#ifdef OPENGL_ES_SUPPORT
+        DrawSphere(BallRad);
         glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, AltCols[i % nCols]);
-        glCallList(DL_BALL + pState->DLStart);  
+#ifdef OPENGL_ES_SUPPORT
+        DrawSphere(BallRad);
         
         glPopMatrix();
     }
@@ -951,24 +1276,40 @@ void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState)
                 glRotatef(pState->objects[i].Rot, 0.0f, 1.0f, 0.0f);
                 glRotatef(pState->objects[i].Elev, -1.0f, 0.0f, 0.0f);
                 glTranslatef(0.0f, 0.0f, -1.0f);
+#ifdef OPENGL_ES_SUPPORT
+                DrawClub();
+#else
                 glCallList(DL_CLUB + pState->DLStart);
+#endif
                 break;
 
             case OBJECT_RING:
                 glTranslatef(pState->objects[i].x, pState->objects[i].y, pState->objects[i].z);
                 glRotatef(pState->objects[i].Rot, 0.0f, 1.0f, 0.0f);
                 glRotatef(pState->objects[i].Elev, -1.0f, 0.0f, 0.0f);
+#ifdef OPENGL_ES_SUPPORT
+                DrawRing();
+#else
                 glCallList(DL_RING + pState->DLStart);
+#endif
                 break;
 
             default:
                 glTranslatef(pState->objects[i].x, pState->objects[i].y, pState->objects[i].z);        
                 glRotatef(pState->objects[i].Rot, 0.6963f, 0.6963f, 0.1742f);
+#ifdef OPENGL_ES_SUPPORT
+                DrawSphere(BallRad);
+#else
                 glCallList(DL_BALL + pState->DLStart);
+#endif
                 glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
                 glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, 
                     AltCols[i % nCols]);
+#ifdef OPENGL_ES_SUPPORT
+                DrawSphere(BallRad);
+#else
                 glCallList(DL_BALL + pState->DLStart);
+#endif
                 break;
         }
 
@@ -976,7 +1317,11 @@ void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState)
     }
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, BodyCol);
+#ifdef OPENGL_ES_SUPPORT
+    DrawTorso();
+#else
     glCallList(DL_TORSO + pState->DLStart);
+#endif
     JMDrawArm(pState, 1);
     JMDrawArm(pState, 0);
 }

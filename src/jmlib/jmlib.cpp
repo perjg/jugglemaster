@@ -1455,3 +1455,16 @@ void JuggleMaster::doStepcalc(void) {
 JML_BOOL JuggleMaster::isValidPattern(char* patt) {
 	return JMSiteValidator::validateSite(patt);
 }
+
+//fixme:
+#ifdef JUGGLEMASTER_OPENGL_SUPPORT
+
+void JuggleMaster::setRenderingMode(rendering_t mode) {
+
+}
+
+rendering_t JuggleMaster::getRenderingMode() {
+  return RENDERING_NONE;
+}
+
+#endif

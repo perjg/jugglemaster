@@ -30,9 +30,9 @@ enum engine_t {
 
 // Rendering engine
 enum rendering_t {
-  RENDERING_ENGINE_NONE = 0, // no internal rendering done
-  RENDERING_OPENGL_2D,       // OpenGL 2D rendering 
-  RENDERING_OPENGL_3D,       // OpenGL rendering using the JuggleSaver rendering engine
+  RENDERING_NONE = 0,  // no internal rendering done
+  RENDERING_OPENGL_2D, // OpenGL 2D rendering 
+  RENDERING_OPENGL_3D, // OpenGL rendering using the JuggleSaver rendering engine
 };
 
 class JuggleMaster;
@@ -154,6 +154,10 @@ public:
 
 	virtual JML_BOOL isValidPattern(char* patt) = 0;
 
+  // Rendering functions
+  // Currently valid for OpenGL rendering when using JMLib_Wrapper and JuggleSaver
+  // (JUGGLESAVER_SUPPORT)
+  
 	// camera placement functionality
 	virtual void trackballStart(JML_INT32 x, JML_INT32 y) {}
 	virtual void trackballTrack(JML_INT32 x, JML_INT32 y) {}
@@ -169,6 +173,10 @@ public:
   virtual camera* getCamera() { return NULL; }
   virtual void setCamera(camera* cam) {}
   virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, camera* cam, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF) { return FALSE; }
+  
+  // misc rendering functionality
+  virtual void setRenderingMode(rendering_t mode) {}
+  virtual rendering_t getRenderingMode() { return RENDERING_NONE; }
 };
 
 #endif

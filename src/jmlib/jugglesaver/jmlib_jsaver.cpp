@@ -68,7 +68,17 @@ void JuggleSaver::initialize() {
   applyPattern();
   ResizeGL(&state, width_, height_);
   initialized = true;
+}
 
+void JuggleSaver::reInitialize() {
+	trackball_state* trackball = state.trackball;
+
+  setWindowSize(width_, height_);
+  InitGLSettings(&state, FALSE);
+	state.trackball = trackball;
+  applyPattern();
+  ResizeGL(&state, width_, height_);
+  initialized = true;
 }
 
 void JuggleSaver::shutdown() {

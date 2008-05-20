@@ -23,15 +23,19 @@
 
 #include "jmlib.h"
 #include "jugglesaver/jugglesaver.h"
+#include "render_jm_flat.h"
 #include <time.h>
 //#include <sys/time.h>
 
 JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern(NULL),
   JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL),
-	trackball(NULL), spin(TRUE), SavedSpinSpeed(20.0f), SavedTranslateSpeed(0.0f)
+	trackball(NULL), spin(TRUE), SavedSpinSpeed(20.0f), SavedTranslateSpeed(0.0f),
+  render_mode(RENDERING_OPENGL_3D)
 {
   jm = JMLib::alloc_JuggleMaster();
   js = JMLib::alloc_JuggleSaver();
+  
+  jm_flat = new JMFlatOpenGL(jm);
 
   jmState.TranslateAngle = 0.0f;
   jmState.SpinAngle = 0.0f;
@@ -357,15 +361,18 @@ void JMLibWrapper::render() {
     return;
   }
 
-
+  //fixme: consider supporting 2D mode for JuggleSaver also
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER) {
     active->render();
   }
   else {
-    doCoordTransform(true, true);
-    JMDrawGLScene(&jmState);
-    
-    //fixme: should also support flat JuggleMaster rendering
+    if (render_mode == RENDERING_OPENGL_2D) {
+      jm_flat->render();    
+    }
+    else {
+      doCoordTransform(true, true);
+      JMDrawGLScene(&jmState);
+    }
   }
 }
 
@@ -385,11 +392,11 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
   //js->doJuggle();
 
   /* While drawing, keep track of the rendering speed so we can adjust the
-  * animation speed so things appear consistent.  The basis of the this
-  * code comes from the frame rate counter (fps.c) but has been modified
-  * so that it reports the initial frame rate earlier (after 0.02 secs
-  * instead of 1 sec). */
-    
+   * animation speed so things appear consistent.  The basis of the this
+   * code comes from the frame rate counter (fps.c) but has been modified
+   * so that it reports the initial frame rate earlier (after 0.02 secs
+   * instead of 1 sec).
+   */
   if (FramesSinceSync >=  1 * (unsigned int) CurrentFrameRate) {
     struct timeval tvnow;
     unsigned now;
@@ -446,6 +453,7 @@ JML_BOOL JMLibWrapper::setWindowSize(JML_INT32 width, JML_INT32 height) {
 
   //jm->setWindowSize(width, height);
   js->setWindowSize(width, height);
+  jm_flat->resize(width, height);
 	return 1;
 }
 
@@ -462,8 +470,6 @@ JML_CHAR* JMLibWrapper::getPattName(void) {
   return active->getPattName();
 }
 
-// Only JuggleMaster cares about styles
-// fixme: return
 JML_CHAR* JMLibWrapper::getStyle(void) {
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER)
     return "JuggleSaver";
@@ -558,6 +564,27 @@ void JMLibWrapper::setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT tra
     TranslateSpeed = 0.0f;
   }
 }
+
+void JMLibWrapper::setRenderingMode(rendering_t mode) {
+  if (mode != render_mode) {
+    if (mode == RENDERING_NONE) {
+    
+    }
+    else if (mode == RENDERING_OPENGL_3D) {
+      static_cast<JuggleSaver*>(js)->reInitialize();
+    }
+    else if (mode == RENDERING_OPENGL_2D) {
+      jm_flat->initialize(imageWidth, imageHeight);
+    }
+    else {
+      mode = RENDERING_OPENGL_3D;
+    }
+    
+    render_mode = mode;
+  }
+}
+
+rendering_t JMLibWrapper::getRenderingMode() { return render_mode; }
 
 #endif // JUGGLESAVER_SUPPORT
 

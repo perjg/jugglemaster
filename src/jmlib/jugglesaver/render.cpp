@@ -158,6 +158,8 @@ void InitGLSettings(RENDER_STATE* pState, int WireFrame)
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
     
+    glShadeModel(GL_SMOOTH);
+    
 #ifdef OPENGL_ES_SUPPORT
     pState->DLStart = -1; // No display list support in OpenGL ES
 #else
@@ -989,6 +991,7 @@ int InitGLDisplayLists(void)
       DrawForearm();
     glEndList();
 
+    //gluDeleteQuadric(pQuad);
     return s;
 }
 #endif

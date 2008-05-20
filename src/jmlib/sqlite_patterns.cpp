@@ -95,7 +95,7 @@ void JMPatterns::addPattern(pattern_t* patt, pattern_group_t* group) {
 		if (valid) object_count = JMSiteValidator::getBallCount();
 	}
 
-  char* sql = sqlite3_mprintf("INSERT INTO Pattern VALUES (%Q, %Q, %Q, %Q, %Q, %f, %f, %d NULL)",
+  char* sql = sqlite3_mprintf("INSERT INTO Pattern VALUES (%Q, %Q, %Q, %Q, %Q, %f, %f, %d, NULL)",
           patt->name, patt->data, group->name, patt->style, patt->author, patt->hr, patt->dr, object_count);
   queryDB(sql);
   sqlite3_free(sql);
@@ -156,6 +156,9 @@ void JMPatterns::initializeDatabase(FILE* out, FILE* inJM, FILE* inJS) {
     addStyle(cur_style);  
 		cur_style = cur_style->next;
 	}
+  
+  // test
+  pattern_t* patt = searchQuery("SELECT * FROM Pattern WHERE style LIKE 'JuggleSaver'");
 }
 
 pattern_t* JMPatterns::search(const char* name) {
@@ -166,12 +169,62 @@ pattern_t* JMPatterns::search(const char* name, const char* site, const char* st
 	return searchQuery(NULL);
 }
 
+// Assumes a query in the Pattern table
 pattern_t* JMPatterns::searchQuery(const char* query) {
 	if (!query || query[0] == '\0') return NULL;
 
-	pattern_t* patt = new pattern_t;
+  pattern_t* first_patt = NULL;
+	pattern_t* new_patt = NULL;
+  pattern_t* cur_patt = NULL;
+  
+  char** result; 
+  int nrows, ncols;
+  char* zErr;
+  int rc = sqlite3_get_table(db_, query, &result, &nrows, &ncols, &zErr);
 
-	return patt;
+  for(int i=0; i < nrows; i++) {
+    char* name   = result[(i+1)*ncols + 0];
+    char* data   = result[(i+1)*ncols + 1];
+    char* cat    = result[(i+1)*ncols + 2];
+    char* style  = result[(i+1)*ncols + 3];
+    char* author = result[(i+1)*ncols + 4];
+    char* hr_c   = result[(i+1)*ncols + 5];
+    char* dr_c   = result[(i+1)*ncols + 6];
+  
+    new_patt = new pattern_t;
+    new_patt->name = strdup(name);
+    new_patt->data = strdup(data);
+    new_patt->author = strdup(author);
+    new_patt->hr = atof(hr_c);
+    new_patt->dr = atof(dr_c);
+    new_patt->style = strdup(style);
+    new_patt->ga = 0.0f; // ?
+    new_patt->sp = 1.0f;
+    new_patt->next = NULL;
+    
+    if (!first_patt) {
+      first_patt = new_patt;
+      cur_patt = new_patt;
+    }
+    else {
+      cur_patt->next = new_patt;
+      cur_patt = new_patt;
+    }
+  }
+  
+  /*
+  for(int i=0; i < nrows; i++) {
+    for(int j=0; j < ncols; j++) { 
+      // the i+1 term skips over the first record, which is the column headers
+      char* col = result[(i+1)*ncols + j];
+    }
+  }
+  */
+
+  sqlite3_free_table(result);
+  sqlite3_free(zErr);
+
+	return first_patt;
 }
 
 

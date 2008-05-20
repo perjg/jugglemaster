@@ -24,12 +24,17 @@
 
 #include "jugglesaver/jugglesaver.h"
 
+class JMFlatOpenGL;
+
 class JMLibWrapper : public JMLib {
   friend class JMLib;
 private:
   JMLib* jm;
   JMLib* js;
   JMLib* active;
+  JMFlatOpenGL* jm_flat;
+
+  rendering_t render_mode;
 
   JMLibWrapper();
  
@@ -128,6 +133,10 @@ public:
   virtual void toggleAutoRotate();
   virtual void setAutoRotate(JML_BOOL on);
   virtual void setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT translateSpeed);
+  
+  // misc rendering functionality
+  virtual void setRenderingMode(rendering_t mode);
+  virtual rendering_t getRenderingMode();
 };
 
 #endif

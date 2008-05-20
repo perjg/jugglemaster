@@ -56,6 +56,7 @@ public:
   ~JuggleSaver();
 
   virtual void initialize();
+  void reInitialize();
   virtual void shutdown();
 
   virtual engine_t getType() { return JUGGLING_ENGINE_JUGGLESAVER; }
@@ -124,6 +125,9 @@ public:
   virtual void toggleAutoRotate();
   virtual void setAutoRotate(JML_BOOL on);
   virtual void setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT translateSpeed);
+  
+  virtual void setRenderingMode(rendering_t mode) {}
+  virtual rendering_t getRenderingMode() { return RENDERING_OPENGL_3D; }
 };
 
 #endif // JMLIB_JSAVER

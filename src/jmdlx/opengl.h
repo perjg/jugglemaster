@@ -19,7 +19,6 @@
 #include <wx/wx.h>
 #include "../jmlib/jmlib.h"
 #include "../jmlib/jugglesaver/jmlib_jsaver.h"
-#include "../jmgfx/opengl_renderer.h"
 
 // OpenGL
 #if !wxUSE_GLCANVAS
@@ -49,16 +48,13 @@ public:
   void setRenderMode3D();
   void setRenderModeFlat();
 
-  void enableAutoRotate()  { renderer->enableAutoRotate();  }
-  void disableAutoRotate() { renderer->disableAutoRotate(); }
+  void enableAutoRotate()  { jmlib->setAutoRotate(true);  }
+  void disableAutoRotate() { jmlib->setAutoRotate(false); }
 
   void ballColors(bool on);
 private:
   JMFrame* parent;
   JMLib* jmlib;
-  //JuggleSaver* jmlib;
-  JMOpenGLRenderer* renderer;
-  //GLuint m_gllist;
 
   long cur_x;
   long cur_y;
@@ -67,35 +63,6 @@ private:
   void SetBallColor(int color);
   DECLARE_EVENT_TABLE()
 };
-
-/*
-class JMOpenGLCanvas : public wxGLCanvas {
-public:
-  JMOpenGLCanvas(JMFrame* parent, JMLib *j);
-  ~JMOpenGLCanvas();
-
-  void OnPaint(wxPaintEvent &event);
-  void OnEraseBackground(wxEraseEvent& event);
-  void OnSize(wxSizeEvent &event);
-  void OnLMouseDown(wxMouseEvent &event);
-
-  void setRenderMode3D();
-  void setRenderModeFlat();
-
-  void enableAutoRotate()  { renderer->enableAutoRotate();  }
-  void disableAutoRotate() { renderer->disableAutoRotate(); }
-
-  void ballColors(bool on);
-private:
-  JMFrame* parent;
-  JMLib* jmlib;
-  JMOpenGLRenderer* renderer;
-  //GLuint m_gllist;
-
-  void SetBallColor(int color);
-  DECLARE_EVENT_TABLE()
-};
-*/
 
 bool OpenGLSupported();
 

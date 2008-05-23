@@ -28,7 +28,7 @@
 //#include <sys/time.h>
 
 JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern(NULL),
-  JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL),
+  JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed(0.0f), objectType(OBJECT_BALL),
 	trackball(NULL), spin(TRUE), SavedSpinSpeed(20.0f), SavedTranslateSpeed(0.0f),
   render_mode(RENDERING_OPENGL_3D)
 {
@@ -87,6 +87,7 @@ JML_CHAR *JMLibWrapper::possible_styles[] = {
 void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   float scalingFactorX = 0.25f / jm->getBallRadius();
   float scalingFactorY = 0.25f / jm->getBallRadius();
+  int i = 0;
 
   //arm*  jmlib_ap    = &(jm->ap);
   ball* jmlib_rhand = &(jm->rhand);
@@ -123,7 +124,7 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
 
   // balls
   jmState.objectCount = jm->numBalls();
-  for(int i = jm->numBalls() - 1; i >= 0; i--) {
+  for(i = jm->numBalls() - 1; i >= 0; i--) {
     if (flipY) jmState.objects[i].y = (float)(h - jm->b[i].gy);
     else       jmState.objects[i].y = (float)jm->b[i].gy;
 
@@ -152,7 +153,45 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
     }
   }
 
-  // hack: need display list
+  // body
+  scalingFactorX *= 0.9f;
+  scalingFactorY *= 0.8f; // compress body height to better match JS juggler
+  struct arm* ap = &jm->ap;
+  
+  //              0      1      2      3      4      5
+  float z[] = { 0.0f, -1.0f, -1.5f, -2.0f, -2.0f, -2.0f };
+  
+  for(i=0; i<=5; i++) { // arms
+    if (flipY) {
+      jmState.juggler.ry[i] = (float)(h - ap->ry[i]);
+      jmState.juggler.ly[i] = (float)(h - ap->ly[i]);
+    }
+    else {
+      jmState.juggler.ry[i] = (float)ap->ry[i];
+      jmState.juggler.ly[i] = (float)ap->ly[i];
+    }
+
+    jmState.juggler.ry[i] = ((jmState.juggler.ry[i] - half_h) + h*0.2f) * scalingFactorY;
+    jmState.juggler.rx[i] = (ap->rx[i] - half_w) * scalingFactorX;
+
+    jmState.juggler.ly[i] = ((jmState.juggler.ly[i] - half_h) + h*0.2f) * scalingFactorY;
+    jmState.juggler.lx[i] = (ap->lx[i] - half_w) * scalingFactorX;
+    
+    jmState.juggler.z[i] = z[i];
+  }
+  
+  if (flipY) jmState.juggler.hy = (h - ap->hy) * scalingFactorY;
+  else       jmState.juggler.hy = ap->hy * scalingFactorY;
+
+  // head
+  jmState.juggler.hx = (ap->hx - half_w) * scalingFactorX;
+  jmState.juggler.hy = (h - ap->hy);
+  jmState.juggler.hy = ((jmState.juggler.hy - half_h) + h*0.2f) * scalingFactorY;
+  jmState.juggler.hz = z[5];
+  jmState.juggler.hr = ap->hr * scalingFactorX;
+  jmState.juggler.hy += jmState.juggler.hr;
+
+  // extract display list number from JuggleSaver
   JuggleSaver* jsp = static_cast<JuggleSaver*>(js);
   jmState.DLStart = jsp->state.DLStart;
 }

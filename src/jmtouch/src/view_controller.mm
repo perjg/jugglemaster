@@ -103,7 +103,7 @@
 	UIActionSheet *styleAlert =
 		[[UIActionSheet alloc] initWithTitle:@"Enter site:" message:@""
 								delegate:self defaultButton:nil cancelButton:nil
-								otherButtons:@"534 Mill's Mess", @"JuggleSaver 1", @"JuggleSaver 2", @"Cancel", nil];
+								otherButtons:@"534 Mill's Mess", @"JuggleSaver 1", @"JuggleSaver 2", @"Flat", @"Cancel", nil];
 	[styleAlert showInView:self.view];
 	[styleAlert release];
 }
@@ -135,18 +135,26 @@
 	switch (buttonIndex)
 	{
 		case 0: // 534 Mill's Mess (JuggleMaster)
+      jm->setRenderingMode(RENDERING_OPENGL_3D);
       jm->setPattern("534");
       jm->setStyle("Mills Mess");
  			//self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
 			break;
 		case 1: // JuggleSaver 1
+      jm->setRenderingMode(RENDERING_OPENGL_3D);
       jm->setPattern("6c3b3r");
 			//self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
 			break;
 		case 2: // JuggleSaver 2
+      jm->setRenderingMode(RENDERING_OPENGL_3D);
       jm->setPattern("7c@(-2.6,0.5,-90,0)>(3,0.5,90,0)*1 3c@(2,0.5,90,0)>(-2,0.5,-90,0)*1");
 			//self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
 			break;
+    case 3:
+      jm->setRenderingMode(RENDERING_OPENGL_2D);
+      jm->setPattern("633");
+      jm->setStyle("Reverse");
+      break;
 	}
   
   jm->startJuggle();

@@ -28,11 +28,11 @@
 		CB3EDF960DC8C0CE004F2E1A /* jmlib_jsaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF890DC8C0CE004F2E1A /* jmlib_jsaver.cpp */; };
 		CB3EDF970DC8C0CE004F2E1A /* js_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF8B0DC8C0CE004F2E1A /* js_patterns.cpp */; };
 		CB3EDF980DC8C0CE004F2E1A /* js_validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF8D0DC8C0CE004F2E1A /* js_validator.cpp */; };
-		CB3EDF9A0DC8C0CE004F2E1A /* render_jm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF910DC8C0CE004F2E1A /* render_jm.cpp */; };
 		CB3EDF9B0DC8C0CE004F2E1A /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF920DC8C0CE004F2E1A /* trackball.cpp */; };
 		CB3EDFA10DC8C0E4004F2E1A /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDF9F0DC8C0E4004F2E1A /* jmlib_wrapper.cpp */; };
-		CB3EDFC90DC8CBC7004F2E1A /* render_opengles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDFC80DC8CBC7004F2E1A /* render_opengles.cpp */; };
 		CB3EE0A70DC8E0C1004F2E1A /* view_gl.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB3EE0A60DC8E0C1004F2E1A /* view_gl.mm */; };
+		CB611D0E0DE0702C007D5E3F /* render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB611D0D0DE0702C007D5E3F /* render.cpp */; };
+		CB611D3C0DE07AE5007D5E3F /* render_jm_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB611D3A0DE07AE5007D5E3F /* render_jm_flat.cpp */; };
 		CB6ABABB0DB24B6E000FD76F /* sqlite_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABAB90DB24B6E000FD76F /* sqlite_patterns.cpp */; };
 		CB6ABAC40DB24D56000FD76F /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABAC10DB24D56000FD76F /* sqlite3.c */; };
 		CBA7A9F90DABBA5500E9FAB5 /* view_controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBA7A9F80DABBA5500E9FAB5 /* view_controller.mm */; };
@@ -80,17 +80,17 @@
 		CB3EDF8D0DC8C0CE004F2E1A /* js_validator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = js_validator.cpp; path = ../jmlib/jugglesaver/js_validator.cpp; sourceTree = SOURCE_ROOT; };
 		CB3EDF8E0DC8C0CE004F2E1A /* js_validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_validator.h; path = ../jmlib/jugglesaver/js_validator.h; sourceTree = SOURCE_ROOT; };
 		CB3EDF8F0DC8C0CE004F2E1A /* jugglesaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jugglesaver.h; path = ../jmlib/jugglesaver/jugglesaver.h; sourceTree = SOURCE_ROOT; };
-		CB3EDF910DC8C0CE004F2E1A /* render_jm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render_jm.cpp; path = ../jmlib/jugglesaver/render_jm.cpp; sourceTree = SOURCE_ROOT; };
 		CB3EDF920DC8C0CE004F2E1A /* trackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = trackball.cpp; path = ../jmlib/jugglesaver/trackball.cpp; sourceTree = SOURCE_ROOT; };
 		CB3EDF930DC8C0CE004F2E1A /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = ../jmlib/jugglesaver/trackball.h; sourceTree = SOURCE_ROOT; };
-		CB3EDF9C0DC8C0E4004F2E1A /* jmlib_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_base.h; path = ../jmlib/jmlib_base.h; sourceTree = SOURCE_ROOT; };
 		CB3EDF9D0DC8C0E4004F2E1A /* jmlib_if.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_if.h; path = ../jmlib/jmlib_if.h; sourceTree = SOURCE_ROOT; };
 		CB3EDF9E0DC8C0E4004F2E1A /* jmlib_jugglemaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jugglemaster.h; path = ../jmlib/jmlib_jugglemaster.h; sourceTree = SOURCE_ROOT; };
 		CB3EDF9F0DC8C0E4004F2E1A /* jmlib_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_wrapper.cpp; path = ../jmlib/jmlib_wrapper.cpp; sourceTree = SOURCE_ROOT; };
 		CB3EDFA00DC8C0E4004F2E1A /* jmlib_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_wrapper.h; path = ../jmlib/jmlib_wrapper.h; sourceTree = SOURCE_ROOT; };
-		CB3EDFC80DC8CBC7004F2E1A /* render_opengles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render_opengles.cpp; path = ../jmlib/jugglesaver/render_opengles.cpp; sourceTree = SOURCE_ROOT; };
 		CB3EE0A50DC8E0C1004F2E1A /* view_gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = view_gl.h; path = src/view_gl.h; sourceTree = SOURCE_ROOT; };
 		CB3EE0A60DC8E0C1004F2E1A /* view_gl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = view_gl.mm; path = src/view_gl.mm; sourceTree = SOURCE_ROOT; };
+		CB611D0D0DE0702C007D5E3F /* render.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render.cpp; path = ../jmlib/jugglesaver/render.cpp; sourceTree = SOURCE_ROOT; };
+		CB611D3A0DE07AE5007D5E3F /* render_jm_flat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render_jm_flat.cpp; path = ../jmlib/render_jm_flat.cpp; sourceTree = SOURCE_ROOT; };
+		CB611D3B0DE07AE5007D5E3F /* render_jm_flat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = render_jm_flat.h; path = ../jmlib/render_jm_flat.h; sourceTree = SOURCE_ROOT; };
 		CB6ABAB90DB24B6E000FD76F /* sqlite_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite_patterns.cpp; path = ../jmlib/sqlite_patterns.cpp; sourceTree = SOURCE_ROOT; };
 		CB6ABABA0DB24B6E000FD76F /* sqlite_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite_patterns.h; path = ../jmlib/sqlite_patterns.h; sourceTree = SOURCE_ROOT; };
 		CB6ABAC10DB24D56000FD76F /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../jmlib/sqlite/sqlite3.c; sourceTree = SOURCE_ROOT; };
@@ -214,7 +214,6 @@
 				CB14B2FC0D90155A009BD0C0 /* jmlib.cpp */,
 				CB14B2FD0D90155A009BD0C0 /* jmlib.h */,
 				CB14B2FE0D90155A009BD0C0 /* jmlib_types.h */,
-				CB3EDF9C0DC8C0E4004F2E1A /* jmlib_base.h */,
 				CB3EDF9D0DC8C0E4004F2E1A /* jmlib_if.h */,
 				CB3EDF9E0DC8C0E4004F2E1A /* jmlib_jugglemaster.h */,
 				CB3EDF9F0DC8C0E4004F2E1A /* jmlib_wrapper.cpp */,
@@ -223,6 +222,8 @@
 				CB14B3010D90155A009BD0C0 /* patterns.h */,
 				CB14B3020D90155A009BD0C0 /* prefs.cpp */,
 				CB14B3030D90155A009BD0C0 /* prefs.h */,
+				CB611D3A0DE07AE5007D5E3F /* render_jm_flat.cpp */,
+				CB611D3B0DE07AE5007D5E3F /* render_jm_flat.h */,
 				CB14B3040D90155A009BD0C0 /* randompatt.cpp */,
 				CB14B3050D90155A009BD0C0 /* randompatt.h */,
 				CB14B3060D90155A009BD0C0 /* util.cpp */,
@@ -248,8 +249,7 @@
 				CB3EDF8D0DC8C0CE004F2E1A /* js_validator.cpp */,
 				CB3EDF8E0DC8C0CE004F2E1A /* js_validator.h */,
 				CB3EDF8F0DC8C0CE004F2E1A /* jugglesaver.h */,
-				CB3EDFC80DC8CBC7004F2E1A /* render_opengles.cpp */,
-				CB3EDF910DC8C0CE004F2E1A /* render_jm.cpp */,
+				CB611D0D0DE0702C007D5E3F /* render.cpp */,
 				CB3EDF920DC8C0CE004F2E1A /* trackball.cpp */,
 				CB3EDF930DC8C0CE004F2E1A /* trackball.h */,
 			);
@@ -337,12 +337,12 @@
 				CB3EDF960DC8C0CE004F2E1A /* jmlib_jsaver.cpp in Sources */,
 				CB3EDF970DC8C0CE004F2E1A /* js_patterns.cpp in Sources */,
 				CB3EDF980DC8C0CE004F2E1A /* js_validator.cpp in Sources */,
-				CB3EDF9A0DC8C0CE004F2E1A /* render_jm.cpp in Sources */,
 				CB3EDF9B0DC8C0CE004F2E1A /* trackball.cpp in Sources */,
 				CB3EDFA10DC8C0E4004F2E1A /* jmlib_wrapper.cpp in Sources */,
-				CB3EDFC90DC8CBC7004F2E1A /* render_opengles.cpp in Sources */,
 				CB3EE0A70DC8E0C1004F2E1A /* view_gl.mm in Sources */,
 				CB05139A0DCC49A10088A2D2 /* glues.cpp in Sources */,
+				CB611D0E0DE0702C007D5E3F /* render.cpp in Sources */,
+				CB611D3C0DE07AE5007D5E3F /* render_jm_flat.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

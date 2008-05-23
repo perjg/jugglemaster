@@ -16,74 +16,6 @@
 #include "jmdlx.h"
 #include "opengl.h"
 
-/*
-// JuggleSaver stuff
-BEGIN_EVENT_TABLE(JMOpenGLCanvas, wxGLCanvas)
-  EVT_PAINT(JMOpenGLCanvas::OnPaint)
-  EVT_ERASE_BACKGROUND(JMOpenGLCanvas::OnEraseBackground) 
-  EVT_SIZE(JMOpenGLCanvas::OnSize)
-  EVT_LEFT_DOWN(JMOpenGLCanvas::OnLMouseDown)
-END_EVENT_TABLE()
-
-JMOpenGLCanvas::JMOpenGLCanvas(JMFrame *p, JMLib *j) : 
-  wxGLCanvas((wxFrame*)p, -1, wxDefaultPosition, wxSize(480,400), wxNO_BORDER) {
-	jmlib = new JuggleSaver();
-  //jmlib = j;
-  jmlib->setWindowSize(480,400);
-  jmlib->initialize();
-	parent = p;
-}
-
-JMOpenGLCanvas::~JMOpenGLCanvas() {
-  delete renderer;
-}
-
-void JMOpenGLCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
-  wxPaintDC dc(this);
-  
-  SetCurrent();
-  jmlib->doJuggle();
-  SwapBuffers();
-}
-
-void JMOpenGLCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
-  // Should be empty
-}
-
-void JMOpenGLCanvas::OnSize(wxSizeEvent &event) {
-  wxGLCanvas::OnSize(event);
-
-  // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-  int w, h;
-  GetClientSize(&w, &h);
-#ifndef __WXMOTIF__
-  if (GetContext())
-#endif
-  {
-    SetCurrent();
-    glViewport(0, 0, (GLint)w, (GLint)h);
-  }
-  
-  jmlib->setWindowSize(w, h);
-}
-
-void JMOpenGLCanvas::OnLMouseDown(wxMouseEvent& event) {
-  parent->togglePause();
-  event.Skip();
-}
-
-void JMOpenGLCanvas::setRenderMode3D() {}
-
-void JMOpenGLCanvas::setRenderModeFlat() {}
-
-void JMOpenGLCanvas::SetBallColor(int color) {}
-void JMOpenGLCanvas::ballColors(bool on) {}
-
-bool OpenGLSupported() {
-    return true;
-}
-*/
-
 // JuggleMaster
 BEGIN_EVENT_TABLE(JMOpenGLCanvas, wxGLCanvas)
   EVT_PAINT(JMOpenGLCanvas::OnPaint)
@@ -105,22 +37,13 @@ JMOpenGLCanvas::JMOpenGLCanvas(JMFrame *p, JMLib *j) :
   cur_x = 0;
   cur_y = 0;
   toggleRotate = false;
-  
-  //jmlib = JMLib::alloc_JuggleSaver();
-  //jmlib->setWindowSize(480,400);
+
   jmlib->initialize();
   
 	parent = p;
-  
-  if (jmlib->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
-    renderer = new JMOpenGLRenderer();
-    renderer->initialize(j, 480, 400, JMOpenGLRenderer::RENDER_MODE_FLAT);
-    renderer->ballColors(parent->optionsMenu->IsChecked(OPTION_COLORBALLS));
-  }
 }
 
 JMOpenGLCanvas::~JMOpenGLCanvas() {
-  delete renderer;
 }
 
 void JMOpenGLCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
@@ -129,15 +52,6 @@ void JMOpenGLCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
   SetCurrent();
   
   jmlib->render();
-  /*
-  if (jmlib->getType() == JUGGLING_ENGINE_JUGGLEMASTER)
-    renderer->draw();
-  else
-    jmlib->render();
-    */
-    //jmlib->doJuggle();
-  //else
-  //  DrawGLScene(&state);
   SwapBuffers();
 }
 
@@ -147,8 +61,6 @@ void JMOpenGLCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
 
 void JMOpenGLCanvas::OnSize(wxSizeEvent &event) {
   // Don't call jmlib->setWindowSize here, the renderer will take care of scaling
-  //if (jmlib->getType() == JUGGLING_ENGINE_JUGGLEMASTER)
-  //  renderer->resize(event.GetSize().x, event.GetSize().y);
 
   wxGLCanvas::OnSize(event);
 
@@ -163,8 +75,7 @@ void JMOpenGLCanvas::OnSize(wxSizeEvent &event) {
     glViewport(0, 0, (GLint)w, (GLint)h);
   }
   
-  //if (jmlib->getType() == JUGGLING_ENGINE_JUGGLESAVER)  
-    jmlib->setWindowSize(w, h);
+  jmlib->setWindowSize(w, h);
 }
 
 void JMOpenGLCanvas::OnLMouseDown(wxMouseEvent& event) {
@@ -259,13 +170,11 @@ void JMOpenGLCanvas::OnKeyDown(wxKeyEvent& event) {
 }
 
 void JMOpenGLCanvas::setRenderMode3D() {
-  if (jmlib->getType() == JUGGLING_ENGINE_JUGGLEMASTER)
-    renderer->setRenderingMode(JMOpenGLRenderer::RENDER_MODE_3D);
+  jmlib->setRenderingMode(RENDERING_OPENGL_3D);
 }
 
 void JMOpenGLCanvas::setRenderModeFlat() {
-  if (jmlib->getType() == JUGGLING_ENGINE_JUGGLEMASTER)
-    renderer->setRenderingMode(JMOpenGLRenderer::RENDER_MODE_FLAT);
+  jmlib->setRenderingMode(RENDERING_OPENGL_2D);
 }
 
 void JMOpenGLCanvas::SetBallColor(int color) {
@@ -284,8 +193,8 @@ void JMOpenGLCanvas::SetBallColor(int color) {
 }
 
 void JMOpenGLCanvas::ballColors(bool on) {
-  if (jmlib->getType() == JUGGLING_ENGINE_JUGGLEMASTER)
-    renderer->ballColors(on);
+  //if (jmlib->getType() == JUGGLING_ENGINE_JUGGLEMASTER)
+  //  renderer->ballColors(on);
 }
 
 bool OpenGLSupported() {

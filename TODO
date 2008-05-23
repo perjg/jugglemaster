@@ -21,11 +21,11 @@ JuggleSaver
 * Some JuggleSaver patterns are loaded twice
 * Pattern parsing: * -1 not parsed correctly
 * Timing is strange
+* Site validator a-z / A-Z not parsed properly
 
 JuggleMaster
 * Club spinning is strange while holding for certain patterns
 * Clubs are held too low for certain patterns
-* Balls should continue spinning when held
 * Pattern parsing not safe for incorrect pattern files
 * Integrate timing functionality (JUGGLEMASTER_NEW_TIMING)
 
@@ -39,8 +39,6 @@ CLEANUP
 NEW STUFF AND ENHANCEMENTS
 
 OpenGL Stuff
-* Integrate OpenGL and OpenGL ES renderer into one file
-* Add OPENGL_ES_SUPPORT define (turns off display list support)
 * Add font support (pattern display & fps counter) (OPENGL_FONT_SUPPORT)
 * Rotate function
 * Load new pattern without changing 
@@ -55,7 +53,7 @@ OpenGL Stuff
 SQL Pattern loader
 * Get random pattern from library
 * Load pattern with style
-* 
+* Pattern navigation: next/prev pattern/category
 
 Misc
 * Mixed object type
@@ -71,6 +69,15 @@ Misc
 * fps counter
 * Currently active pattern info on screen
 * Bounce juggler's head for JuggleMaster patterns
+
+IFDEF documentation
+* JUGGLESAVER_SUPPORT - Turns on JuggleSaver support and JuggleSaver rendering engine
+* OPENGL_ES_SUPPORT - Compile all OpenGL functionality in OpenGL ES compatibility mode. Requires JUGGLESAVER_SUPPORT
+* JUGGLEMASTER_OPENGL_SUPPORT - Turns on flat OpenGL rendering for JuggleMaster. Automatically turned on with JUGGLESAVER_SUPPORT. Use this to get simple 2D OpenGL support without JuggleSaver compatibility
+* SMALL_MEMORY_DEVICE - Reduces memory requirement of JuggleMaster at the expense of losing compatibility for patterns with 630 balls. Should be unneccesary for most platforms, currently only used in the Palm OS version.
+
+Other:
+* JMWIN - Enabled in JMWin, required for proper OpenGL support on that platform. Don't use for other platforms.
 
 STUFF FOR THE FUTURE
 

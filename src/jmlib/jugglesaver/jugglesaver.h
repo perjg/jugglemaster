@@ -265,6 +265,17 @@ typedef struct
 
 } RENDER_STATE;
 
+/* JUGGLEMASTER_JUGGLER is used to keep coordinates for rendering the juggler
+ * JuggleMaster style 
+*/
+typedef struct
+{
+  float rx[6], ry[6];   // coordinates of the right arm
+  float lx[6], ly[6];   // coordinates of the left arm
+  float z[6]; // z coordinates for left and right arm
+  float hx, hy, hz, hr; // coordinates of the head
+} JUGGLEMASTER_JUGGLER;
+
 /* JUGGLEMASTER_RENDER_STATE is used to transfer data from JuggleMaster to the JuggleSaver
  * rendering engine
  */
@@ -278,6 +289,7 @@ typedef struct
     int objectTypes[630]; // 0 - ball, 1 - ring, 2 - club
     POS leftHand;
     POS rightHand;
+    JUGGLEMASTER_JUGGLER juggler;
     trackball_state *trackball;
 } JUGGLEMASTER_RENDER_STATE;
 

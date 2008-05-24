@@ -590,58 +590,6 @@ void DrawCylinder(bool outside, float baseRadius, float topRadius, float height,
 
 void DrawDisk(bool outside, GLfloat innerRadius, GLfloat outerRadius, GLint slices, GLint loops);
 
-void DrawGLCylinder2(float *p1, float from_rad, float *p2, float to_rad, bool has_disk)
-{
-	float r2d = 180.0f / PI;
-
-	// orientation vector 
-	float vx = p2[1]-p1[1];
-	float vy = p2[2]-p1[2];
-	float vz = p2[3]-p1[3];
-
-	float length = sqrt(vx*vx + vy*vy + vz*vz);
-
-	// rotation vector
-	float rx = -vy*vz;
-	float ry = +vx*vz;
-	float ax = 0.0;
-
-	float zero = 1.0e-3;
-	if (fabs(vz) < zero)
-	{
-		ax = r2d*acos(vx / length);	// rotation angle in x-y plane
-		if ( vx <= 0.0 ) ax = -ax;
-	}
-	else
-	{
-		ax = r2d*acos(vz / length);	// rotation angle
-		if ( vz <= 0.0 ) ax = -ax;
-	}
-
-	glPushMatrix();
-		glTranslatef( p1[1], p1[2], p1[3] );	// translate to point 1
-
-		if (fabs(vz) < zero)
-		{
-			glRotatef(90.0, 0, 1, 0.0);    // Rotate & align with x axis
-			glRotatef(ax, -1.0, 0.0, 0.0); // Rotate to point 2 in x-y plane
-		}
-		else
-		{
-			glRotatef(ax, rx, ry, 0.0); // Rotate about rotation vector
-		}
-
-    DrawCylinder(true, from_rad, to_rad, length, 18, 1);
-    
-    if (has_disk)
-    {
-      glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-      DrawDisk(true, 0, from_rad, 18, 1);
-    }
-
-	glPopMatrix();
-}
-
 /* Draws a cylinder from -> to
  *
  * Based on example at:
@@ -655,7 +603,7 @@ void DrawCylinderAt(POS from, float from_rad, POS to, float to_rad, bool has_dis
 	float vx = to.x - from.x;
 	float vy = to.y - from.y;
 	float vz = to.z - from.z;
-
+  
 	float length = sqrt(vx*vx + vy*vy + vz*vz);
 
 	// rotation vector
@@ -1344,80 +1292,78 @@ void JMDrawJMJuggler(JUGGLEMASTER_RENDER_STATE* pState)
     POS from, to;
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, BodyCol);
-#ifdef OPENGL_ES_SUPPORT
-    //DrawTorso();
-    DrawHead();
-#else
-    //glCallList(DL_TORSO + pState->DLStart);
-    //DrawHead();
-#endif
 
     // right arm
-    for (int i=0; i < 4; i++) {
+    for (int i=0; i < 5; i++) {
         from.x = pState->juggler.rx[i];
         from.y = pState->juggler.ry[i];
         from.z = pState->juggler.z[i];
 
-        if (i == 1) i++;
+        //if (i == 1) i++;
 
         to.x = pState->juggler.rx[i+1];
         to.y = pState->juggler.ry[i+1];
         to.z = pState->juggler.z[i+1];
         
+        if (i == 4)
+          to.y += 0.15f;
+        
         if (i > 0) { // draw spheres for the joints
             glPushMatrix();
                 glTranslatef(from.x, from.y, from.z);
-                DrawFullSphere(i == 2 ? 0.2f : 0.3f);
+                DrawFullSphere(pState->juggler.rad[i]);
             glPopMatrix();
         }
-                
-        if (i == 0)
-            DrawCylinderAt(from, 0.15f, to, 0.2f, true);
-        else if (i == 2)
-            DrawCylinderAt(from, 0.2f, to, 0.3f, false);
-        else
-            DrawCylinderAt(from, 0.3f, to, 0.3f, false);
+        
+        /*
+        glBegin(GL_LINE_STRIP);
+            //glColor3f(1.0f,1.0f,1.0f);
+            glVertex3f(from.x, from.y, from.z);
+            glVertex3f(to.x, to.y, to.z);
+        glEnd();
+        */
+        
+        DrawCylinderAt(from, pState->juggler.rad[i], to, pState->juggler.rad[i+1], i == 0);
     }
      
     // left arm
-    for (int i=0; i < 4; i++) {
+    for (int i=0; i < 5; i++) {
         from.x = pState->juggler.lx[i];
         from.y = pState->juggler.ly[i];
         from.z = pState->juggler.z[i];
 
-        if (i == 1) i++;
+        //if (i == 1) i++;
 
         to.x = pState->juggler.lx[i+1];
         to.y = pState->juggler.ly[i+1];
         to.z = pState->juggler.z[i+1];
+        
+        if (i == 4)
+          to.y += 0.15f;
 
         if (i > 0) { // draw spheres for the joints
             glPushMatrix();
                 glTranslatef(from.x, from.y, from.z);
-                DrawFullSphere(i == 2 ? 0.2f : 0.3f);
+                DrawFullSphere(pState->juggler.rad[i]);
             glPopMatrix();
         }
 
-        if (i == 0)
-            DrawCylinderAt(from, 0.15f, to, 0.2f, true);
-        else if (i == 2)
-            DrawCylinderAt(from, 0.2f, to, 0.3f, false);
-        else
-            DrawCylinderAt(from, 0.3f, to, 0.3f, false);
+        DrawCylinderAt(from, pState->juggler.rad[i], to, pState->juggler.rad[i+1], i == 0);
     }
-     
-    from.x = pState->juggler.lx[4];
-    from.y = pState->juggler.ly[4];
-    from.z = pState->juggler.z[4];
+    
+    /*
+    from.x = pState->juggler.lx[5];
+    from.y = pState->juggler.ly[5];
+    from.z = pState->juggler.z[5];
 
     glPushMatrix();
         glTranslatef(from.x, from.y, from.z);
         DrawFullSphere(0.3f);
     glPopMatrix();
 
-    to.x = pState->juggler.rx[4];
-    to.y = pState->juggler.ry[4];
-    to.z = pState->juggler.z[4];
+    to.x = pState->juggler.rx[5];
+    to.y = pState->juggler.ry[5];
+    to.z = pState->juggler.z[5];
 
     glPushMatrix();
         glTranslatef(to.x, to.y, to.z);
@@ -1425,10 +1371,11 @@ void JMDrawJMJuggler(JUGGLEMASTER_RENDER_STATE* pState)
     glPopMatrix();
      
     DrawCylinderAt(from, 0.3f, to, 0.3f, false);
+    */
     
     /* draw the head */
     glPushMatrix();
-        glTranslatef(pState->juggler.hx, pState->juggler.hy, pState->juggler.hz);
+        glTranslatef(pState->juggler.hx, pState->juggler.hy + pState->juggler.hr, pState->juggler.hz);
         glRotatef(-30.0f, 1.0f, 0.0f, 0.0f);
         DrawCylinder(true, pState->juggler.hr, pState->juggler.hr, 0.3f, 15, 1);
             
@@ -1519,6 +1466,8 @@ void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState)
         glPopMatrix();
     }
 
-    //JMDrawJSJuggler(pState);
-    JMDrawJMJuggler(pState);
+    if (pState->UseJMJuggler)
+        JMDrawJMJuggler(pState);
+    else
+        JMDrawJSJuggler(pState);
 }

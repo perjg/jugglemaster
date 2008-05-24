@@ -272,7 +272,8 @@ typedef struct
 {
   float rx[6], ry[6];   // coordinates of the right arm
   float lx[6], ly[6];   // coordinates of the left arm
-  float z[6]; // z coordinates for left and right arm
+  float z[6];   // z coordinates for left and right arm
+  float rad[6]; // radius of each joint
   float hx, hy, hz, hr; // coordinates of the head
 } JUGGLEMASTER_JUGGLER;
 
@@ -289,8 +290,9 @@ typedef struct
     int objectTypes[630]; // 0 - ball, 1 - ring, 2 - club
     POS leftHand;
     POS rightHand;
-    JUGGLEMASTER_JUGGLER juggler;
+    JUGGLEMASTER_JUGGLER juggler; // Data for drawing JuggleMaster juggler
     trackball_state *trackball;
+    bool UseJMJuggler; // set to true to use JuggleMaster juggler for drawing
 } JUGGLEMASTER_RENDER_STATE;
 
 // engine.cpp

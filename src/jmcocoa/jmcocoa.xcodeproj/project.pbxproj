@@ -40,6 +40,7 @@
 		CBA2E16A0DBCC37500618F0B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBA2E1690DBCC37500618F0B /* OpenGL.framework */; };
 		CBA2E1780DBCC63C00618F0B /* JMOpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1770DBCC63C00618F0B /* JMOpenGLView.mm */; };
 		CBBC40E70DCEDE9F00FBC66E /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = CBBC40E40DCEDE9F00FBC66E /* sqlite3.c */; };
+		CBC9EDD30DE8044400E8B435 /* render_jm_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBC9EDD10DE8044400E8B435 /* render_jm_flat.cpp */; };
 		CBCC8D1A0DDEDC5500C25D41 /* sqlite_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBCC8D180DDEDC5500C25D41 /* sqlite_patterns.cpp */; };
 /* End PBXBuildFile section */
 
@@ -106,6 +107,8 @@
 		CBBC40E40DCEDE9F00FBC66E /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = sqlite/sqlite3.c; sourceTree = "<group>"; };
 		CBBC40E50DCEDE9F00FBC66E /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = sqlite/sqlite3.h; sourceTree = "<group>"; };
 		CBBC40E60DCEDE9F00FBC66E /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = sqlite/sqlite3ext.h; sourceTree = "<group>"; };
+		CBC9EDD10DE8044400E8B435 /* render_jm_flat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = render_jm_flat.cpp; sourceTree = "<group>"; };
+		CBC9EDD20DE8044400E8B435 /* render_jm_flat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = render_jm_flat.h; sourceTree = "<group>"; };
 		CBCC8D180DDEDC5500C25D41 /* sqlite_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite_patterns.cpp; sourceTree = "<group>"; };
 		CBCC8D190DDEDC5500C25D41 /* sqlite_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite_patterns.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -200,6 +203,8 @@
 				1FD17B3D0A9BD45800668490 /* prefs.h */,
 				1FD17B3E0A9BD45800668490 /* randompatt.cpp */,
 				1FD17B3F0A9BD45800668490 /* randompatt.h */,
+				CBC9EDD10DE8044400E8B435 /* render_jm_flat.cpp */,
+				CBC9EDD20DE8044400E8B435 /* render_jm_flat.h */,
 				1FD17B410A9BD45800668490 /* util.cpp */,
 				1FD17B420A9BD45800668490 /* util.h */,
 				1FD17B430A9BD45800668490 /* validator.cpp */,
@@ -368,6 +373,7 @@
 				CB1AD7810DCB51900047D6B9 /* trackball.cpp in Sources */,
 				CBBC40E70DCEDE9F00FBC66E /* sqlite3.c in Sources */,
 				CBCC8D1A0DDEDC5500C25D41 /* sqlite_patterns.cpp in Sources */,
+				CBC9EDD30DE8044400E8B435 /* render_jm_flat.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

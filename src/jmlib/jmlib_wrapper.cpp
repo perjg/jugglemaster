@@ -39,6 +39,7 @@ JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern
 
   jmState.TranslateAngle = 0.0f;
   jmState.SpinAngle = 0.0f;
+  jmState.UseJMJuggler = true;
 
   // active must always start in JuggleSaver mode to ensure complete
   // initialization of the rendering engine
@@ -89,10 +90,14 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   float scalingFactorY = 0.25f / jm->getBallRadius();
   int i = 0;
 
-  //arm*  jmlib_ap    = &(jm->ap);
-  ball* jmlib_rhand = &(jm->rhand);
-  ball* jmlib_lhand = &(jm->lhand);
-  //hand* jmlib_handp = &(jm->handpoly);
+  // important: JuggleSaver body needs left and right hand swapped
+  ball* jmlib_rhand = &(jm->lhand);
+  ball* jmlib_lhand = &(jm->rhand);
+  
+  if (jmState.UseJMJuggler) {
+    jmlib_rhand = &(jm->rhand);
+    jmlib_lhand = &(jm->lhand);  
+  }
 
   JML_INT32 w = jm->getImageWidth();
   JML_INT32 h = jm->getImageHeight();
@@ -110,17 +115,18 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   ballRadius = jm->getBallRadius() * scalingFactorX;
 
   // left hand
-  if (flipY) jmState.leftHand.y = (float)(h - jmlib_rhand->gy);
-  else       jmState.leftHand.y = (float)jmlib_rhand->gy;
+  if (flipY) jmState.leftHand.y = (float)(h - jmlib_lhand->gy);
+  else       jmState.leftHand.y = (float)jmlib_lhand->gy;
 
   jmState.leftHand.y = ((jmState.leftHand.y - half_h) + h*0.2f) * scalingFactorY;
-  jmState.leftHand.x = (jmlib_rhand->gx - half_w) * scalingFactorX + ballRadius;
+  jmState.leftHand.x = (jmlib_lhand->gx - half_w) * scalingFactorX + ballRadius;
 
-  if (flipY) jmState.rightHand.y = (float)(h - jmlib_lhand->gy);
-  else       jmState.rightHand.y = (float)jmlib_lhand->gy;
+  // right hand
+  if (flipY) jmState.rightHand.y = (float)(h - jmlib_rhand->gy);
+  else       jmState.rightHand.y = (float)jmlib_rhand->gy;
 
   jmState.rightHand.y = ((jmState.rightHand.y - half_h) + h*0.2f) * scalingFactorY;
-  jmState.rightHand.x = (jmlib_lhand->gx - half_w) * scalingFactorX + ballRadius;
+  jmState.rightHand.x = (jmlib_rhand->gx - half_w) * scalingFactorX + ballRadius;
 
   // balls
   jmState.objectCount = jm->numBalls();
@@ -154,12 +160,13 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   }
 
   // body
-  scalingFactorX *= 0.9f;
-  scalingFactorY *= 0.8f; // compress body height to better match JS juggler
+  //scalingFactorX *= 0.9f;
+  //scalingFactorY *= 0.8f; // compress body height to better match JS juggler
   struct arm* ap = &jm->ap;
   
-  //              0      1      2      3      4      5
-  float z[] = { 0.0f, -1.0f, -1.5f, -2.0f, -2.0f, -2.0f };
+  float z[]   = { 0.0f,  -1.2f, -2.0f, -2.01f, -2.02f, -2.03f };
+  //float z[]   = { 0.0f,  -1.2f, -2.0f, -2.0f, -2.0f, -2.0f };
+  float rad[] = { 0.15f,  0.2f,  0.3f,  0.3f,  0.3f,  0.3f };
   
   for(i=0; i<=5; i++) { // arms
     if (flipY) {
@@ -177,7 +184,16 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
     jmState.juggler.ly[i] = ((jmState.juggler.ly[i] - half_h) + h*0.2f) * scalingFactorY;
     jmState.juggler.lx[i] = (ap->lx[i] - half_w) * scalingFactorX;
     
-    jmState.juggler.z[i] = z[i];
+    jmState.juggler.z[i]   = z[i];
+    jmState.juggler.rad[i] = rad[i];
+    
+    /*
+    // adjust for ball radius
+    jmState.juggler.rx[i] -= ballRadius;
+    jmState.juggler.ry[i] += ballRadius;
+    jmState.juggler.lx[i] += ballRadius;
+    jmState.juggler.ly[i] += ballRadius;
+    */
   }
   
   if (flipY) jmState.juggler.hy = (h - ap->hy) * scalingFactorY;
@@ -189,7 +205,7 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   jmState.juggler.hy = ((jmState.juggler.hy - half_h) + h*0.2f) * scalingFactorY;
   jmState.juggler.hz = z[5];
   jmState.juggler.hr = ap->hr * scalingFactorX;
-  jmState.juggler.hy += jmState.juggler.hr;
+  //jmState.juggler.hy += jmState.juggler.hr;
 
   // extract display list number from JuggleSaver
   JuggleSaver* jsp = static_cast<JuggleSaver*>(js);

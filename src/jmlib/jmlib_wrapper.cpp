@@ -28,7 +28,7 @@
 //#include <sys/time.h>
 
 JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern(NULL),
-  JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed(0.0f), objectType(OBJECT_BALL),
+  JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL),
 	trackball(NULL), spin(TRUE), SavedSpinSpeed(20.0f), SavedTranslateSpeed(0.0f),
   render_mode(RENDERING_OPENGL_3D)
 {

@@ -1872,6 +1872,34 @@ x 33 Balls: x
 %Mills Mess
 6464 Tims Multi Mess
 
+*Ryuhan (http://fine.tok2.com/home/ryuhan/ngrjug/jugmas.html)
+#DR=0.6
+#HR=0.15
+%Run-Run
+{ 20,  2}{  -5,  2}
+{ 1,  2}{  20,  2}
+{ 1,  2}{  20,  2}
+{ 20,  2}{  -5,  2}
+(2,4x)(4x,2) 3 Run-Run Cascade
+(2,8x)(8x,2) 5 Run-Run Cascade A
+(4,6x)(6x,4) 5 Run-Run Cascade B
+
+%ByRyuhan
+{ 15, 10}{ 4, 0}
+{ 15, 10}{ 4, 0}
+{ 12, 0}{ 4, 10}
+{ 8, 10}{ 4, 0}
+{ 15, 10}{ 4, 0}
+{ 15, 10}{ 4, 0}
+{ 8, 10}{ 4 , 0}
+{ 12, 0}{ 4, 10}
+
+#DR=0.5
+#HR=0.2
+%ByRyuhan
+(6x,4)(4,6x) ByRyuhan
+1234567  ByRyuhan2
+
 /[ Patterns By Scotch Tom ]
 *Tom Davie <tom.davie@gmail.com>
 %Normal

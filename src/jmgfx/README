@@ -1,8 +1,0 @@
-README for jmgfx
-
-This directory is a placeholder for platform independent / portable
-graphics implementations for jmlib.
-
-Current contents:
-
-opengl_renderer    3D graphics for jmlib in OpenGL.

@@ -31,10 +31,7 @@ JuggleMaster
 
 CLEANUP
 
-* Add JUGGLESAVER_SUPPORT #define
-* Clean up virtual keyword in headers
 * Add documentation to headers
-* Remove juggler class
 
 NEW STUFF AND ENHANCEMENTS
 

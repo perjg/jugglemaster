@@ -1286,7 +1286,7 @@ void JMDrawJSJuggler(JUGGLEMASTER_RENDER_STATE* pState)
     JMDrawArm(pState, 0);
 }
 
-/* Draw JuggleMaster Juggler figure (for JuggleMaster pattern) */
+/* Draw JuggleMaster Juggler figure (for JuggleMaster patterns only) */
 void JMDrawJMJuggler(JUGGLEMASTER_RENDER_STATE* pState)
 {
     POS from, to;
@@ -1294,12 +1294,10 @@ void JMDrawJMJuggler(JUGGLEMASTER_RENDER_STATE* pState)
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, BodyCol);
 
     // right arm
-    for (int i=0; i < 5; i++) {
+    for (int i=0; i < 3; i++) {
         from.x = pState->juggler.rx[i];
         from.y = pState->juggler.ry[i];
         from.z = pState->juggler.z[i];
-
-        //if (i == 1) i++;
 
         to.x = pState->juggler.rx[i+1];
         to.y = pState->juggler.ry[i+1];
@@ -1327,12 +1325,10 @@ void JMDrawJMJuggler(JUGGLEMASTER_RENDER_STATE* pState)
     }
      
     // left arm
-    for (int i=0; i < 5; i++) {
+    for (int i=0; i < 3; i++) {
         from.x = pState->juggler.lx[i];
         from.y = pState->juggler.ly[i];
         from.z = pState->juggler.z[i];
-
-        //if (i == 1) i++;
 
         to.x = pState->juggler.lx[i+1];
         to.y = pState->juggler.ly[i+1];
@@ -1351,31 +1347,52 @@ void JMDrawJMJuggler(JUGGLEMASTER_RENDER_STATE* pState)
         DrawCylinderAt(from, pState->juggler.rad[i], to, pState->juggler.rad[i+1], i == 0);
     }
     
-    /*
-    from.x = pState->juggler.lx[5];
-    from.y = pState->juggler.ly[5];
-    from.z = pState->juggler.z[5];
+    // complete the body
+    from.x = pState->juggler.lx[3];
+    from.y = pState->juggler.ly[3];
+    from.z = pState->juggler.z[3];
+
+    to.x = pState->juggler.rx[3];
+    to.y = pState->juggler.ry[3];
+    to.z = pState->juggler.z[3];
+
+    POS mid;
+    mid.x = -((abs(to.x) - abs(from.x)) / 2); 
+    mid.y = pState->juggler.ly[4];
+    mid.z = pState->juggler.z[4];
 
     glPushMatrix();
         glTranslatef(from.x, from.y, from.z);
-        DrawFullSphere(0.3f);
+        DrawFullSphere(pState->juggler.rad[3]);
     glPopMatrix();
 
-    to.x = pState->juggler.rx[5];
-    to.y = pState->juggler.ry[5];
-    to.z = pState->juggler.z[5];
+    DrawCylinderAt(from, 0.3f, mid, 0.3f, false);
+
+    glPushMatrix();
+        glTranslatef(mid.x, mid.y, mid.z);
+        DrawFullSphere(pState->juggler.rad[3]);
+    glPopMatrix();
+
+    DrawCylinderAt(mid, 0.3f, to, 0.3f, false);
 
     glPushMatrix();
         glTranslatef(to.x, to.y, to.z);
-        DrawFullSphere(0.3f);
+        DrawFullSphere(pState->juggler.rad[3]);
     glPopMatrix();
-     
-    DrawCylinderAt(from, 0.3f, to, 0.3f, false);
-    */
+
+    // Draw vertical cylinder
+    int height = ShoulderPos[1] + 1.0f;
+    glPushMatrix();
+        glTranslatef(mid.x, mid.y-height, mid.z);
+        glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+        DrawCylinder(true, 0.3, 0.3, height, 18, 1);
+        glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+        DrawDisk(true, 0.0, 0.3, 18, 1);
+    glPopMatrix();
     
     /* draw the head */
     glPushMatrix();
-        glTranslatef(pState->juggler.hx, pState->juggler.hy + pState->juggler.hr, pState->juggler.hz);
+        glTranslatef(pState->juggler.hx, pState->juggler.hy, pState->juggler.hz);
         glRotatef(-30.0f, 1.0f, 0.0f, 0.0f);
         DrawCylinder(true, pState->juggler.hr, pState->juggler.hr, 0.3f, 15, 1);
             

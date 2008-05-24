@@ -95,6 +95,9 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   ball* jmlib_lhand = &(jm->rhand);
   
   if (jmState.UseJMJuggler) {
+    //scalingFactorX *= 1.1f;
+    //scalingFactorY *= 0.8f; // compress body height to better match JS juggler
+
     jmlib_rhand = &(jm->rhand);
     jmlib_lhand = &(jm->lhand);  
   }
@@ -136,7 +139,7 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
 
     jmState.objects[i].y = ((jmState.objects[i].y - half_h) + h*0.2f) * scalingFactorY;
 	  jmState.objects[i].x = (jm->b[i].gx - half_w) * scalingFactorX + ballRadius;
-    
+
     switch (objectType) {
       case OBJECT_CLUB:
         jmState.objectTypes[i] = OBJECT_CLUB;
@@ -160,8 +163,6 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   }
 
   // body
-  //scalingFactorX *= 0.9f;
-  //scalingFactorY *= 0.8f; // compress body height to better match JS juggler
   struct arm* ap = &jm->ap;
   
   float z[]   = { 0.0f,  -1.2f, -2.0f, -2.01f, -2.02f, -2.03f };
@@ -187,13 +188,11 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
     jmState.juggler.z[i]   = z[i];
     jmState.juggler.rad[i] = rad[i];
     
-    /*
     // adjust for ball radius
     jmState.juggler.rx[i] -= ballRadius;
     jmState.juggler.ry[i] += ballRadius;
     jmState.juggler.lx[i] += ballRadius;
     jmState.juggler.ly[i] += ballRadius;
-    */
   }
   
   if (flipY) jmState.juggler.hy = (h - ap->hy) * scalingFactorY;
@@ -203,9 +202,9 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   jmState.juggler.hx = (ap->hx - half_w) * scalingFactorX;
   jmState.juggler.hy = (h - ap->hy);
   jmState.juggler.hy = ((jmState.juggler.hy - half_h) + h*0.2f) * scalingFactorY;
-  jmState.juggler.hz = z[5];
+  jmState.juggler.hz = z[5]+0.1f;
   jmState.juggler.hr = ap->hr * scalingFactorX;
-  //jmState.juggler.hy += jmState.juggler.hr;
+  jmState.juggler.hy += jmState.juggler.hr/2.0f;
 
   // extract display list number from JuggleSaver
   JuggleSaver* jsp = static_cast<JuggleSaver*>(js);

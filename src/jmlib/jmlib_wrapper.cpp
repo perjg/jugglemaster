@@ -23,17 +23,34 @@
 
 #include "jmlib.h"
 #include "jugglesaver/jugglesaver.h"
+#include "jugglesaver/gltrackball.h"
 #include "render_jm_flat.h"
 #include <time.h>
+#include <ctype.h>
 //#include <sys/time.h>
 
+char* toupper_strdup(char* s) {
+  char* res = new char[strlen(s) + 1];
+  
+  char* dest = res;
+  
+  while (*s) {
+    *dest = toupper(*s);
+    s++;
+    dest++;
+  }
+  
+  *dest = 0;
+  return res;
+}
+
 JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern(NULL),
-  JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_BALL),
+  JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed(20.0f), objectType(OBJECT_TYPE_DEFAULT),
 	trackball(NULL), spin(TRUE), SavedSpinSpeed(20.0f), SavedTranslateSpeed(0.0f),
   render_mode(RENDERING_OPENGL_3D)
 {
-  jm = JMLib::alloc_JuggleMaster();
-  js = JMLib::alloc_JuggleSaver();
+  jm = static_cast<JuggleMaster*>(JMLib::alloc_JuggleMaster());
+  js = static_cast<JuggleSaver*>(JMLib::alloc_JuggleSaver());
   
   jm_flat = new JMFlatOpenGL(jm);
 
@@ -42,11 +59,9 @@ JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern
   jmState.UseJMJuggler = true;
 
   // active must always start in JuggleSaver mode to ensure complete
-  // initialization of the rendering engine
-  // rendering will switch to JuggleMaster automatically on drawing
+  // initialization of the rendering engine.
+  // Rendering will switch to JuggleMaster automatically on drawing
   // the first frame
-  //fixme: how about if the pattern is JuggleSaver only?
-  // i.e. setPattern called before first render is called?
   firstFrame = true;
   active = js;
   SetCameraExtraZoom(0.3f);
@@ -56,19 +71,20 @@ JMLibWrapper::JMLibWrapper() : imageWidth(480), imageHeight(400), currentPattern
   LastSyncTime = 0;
 }
 
-// fixme: this assumes initialize must be called manually
-// change initialize to do general initialization only and add
-// initializeRendering to do OpenGL stuff
 void JMLibWrapper::initialize() {
  jm->initialize();
  js->initialize();
- jmState.trackball = static_cast<JuggleSaver*>(js)->state.trackball;
+ jmState.trackball = js->state.trackball;
  trackball = jmState.trackball;
 }
 
+JMLibWrapper::~JMLibWrapper() {
+  shutdown();
+}
+
 void JMLibWrapper::shutdown() {
- jm->shutdown();
- js->shutdown();
+  delete jm;
+  delete js;
 }
 
 JML_CHAR *JMLibWrapper::possible_styles[] = {
@@ -84,6 +100,26 @@ JML_CHAR *JMLibWrapper::possible_styles[] = {
   ,"JuggleSaver"
 };
 
+// Helper function used to get the currrently set object type
+int JMLibWrapper::getObjectTypeEx(int i) {
+  switch (objectType) {
+    case OBJECT_TYPE_DEFAULT:
+      if (randomObjectType < 4)
+        return randomObjectType; // ball, ring or club
+      else
+        return (i % 3) + 1; // mixed
+    case OBJECT_TYPE_BALL:
+      return OBJECT_BALL;
+    case OBJECT_TYPE_CLUB:
+      return OBJECT_CLUB;
+    case OBJECT_TYPE_RING:
+      return OBJECT_RING;
+    case OBJECT_TYPE_MIXED:
+      return (i % 3) + 1;
+  }
+  return OBJECT_BALL;
+}
+
 // Transform JuggleMaster coordinates to JuggleSaver coordinates
 void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   float scalingFactorX = 0.25f / jm->getBallRadius();
@@ -95,8 +131,8 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   ball* jmlib_lhand = &(jm->rhand);
   
   if (jmState.UseJMJuggler) {
-    //scalingFactorX *= 1.1f;
-    //scalingFactorY *= 0.8f; // compress body height to better match JS juggler
+    //scalingFactorX *= 0.9f;
+    //scalingFactorY *= 0.8f;
 
     jmlib_rhand = &(jm->rhand);
     jmlib_lhand = &(jm->lhand);  
@@ -140,7 +176,7 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
     jmState.objects[i].y = ((jmState.objects[i].y - half_h) + h*0.2f) * scalingFactorY;
 	  jmState.objects[i].x = (jm->b[i].gx - half_w) * scalingFactorX + ballRadius;
 
-    switch (objectType) {
+    switch (getObjectTypeEx(i)) {
       case OBJECT_CLUB:
         jmState.objectTypes[i] = OBJECT_CLUB;
         jmState.objects[i].z = 1.2f;
@@ -154,7 +190,7 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
         jmState.objects[i].Elev = 0.0f;
         jmState.objects[i].Rot = 0.0f;
         break;
-      default: // ball
+      case OBJECT_BALL: // ball
         jmState.objectTypes[i] = OBJECT_BALL;
         jmState.objects[i].z = 0.0f;
         jmState.objects[i].Elev = 0.0f;
@@ -207,8 +243,7 @@ void JMLibWrapper::doCoordTransform(bool flipY, bool centerOrigin) {
   jmState.juggler.hy += jmState.juggler.hr/2.0f;
 
   // extract display list number from JuggleSaver
-  JuggleSaver* jsp = static_cast<JuggleSaver*>(js);
-  jmState.DLStart = jsp->state.DLStart;
+  jmState.DLStart = js->state.DLStart;
 }
 
 engine_t JMLibWrapper::getType() {
@@ -248,8 +283,9 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
   bool vss = JMSiteValidator::validateVSS(site);
   bool mss = JMSiteValidator::isMSS(site);
   bool sss = JMSiteValidator::isSSS(site);
-  
-  // fixme: Patterns from JuggleSaver's pattern library should be loaded there directly
+
+  // fixme: If style is set to JuggleSaver: Don't switch to JuggleMaster unless neccesary
+  // fixme: If style is set to anything else, don't switch to JuggleSaver unless neccesary
   
   // mss and sss are only supported by JuggleMaster
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER && (mss || sss)) {
@@ -275,11 +311,10 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
 
   if (active->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
     JML_CHAR high[2];
-    high[0] = getHighestThrow(site, sss);
+    high[0] = toupper(getHighestThrow(site, sss));
     high[1] = 0; 
 
-		//fixme: proper randomness
-    objectType = (rand() % 3) + 1;
+    randomObjectType = (rand() % 4) + 1;
     
     // tune camera placement
     // fixme: not quite there yet... should also tune based on window size and aspect ratio
@@ -292,12 +327,19 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
       SetCameraExtraZoom(0.25f);
     else
       SetCameraExtraZoom(0.15f);
-    
+        
     // For sites that are incompatible with JuggleSaver set
 		// the pattern to be the highest throw in the site
 		// this ought to ensure a reasonable camera position
-		if (vss) js->setPattern(site);
-		else js->setPattern(high);
+		if (vss) {
+      char* site_upper = toupper_strdup(site);
+      js->setPattern(site_upper);
+      delete[] site_upper;
+    }
+		else {
+      js->setPattern(high);
+    }
+    
     jm->setPattern(name, site, hr, dr);
   }
   else { // JuggleSaver
@@ -340,6 +382,17 @@ JML_BOOL JMLibWrapper::setStyle(JML_CHAR* name) {
     }
   }
 
+  // For any other style, switch back to JuggleMaster if the pattern is
+  // a valid siteswap
+  if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER) {
+    if (JMSiteValidator::validateSite(currentPattern)) {
+      active = jm;
+    }
+    else { // attempted to switch from JS to JM with a pattern that is JS-only
+      return FALSE; 
+    }
+  }
+  
   return jm->setStyle(name);
 }
 
@@ -441,10 +494,6 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
     return 0;
   }
 
-  // fixme: doJuggle should be changed to use frame rate counter
-  //jm->doJuggle();
-  //js->doJuggle();
-
   /* While drawing, keep track of the rendering speed so we can adjust the
    * animation speed so things appear consistent.  The basis of the this
    * code comes from the frame rate counter (fps.c) but has been modified
@@ -485,7 +534,7 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
       timeDelta += JuggleSpeed / CurrentFrameRate;
 
       if (timeDelta > 0.06f) {
-        jm->doJuggle();
+        jm->doJuggleEx();
         timeDelta = 0;
       }
         
@@ -497,7 +546,6 @@ JML_INT32 JMLibWrapper::doJuggle(void) {
 	return 1;
 }
 
-//fixme: jm should always use default window size
 JML_BOOL JMLibWrapper::setWindowSize(JML_INT32 width, JML_INT32 height) {
   imageWidth = width;
   imageHeight = height;
@@ -505,7 +553,6 @@ JML_BOOL JMLibWrapper::setWindowSize(JML_INT32 width, JML_INT32 height) {
   FramesSinceSync = 0;
   CurrentFrameRate = 0;
 
-  //jm->setWindowSize(width, height);
   js->setWindowSize(width, height);
   jm_flat->resize(width, height);
 	return 1;
@@ -539,11 +586,33 @@ JML_INT32 JMLibWrapper::getImageHeight() {
   return active->getImageHeight();
 }
 
-void JMLibWrapper::speedUp(void) {}
-void JMLibWrapper::speedDown(void) {}
-void JMLibWrapper::speedReset(void) {}
-void JMLibWrapper::setSpeed(float s) {}
-float JMLibWrapper::speed(void) { return 1.0f; }
+void JMLibWrapper::speedUp(void) {
+  if (JuggleSpeed <= 10.0f) JuggleSpeed++;
+  js->speedUp();
+}
+
+void JMLibWrapper::speedDown(void) {
+  if (JuggleSpeed >= 0.1f) JuggleSpeed--;
+  js->speedDown();
+}
+
+void JMLibWrapper::speedReset(void) {
+  JuggleSpeed = 2.2f;
+  js->speedReset();
+}
+
+void JMLibWrapper::setSpeed(float s) {
+  if (s < 0.1) s= 0.1f;
+  if (s > 10.0) s = 10.0f;
+  JuggleSpeed = s;
+  js->setSpeed(s);
+}
+
+float JMLibWrapper::speed(void) {
+  if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER)
+    return js->speed();
+  return JuggleSpeed;
+}
 
 JML_CHAR  JMLibWrapper::getSiteposStart(void) { return active->getSiteposStart(); }
 JML_CHAR  JMLibWrapper::getSiteposStop(void)  { return active->getSiteposStop();  }
@@ -553,8 +622,6 @@ JML_INT32 JMLibWrapper::getBallRadius(void)   { return active->getBallRadius(); 
 JML_BOOL JMLibWrapper::isValidPattern(char* patt) {
 	return JMSiteValidator::validateSite(patt) || JSValidator::validateJSPattern(patt);
 }
-
-#include "jugglesaver/gltrackball.h"
 
 void JMLibWrapper::trackballStart(JML_INT32 x, JML_INT32 y) {
 	js->trackballStart(x, y);
@@ -625,7 +692,7 @@ void JMLibWrapper::setRenderingMode(rendering_t mode) {
     
     }
     else if (mode == RENDERING_OPENGL_3D) {
-      static_cast<JuggleSaver*>(js)->reInitialize();
+      js->reInitialize();
     }
     else if (mode == RENDERING_OPENGL_2D) {
       jm_flat->initialize(imageWidth, imageHeight);
@@ -639,6 +706,10 @@ void JMLibWrapper::setRenderingMode(rendering_t mode) {
 }
 
 rendering_t JMLibWrapper::getRenderingMode() { return render_mode; }
+
+void JMLibWrapper::setObjectType(object_type_t type) {
+  objectType = type;
+}
 
 #endif // JUGGLESAVER_SUPPORT
 

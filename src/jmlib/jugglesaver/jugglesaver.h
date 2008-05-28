@@ -58,8 +58,8 @@ extern "C" {
  * numbers.  Arguably it's better to work at a higher precision and cast it
  * back but littering the code with casts makes it less readable -- without
  * the casts you can get tons of warnings from the compiler (particularily
- * MSVC which enables loss of precision warnings by default) */
- 
+ * MSVC which enables loss of precision warnings by default)
+ */
 #define cosf(a) (float)(cos((a)))
 #define sinf(a) (float)(sin((a)))
 #define tanf(a) (float)(tan((a)))
@@ -81,7 +81,7 @@ extern "C" {
  *
  * The code is broadly split into the following parts:
  *
- * In engine.c:
+ * In engine.cpp:
  *  - Engine.  The process of determining the position of the juggler and 
  *        objects being juggled at an arbitrary point in time.  This is
  *        independent from any drawing code.
@@ -89,7 +89,7 @@ extern "C" {
  *        a Juggle Saver compatible siteswap for use by the engine.  For an
  *        introduction to juggling site swaps check out
  *         http://www.jugglingdb.com/
- * In render.c
+ * In render.c--
  *  - Rendering.  OpenGL drawing code that animates the juggler.
  *  
  *****************************************************************************/
@@ -108,8 +108,8 @@ extern "C" {
  * from the 'From' position to the 'To' position.
  * 
  * Because this is the position of the hand some translation is required with
- * rings and clubs to get the centre of rotation position. */
-
+ * rings and clubs to get the centre of rotation position.
+ */
 typedef struct
 {
     float x;
@@ -140,8 +140,8 @@ typedef struct
  *    carrying an object and while moving the hand from a throw to a catch.
  * NextForHand - Number of beats before the hand that throws this object will
  *    throw another object.  This is always going to be at least 2.  When there
- *    are gaps in the pattern (0's) or holds (2's) NextForHand increases. */
-
+ *    are gaps in the pattern (0's) or holds (2's) NextForHand increases.
+ */
 typedef struct
 {
     int TotalTime;
@@ -166,8 +166,8 @@ typedef struct
  * ObjectType - One of the OBJECT_XX defines.
  * TotalTwist - Only relevant for OBJECT_BALL, this is the total amount the ball
  *     has twisted while in the air.  When segmented balls are drawn you see a 
- *     spinning effect similar to what happens when you juggle beanbags.  */
-
+ *     spinning effect similar to what happens when you juggle beanbags. 
+ */
 #define OBJECT_DEFAULT 0
 #define OBJECT_BALL 1
 #define OBJECT_CLUB 2
@@ -193,8 +193,8 @@ typedef struct
  *     juggler's hands.
  * MaxWeight is the maximum weight of the all throws in pThrowInfo.
  * Height and Alpha are parameters that describe how objects fall under the
- *     influence of gravity.  See SetHeightAndAlpha() for the gory details. */
-
+ *     influence of gravity.  See SetHeightAndAlpha() for the gory details.
+ */
 typedef struct
 {
     THROW_INFO* pThrowInfo;
@@ -215,8 +215,8 @@ typedef struct
 
 /* EXT_SITE_INFO is used to initialise a PATTERN_INFO object using a Juggle
  * Saver compatible site swap.  These contain additional information about the
- * type of object thrown, the positions of throw and catch etc. */
-
+ * type of object thrown, the positions of throw and catch etc.
+ */
 #define HAS_FROM_POS 1
 #define HAS_TO_POS 2
 #define HAS_SNATCH 4
@@ -267,7 +267,7 @@ typedef struct
 
 /* JUGGLEMASTER_JUGGLER is used to keep coordinates for rendering the juggler
  * JuggleMaster style 
-*/
+ */
 typedef struct
 {
   float rx[6], ry[6];   // coordinates of the right arm
@@ -318,7 +318,7 @@ void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState);
 void SetPattern(RENDER_STATE* pState, char* pattern);
 void UpdatePattern(RENDER_STATE* pState, int MinBalls, int MaxBalls, int MinHeightInc, int MaxHeightInc);
 
-// JuggleMaster need extra zoom for the camera
+// JuggleMaster needs extra zoom for the camera
 void SetCameraExtraZoom(float f);
 
 #ifdef __cplusplus

@@ -25,20 +25,6 @@
 // The JuggleMaster class
 class JuggleMaster : public JMLib {
   friend class JMLib;
- public:
-  // read-only (add access methods)
-  /*
-  struct arm ap;
-  struct ball rhand,lhand;
-  struct hand handpoly;
-  struct ball b[BMAX];
-  JML_INT32 dpm;
-  JML_INT32 gx_max, gx_min, gy_max, gy_min;
-  JML_INT32 imageWidth, imageHeight;
-  // read-write
-  JML_INT32 status;
-  */
- protected:
   JML_INT32 balln;
   JML_INT32 bm1;
   JML_INT32 arm_x;
@@ -71,7 +57,6 @@ class JuggleMaster : public JMLib {
   JML_INT32 high0[BMAX+1];
   JML_FLOAT high[BMAX+1];
   JML_INT32 kw0;       // XR/KW [m]
-  // JML_INT32 frameSkip; // frameskip counter
   JML_CHAR siteswap[JML_MAX_SITELEN]; // The current siteswap
   JML_CHAR pattname[LMAX]; // The name of the current pattern
   JML_INT8 steps[LMAX]; // used to print the site on screen
@@ -95,13 +80,17 @@ class JuggleMaster : public JMLib {
   void arm_line(void);
   void applyCorrections(void);
   void doStepcalc(void);
-  // The juggler class contains all data neccesary for drawing
-  //Juggler juggler;
   struct hand handpoly_ex;
+
+#ifdef JUGGLEMASTER_NEW_TIMING
+  float CurrentFrameRate;
+  float JuggleSpeed;
+  unsigned FramesSinceSync;
+  unsigned LastSyncTime;
+#endif
 
 private:
   JuggleMaster();
-  JuggleMaster(ERROR_CALLBACK* _cb);
 public:
   ~JuggleMaster();
 
@@ -109,9 +98,6 @@ public:
   virtual void shutdown();
 
   virtual engine_t getType() { return JUGGLING_ENGINE_JUGGLEMASTER; }
-  
-  //virtual rendering_t getRenderingType() {}
-  //virtual void setRenderingType(rendering_t r) {}
   
   virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
   virtual JML_BOOL setPattern(JML_CHAR* site) { return setPattern(site, site); }
@@ -126,7 +112,6 @@ public:
   virtual JML_FLOAT getHR();
   virtual void setDR(JML_FLOAT DR);
   virtual JML_FLOAT getDR();
-  // repeat for all toggleable settings
 
   virtual JML_INT32 numBalls(void);
   
@@ -138,9 +123,9 @@ public:
   virtual void setPause(JML_BOOL pauseOn = true);
   virtual JML_INT32  getStatus(void);
 
+  virtual JML_INT32 doJuggleEx(void);
   virtual JML_INT32 doJuggle(void);
 
-  // JML_BOOL setFrameskip(JML_INT32 fs);
   virtual JML_BOOL setWindowSize(JML_INT32 width, JML_INT32 height);
   virtual void     setWindowSizeDefault() { setWindowSize(480, 400); }
   virtual void setMirror(JML_BOOL mir = true);

@@ -20,6 +20,7 @@
  */ 
 
 #include "js_validator.h"
+#include "../validator.h"
 
 int JSValidator::siteDigit(char s) {
   if (s >= '0' && s <= '9')
@@ -103,6 +104,15 @@ bool JSValidator::validateJSPattern(char* patt) {
     if (!JSValidator::validateVSS(site)) return false;
 
     return true;
+}
+
+bool JSValidator::isJSOnly(char* patt) {
+  bool valid_js = validateJSPattern(patt);
+  bool valid_jm = JMSiteValidator::validateSite(patt);
+  
+  if (valid_js && !valid_jm)
+    return true;
+  return false;
 }
 
 #ifdef VALIDATOR_STANDALONE

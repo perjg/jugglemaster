@@ -32,6 +32,8 @@
 		CB1AD77F0DCB51900047D6B9 /* gltrackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB1AD7790DCB51900047D6B9 /* gltrackball.cpp */; };
 		CB1AD7800DCB51900047D6B9 /* js_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB1AD77B0DCB51900047D6B9 /* js_patterns.cpp */; };
 		CB1AD7810DCB51900047D6B9 /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB1AD77D0DCB51900047D6B9 /* trackball.cpp */; };
+		CB5297F10DED9B3A006B8600 /* moresites.txt in Resources */ = {isa = PBXBuildFile; fileRef = CB5297EF0DED9B3A006B8600 /* moresites.txt */; };
+		CB5297F20DED9B3A006B8600 /* patterns.jm in Resources */ = {isa = PBXBuildFile; fileRef = CB5297F00DED9B3A006B8600 /* patterns.jm */; };
 		CBA2E1480DBCC20900618F0B /* engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1410DBCC20900618F0B /* engine.cpp */; };
 		CBA2E1490DBCC20900618F0B /* jmlib_jsaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1420DBCC20900618F0B /* jmlib_jsaver.cpp */; };
 		CBA2E14A0DBCC20900618F0B /* js_validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1440DBCC20900618F0B /* js_validator.cpp */; };
@@ -89,6 +91,8 @@
 		CB1AD77C0DCB51900047D6B9 /* js_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_patterns.h; path = jugglesaver/js_patterns.h; sourceTree = "<group>"; };
 		CB1AD77D0DCB51900047D6B9 /* trackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = trackball.cpp; path = jugglesaver/trackball.cpp; sourceTree = "<group>"; };
 		CB1AD77E0DCB51900047D6B9 /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = jugglesaver/trackball.h; sourceTree = "<group>"; };
+		CB5297EF0DED9B3A006B8600 /* moresites.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = moresites.txt; path = ../../data/moresites.txt; sourceTree = SOURCE_ROOT; };
+		CB5297F00DED9B3A006B8600 /* patterns.jm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = patterns.jm; path = ../../data/patterns.jm; sourceTree = SOURCE_ROOT; };
 		CBA2E1410DBCC20900618F0B /* engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = engine.cpp; path = jugglesaver/engine.cpp; sourceTree = "<group>"; };
 		CBA2E1420DBCC20900618F0B /* jmlib_jsaver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_jsaver.cpp; path = jugglesaver/jmlib_jsaver.cpp; sourceTree = "<group>"; };
 		CBA2E1430DBCC20900618F0B /* jmlib_jsaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jsaver.h; path = jugglesaver/jmlib_jsaver.h; sourceTree = "<group>"; };
@@ -185,10 +189,10 @@
 		1FD17B340A9BD45800668490 /* jmlib */ = {
 			isa = PBXGroup;
 			children = (
+				CBA2E13F0DBCC1D600618F0B /* jugglesaver */,
+				CBBC40E80DCEDEA200FBC66E /* sqlite */,
 				CBCC8D180DDEDC5500C25D41 /* sqlite_patterns.cpp */,
 				CBCC8D190DDEDC5500C25D41 /* sqlite_patterns.h */,
-				CBBC40E80DCEDEA200FBC66E /* sqlite */,
-				CBA2E13F0DBCC1D600618F0B /* jugglesaver */,
 				CBA2E14C0DBCC24000618F0B /* jmlib_base.h */,
 				CBA2E14D0DBCC24000618F0B /* jmlib_if.h */,
 				CBA2E14E0DBCC24000618F0B /* jmlib_jugglemaster.h */,
@@ -238,6 +242,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CB5297EF0DED9B3A006B8600 /* moresites.txt */,
+				CB5297F00DED9B3A006B8600 /* patterns.jm */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				1F9AF0470AA2495B004BB7E4 /* emptyMovie.mov */,
 				1FD17D960A9C838A00668490 /* error.png */,
@@ -342,6 +348,8 @@
 				1FD17F080A9CD77C00668490 /* JuggleMaster.icns in Resources */,
 				1F9AF0480AA2495B004BB7E4 /* emptyMovie.mov in Resources */,
 				1F0A2A2D0AA352440052FE03 /* stopExport.tif in Resources */,
+				CB5297F10DED9B3A006B8600 /* moresites.txt in Resources */,
+				CB5297F20DED9B3A006B8600 /* patterns.jm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,6 +470,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
+				PRODUCT_NAME = JuggleMaster;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;

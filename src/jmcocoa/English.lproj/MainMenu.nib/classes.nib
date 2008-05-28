@@ -27,6 +27,12 @@
 			<dict>
 				<key>cancelExport</key>
 				<string>id</string>
+				<key>setLoadedCategory</key>
+				<string>id</string>
+				<key>setLoadedPattern</key>
+				<string>id</string>
+				<key>setObjectType</key>
+				<string>id</string>
 				<key>setPattern</key>
 				<string>id</string>
 				<key>setPatternStyle</key>
@@ -36,6 +42,8 @@
 				<key>setStyle</key>
 				<string>id</string>
 				<key>showInspector</key>
+				<string>id</string>
+				<key>switchLoadedPattern</key>
 				<string>id</string>
 				<key>toggleRecording</key>
 				<string>id</string>

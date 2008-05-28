@@ -25,6 +25,7 @@
 
 #include "jmlib_jsaver.h"
 #include <time.h>
+#include "gltrackball.h"
 
 JML_CHAR *JuggleSaver::possible_styles[] = {
 	"JuggleSaver",
@@ -44,11 +45,6 @@ JuggleSaver::JuggleSaver()  : JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed
   LastSyncTime = 0;
 }
 
-JuggleSaver::JuggleSaver(ERROR_CALLBACK* _cb) {
-  JuggleSaver();
-  setErrorCallback(_cb);
-}
-
 JuggleSaver::~JuggleSaver() {
   shutdown();
   if (pattname != NULL) { delete pattname; }
@@ -56,7 +52,6 @@ JuggleSaver::~JuggleSaver() {
   if (siteswap != NULL) { delete siteswap; }
 }
 
-// fixme: InitGLSettings and ResizeGL should go in the renderer
 void JuggleSaver::initialize() {
   if (initialized) return;
   
@@ -64,7 +59,6 @@ void JuggleSaver::initialize() {
   InitGLSettings(&state, FALSE);
 	state.trackball = gltrackball_init();
 	trackball = state.trackball;
-  //setPatternDefault(); //fixme: what if setPattern has been called before initialize?
   applyPattern();
   ResizeGL(&state, width_, height_);
   initialized = true;
@@ -82,6 +76,9 @@ void JuggleSaver::reInitialize() {
 }
 
 void JuggleSaver::shutdown() {
+  free(trackball);
+  trackball = NULL;
+  state.trackball = NULL;
 }
 
 JML_BOOL JuggleSaver::applyPattern() {
@@ -125,7 +122,6 @@ void JuggleSaver::setPatternDefault(void) {
   setPattern("3 Cascade", "3");
 }
 
-//fixme: calculate this from the 
 JML_INT32 JuggleSaver::numBalls(void) {
   PATTERN_INFO* pPattern = state.pPattern;
   if (pPattern) return pPattern->Objects;
@@ -170,8 +166,8 @@ JML_INT32 JuggleSaver::doJuggle(void) {
   * animation speed so things appear consistent.  The basis of the this
   * code comes from the frame rate counter (fps.c) but has been modified
   * so that it reports the initial frame rate earlier (after 0.02 secs
-  * instead of 1 sec). */
-    
+  * instead of 1 sec).
+  */
   if (FramesSinceSync >=  1 * (unsigned int) CurrentFrameRate) {
     struct timeval tvnow;
     unsigned now;
@@ -199,8 +195,6 @@ JML_INT32 JuggleSaver::doJuggle(void) {
   }
     
   FramesSinceSync++;
-  //DrawGLScene(&state);
-  //JMDrawGLScene(&state);
     
   //if (CurrentFrameRate > 0.001f /*1.0e-6f*/) {
   if (CurrentFrameRate > 1.0e-6f) {
@@ -209,13 +203,9 @@ JML_INT32 JuggleSaver::doJuggle(void) {
 		state.TranslateAngle += TranslateSpeed / CurrentFrameRate;
   }
     
-  //if (mi->fps_p)
-  //    do_fps(mi);
-
 	return 1;
 }
 
-//fixme: this should not call ResizeGL directly
 JML_BOOL JuggleSaver::setWindowSize(JML_INT32 width, JML_INT32 height) {
   width_ = width;
   height_ = height;
@@ -232,10 +222,6 @@ JML_INT32 JuggleSaver::getImageHeight() {
   return height_;
 }
 
-// fixme: This should be changed to match JuggleMaster speed stuff
-// JuggleMaster will require changes to doJuggle to make one call
-// to the internal doJuggle correspond to default speed when
-// JuggleSpeed = 2.2
 void JuggleSaver::speedUp(void) {
   if (JuggleSpeed <= 10.0f) JuggleSpeed++;
 }
@@ -258,7 +244,8 @@ float JuggleSaver::speed(void) {
   return JuggleSpeed;
 }
 
-// fixme
+// Returns dummy valiue
+// BallRad is used internally for ball radius. This is a float value
 JML_INT32 JuggleSaver::getBallRadius(void) {
   return 1;
 }
@@ -275,8 +262,6 @@ JML_INT32 JuggleSaver::numStyles(void) {
 JML_BOOL JuggleSaver::isValidPattern(char* patt) {
 	return JSValidator::validateJSPattern(patt);
 }
-
-#include "gltrackball.h"
 
 void JuggleSaver::trackballStart(JML_INT32 x, JML_INT32 y) {
 	gltrackball_start(trackball, x, y, width_, height_);

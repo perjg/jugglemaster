@@ -29,8 +29,8 @@ class JMFlatOpenGL;
 class JMLibWrapper : public JMLib {
   friend class JMLib;
 private:
-  JMLib* jm;
-  JMLib* js;
+  JuggleMaster* jm;
+  JuggleSaver* js;
   JMLib* active;
   JMFlatOpenGL* jm_flat;
 
@@ -62,10 +62,14 @@ private:
   JML_CHAR getHighestThrow(JML_CHAR* site, bool is_sss);
   void doCoordTransform(bool flipY = true, bool centerOrigin = false);
   
-  int objectType;
   bool firstFrame;
   static JML_CHAR *possible_styles[]; // Contains list of all possible styles
+
+  int randomObjectType; // for default object type
+  object_type_t objectType;
+  int getObjectTypeEx(int i);
 public:
+  ~JMLibWrapper();
   virtual void initialize();
   virtual void shutdown();
 
@@ -137,6 +141,7 @@ public:
   // misc rendering functionality
   virtual void setRenderingMode(rendering_t mode);
   virtual rendering_t getRenderingMode();
+  virtual void setObjectType(object_type_t type);
 };
 
 #endif

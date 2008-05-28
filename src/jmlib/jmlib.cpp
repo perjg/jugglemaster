@@ -99,13 +99,13 @@ JuggleMaster::JuggleMaster() {
   use_cpp_callback = 0;
   cb = (ERROR_CALLBACK*)NULL;
   mCallback = NULL;
-}
-
-JuggleMaster::JuggleMaster(ERROR_CALLBACK* _cb) {
-  initialize();
-  use_cpp_callback = 0;
-  cb = _cb;
-  mCallback = NULL;
+  
+#ifdef JUGGLEMASTER_NEW_TIMING
+  CurrentFrameRate = 0.0f;
+  JuggleSpeed = 2.2f;
+  FramesSinceSync = 0;
+  LastSyncTime = 0;
+#endif
 }
 
 JuggleMaster::~JuggleMaster() {
@@ -139,7 +139,6 @@ void JuggleMaster::initialize(void) {
   hand_on = 1;
   hand_x = 0;
   hand_y = 0;
-  // frameSkip = FS_DEF;
   scalingMethod = SCALING_METHOD_CLASSIC;
   
   smode = 50.0;
@@ -160,29 +159,6 @@ void JuggleMaster::initialize(void) {
 
 void JuggleMaster::shutdown(void) {
 }
-
-/*
-void JuggleMaster::setErrorCallback(void *aUData, void (*aCallback)
-			(void *, JML_CHAR *)) {
-  mUData = aUData;
-  use_cpp_callback = 1;
-  mCallback = aCallback;
-}
-
-void JuggleMaster::setErrorCallback(ERROR_CALLBACK* _cb) {
-  cb = _cb;
-}
-
-void JuggleMaster::error(JML_CHAR* msg) {
-  if(use_cpp_callback) {
-    if(mCallback != NULL) {
-      mCallback(mUData, msg);
-    }
-  } else if(cb != NULL) {
-    cb(msg);
-  }
-}
-*/
 
 JML_BOOL JuggleMaster::setWindowSize(JML_INT32 width, JML_INT32 height) {
   if (width <= 0 || height <= 0)
@@ -260,7 +236,7 @@ JML_INT32 JuggleMaster::getBallRadius() {
   }
 }
 
-
+// Coordinate transform for SCALING_METHOD_DYNAMIC
 void JuggleMaster::doCoordTransform() {
   JML_FLOAT zoomFactorX = (float)scaleImageWidth  / (float)imageWidth;
   JML_FLOAT zoomFactorY = (float)scaleImageHeight / (float)imageHeight;
@@ -481,15 +457,16 @@ JML_BOOL JuggleMaster::setStyle(JML_CHAR* name) {
     JML_INT8 *style;
     style = new JML_INT8[(size_t)(4*sizeof(JML_INT8)*strlen(getSite()))];
     if(style != NULL) {
-	for(i=0;i<(int)strlen(getSite())*4;) {
-	  style[i++] = (rand()%30)-15;
-	  style[i++] = (rand()%10);
-	}
-	setStyle("Random", (JML_UINT8)strlen(getSite()), style);
-	delete style;
-	startJuggle();
-    } else {
-	setStyleDefault();
+      for(i=0;i<(int)strlen(getSite())*4;) {
+        style[i++] = (rand()%30)-15;
+        style[i++] = (rand()%10);
+      }
+      setStyle("Random", (JML_UINT8)strlen(getSite()), style);
+      delete[] style;
+      startJuggle();
+      }
+      else {
+        setStyleDefault();
     }
   }
 #endif
@@ -549,7 +526,6 @@ JML_FLOAT JuggleMaster::getDR() {
 JML_INT32 JuggleMaster::numBalls(void) {
 	return balln;
 }
-
 
 // Internal functions
 void JuggleMaster::arm_line(void){
@@ -1288,19 +1264,39 @@ JML_FLOAT JuggleMaster::fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t) {
 	return(true);
 } */
 
-/* FIXME */
+#ifdef JUGGLEMASTER_NEW_TIMING
+void JuggleMaster::speedUp(void) {
+  if (JuggleSpeed <= 10.0f) JuggleSpeed++;
+}
+
+void JuggleMaster::speedDown(void) {
+  if (JuggleSpeed >= 0.1f) JuggleSpeed--;
+}
+
+void JuggleMaster::speedReset(void) {
+  JuggleSpeed = 2.2f;
+}
+
+void JuggleMaster::setSpeed(float s) {
+  if (s < 0.1) s= 0.1f;
+  if (s > 10.0) s = 10.0f;
+  JuggleSpeed = s;
+}
+
+float JuggleMaster::speed(void) {
+  return JuggleSpeed;
+}
+#else
 void JuggleMaster::speedUp(void) {
 	cSpeed = SPEED_MAX;
 	set_ini(0);
 }
 
-/* FIXME */
 void JuggleMaster::speedDown(void) {
 	cSpeed = SPEED_MIN;
 	set_ini(0);
 }
 
-/* FIXME */
 void JuggleMaster::speedReset(void) {
 	cSpeed = SPEED_DEF;
 	set_ini(0);
@@ -1314,8 +1310,9 @@ void JuggleMaster::setSpeed(float s) {
 float JuggleMaster::speed(void) {
 	return cSpeed;
 }
+#endif
 
-JML_INT32 JuggleMaster::doJuggle(void) {
+JML_INT32 JuggleMaster::doJuggleEx(void) {
   JML_INT32 i;
   JML_INT32 tone = 0;
   
@@ -1349,6 +1346,56 @@ JML_INT32 JuggleMaster::doJuggle(void) {
     doCoordTransform();
 
   return tone;
+}
+
+JML_INT32 JuggleMaster::doJuggle(void) {
+#ifdef JUGGLEMASTER_NEW_TIMING
+  static float timeDelta = 0;
+
+  if (FramesSinceSync >=  1 * (unsigned int) CurrentFrameRate) {
+    struct timeval tvnow;
+    unsigned now;
+            
+    # ifdef GETTIMEOFDAY_TWO_ARGS
+      struct timezone tzp;
+      gettimeofday(&tvnow, &tzp);
+    # else
+      gettimeofday(&tvnow);
+    # endif
+        
+    now = (unsigned) (tvnow.tv_sec * 1000000 + tvnow.tv_usec);
+
+    if (FramesSinceSync == 0) {
+      LastSyncTime = now;
+    }
+    else {
+      unsigned Delta = now - LastSyncTime;
+      if (Delta > 20000) {
+        LastSyncTime = now;
+        CurrentFrameRate = (FramesSinceSync * 1.0e6f) / Delta;
+        FramesSinceSync = 0;
+      }
+    }
+  }
+    
+  FramesSinceSync++;
+    
+  if (CurrentFrameRate > 1.0e-6f) {
+    if (getStatus() == ST_JUGGLE) {
+      timeDelta += JuggleSpeed / CurrentFrameRate;
+
+      if (timeDelta > 0.06f) {
+        doJuggleEx();
+        timeDelta = 0;
+      }
+    }
+  }
+
+	return 1;
+
+#else
+  doJuggleEx();
+#endif
 }
 
 // Modify to include hand calculations

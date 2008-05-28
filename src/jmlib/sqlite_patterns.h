@@ -30,10 +30,38 @@ class JMPatterns {
   friend class SearchResult;
 public:
   JMPatterns() : filename_(NULL), db_(NULL) {}
+  ~JMPatterns();
   
-  pattern_t* search(const char* name);
-  pattern_t* search(const char* name, const char* site, const char* style, int balls);
+  /** Search for a pattern
+   * Matches any category name, pattern name, style name or site
+   */
+  pattern_t* search(const char* item);
 
+  /** Search for a pattern 
+   * @param name Matches category or pattern name
+   * @param site Matches site
+   * @param style Matches style
+   * @param minBalls Minimum amount of balls in pattern, 0 for any
+   * @param maxBalls Maximum amount of balls in pattern, 0 for any
+   */
+  pattern_t* search(const char* name, const char* site, const char* style, int minBalls, int maxBalls);
+
+  /** Returns patterns for the named category */
+  pattern_t* getCategory(const char* category);
+  
+  /** Returns the most recent count patterns loaded */
+  pattern_t* getRecentPatterns(int count);
+
+  /** Gets a random pattern.
+   * Patterns can contain a list of categories to include or exclude in the selection
+   */
+  pattern_t* getRandomPattern(const char** categories, bool exclude = true);
+  
+  void loadPattern(const pattern_t* patt, JMLib* jm);
+  void loadNextPattern(const pattern_t* patt, JMLib* jm);
+  void loadPrevPattern(const pattern_t* patt, JMLib* jm);
+  void loadRandomPattern(JMLib* jm, const char** categories, bool exclude = true);
+  
 	void freeSearchResult(pattern_t* patterns);
 
 	/*
@@ -42,6 +70,8 @@ public:
 	 * @param inJS  JuggleSaver file
 	 */
 	void initializeDatabase(FILE* out, FILE* inJM, FILE* inJS);
+  
+  void loadDatabase(FILE* db);
 private:
   void createDB();
   void closeDB();
@@ -50,6 +80,7 @@ private:
   void addPattern(pattern_t* patt, pattern_group_t* group);
   void addStyle(style_t* style);
 	pattern_t* searchQuery(const char* query);
+  
 
   char* filename_;
   void init();

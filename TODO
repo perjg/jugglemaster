@@ -28,6 +28,9 @@ JuggleMaster
 * Clubs are held too low for certain patterns
 * Pattern parsing not safe for incorrect pattern files
 * Integrate timing functionality (JUGGLEMASTER_NEW_TIMING)
+* Camera placement is wrong for JuggleMaster patterns that include
+  a-z in their siteswap. Corresponding JuggleSaver pattern should
+  have uppercase A-Z.
 
 CLEANUP
 
@@ -66,6 +69,7 @@ Misc
 * fps counter
 * Currently active pattern info on screen
 * Bounce juggler's head for JuggleMaster patterns
+
 
 IFDEF documentation
 * JUGGLESAVER_SUPPORT - Turns on JuggleSaver support and JuggleSaver rendering engine

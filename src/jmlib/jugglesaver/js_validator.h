@@ -36,6 +36,8 @@ class JSValidator {
   static bool validateVSS(char* site);
   // validate a JuggleSaver pattern
   static bool validateJSPattern(char* patt);
+  // check if a pattern is JuggleSaver only
+  static bool isJSOnly(char* patt);
 };
 
 #endif

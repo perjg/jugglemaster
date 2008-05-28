@@ -51,7 +51,6 @@ private:
   JML_BOOL applyPattern();
 
   JuggleSaver();
-  JuggleSaver(ERROR_CALLBACK* _cb);
 public:
   ~JuggleSaver();
 

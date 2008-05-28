@@ -161,11 +161,11 @@ void JMPatterns::initializeDatabase(FILE* out, FILE* inJM, FILE* inJS) {
   pattern_t* patt = searchQuery("SELECT * FROM Pattern WHERE style LIKE 'JuggleSaver'");
 }
 
-pattern_t* JMPatterns::search(const char* name) {
+pattern_t* JMPatterns::search(const char* item) {
 	return searchQuery(NULL);
 }
 
-pattern_t* JMPatterns::search(const char* name, const char* site, const char* style, int balls) {
+pattern_t* JMPatterns::search(const char* name, const char* site, const char* style, int minBalls, int maxBalls) {
 	return searchQuery(NULL);
 }
 
@@ -181,6 +181,14 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
   int nrows, ncols;
   char* zErr;
   int rc = sqlite3_get_table(db_, query, &result, &nrows, &ncols, &zErr);
+  
+  if(rc != SQLITE_OK) {
+    if (zErr != NULL) {
+      fprintf(stderr, "SQL error: %s\n", zErr);
+      fprintf(stderr, "\tStatement: '%s'\n", query);
+      sqlite3_free(zErr);
+    }
+  }
 
   for(int i=0; i < nrows; i++) {
     char* name   = result[(i+1)*ncols + 0];
@@ -195,6 +203,7 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
     new_patt->name = strdup(name);
     new_patt->data = strdup(data);
     new_patt->author = strdup(author);
+    new_patt->style = strdup(style);
     new_patt->hr = atof(hr_c);
     new_patt->dr = atof(dr_c);
     new_patt->style = strdup(style);

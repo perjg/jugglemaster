@@ -1121,6 +1121,8 @@ void JuggleMaster::set_dpm(void) {
 JML_INT32 JuggleMaster::set_patt(JML_CHAR* s) {
   JML_INT32 i, l, flag = 0, flag2 = 0, a = 0;
   
+  resetSpin();
+  
   l = (JML_INT32)strlen(s);
   
   if(l>LMAX) return 10;

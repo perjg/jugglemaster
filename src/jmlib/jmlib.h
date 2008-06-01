@@ -180,17 +180,22 @@ struct ball {
 
   JML_FLOAT prevSpin;
 
-  ball() : prevSpin(PI) {}
+  ball() : prevSpin(2*PI - 0.2f) {}
+
+  void resetSpin() { prevSpin = 2*PI - 0.2f; }
 
   float getBallSpin() {
     return (PI + (float)t * PI) * ((bh - 1) / 2) / 6;
   }
 
-  //fixme: when holding, gradually reduce the spin towards 0
+  // when holding, save the current spin and use it for the entire hold
   float getSpin(int spins) {
     float spin;
 
     if (isHolding()) {
+      return prevSpin;
+    }
+    else if (!(st & OBJECT_MOVE)) {
       return prevSpin;
     }
     else {
@@ -202,28 +207,6 @@ struct ball {
     }
     
     return spin;
-    
-    /*
-    static float prevSpin = 0.0f;
-    float spin = 0.0f;
-    
-    // when holding, gradually reduce the spin towards 0
-    if (isHolding()) {
-      if (prevSpin > 0.0f)
-        prevSpin -= PI;
-      if (prevSpin < 0) prevSpin = 0;
-      spin = prevSpin;
-    }
-    else {
-      spin = (HALF_PI + (float)t * PI) * ((spins * bh - 1) / 2);
-      prevSpin = spin;
-    }
-    
-    return spin;
-    */
-  
-    //if (isHolding()) return 0;
-    //else return (HALF_PI + (float)t * PI) * ((spins * bh - 1) / 2);
   }
 
   JML_BOOL isHolding() {

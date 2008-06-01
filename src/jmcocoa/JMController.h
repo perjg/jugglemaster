@@ -51,6 +51,8 @@ typedef enum
 		DataHandler mDataHandlerRef;
     
     JMPatterns* patternLib;
+    pattern_group_t* categories;
+    pattern_t* cur_pattern; // patterns in currently selected category
 }
 
 - (IBAction)showInspector:(id)sender;
@@ -66,6 +68,8 @@ typedef enum
 - (IBAction)setLoadedCategory:(id)sender;
 - (IBAction)setLoadedPattern:(id)sender;
 - (IBAction)switchLoadedPattern:(id)sender;
+
+- (void)updatePatterns:(NSString*)str;
 
 - (void)setFrame:(NSRect)frameRect;
 

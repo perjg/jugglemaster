@@ -40,6 +40,7 @@ struct pattern_group_t {
 	JML_CHAR *name;
 	struct pattern_t *first_patt;
 	struct pattern_group_t *next;
+	struct pattern_group_t *prev;
 };
 
 struct pattern_t {
@@ -52,6 +53,7 @@ struct pattern_t {
 	int bgred, bggreen, bgblue; /* Background color */
 	int bp, hd, pd, mr; /* Beep, Hand, Pattern, Mirror */
 	struct pattern_t *next;
+  struct pattern_t *prev;
 };
 
 struct groups_t {

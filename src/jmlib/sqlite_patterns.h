@@ -24,8 +24,6 @@ extern "C" {
 #include "sqlite/sqlite3.h"
 }
 
-class SearchResult;
-
 class JMPatterns {
   friend class SearchResult;
 public:
@@ -46,8 +44,14 @@ public:
    */
   pattern_t* search(const char* name, const char* site, const char* style, int minBalls, int maxBalls);
 
+  /** Gets all categories */
+  pattern_group_t* getCategories();
+
   /** Returns patterns for the named category */
   pattern_t* getCategory(const char* category);
+  
+  /** Gets a style */
+  style_t* getStyle(const char* name);
   
   /** Returns the most recent count patterns loaded */
   pattern_t* getRecentPatterns(int count);
@@ -56,13 +60,14 @@ public:
    * Patterns can contain a list of categories to include or exclude in the selection
    */
   pattern_t* getRandomPattern(const char** categories, bool exclude = true);
-  
-  void loadPattern(const pattern_t* patt, JMLib* jm);
-  void loadNextPattern(const pattern_t* patt, JMLib* jm);
-  void loadPrevPattern(const pattern_t* patt, JMLib* jm);
-  void loadRandomPattern(JMLib* jm, const char** categories, bool exclude = true);
+
+  pattern_t* loadPattern(const pattern_t* patt, int offset, JMLib* jm);
+  pattern_t* loadNextPattern(const pattern_t* patt, JMLib* jm);
+  pattern_t* loadPrevPattern(const pattern_t* patt, JMLib* jm);
+  pattern_t* loadRandomPattern(JMLib* jm, const char** categories, bool exclude = true);
   
 	void freeSearchResult(pattern_t* patterns);
+  void freeCategories(pattern_group_t* group);
 
 	/*
 	 * @param out   File pointer for writing the sqlite database
@@ -81,46 +86,50 @@ private:
   void addStyle(style_t* style);
 	pattern_t* searchQuery(const char* query);
   
-
   char* filename_;
   void init();
   sqlite3* db_;
 };
 
-class SearchResult {
+/*
+class Array {
+ public:
+   int& operator[] (unsigned i);      // Some people don't like this syntax
+   ...
+ };
+ 
+ inline
+ int& Array::operator[] (unsigned i)  // Some people don't like this syntax
+ {
+   ...
+ } 
+*/
+
+class JMCategoryIterator {
 public:
-  int getHits();
-  pattern_t* getPattern();
-  style_t*   getStyle();
-  pattern_group_t* getCategory();
-  void loadCurrent();
-  void first();
-  void next();
-  void previous();
-  void last();
-private:
 
 };
 
-/*
+class JMPatternIterator {
+private:
+  pattern_t* m_first;
+  pattern_t* m_current;
+public:
+  JMPatternIterator(pattern_t* first) { m_first = first; m_current = first; }
+  virtual ~JMPatternIterator() {}
 
-- sqlite pattern loader
- * search by pattern type / name / style
-
- JMLib -> initPatternLoader(filename);
- (loads pattern file, creates sql db if not exists or out of date)
-
- DB: * general info table (gravity etc.)
-     * categories -> name, description
-     * pattern -> name, site, style
-
- JMSearchResult* beginSearch(hits, name, category, style);
- JMPattern* getFirst(JMSearchResult*)
- JMPattern* getNext(JMSearchResult*)
- JMPattern* getAt(JMSearchResult*)
- void endSearch(JMSearchResult*)
-
- loadPattern(JMSearchResult*)
- loadPattern(JMSearchResult*, pos)
-
-*/
+  virtual pattern_t* operator[] (unsigned int i);
+  virtual pattern_t* first();
+  virtual pattern_t* last();
+  virtual pattern_t* next();
+  virtual pattern_t* prev();
+  virtual pattern_t* random();
+  
+  virtual pattern_t* nextCategory();
+  virtual pattern_t* prevCategory();
+  
+  int getCount();
+  void loadCurrent(JMLib* jm);
+  
+  JMCategoryIterator* getCategoryIterator();
+};

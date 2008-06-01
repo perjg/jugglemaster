@@ -25,6 +25,7 @@
 // The JuggleMaster class
 class JuggleMaster : public JMLib {
   friend class JMLib;
+private:
   JML_INT32 balln;
   JML_INT32 bm1;
   JML_INT32 arm_x;
@@ -81,6 +82,8 @@ class JuggleMaster : public JMLib {
   void applyCorrections(void);
   void doStepcalc(void);
   struct hand handpoly_ex;
+
+  void resetSpin() { for (int i = 0; i < BMAX; i++) { b[i].resetSpin(); } }
 
 #ifdef JUGGLEMASTER_NEW_TIMING
   float CurrentFrameRate;

@@ -24,6 +24,71 @@
 #include "patterns.h"
 #include "jugglesaver/js_patterns.h"
 
+// JMPatternIterator
+pattern_t* JMPatternIterator::operator[] (unsigned int i) {
+  pattern_t* temp = m_first;
+  
+  while (i > 0 && temp) {
+    i--;
+    temp = temp->next;
+  }
+
+  m_current = temp;
+  return m_current;
+}
+
+pattern_t* JMPatternIterator::first() {
+  m_current = m_first;
+  return m_current;
+}
+
+pattern_t* JMPatternIterator::last() {
+  pattern_t* temp = m_first;
+  
+  while (temp->next) {
+    temp = temp->next;
+  }
+
+  m_current = temp;
+  return m_current;
+}
+
+pattern_t* JMPatternIterator::next() {
+  if (m_current->next) m_current = m_current->next;
+  return m_current;
+}
+
+pattern_t* JMPatternIterator::prev() {
+  if (m_current->prev) m_current = m_current->prev;
+  return m_current;
+}
+
+pattern_t* JMPatternIterator::random() {
+  return NULL;
+}
+
+pattern_t* JMPatternIterator::nextCategory() {
+
+  return m_current;
+}
+
+pattern_t* JMPatternIterator::prevCategory() {
+
+  return m_current;
+}
+
+int JMPatternIterator::getCount() {
+  return 1;
+}
+
+void JMPatternIterator::loadCurrent(JMLib* jm) {
+
+}
+
+JMCategoryIterator* JMPatternIterator::getCategoryIterator() {
+  return NULL;
+}
+
 /*
  * pattern: name, data, style, author, hr, dr
  * style: name, data, length
@@ -157,8 +222,96 @@ void JMPatterns::initializeDatabase(FILE* out, FILE* inJM, FILE* inJS) {
 		cur_style = cur_style->next;
 	}
   
+  /*
   // test
   pattern_t* patt = searchQuery("SELECT * FROM Pattern WHERE style LIKE 'JuggleSaver'");
+  pattern_group_t* categories = getCategories();
+  pattern_t* cat1 = getCategory(categories ? categories->name : NULL);
+  categories = categories ? categories->next : NULL;
+  pattern_t* cat2 = getCategory(categories ? categories->name : NULL);
+  categories = categories ? categories->next : NULL;
+  pattern_t* cat3 = getCategory(categories ? categories->name : NULL);
+  categories = categories ? categories->next : NULL;
+  */
+}
+
+pattern_t* JMPatterns::getCategory(const char* category) {
+  char* sql = sqlite3_mprintf("SELECT * FROM Pattern WHERE category LIKE %Q", category);
+  pattern_t* patt = searchQuery(sql);
+  sqlite3_free(sql);
+  return patt;  
+}
+
+pattern_group_t* JMPatterns::getCategories() {
+  char* sql = "SELECT * FROM Category";
+  pattern_group_t* first_group = NULL;
+	pattern_group_t* new_group = NULL;
+  pattern_group_t* cur_group = NULL;
+  
+  char** result; 
+  int nrows, ncols;
+  char* zErr;
+  int rc = sqlite3_get_table(db_, sql, &result, &nrows, &ncols, &zErr);
+  
+  if(rc != SQLITE_OK) {
+    if (zErr != NULL) {
+      fprintf(stderr, "SQL error: %s\n", zErr);
+      fprintf(stderr, "\tStatement: '%s'\n", sql);
+      sqlite3_free(zErr);
+      return NULL;
+    }
+  }
+
+  if (nrows == 0) return NULL;
+
+  for(int i=0; i < nrows; i++) {
+    char* name   = result[(i+1)*ncols];
+    
+    new_group = new pattern_group_t;
+    new_group->name = strdup(name);
+    new_group->first_patt = NULL;
+    new_group->next = NULL;
+    new_group->prev = cur_group;
+    
+    if (!first_group) {
+      first_group = new_group;
+      cur_group = new_group;
+    }
+    else {
+      cur_group->next = new_group;
+      cur_group = new_group;
+    }
+  }
+
+  sqlite3_free_table(result);
+  sqlite3_free(zErr);
+  return first_group;
+}
+
+pattern_t* JMPatterns::loadPattern(const pattern_t* patt, int offset, JMLib* jm) {
+  pattern_t* temp = (pattern_t*)patt;
+  
+  while (offset > 0 && temp) {
+    offset--;
+    temp = temp->next;
+  }
+
+  jm->stopJuggle();
+  jm->setPattern(temp->name, temp->data, temp->hr, temp->dr);
+  jm->setStyleDefault();
+  jm->startJuggle();
+}
+
+pattern_t* JMPatterns::loadNextPattern(const pattern_t* patt, JMLib* jm) {
+
+}
+
+pattern_t* JMPatterns::loadPrevPattern(const pattern_t* patt, JMLib* jm) {
+
+}
+
+pattern_t* JMPatterns::loadRandomPattern(JMLib* jm, const char** categories, bool exclude) {
+
 }
 
 pattern_t* JMPatterns::search(const char* item) {
@@ -187,8 +340,11 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
       fprintf(stderr, "SQL error: %s\n", zErr);
       fprintf(stderr, "\tStatement: '%s'\n", query);
       sqlite3_free(zErr);
+      return NULL;
     }
   }
+
+  if (nrows == 0) return NULL;
 
   for(int i=0; i < nrows; i++) {
     char* name   = result[(i+1)*ncols + 0];
@@ -210,6 +366,7 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
     new_patt->ga = 0.0f; // ?
     new_patt->sp = 1.0f;
     new_patt->next = NULL;
+    new_patt->prev = cur_patt;
     
     if (!first_patt) {
       first_patt = new_patt;
@@ -221,15 +378,6 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
     }
   }
   
-  /*
-  for(int i=0; i < nrows; i++) {
-    for(int j=0; j < ncols; j++) { 
-      // the i+1 term skips over the first record, which is the column headers
-      char* col = result[(i+1)*ncols + j];
-    }
-  }
-  */
-
   sqlite3_free_table(result);
   sqlite3_free(zErr);
 
@@ -250,5 +398,16 @@ void JMPatterns::freeSearchResult(pattern_t* patt) {
 		tmppatt = patt;
 		patt = patt->next;
 		delete tmppatt;
+	}
+}
+
+void JMPatterns::freeCategories(pattern_group_t* group) {
+	struct pattern_group_t *tmpgroup = NULL;
+
+	while (group) {
+		if(group->name != NULL) delete group->name;
+		tmpgroup = group;
+		group = group->next;
+		delete tmpgroup;
 	}
 }

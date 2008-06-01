@@ -37,26 +37,38 @@ static JML_CHAR* patterns[]
   // Load patterns
   patternLib = new JMPatterns();
   
-  NSString *path = [[NSBundle mainBundle] pathForResource: @"patterns.jm" 
-                         ofType: @"jm" inDirectory: @"Contents/Resources"];
+  //NSString *path = [[NSBundle mainBundle] pathForResource: @"patterns.jm" 
+  //                       ofType: @"jm" inDirectory: @"Contents/Resources"];
   
-  FILE* db_f = fopen("Juggle Master.app/Contents/Resources/patterns.db", "w+");
-  FILE* jm_f = fopen("Juggle Master.app/Contents/Resources/patterns.jm", "r");
-  FILE* js_f = fopen("Juggle Master.app/Contents/Resources/moresites.txt", "r");
+  //FILE* db_f = fopen("JuggleMaster.app/Contents/Resources/patterns.db", "w+");
+  FILE* db_f = fopen("patterns.db", "w+");
+  FILE* jm_f = fopen("JuggleMaster.app/Contents/Resources/patterns.jm", "r");
+  FILE* js_f = fopen("JuggleMaster.app/Contents/Resources/moresites.txt", "r");
   patternLib = new JMPatterns();
   patternLib->initializeDatabase(db_f, jm_f, js_f);
   
-  [categorySelect removeAllItems];
-  [patternSelect removeAllItems];
-  
-  [categorySelect addItemWithTitle:@"test1"];
-  [categorySelect addItemWithTitle:@"test test test test test test test test"];
+  // Initialize list of categories and patterns
+  categories = patternLib->getCategories();
+  cur_pattern = NULL;
 
-  [patternSelect addItemWithTitle:@"test1"];
-  [patternSelect addItemWithTitle:@"test2"];
+  [categorySelect removeAllItems];
   
+  pattern_group_t* temp = categories;
+  NSString* name;
+  bool first = true;
   
-  
+  while (temp) {
+    name = [NSString stringWithUTF8String: temp->name];
+    
+    if (first) {
+      [self updatePatterns:name];
+      first = false;
+    }
+    
+    [categorySelect addItemWithTitle: name];
+    temp = temp->next;
+  }
+    
 	renderTimer = [[NSTimer scheduledTimerWithTimeInterval:1/60 target:self selector:@selector(doRender:) userInfo:nil repeats:YES] retain];
 }
 
@@ -80,6 +92,27 @@ static JML_CHAR* patterns[]
 	
 	[renderTimer release];
 	[super dealloc];
+}
+
+- (void)updatePatterns:(NSString*)str
+{
+  [patternSelect removeAllItems];
+  
+  if (cur_pattern != NULL) {
+    patternLib->freeSearchResult(cur_pattern);
+    cur_pattern = NULL;
+  }
+  
+  cur_pattern = patternLib->getCategory([str UTF8String]);
+  
+  pattern_t* temp = cur_pattern;
+  NSString* name;
+  
+  while (temp) {
+    name = [NSString stringWithUTF8String: temp->name];
+    [patternSelect addItemWithTitle: name];
+    temp = temp->next;
+  }
 }
 
 - (IBAction)copy:(id)sender
@@ -149,10 +182,27 @@ static JML_CHAR* patterns[]
 
 - (IBAction)setLoadedCategory:(id)sender
 {
+  [self updatePatterns:[sender titleOfSelectedItem]];
 }
 
 - (IBAction)setLoadedPattern:(id)sender
 {
+  int offset = [sender indexOfSelectedItem];
+  
+  patternLib->loadPattern(cur_pattern, offset, jm);
+  /*
+  pattern_t* temp = cur_pattern;
+  
+  while (offset > 0 && temp) {
+    offset--;
+    temp = temp->next;
+  }
+
+  jm->stopJuggle();
+  jm->setPattern(temp->name, temp->data, temp->hr, temp->dr);
+  jm->setStyleDefault();
+  jm->startJuggle();
+  */
 }
 
 - (IBAction)switchLoadedPattern:(id)sender

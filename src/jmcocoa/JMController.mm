@@ -183,6 +183,7 @@ static JML_CHAR* patterns[]
 - (IBAction)setLoadedCategory:(id)sender
 {
   [self updatePatterns:[sender titleOfSelectedItem]];
+  [self setLoadedPattern:0];
 }
 
 - (IBAction)setLoadedPattern:(id)sender
@@ -190,25 +191,31 @@ static JML_CHAR* patterns[]
   int offset = [sender indexOfSelectedItem];
   
   patternLib->loadPattern(cur_pattern, offset, jm);
-  /*
-  pattern_t* temp = cur_pattern;
-  
-  while (offset > 0 && temp) {
-    offset--;
-    temp = temp->next;
-  }
-
-  jm->stopJuggle();
-  jm->setPattern(temp->name, temp->data, temp->hr, temp->dr);
-  jm->setStyleDefault();
-  jm->startJuggle();
-  */
 }
 
 - (IBAction)switchLoadedPattern:(id)sender
 {
   int seg = [sender selectedSegment];
-  int bar = 0;
+  
+  switch (seg) {
+  case 0: // prev
+    if ([patternSelect indexOfSelectedItem] > 0)
+      [patternSelect selectItemAtIndex:[patternSelect indexOfSelectedItem]-1]; 
+    else
+      return; //fixme: switch to prev category
+    break;
+  case 1: // random
+  
+    break;
+  case 2: // next
+    if ([patternSelect indexOfSelectedItem] < [patternSelect numberOfItems]-1)
+      [patternSelect selectItemAtIndex:[patternSelect indexOfSelectedItem]+1];
+    else
+      return; //
+    break;
+  }
+  
+  patternLib->loadPattern(cur_pattern, [patternSelect indexOfSelectedItem], jm);
 }
 
 - (IBAction)toggleShowPattern:(id)sender

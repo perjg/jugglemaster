@@ -167,9 +167,39 @@ void JMPatterns::addPattern(pattern_t* patt, pattern_group_t* group) {
 }
 
 void JMPatterns::addStyle(style_t* style) {
-  char* sql = sqlite3_mprintf("INSERT INTO Style VALUES (%Q, %Q, %d)", style->name, style->data, style->length);
+  char* data = new char[ style->length * 2 + 1];
+  memset(data, 0, style->length * 2);
+  char temp[4];
+  
+  // pack data as hex values. Add 100 bias to make all style coordinates positive
+  for (int i = 0; i < style->length; i++) {
+    sprintf(temp, "%02x", style->data[i] + 100);
+    strcat(data, temp);
+  }
+
+  char* sql = sqlite3_mprintf("INSERT INTO Style VALUES (%Q, x%Q, %d)", style->name, data, style->length);
   queryDB(sql);
   sqlite3_free(sql);
+  
+/*
+  char* data = new char[ style->length * 5]; // room for sign, 3 digits and comma
+  memset(data, 0, style->length * 5);
+  char temp[5];
+  
+  for (int i = 0; i < style->length; i++) {
+    if (i == 0)
+      sprintf(temp, "%d", style->data[i]);
+    else
+      sprintf(temp, ",%d", style->data[i]);
+    
+    strcat(data, temp);
+  }
+
+  char* sql = sqlite3_mprintf("INSERT INTO Style VALUES (%Q, %Q, %d)", style->name, data, style->length);
+  queryDB(sql);
+  delete[] data;
+  sqlite3_free(sql);
+*/
 }
 
 void JMPatterns::closeDB() {
@@ -235,6 +265,43 @@ void JMPatterns::initializeDatabase(FILE* out, FILE* inJM, FILE* inJS) {
   */
 }
 
+style_t* JMPatterns::getStyle(const char* name) {
+  char* sql = sqlite3_mprintf("SELECT * FROM Style WHERE name LIKE %Q", name);
+    
+  char** result; 
+  int nrows, ncols;
+  char* zErr;
+  int rc = sqlite3_get_table(db_, sql, &result, &nrows, &ncols, &zErr);
+  
+  if(rc != SQLITE_OK) {
+    if (zErr != NULL) {
+      fprintf(stderr, "SQL error: %s\n", zErr);
+      fprintf(stderr, "\tStatement: '%s'\n", sql);
+      sqlite3_free(zErr);
+      return NULL;
+    }
+  }
+
+  if (nrows == 0) return NULL;
+
+  style_t* style = new style_t;
+  style->name = strdup(result[ncols]);
+  style->length = atoi(result[ncols+2]);
+  style->data = new JML_INT8[style->length];
+  memcpy(style->data, result[ncols+1], style->length);
+  
+  // adjust for bias
+  for (int i = 0; i < style->length; i++) {
+    style->data[i] -= 100;
+    //fprintf(stderr, "Data[%d] = %d\n", i, style->data[i]);
+  }
+  
+  sqlite3_free(sql);
+  sqlite3_free_table(result);
+  sqlite3_free(zErr);
+  return style;
+}
+
 pattern_t* JMPatterns::getCategory(const char* category) {
   char* sql = sqlite3_mprintf("SELECT * FROM Pattern WHERE category LIKE %Q", category);
   pattern_t* patt = searchQuery(sql);
@@ -298,7 +365,18 @@ pattern_t* JMPatterns::loadPattern(const pattern_t* patt, int offset, JMLib* jm)
 
   jm->stopJuggle();
   jm->setPattern(temp->name, temp->data, temp->hr, temp->dr);
-  jm->setStyleDefault();
+
+  style_t* style = getStyle(temp->style);
+
+  if (style) {
+    jm->setStyle(style->name, style->length/4, style->data, 0);
+    delete[] style->name;
+    delete[] style->data;
+    delete[] style;
+  }
+  else {
+    jm->setStyleDefault();  
+  }
   jm->startJuggle();
 }
 

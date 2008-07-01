@@ -40,12 +40,13 @@ static JML_CHAR* patterns[]
   //NSString *path = [[NSBundle mainBundle] pathForResource: @"patterns.jm" 
   //                       ofType: @"jm" inDirectory: @"Contents/Resources"];
   
-  //FILE* db_f = fopen("JuggleMaster.app/Contents/Resources/patterns.db", "w+");
-  FILE* db_f = fopen("patterns.db", "w+");
+  //fixme: get bundle path
+  char* fname = "JuggleMaster.app/Contents/Resources/patterns.db";
   FILE* jm_f = fopen("JuggleMaster.app/Contents/Resources/patterns.jm", "r");
   FILE* js_f = fopen("JuggleMaster.app/Contents/Resources/moresites.txt", "r");
   patternLib = new JMPatterns();
-  patternLib->initializeDatabase(db_f, jm_f, js_f);
+  patternLib->initializeDatabase(fname, jm_f, js_f);
+  //patternLib->loadDatabase(fname);
   
   // Initialize list of categories and patterns
   categories = patternLib->getCategories();
@@ -115,6 +116,23 @@ static JML_CHAR* patterns[]
   }
 }
 
+- (void)updateObjectPopUp
+{
+  int idx = [objectSelect indexOfSelectedItem];
+
+  // change text for objects box to reflect juggling engine
+  if (jm->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
+    [objectSelect removeItemAtIndex:0];
+    [objectSelect insertItemWithTitle:@"Random" atIndex:0];
+  }
+  else {
+    [objectSelect removeItemAtIndex:0];
+    [objectSelect insertItemWithTitle:@"Pattern Default" atIndex:0];
+  }
+  
+  [objectSelect selectItemAtIndex:idx];
+}
+
 - (IBAction)copy:(id)sender
 {
 	[view copy:sender];
@@ -150,14 +168,7 @@ static JML_CHAR* patterns[]
 		jm->setPattern(pat);
     jm->setStyle(patterns[[[styleSelect selectedItem] tag]]);
 		jm->startJuggle();
-    
-    // change text for objects box to reflect juggling engine
-    if (jm->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
-      // element 0 is Random
-    }
-    else {
-      // element 0 is Pattern Default
-    }
+    [self updateObjectPopUp];
 	}
 	else
 	{
@@ -168,6 +179,7 @@ static JML_CHAR* patterns[]
 - (IBAction)setStyle:(id)sender
 {
 	jm->setStyle(patterns[[[sender selectedItem] tag]]);
+  [self updateObjectPopUp];
 }
 
 - (IBAction)setObjectType:(id)sender
@@ -199,23 +211,42 @@ static JML_CHAR* patterns[]
   
   switch (seg) {
   case 0: // prev
-    if ([patternSelect indexOfSelectedItem] > 0)
+    if ([patternSelect indexOfSelectedItem] > 0) { // prev pattern
       [patternSelect selectItemAtIndex:[patternSelect indexOfSelectedItem]-1]; 
-    else
-      return; //fixme: switch to prev category
+    }
+    else if ([categorySelect indexOfSelectedItem] != 0) { // prev category
+      [categorySelect selectItemAtIndex:[categorySelect indexOfSelectedItem]-1];
+      [self updatePatterns:[categorySelect titleOfSelectedItem]];
+      [patternSelect selectItemAtIndex:[patternSelect numberOfItems]-1]; 
+    }
+    else { // last item in last category
+      [categorySelect selectItemAtIndex:[categorySelect numberOfItems]-1];
+      [self updatePatterns:[categorySelect titleOfSelectedItem]];
+      [patternSelect selectItemAtIndex:[patternSelect numberOfItems]-1]; 
+    }
     break;
   case 1: // random
   
     break;
   case 2: // next
-    if ([patternSelect indexOfSelectedItem] < [patternSelect numberOfItems]-1)
+    if ([patternSelect indexOfSelectedItem] < [patternSelect numberOfItems]-1) {
       [patternSelect selectItemAtIndex:[patternSelect indexOfSelectedItem]+1];
-    else
-      return; //
+    }
+    else if ([categorySelect indexOfSelectedItem] < [categorySelect numberOfItems]-1) {
+      [categorySelect selectItemAtIndex:[categorySelect indexOfSelectedItem]+1];
+      [self updatePatterns:[categorySelect titleOfSelectedItem]];
+      [patternSelect selectItemAtIndex:0]; 
+    }
+    else { // first item in first category
+      [categorySelect selectItemAtIndex:0];
+      [self updatePatterns:[categorySelect titleOfSelectedItem]];
+      [patternSelect selectItemAtIndex:0]; 
+    }
     break;
   }
   
   patternLib->loadPattern(cur_pattern, [patternSelect indexOfSelectedItem], jm);
+  [self updateObjectPopUp];
 }
 
 - (IBAction)toggleShowPattern:(id)sender

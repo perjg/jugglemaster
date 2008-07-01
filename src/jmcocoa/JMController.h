@@ -70,6 +70,7 @@ typedef enum
 - (IBAction)switchLoadedPattern:(id)sender;
 
 - (void)updatePatterns:(NSString*)str;
+- (void)updateObjectPopUp;
 
 - (void)setFrame:(NSRect)frameRect;
 

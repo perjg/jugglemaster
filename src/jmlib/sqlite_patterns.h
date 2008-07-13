@@ -27,7 +27,7 @@ extern "C" {
 class JMPatterns {
   friend class SearchResult;
 public:
-  JMPatterns() : filename_(NULL), db_(NULL) {}
+  JMPatterns() : m_db(NULL) {}
   ~JMPatterns();
   
   /** Search for a pattern
@@ -74,11 +74,11 @@ public:
 	 * @param inJM  JuggleMaster file
 	 * @param inJS  JuggleSaver file
 	 */
-	void initializeDatabase(FILE* out, FILE* inJM, FILE* inJS);
+	void initializeDatabase(char* dbFilename, FILE* inJM, FILE* inJS);
   
-  void loadDatabase(FILE* db);
+  void loadDatabase(char* dbFilename);
 private:
-  void createDB();
+  void createDB(char* dbFilename);
   void closeDB();
   void queryDB(const char* query);
   void addCategory(pattern_group_t* group);
@@ -86,9 +86,9 @@ private:
   void addStyle(style_t* style);
 	pattern_t* searchQuery(const char* query);
   
-  char* filename_;
+  char* m_filename;
   void init();
-  sqlite3* db_;
+  sqlite3* m_db;
 };
 
 /*

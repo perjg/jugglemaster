@@ -1223,6 +1223,7 @@ void JuggleMaster::startJuggle(void) {
   time_period=0;
   
   status = ST_JUGGLE;
+  doJuggleEx(); // skip gruff
 }
 
 void JuggleMaster::stopJuggle(void) {

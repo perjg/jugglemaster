@@ -97,7 +97,7 @@ JMCategoryIterator* JMPatternIterator::getCategoryIterator() {
  */
 
 // create an empty sqlite database
-void JMPatterns::createDB() {
+void JMPatterns::createDB(char* dbFileName) {
   const char* sql = "DROP TABLE IF EXISTS CameraData;"
                     "CREATE TABLE CameraData (id PRIMARY KEY);"
                     "DROP TABLE IF EXISTS Category;"
@@ -108,18 +108,17 @@ void JMPatterns::createDB() {
                     "DROP TABLE IF EXISTS Style;"
                     "CREATE TABLE Style (name PRIMARY KEY, data NOT NULL, length NOT NULL);";
   
-  const char* dbname = "test.db";
   char* zErr;
   int rc;
 
-  rc = sqlite3_open(dbname, &db_);
+  rc = sqlite3_open(dbFileName, &m_db);
   if(rc) {
-    fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db_));
-    sqlite3_close(db_);
+    fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(m_db));
+    sqlite3_close(m_db);
     return;
   }
 
-  rc = sqlite3_exec(db_, sql, NULL, NULL, &zErr);
+  rc = sqlite3_exec(m_db, sql, NULL, NULL, &zErr);
   if(rc != SQLITE_OK) {
     if (zErr != NULL) {
       fprintf(stderr, "SQL error: %s\n", zErr);
@@ -129,8 +128,10 @@ void JMPatterns::createDB() {
 }
 
 void JMPatterns::queryDB(const char* query) {
+  if (!m_db) return;
+
   char* zErr;
-  int rc = sqlite3_exec(db_, query, NULL, NULL, &zErr);
+  int rc = sqlite3_exec(m_db, query, NULL, NULL, &zErr);
   if(rc != SQLITE_OK) {
     if (zErr != NULL) {
       fprintf(stderr, "SQL error: %s\n", zErr);
@@ -141,6 +142,7 @@ void JMPatterns::queryDB(const char* query) {
 }
 
 void JMPatterns::addCategory(pattern_group_t* group) {
+  // fixme: add index
   char* sql = sqlite3_mprintf("INSERT INTO Category VALUES (%Q)", group->name);
   queryDB(sql);  
   sqlite3_free(sql);
@@ -160,6 +162,7 @@ void JMPatterns::addPattern(pattern_t* patt, pattern_group_t* group) {
 		if (valid) object_count = JMSiteValidator::getBallCount();
 	}
 
+  // fixme: add index
   char* sql = sqlite3_mprintf("INSERT INTO Pattern VALUES (%Q, %Q, %Q, %Q, %Q, %f, %f, %d, NULL)",
           patt->name, patt->data, group->name, patt->style, patt->author, patt->hr, patt->dr, object_count);
   queryDB(sql);
@@ -180,41 +183,21 @@ void JMPatterns::addStyle(style_t* style) {
   char* sql = sqlite3_mprintf("INSERT INTO Style VALUES (%Q, x%Q, %d)", style->name, data, style->length);
   queryDB(sql);
   sqlite3_free(sql);
-  
-/*
-  char* data = new char[ style->length * 5]; // room for sign, 3 digits and comma
-  memset(data, 0, style->length * 5);
-  char temp[5];
-  
-  for (int i = 0; i < style->length; i++) {
-    if (i == 0)
-      sprintf(temp, "%d", style->data[i]);
-    else
-      sprintf(temp, ",%d", style->data[i]);
-    
-    strcat(data, temp);
-  }
-
-  char* sql = sqlite3_mprintf("INSERT INTO Style VALUES (%Q, %Q, %d)", style->name, data, style->length);
-  queryDB(sql);
-  delete[] data;
-  sqlite3_free(sql);
-*/
 }
 
 void JMPatterns::closeDB() {
-  if (db_) sqlite3_close(db_);
+  if (m_db) sqlite3_close(m_db);
 }
 
 // initializes an sql database from JuggleMaster and/or JuggleSaver pattern files
-void JMPatterns::initializeDatabase(FILE* out, FILE* inJM, FILE* inJS) {
+void JMPatterns::initializeDatabase(char* dbFilename, FILE* inJM, FILE* inJS) {
 	groups_t groups;
   groups.first = NULL;
 	styles_t styles;
   styles.first = NULL;
   int result = false;
 
-  createDB();
+  createDB(dbFilename);
 
 	//if (!out) return;
 	if (!inJM && !inJS) return;
@@ -265,13 +248,27 @@ void JMPatterns::initializeDatabase(FILE* out, FILE* inJM, FILE* inJS) {
   */
 }
 
+void JMPatterns::loadDatabase(char* dbFilename) {
+  int rc;
+
+  rc = sqlite3_open(dbFilename, &m_db);
+  if(rc) {
+    fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(m_db));
+    sqlite3_close(m_db);
+    return;
+  }
+
+}
+
 style_t* JMPatterns::getStyle(const char* name) {
+  if (!m_db) return NULL;
+
   char* sql = sqlite3_mprintf("SELECT * FROM Style WHERE name LIKE %Q", name);
     
   char** result; 
   int nrows, ncols;
   char* zErr;
-  int rc = sqlite3_get_table(db_, sql, &result, &nrows, &ncols, &zErr);
+  int rc = sqlite3_get_table(m_db, sql, &result, &nrows, &ncols, &zErr);
   
   if(rc != SQLITE_OK) {
     if (zErr != NULL) {
@@ -310,6 +307,8 @@ pattern_t* JMPatterns::getCategory(const char* category) {
 }
 
 pattern_group_t* JMPatterns::getCategories() {
+  if (!m_db) return NULL;
+
   char* sql = "SELECT * FROM Category";
   pattern_group_t* first_group = NULL;
 	pattern_group_t* new_group = NULL;
@@ -318,7 +317,7 @@ pattern_group_t* JMPatterns::getCategories() {
   char** result; 
   int nrows, ncols;
   char* zErr;
-  int rc = sqlite3_get_table(db_, sql, &result, &nrows, &ncols, &zErr);
+  int rc = sqlite3_get_table(m_db, sql, &result, &nrows, &ncols, &zErr);
   
   if(rc != SQLITE_OK) {
     if (zErr != NULL) {
@@ -339,6 +338,7 @@ pattern_group_t* JMPatterns::getCategories() {
     new_group->first_patt = NULL;
     new_group->next = NULL;
     new_group->prev = cur_group;
+    new_group->index = i;
     
     if (!first_group) {
       first_group = new_group;
@@ -355,6 +355,7 @@ pattern_group_t* JMPatterns::getCategories() {
   return first_group;
 }
 
+//fixme: enter bug: jugglesaver not getting camera calculation?
 pattern_t* JMPatterns::loadPattern(const pattern_t* patt, int offset, JMLib* jm) {
   pattern_t* temp = (pattern_t*)patt;
   
@@ -368,7 +369,10 @@ pattern_t* JMPatterns::loadPattern(const pattern_t* patt, int offset, JMLib* jm)
 
   style_t* style = getStyle(temp->style);
 
-  if (style) {
+  if (strcmp(patt->style, "JuggleSaver") == 0) {
+    jm->setStyle("JuggleSaver");
+  }
+  else if (style) {
     jm->setStyle(style->name, style->length/4, style->data, 0);
     delete[] style->name;
     delete[] style->data;
@@ -378,14 +382,20 @@ pattern_t* JMPatterns::loadPattern(const pattern_t* patt, int offset, JMLib* jm)
     jm->setStyleDefault();  
   }
   jm->startJuggle();
+  
+  return temp;
 }
 
+//fixme: should be able to move to next category automatically
 pattern_t* JMPatterns::loadNextPattern(const pattern_t* patt, JMLib* jm) {
-
+  if (patt->next) return loadPattern(patt->next, 0, jm);
+  return NULL;
 }
 
+//fixme: should be able to move to previous category automatically
 pattern_t* JMPatterns::loadPrevPattern(const pattern_t* patt, JMLib* jm) {
-
+  if (patt->prev) return loadPattern(patt->prev, 0, jm);
+  return NULL;
 }
 
 pattern_t* JMPatterns::loadRandomPattern(JMLib* jm, const char** categories, bool exclude) {
@@ -402,6 +412,7 @@ pattern_t* JMPatterns::search(const char* name, const char* site, const char* st
 
 // Assumes a query in the Pattern table
 pattern_t* JMPatterns::searchQuery(const char* query) {
+  if (!m_db) return NULL;
 	if (!query || query[0] == '\0') return NULL;
 
   pattern_t* first_patt = NULL;
@@ -411,7 +422,7 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
   char** result; 
   int nrows, ncols;
   char* zErr;
-  int rc = sqlite3_get_table(db_, query, &result, &nrows, &ncols, &zErr);
+  int rc = sqlite3_get_table(m_db, query, &result, &nrows, &ncols, &zErr);
   
   if(rc != SQLITE_OK) {
     if (zErr != NULL) {
@@ -445,6 +456,8 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
     new_patt->sp = 1.0f;
     new_patt->next = NULL;
     new_patt->prev = cur_patt;
+    new_patt->index = i;
+    //fixme: add pointer to category
     
     if (!first_patt) {
       first_patt = new_patt;

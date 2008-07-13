@@ -1,6 +1,6 @@
 /*
  * JMDeluxe - Portable JuggleMaster based on wxWindows
- * (C) Per Johan Groland 2002, 2006, Gary Briggs 2003
+ * (C) Per Johan Groland 2002-8, Gary Briggs 2003
  *
  * JuggleMaster is  free software; you can redistribute  it and/or modify
  * it under the  terms of the GNU General  Public License as published

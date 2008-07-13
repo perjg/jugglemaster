@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB33454B0DFA5A18004611F2 /* glfont.c in Sources */ = {isa = PBXBuildFile; fileRef = CB3345490DFA5A18004611F2 /* glfont.c */; };
 		CB398D690DB787A6004DBEAC /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */; };
 		CB3EDB870DC82AFD004F2E1A /* sqlite_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDB850DC82AFD004F2E1A /* sqlite_patterns.cpp */; };
 		CB4FFB930DCC270D00952DDA /* render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB4FFB920DCC270D00952DDA /* render.cpp */; };
@@ -55,6 +56,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CB3345490DFA5A18004611F2 /* glfont.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glfont.c; path = ../../jmlib/glfont/glfont.c; sourceTree = SOURCE_ROOT; };
+		CB33454A0DFA5A18004611F2 /* glfont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glfont.h; path = ../../jmlib/glfont/glfont.h; sourceTree = SOURCE_ROOT; };
 		CB398B0A0DB64335004DBEAC /* jmlib_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_wrapper.h; path = ../../jmlib/jmlib_wrapper.h; sourceTree = SOURCE_ROOT; };
 		CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_wrapper.cpp; path = ../../jmlib/jmlib_wrapper.cpp; sourceTree = SOURCE_ROOT; };
 		CB3991AD0DB9B026004DBEAC /* jmlib_jugglemaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jugglemaster.h; path = ../../jmlib/jmlib_jugglemaster.h; sourceTree = SOURCE_ROOT; };
@@ -163,6 +166,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CB33453F0DFA57CB004611F2 /* glfont */ = {
+			isa = PBXGroup;
+			children = (
+				CB3345490DFA5A18004611F2 /* glfont.c */,
+				CB33454A0DFA5A18004611F2 /* glfont.h */,
+			);
+			name = glfont;
+			sourceTree = "<group>";
+		};
 		CB6ABAED0DB25168000FD76F = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +197,7 @@
 		CB6ABB4B0DB25583000FD76F /* jmlib */ = {
 			isa = PBXGroup;
 			children = (
+				CB33453F0DFA57CB004611F2 /* glfont */,
 				CBBC40420DCED07D00FBC66E /* sqlite */,
 				CBEAE2D60DB38E390019833A /* jugglesaver */,
 				CB6ABB4D0DB255A9000FD76F /* jmlib.h */,
@@ -370,6 +383,7 @@
 				CB4FFB930DCC270D00952DDA /* render.cpp in Sources */,
 				CBBC40680DCED5C900FBC66E /* sqlite3.c in Sources */,
 				CB611D400DE07B87007D5E3F /* render_jm_flat.cpp in Sources */,
+				CB33454B0DFA5A18004611F2 /* glfont.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

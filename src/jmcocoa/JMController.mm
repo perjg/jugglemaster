@@ -35,7 +35,7 @@ static JML_CHAR* patterns[]
  	[view setJMLib:jm];
   
   // Load patterns
-  patternLib = new JMPatterns();
+  //patternLib = new JMPatterns();
   
   //NSString *path = [[NSBundle mainBundle] pathForResource: @"patterns.jm" 
   //                       ofType: @"jm" inDirectory: @"Contents/Resources"];

@@ -468,6 +468,10 @@ void JMLibWrapper::render() {
     return;
   }
 
+#ifdef GLFONT_SUPPORT
+  //renderFont();
+#endif
+
   //fixme: consider supporting 2D mode for JuggleSaver also
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER) {
     active->render();
@@ -482,6 +486,53 @@ void JMLibWrapper::render() {
     }
   }
 }
+
+#ifdef GLFONT_SUPPORT
+void JMLibWrapper::renderFont() {
+  static bool initialized = false;
+  
+  if (!initialized) {
+    GLuint tex;
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures(1, &tex);
+    int ret =  glFontCreate (&glFont, "times12.glf", tex);
+
+    initialized = true;
+  }
+
+  glFontBegin(&glFont);
+  glFontTextOut("hello", 0, 0, 0);
+  glFontEnd();
+
+/*
+//Initialize the viewport
+glViewport(0, 0, imageWidth, imageHeight);
+
+//Initialize OpenGL projection matrix
+glMatrixMode(GL_PROJECTION);
+glLoadIdentity();
+glOrtho(0, imageWidth, 0, imageHeight, -1, 1);
+
+//Clear back buffer
+glClear(GL_COLOR_BUFFER_BIT);
+
+//Draw some stuff
+glMatrixMode(GL_MODELVIEW);
+glLoadIdentity();
+
+glFontBegin(&glFont);
+glScalef(8.0, 8.0, 8.0);
+glTranslatef(30, 30, 0);
+glFontTextOut("Test string", 5, 5, 0);
+glFontEnd();
+glFlush();
+
+//Destroy the font
+//glFontDestroy(&font);
+*/
+}
+#endif
+
 
 //fixme: currently JuggleSaver has its own frames counter, JuggleMaster has none.
 // these should all be unified

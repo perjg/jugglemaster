@@ -24,6 +24,10 @@
 
 #include "jugglesaver/jugglesaver.h"
 
+#ifdef GLFONT_SUPPORT
+#include "glfont/glfont.h"
+#endif
+
 class JMFlatOpenGL;
 
 class JMLibWrapper : public JMLib {
@@ -68,6 +72,12 @@ private:
   int randomObjectType; // for default object type
   object_type_t objectType;
   int getObjectTypeEx(int i);
+
+#ifdef GLFONT_SUPPORT
+  GLFONT glFont;
+  void renderFont();
+#endif
+  
 public:
   ~JMLibWrapper();
   virtual void initialize();

@@ -35,7 +35,7 @@
 
 #ifdef JMWIN
 // required to compile when using MFC
-#include "../../jmwin/src/stdafx.h"
+#include "../jmwin/src/stdafx.h"
 #endif
 
 //fixme: add other applicable platforms here

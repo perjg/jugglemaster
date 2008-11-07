@@ -1398,6 +1398,7 @@ JML_INT32 JuggleMaster::doJuggle(void) {
 
 #else
   doJuggleEx();
+	return 1;
 #endif
 }
 

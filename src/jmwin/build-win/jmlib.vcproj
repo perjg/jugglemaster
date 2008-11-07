@@ -164,6 +164,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\jmlib\render_jm_flat.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\jmlib\sqlite_patterns.cpp"
 				>
 			</File>

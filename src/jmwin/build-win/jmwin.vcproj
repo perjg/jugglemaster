@@ -223,10 +223,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\jmgfx\opengl_renderer.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\patternloader.cpp"
 				>
 			</File>

@@ -399,7 +399,7 @@ pattern_t* JMPatterns::loadPrevPattern(const pattern_t* patt, JMLib* jm) {
 }
 
 pattern_t* JMPatterns::loadRandomPattern(JMLib* jm, const char** categories, bool exclude) {
-
+	return NULL;
 }
 
 pattern_t* JMPatterns::search(const char* item) {

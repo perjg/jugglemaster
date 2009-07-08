@@ -127,6 +127,8 @@ public:
   
   virtual void setRenderingMode(rendering_t mode) {}
   virtual rendering_t getRenderingMode() { return RENDERING_OPENGL_3D; }
+
+  RENDER_STATE* getState() { return &state; }
 };
 
 #endif // JMLIB_JSAVER

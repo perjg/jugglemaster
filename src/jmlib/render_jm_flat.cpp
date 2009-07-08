@@ -156,6 +156,9 @@ void JMFlatOpenGL::calculateZoomFactor() {
 void JMFlatOpenGL::initializeFlatRenderMode() {
   scalingFactor = 0.90f;
 
+	zoomFactorX_JS = 40.0f;
+	zoomFactorY_JS = 50.0f;
+
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
@@ -338,3 +341,95 @@ void JMFlatOpenGL::setBallColor(int color) {
   else if (color == 4) glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
   else if (color == 5) glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
 }
+
+#ifdef JUGGLESAVER_SUPPORT
+
+#include <math.h>
+
+static float ShoulderPos[3] = {/*0.95f*/ 0.45f, /*2.1f*/ 1.05f, 1.7f};
+static float BallRadius = 5.0f;
+
+// Quick and dirty 2D stickman rendering of JuggleSaver patterns
+void JMFlatOpenGL::renderJS(RENDER_STATE* pState) {
+	float Time = pState->Time;
+  PATTERN_INFO* pPattern = pState->pPattern;
+
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+  glMatrixMode(GL_PROJECTION);	
+  glLoadIdentity();
+#ifdef OPENGL_ES_SUPPORT
+  glOrthof(-width/2, width/2, -height/2, height/2, -10.0f, 10.0f);
+#else
+  glOrtho(-width/2, width/2, -height/2, height/2, -10.0f, 10.0f);
+#endif
+
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  // Scale to fit full window
+  glScalef(zoomFactorX, zoomFactorY, 0.0f);
+
+  glColor4f(255.0f, 255.0f, 255.0f, 1.0f);
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+	drawArmJS(pState, Time, true);
+	drawArmJS(pState, Time, false);
+
+	// torso
+	drawLine(0, 0, 0, (-ShoulderPos[0] * 2 * zoomFactorY_JS) - jmlib->getImageHeight()/4);
+
+	// shoulders
+	drawLine(0, 0, (ShoulderPos[1]) * zoomFactorX_JS, 0);
+	drawLine(0, 0, -(ShoulderPos[1]) * zoomFactorX_JS, 0);
+
+	// head
+	drawFilledCircle(0, ShoulderPos[1] + 1.0f * zoomFactorY_JS, 0.5f * zoomFactorX_JS);
+
+	// balls
+	for (int i = 0; i < pPattern->Objects; i++) {
+    POS ObjPos;
+    GetObjectPosition(pPattern, i, Time, 0.0f, &ObjPos);
+
+		if (coloredBalls) setBallColor(i%6);
+
+		drawFilledCircle(ObjPos.x * zoomFactorX_JS,
+			               (ObjPos.y * zoomFactorY_JS) - jmlib->getImageHeight()/4,
+										 BallRadius * 2.0f);
+
+		if (ObjPos.y * zoomFactorY_JS > jmlib->getImageHeight()/4 + jmlib->getImageHeight()/2 - jmlib->getImageHeight()/10)
+			zoomFactorY_JS *= 0.9f;
+  }
+}
+
+void JMFlatOpenGL::drawArmJS(RENDER_STATE* pState, float TimePos, bool is_left) {
+  POS Pos;
+    
+  GetHandPosition(pState->pPattern, is_left, TimePos, &Pos);
+
+	// hand
+	drawLine(Pos.x * zoomFactorX_JS - 0.3f * zoomFactorX_JS,
+					 (Pos.y * zoomFactorY_JS) - jmlib->getImageHeight()/4 - BallRadius,
+					 Pos.x * zoomFactorX_JS + 0.3f * zoomFactorX_JS,
+					 (Pos.y * zoomFactorY_JS) - jmlib->getImageHeight()/4 - BallRadius);
+
+	// arm
+	float x1 = is_left ? ShoulderPos[1] * zoomFactorX_JS : -ShoulderPos[1] * zoomFactorX_JS;
+	float y1 = 0.0f;
+	float x2 = Pos.x * zoomFactorX_JS;
+	float y2 = (Pos.y * zoomFactorY_JS) - jmlib->getImageHeight()/4 - BallRadius;
+
+	float len = sqrt ( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
+	float angle = is_left ?  1.0f : -1.0f;
+	float b = sin(angle) * len/2.0f;
+
+	if (is_left) {
+		drawLine(x1, y1, x2/3+b, y2/3-b);
+		drawLine(x2/3+b, y2/3-b, x2, y2);
+	}
+	else {
+		drawLine(x1, y1, x2/3+b, y2/3+b);
+		drawLine(x2/3+b, y2/3+b, x2, y2);
+	}
+}
+
+#endif

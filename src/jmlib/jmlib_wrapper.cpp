@@ -355,6 +355,8 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
   currentPattern = new JML_CHAR[ strlen(site) + 1];
   strcpy(currentPattern, site);
   
+	jm_flat->resetJS();
+
   return true;
 }
 
@@ -474,7 +476,12 @@ void JMLibWrapper::render() {
 
   //fixme: consider supporting 2D mode for JuggleSaver also
   if (active->getType() == JUGGLING_ENGINE_JUGGLESAVER) {
-    active->render();
+    if (render_mode == RENDERING_OPENGL_2D) {
+      jm_flat->renderJS(js->getState());    
+    }
+		else {
+			active->render();
+		}
   }
   else {
     if (render_mode == RENDERING_OPENGL_2D) {

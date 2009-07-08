@@ -89,6 +89,7 @@ private:
   JMLib* jmlib;
 
   float scalingFactor;
+  float zoomFactorX_JS, zoomFactorY_JS;
   float zoomFactorX, zoomFactorY;
   float baseZoffset;
 
@@ -112,6 +113,11 @@ public:
   void initialize(int width, int height);
   void resize(int width, int height);
   void render();
+#ifdef JUGGLESAVER_SUPPORT
+  void renderJS(RENDER_STATE* state);
+  void resetJS() { zoomFactorY_JS = 50.0f; }
+  void drawArmJS(RENDER_STATE* pState, float TimePos, bool is_left);
+#endif
 
   void enableAutoRotate()  { autoRotate = true;  }
   void disableAutoRotate() { autoRotate = false; }

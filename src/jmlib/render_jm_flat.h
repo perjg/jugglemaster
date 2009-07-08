@@ -115,7 +115,7 @@ public:
   void render();
 #ifdef JUGGLESAVER_SUPPORT
   void renderJS(RENDER_STATE* state);
-  void resetJS() { zoomFactorY_JS = 50.0f; }
+  void resetJS(const char* site);
   void drawArmJS(RENDER_STATE* pState, float TimePos, bool is_left);
 #endif
 

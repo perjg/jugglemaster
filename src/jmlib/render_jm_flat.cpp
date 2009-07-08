@@ -383,7 +383,7 @@ void JMFlatOpenGL::renderJS(RENDER_STATE* pState) {
 	drawLine(0, 0, -(ShoulderPos[1]) * zoomFactorX_JS, 0);
 
 	// head
-	drawFilledCircle(0, ShoulderPos[1] + 1.0f * zoomFactorY_JS, 0.5f * zoomFactorX_JS);
+	drawFilledCircle(0, 0.75f * zoomFactorX_JS, 0.5f * zoomFactorX_JS);
 
 	// balls
 	for (int i = 0; i < pPattern->Objects; i++) {
@@ -399,6 +399,23 @@ void JMFlatOpenGL::renderJS(RENDER_STATE* pState) {
 		if (ObjPos.y * zoomFactorY_JS > jmlib->getImageHeight()/4 + jmlib->getImageHeight()/2 - jmlib->getImageHeight()/10)
 			zoomFactorY_JS *= 0.9f;
   }
+}
+
+void JMFlatOpenGL::resetJS(const char* site) {
+	zoomFactorY_JS = 50.0f;
+
+	char highest_throw = 0;
+
+	for (int i = 0; i < strlen(site); i++) {
+		if (site[i] > highest_throw) highest_throw = site[i];
+	}
+
+	if (highest_throw >= '0' && highest_throw <= '9') highest_throw -= '0';
+	else if (highest_throw >= 'a' && highest_throw <= 'z') { highest_throw -= 'a'; highest_throw += 10; }
+	else { highest_throw -= 'A'; highest_throw += 9; }
+
+	for (int i = 0; i < highest_throw-1; i++)
+		zoomFactorY_JS *= 0.9f;
 }
 
 void JMFlatOpenGL::drawArmJS(RENDER_STATE* pState, float TimePos, bool is_left) {

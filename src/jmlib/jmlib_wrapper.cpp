@@ -355,7 +355,9 @@ JML_BOOL JMLibWrapper::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, 
   currentPattern = new JML_CHAR[ strlen(site) + 1];
   strcpy(currentPattern, site);
   
-	jm_flat->resetJS();
+	char* cur_site = GetCurrentSite();
+	jm_flat->resetJS(cur_site);
+	delete[] cur_site;
 
   return true;
 }

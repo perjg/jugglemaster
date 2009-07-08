@@ -99,10 +99,15 @@ bool JSValidator::validateJSPattern(char* patt) {
     int ExtSiteLen;
     EXT_SITE_INFO* pExtInfo = ParsePattern(patt, &ExtSiteLen);
     if (pExtInfo == NULL) return false;
+    delete pExtInfo;
 
     char* site = GetCurrentSite();
-    if (!JSValidator::validateVSS(site)) return false;
+    if (!JSValidator::validateVSS(site)) {
+        delete site;
+        return false;
+    }
 
+    delete site;
     return true;
 }
 

@@ -724,7 +724,7 @@ void DrawPartialDisk(bool outside, GLfloat innerRadius,
                 vertex_arr[offset++] = 0.0;
                 normal_arr[normal_offset++] = 0.0f;
                 normal_arr[normal_offset++] = 0.0f;
-                normal_arr[normal_offset++] = outside ? 1.0f : -1.0f;        
+                normal_arr[normal_offset++] = 1.0f;
             }
         }
         else {
@@ -734,7 +734,7 @@ void DrawPartialDisk(bool outside, GLfloat innerRadius,
                 vertex_arr[offset++] = 0.0;
                 normal_arr[normal_offset++] = 0.0f;
                 normal_arr[normal_offset++] = 0.0f;
-                normal_arr[normal_offset++] = outside ? 1.0f : -1.0f;        
+                normal_arr[normal_offset++] = -1.0f;
             }
         }
         

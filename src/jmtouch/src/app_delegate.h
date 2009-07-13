@@ -22,18 +22,23 @@
 #import <UIKit/UIKit.h>
 #include "jmlib.h"
 
+@class MainViewController;
 @class EAGLView;
 
 @interface jmtouchAppDelegate : NSObject <UIApplicationDelegate> {
 	IBOutlet UIWindow *window;
 	IBOutlet EAGLView *glView;
+  MainViewController *mainViewController;
   
   @private
 		JMLib* jm;
 }
 
+- (IBAction)showInfo;
+- (void)showJuggler;
+
 @property (nonatomic, retain) UIWindow *window;
+@property (nonatomic, retain) MainViewController *mainViewController;
 @property (nonatomic, retain) EAGLView *glView;
 
 @end
-

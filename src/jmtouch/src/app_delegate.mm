@@ -20,34 +20,64 @@
  */
 
 #import "app_delegate.h"
+#import "main_view_controller.h"
 #import "eagl_view.h"
 
 @implementation jmtouchAppDelegate
 
 @synthesize window;
+@synthesize mainViewController;
 @synthesize glView;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+	MainViewController *aController = [[MainViewController alloc] initWithNibName:@"MainView" bundle:nil];
+	//MainViewController *aController = [[MainViewController alloc] initWithNibName:@"FlipsideView" bundle:nil];
+	self.mainViewController = aController;
+	[aController release];
+	
+  mainViewController.view.frame = [UIScreen mainScreen].applicationFrame;
+	//[window addSubview:[mainViewController view]];
+  //[window makeKeyAndVisible];  
+  
   jm = JMLib::alloc();
   //jm = JMLib::alloc_JuggleMaster();
   //jm = JMLib::alloc_JuggleSaver();
+  jm->initialize();
+
 	jm->setWindowSize([glView frame].size.width, [glView frame].size.height);
   jm->setPatternDefault();
   jm->setStyleDefault();
   jm->setScalingMethod(SCALING_METHOD_DYNAMIC);
   jm->startJuggle();
-  jm->initialize();
 
 	[glView setJMLib:jm];
 	glView.animationInterval = 1.0 / 60.0;
 	[glView startAnimation];
 }
 
+- (IBAction)showInfo {
+  //jm->setRenderingMode(RENDERING_OPENGL_2D);
+  //jm->setPattern("3B@(1,-0.4)>(2,4.2)/(-2,1)3B@(-1.8,4.4)>(-2.1,0)");
+  [glView stopAnimation];
+  [glView removeFromSuperview];		
+  
+  [mainViewController setAppDelegate:self];
+  [mainViewController setJm:jm];
+  [window addSubview:[mainViewController view]];
+  [window makeKeyAndVisible];
+}
+
+- (void)showJuggler {
+  [mainViewController.view removeFromSuperview];
+  [window addSubview:glView];
+
+	glView.animationInterval = 1.0 / 60.0;
+  [glView startAnimation];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
 	glView.animationInterval = 1.0 / 5.0;
 }
-
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 	glView.animationInterval = 1.0 / 60.0;

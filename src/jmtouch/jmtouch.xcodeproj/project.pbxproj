@@ -9,9 +9,16 @@
 /* Begin PBXBuildFile section */
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
-		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		CB99CE76100AD75300F68636 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB99CE75100AD75300F68636 /* CoreGraphics.framework */; };
+		CB99CFDA100B0C8600F68636 /* main_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB99CFD7100B0C8600F68636 /* main_view.mm */; };
+		CB99CFDB100B0C8600F68636 /* main_view_controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB99CFD9100B0C8600F68636 /* main_view_controller.mm */; };
+		CB99CFF9100B0D4B00F68636 /* settings_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB99CFF6100B0D4B00F68636 /* settings_view.mm */; };
+		CB99CFFA100B0D4B00F68636 /* settings_view_controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB99CFF8100B0D4B00F68636 /* settings_view_controller.mm */; };
+		CB99D015100B0E0900F68636 /* MainView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB99D012100B0E0900F68636 /* MainView.xib */; };
+		CB99D016100B0E0900F68636 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB99D013100B0E0900F68636 /* MainWindow.xib */; };
+		CB99D017100B0E0900F68636 /* SettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB99D014100B0E0900F68636 /* SettingsView.xib */; };
 		CBD685910E29E53E008EDE01 /* app_delegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBD6858E0E29E53E008EDE01 /* app_delegate.mm */; };
 		CBD685920E29E53E008EDE01 /* eagl_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBD685900E29E53E008EDE01 /* eagl_view.mm */; };
 		CBD685C30E29E72D008EDE01 /* jmlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBD685AF0E29E72D008EDE01 /* jmlib.cpp */; };
@@ -39,10 +46,21 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* JuggleMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JuggleMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB99CE75100AD75300F68636 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		CB99CFD6100B0C8600F68636 /* main_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main_view.h; path = src/main_view.h; sourceTree = SOURCE_ROOT; };
+		CB99CFD7100B0C8600F68636 /* main_view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = main_view.mm; path = src/main_view.mm; sourceTree = SOURCE_ROOT; };
+		CB99CFD8100B0C8600F68636 /* main_view_controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main_view_controller.h; path = src/main_view_controller.h; sourceTree = SOURCE_ROOT; };
+		CB99CFD9100B0C8600F68636 /* main_view_controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = main_view_controller.mm; path = src/main_view_controller.mm; sourceTree = SOURCE_ROOT; };
+		CB99CFF5100B0D4B00F68636 /* settings_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = settings_view.h; path = src/settings_view.h; sourceTree = SOURCE_ROOT; };
+		CB99CFF6100B0D4B00F68636 /* settings_view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = settings_view.mm; path = src/settings_view.mm; sourceTree = SOURCE_ROOT; };
+		CB99CFF7100B0D4B00F68636 /* settings_view_controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = settings_view_controller.h; path = src/settings_view_controller.h; sourceTree = SOURCE_ROOT; };
+		CB99CFF8100B0D4B00F68636 /* settings_view_controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = settings_view_controller.mm; path = src/settings_view_controller.mm; sourceTree = SOURCE_ROOT; };
+		CB99D012100B0E0900F68636 /* MainView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainView.xib; path = resources/MainView.xib; sourceTree = "<group>"; };
+		CB99D013100B0E0900F68636 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = resources/MainWindow.xib; sourceTree = "<group>"; };
+		CB99D014100B0E0900F68636 /* SettingsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsView.xib; path = resources/SettingsView.xib; sourceTree = "<group>"; };
 		CBD6858D0E29E53E008EDE01 /* app_delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = app_delegate.h; path = src/app_delegate.h; sourceTree = SOURCE_ROOT; };
 		CBD6858E0E29E53E008EDE01 /* app_delegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = app_delegate.mm; path = src/app_delegate.mm; sourceTree = SOURCE_ROOT; };
 		CBD6858F0E29E53E008EDE01 /* eagl_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eagl_view.h; path = src/eagl_view.h; sourceTree = SOURCE_ROOT; };
@@ -99,6 +117,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
+				CB99CE76100AD75300F68636 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +127,14 @@
 		080E96DDFE201D6D7F000001 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				CB99CFF5100B0D4B00F68636 /* settings_view.h */,
+				CB99CFF6100B0D4B00F68636 /* settings_view.mm */,
+				CB99CFF7100B0D4B00F68636 /* settings_view_controller.h */,
+				CB99CFF8100B0D4B00F68636 /* settings_view_controller.mm */,
+				CB99CFD6100B0C8600F68636 /* main_view.h */,
+				CB99CFD7100B0C8600F68636 /* main_view.mm */,
+				CB99CFD8100B0C8600F68636 /* main_view_controller.h */,
+				CB99CFD9100B0C8600F68636 /* main_view_controller.mm */,
 				CBD685CE0E29E7EB008EDE01 /* jmtouch_Prefix.pch */,
 				CBD685CF0E29E7EB008EDE01 /* main.m */,
 				CBD6858D0E29E53E008EDE01 /* app_delegate.h */,
@@ -142,8 +169,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CB99D012100B0E0900F68636 /* MainView.xib */,
+				CB99D013100B0E0900F68636 /* MainWindow.xib */,
+				CB99D014100B0E0900F68636 /* SettingsView.xib */,
 				CBD685F90E29EA1D008EDE01 /* Icon.png */,
-				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
 			name = Resources;
@@ -152,6 +181,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CB99CE75100AD75300F68636 /* CoreGraphics.framework */,
 				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
 				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
@@ -271,8 +301,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				CBD685FA0E29EA1D008EDE01 /* Icon.png in Resources */,
+				CB99D015100B0E0900F68636 /* MainView.xib in Resources */,
+				CB99D016100B0E0900F68636 /* MainWindow.xib in Resources */,
+				CB99D017100B0E0900F68636 /* SettingsView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +335,10 @@
 				CBD685E60E29E819008EDE01 /* render.cpp in Sources */,
 				CBD685E70E29E819008EDE01 /* trackball.cpp in Sources */,
 				CBD685EB0E29E835008EDE01 /* sqlite3.c in Sources */,
+				CB99CFDA100B0C8600F68636 /* main_view.mm in Sources */,
+				CB99CFDB100B0C8600F68636 /* main_view_controller.mm in Sources */,
+				CB99CFF9100B0D4B00F68636 /* settings_view.mm in Sources */,
+				CB99CFFA100B0D4B00F68636 /* settings_view_controller.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +349,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Per Johan Groland";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -320,6 +357,7 @@
 				GCC_PREFIX_HEADER = jmtouch_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = JuggleMaster;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9AD133D7-5908-458E-B378-82E22EAA4CD7";
 			};
 			name = Debug;
 		};

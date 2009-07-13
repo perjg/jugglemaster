@@ -25,6 +25,8 @@
 #import <UIKit/UIKit.h>
 #include "jmlib.h"
 
+extern JMLib* g_jm;
+
 @class MainViewController;
 @class EAGLView;
 

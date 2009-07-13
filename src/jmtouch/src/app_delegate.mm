@@ -32,6 +32,8 @@
 @synthesize mainViewController;
 @synthesize glView;
 
+JMLib* g_jm = NULL;
+
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
   /*
    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
@@ -51,6 +53,7 @@
   //[window makeKeyAndVisible];  
   
   jm = JMLib::alloc();
+  g_jm = jm;
   //jm = JMLib::alloc_JuggleMaster();
   //jm = JMLib::alloc_JuggleSaver();
   jm->initialize();

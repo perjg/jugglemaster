@@ -23,15 +23,20 @@
  */
 
 #import <UIKit/UIKit.h>
+#include "jmlib.h"
+
+extern JMLib* g_jm;
 
 @protocol EnterSiteViewControllerDelegate;
-
 
 @interface EnterSiteViewController : UIViewController {
 	id <EnterSiteViewControllerDelegate> delegate;
   IBOutlet UITextField* site;
   IBOutlet UIButton* style;
   IBOutlet UISlider* speed;
+  
+  @private
+    int cur_style;
 }
 
 @property (nonatomic, assign) id <EnterSiteViewControllerDelegate> delegate;

@@ -39,19 +39,30 @@
 }
 */
 
-/*
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-    [super viewDidLoad];
+  cur_style = 0;
+  
+  NSString* siteStr = [[NSString alloc] initWithUTF8String:g_jm->getSite()];
+  [site setText:siteStr];
+
+  [super viewDidLoad];
 }
-*/
 
 - (IBAction)done {
 	[self.delegate enterSiteViewControllerDidFinish:self];	
 }
 
 - (IBAction)stylePress {
-  [style setTitle:@"Reverse" forState:UIControlStateNormal];
+  char** styles = g_jm->getStyles();
+  if (cur_style < g_jm->numStyles()-1)
+    cur_style++;
+  else
+    cur_style = 0;
+  
+  NSString* styleStr = [[NSString alloc] initWithUTF8String:styles[cur_style]];
+  
+  [style setTitle:styleStr forState:UIControlStateNormal];
 }
 
 - (IBAction)jugglePress {

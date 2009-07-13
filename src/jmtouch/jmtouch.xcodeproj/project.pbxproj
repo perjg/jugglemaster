@@ -19,6 +19,9 @@
 		CB99D015100B0E0900F68636 /* MainView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB99D012100B0E0900F68636 /* MainView.xib */; };
 		CB99D016100B0E0900F68636 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB99D013100B0E0900F68636 /* MainWindow.xib */; };
 		CB99D017100B0E0900F68636 /* SettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB99D014100B0E0900F68636 /* SettingsView.xib */; };
+		CB99D02B100B1A8600F68636 /* EnterSiteView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB99D02A100B1A8600F68636 /* EnterSiteView.xib */; };
+		CB99D0CB100B1CBB00F68636 /* enter_site_view_controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB99D0CA100B1CBB00F68636 /* enter_site_view_controller.mm */; };
+		CB99D0D2100B1D6F00F68636 /* enter_site_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB99D0D1100B1D6F00F68636 /* enter_site_view.mm */; };
 		CBD685910E29E53E008EDE01 /* app_delegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBD6858E0E29E53E008EDE01 /* app_delegate.mm */; };
 		CBD685920E29E53E008EDE01 /* eagl_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBD685900E29E53E008EDE01 /* eagl_view.mm */; };
 		CBD685C30E29E72D008EDE01 /* jmlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBD685AF0E29E72D008EDE01 /* jmlib.cpp */; };
@@ -61,6 +64,11 @@
 		CB99D012100B0E0900F68636 /* MainView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainView.xib; path = resources/MainView.xib; sourceTree = "<group>"; };
 		CB99D013100B0E0900F68636 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = resources/MainWindow.xib; sourceTree = "<group>"; };
 		CB99D014100B0E0900F68636 /* SettingsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsView.xib; path = resources/SettingsView.xib; sourceTree = "<group>"; };
+		CB99D02A100B1A8600F68636 /* EnterSiteView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EnterSiteView.xib; path = resources/EnterSiteView.xib; sourceTree = "<group>"; };
+		CB99D0C9100B1CBB00F68636 /* enter_site_view_controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = enter_site_view_controller.h; path = src/enter_site_view_controller.h; sourceTree = SOURCE_ROOT; };
+		CB99D0CA100B1CBB00F68636 /* enter_site_view_controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = enter_site_view_controller.mm; path = src/enter_site_view_controller.mm; sourceTree = SOURCE_ROOT; };
+		CB99D0D0100B1D6F00F68636 /* enter_site_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = enter_site_view.h; path = src/enter_site_view.h; sourceTree = SOURCE_ROOT; };
+		CB99D0D1100B1D6F00F68636 /* enter_site_view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = enter_site_view.mm; path = src/enter_site_view.mm; sourceTree = SOURCE_ROOT; };
 		CBD6858D0E29E53E008EDE01 /* app_delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = app_delegate.h; path = src/app_delegate.h; sourceTree = SOURCE_ROOT; };
 		CBD6858E0E29E53E008EDE01 /* app_delegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = app_delegate.mm; path = src/app_delegate.mm; sourceTree = SOURCE_ROOT; };
 		CBD6858F0E29E53E008EDE01 /* eagl_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eagl_view.h; path = src/eagl_view.h; sourceTree = SOURCE_ROOT; };
@@ -127,6 +135,10 @@
 		080E96DDFE201D6D7F000001 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				CB99D0D0100B1D6F00F68636 /* enter_site_view.h */,
+				CB99D0D1100B1D6F00F68636 /* enter_site_view.mm */,
+				CB99D0C9100B1CBB00F68636 /* enter_site_view_controller.h */,
+				CB99D0CA100B1CBB00F68636 /* enter_site_view_controller.mm */,
 				CB99CFF5100B0D4B00F68636 /* settings_view.h */,
 				CB99CFF6100B0D4B00F68636 /* settings_view.mm */,
 				CB99CFF7100B0D4B00F68636 /* settings_view_controller.h */,
@@ -169,6 +181,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CB99D02A100B1A8600F68636 /* EnterSiteView.xib */,
 				CB99D012100B0E0900F68636 /* MainView.xib */,
 				CB99D013100B0E0900F68636 /* MainWindow.xib */,
 				CB99D014100B0E0900F68636 /* SettingsView.xib */,
@@ -305,6 +318,7 @@
 				CB99D015100B0E0900F68636 /* MainView.xib in Resources */,
 				CB99D016100B0E0900F68636 /* MainWindow.xib in Resources */,
 				CB99D017100B0E0900F68636 /* SettingsView.xib in Resources */,
+				CB99D02B100B1A8600F68636 /* EnterSiteView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +353,8 @@
 				CB99CFDB100B0C8600F68636 /* main_view_controller.mm in Sources */,
 				CB99CFF9100B0D4B00F68636 /* settings_view.mm in Sources */,
 				CB99CFFA100B0D4B00F68636 /* settings_view_controller.mm in Sources */,
+				CB99D0CB100B1CBB00F68636 /* enter_site_view_controller.mm in Sources */,
+				CB99D0D2100B1D6F00F68636 /* enter_site_view.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

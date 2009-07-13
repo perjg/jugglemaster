@@ -22,29 +22,28 @@
  *
  */
 
-#import "settings_view_controller.h"
-#import "enter_site_view_controller.h"
-#include "jmlib.h"
+#import <UIKit/UIKit.h>
 
-@class jmtouchAppDelegate;
- 
-//@interface MainViewController : UINavigationController <FlipsideViewControllerDelegate> {
-@interface MainViewController : UIViewController <FlipsideViewControllerDelegate, EnterSiteViewControllerDelegate> {
-  IBOutlet UITableView *table;
-  
-  @private
-    NSArray* tableItems;
-  
-    NSArray* categories;
-    NSArray* fakeItems;
-  
-    jmtouchAppDelegate* appDelegate;
-    JMLib* jm;
+@protocol EnterSiteViewControllerDelegate;
+
+
+@interface EnterSiteViewController : UIViewController {
+	id <EnterSiteViewControllerDelegate> delegate;
+  IBOutlet UITextField* site;
+  IBOutlet UIButton* style;
+  IBOutlet UISlider* speed;
 }
 
-@property JMLib* jm;
+@property (nonatomic, assign) id <EnterSiteViewControllerDelegate> delegate;
 - (IBAction)done;
-- (void)setAppDelegate:(jmtouchAppDelegate*)appDelegate_;
-//- (void)setJMLib:(JMLib*)jm_;
+- (IBAction)stylePress;
+- (IBAction)jugglePress;
 
 @end
+
+
+@protocol EnterSiteViewControllerDelegate
+- (void)enterSiteViewControllerDidFinish:(EnterSiteViewController *)controller;
+@end
+
+

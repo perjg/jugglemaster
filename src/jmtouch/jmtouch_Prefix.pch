@@ -1,13 +1,16 @@
 /*
  * JMTouch - JuggleMaster for iPhone / iPod Touch
  * Version 1.00
- * (C) Per Johan Groland 2008
+ * (C) Per Johan Groland 2009
  *
- * Using JMLib 2.0 (C) Per Johan Groland 2000-2002
+ * Using JMLib 2.1 (C) Per Johan Groland 2000-2009
  * Based on JuggleMaster Version 1.60
  * Copyright (C) 1995-1996 Ken Matsuoka
  *
- * JMPocket is free software; you can redistribute it and/or modify
+ * JuggleSaver support based on Juggler3D
+ * Copyright (c) 2005-2008 Brian Apps <brian@jugglesaver.co.uk>
+ *
+ * JMTouch is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.

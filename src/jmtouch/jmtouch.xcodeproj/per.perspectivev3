@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>CB99D01E100B0E2100F68636</string>
+						<string>CB99D1E8100B2CB400F68636</string>
 						<key>history</key>
 						<array>
 							<string>CB99CFB1100B087F00F68636</string>
@@ -320,7 +320,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>17</integer>
+									<integer>18</integer>
+									<integer>2</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -342,7 +343,7 @@
 							<real>185</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>47 155 1236 723 0 0 1440 878 </string>
+						<string>48 155 1236 723 0 0 1440 878 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -360,7 +361,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>CBD6851B0E28C5D9008EDE01</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>main_view_controller.mm</string>
+								<string>enter_site_view_controller.mm</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -368,33 +369,41 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>CBD6851C0E28C5D9008EDE01</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>main_view_controller.mm</string>
+										<string>enter_site_view_controller.mm</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>CB99D01D100B0E2100F68636</string>
+										<string>CB99D1E7100B2CB400F68636</string>
 										<key>history</key>
 										<array>
 											<string>CB8567E01005CB52001A986A</string>
 											<string>CB8567E61005CB5F001A986A</string>
-											<string>CB99CCCA100719F300F68636</string>
 											<string>CB99CD2910071C6800F68636</string>
 											<string>CB99CD9F10071EE600F68636</string>
-											<string>CB99CE53100AD54F00F68636</string>
-											<string>CB99CE8E100ADD1800F68636</string>
-											<string>CB99CF3E100B00C500F68636</string>
-											<string>CB99CF3F100B00C500F68636</string>
-											<string>CB99CF40100B00C500F68636</string>
 											<string>CB99CF9C100B081500F68636</string>
-											<string>CB99CFE8100B0CD300F68636</string>
-											<string>CB99CFE9100B0CD300F68636</string>
-											<string>CB99D003100B0D8D00F68636</string>
-											<string>CB99D004100B0D8D00F68636</string>
-											<string>CB99D005100B0D8D00F68636</string>
-											<string>CB99D006100B0D8D00F68636</string>
-											<string>CB99D007100B0D8D00F68636</string>
-											<string>CB99D01A100B0E2100F68636</string>
-											<string>CB99D01B100B0E2100F68636</string>
+											<string>CB99D06F100B1C7100F68636</string>
+											<string>CB99D070100B1C7100F68636</string>
+											<string>CB99D078100B1C7100F68636</string>
+											<string>CB99D07C100B1C7100F68636</string>
+											<string>CB99D07D100B1C7100F68636</string>
+											<string>CB99D07F100B1C7100F68636</string>
+											<string>CB99D0D6100B1DC200F68636</string>
+											<string>CB99D0F5100B203900F68636</string>
+											<string>CB99D0F6100B203900F68636</string>
+											<string>CB99D0F7100B203900F68636</string>
+											<string>CB99D0F8100B203900F68636</string>
+											<string>CB99D189100B28CC00F68636</string>
+											<string>CB99D18B100B28CC00F68636</string>
+											<string>CB99D18C100B28CC00F68636</string>
+											<string>CB99D18D100B28CC00F68636</string>
+											<string>CB99D18E100B28CC00F68636</string>
+											<string>CB99D1B6100B2A5C00F68636</string>
+											<string>CB99D1B8100B2A5C00F68636</string>
+											<string>CB99D1B9100B2A5C00F68636</string>
+											<string>CB99D1CF100B2BFF00F68636</string>
+											<string>CB99D1DF100B2CB400F68636</string>
+											<string>CB99D1E0100B2CB400F68636</string>
+											<string>CB99D1E1100B2CB400F68636</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -504,6 +513,195 @@
 											<string>CB99D00C100B0D8D00F68636</string>
 											<string>CB99D00D100B0D8D00F68636</string>
 											<string>CB99D01C100B0E2100F68636</string>
+											<string>CB99D03B100B1ACD00F68636</string>
+											<string>CB99D03C100B1ACD00F68636</string>
+											<string>CB99D03D100B1ACD00F68636</string>
+											<string>CB99D03E100B1ACD00F68636</string>
+											<string>CB99D03F100B1ACD00F68636</string>
+											<string>CB99D040100B1ACD00F68636</string>
+											<string>CB99D041100B1ACD00F68636</string>
+											<string>CB99D042100B1ACD00F68636</string>
+											<string>CB99D043100B1ACD00F68636</string>
+											<string>CB99D044100B1ACD00F68636</string>
+											<string>CB99D045100B1ACD00F68636</string>
+											<string>CB99D046100B1ACD00F68636</string>
+											<string>CB99D047100B1ACD00F68636</string>
+											<string>CB99D048100B1ACD00F68636</string>
+											<string>CB99D049100B1ACD00F68636</string>
+											<string>CB99D04D100B1ACD00F68636</string>
+											<string>CB99D04F100B1ACD00F68636</string>
+											<string>CB99D052100B1ACD00F68636</string>
+											<string>CB99D053100B1ACD00F68636</string>
+											<string>CB99D054100B1ACD00F68636</string>
+											<string>CB99D055100B1ACD00F68636</string>
+											<string>CB99D056100B1ACD00F68636</string>
+											<string>CB99D05F100B1AF200F68636</string>
+											<string>CB99D062100B1AF200F68636</string>
+											<string>CB99D081100B1C7100F68636</string>
+											<string>CB99D084100B1C7100F68636</string>
+											<string>CB99D085100B1C7100F68636</string>
+											<string>CB99D086100B1C7100F68636</string>
+											<string>CB99D087100B1C7100F68636</string>
+											<string>CB99D088100B1C7100F68636</string>
+											<string>CB99D089100B1C7100F68636</string>
+											<string>CB99D08A100B1C7100F68636</string>
+											<string>CB99D08B100B1C7100F68636</string>
+											<string>CB99D08C100B1C7100F68636</string>
+											<string>CB99D08D100B1C7100F68636</string>
+											<string>CB99D08E100B1C7100F68636</string>
+											<string>CB99D08F100B1C7100F68636</string>
+											<string>CB99D090100B1C7100F68636</string>
+											<string>CB99D091100B1C7100F68636</string>
+											<string>CB99D092100B1C7100F68636</string>
+											<string>CB99D093100B1C7100F68636</string>
+											<string>CB99D094100B1C7100F68636</string>
+											<string>CB99D097100B1C7100F68636</string>
+											<string>CB99D098100B1C7100F68636</string>
+											<string>CB99D099100B1C7100F68636</string>
+											<string>CB99D09B100B1C7100F68636</string>
+											<string>CB99D09F100B1C7100F68636</string>
+											<string>CB99D0A0100B1C7100F68636</string>
+											<string>CB99D0A1100B1C7100F68636</string>
+											<string>CB99D0A2100B1C7100F68636</string>
+											<string>CB99D0A3100B1C7100F68636</string>
+											<string>CB99D0A4100B1C7100F68636</string>
+											<string>CB99D0A5100B1C7100F68636</string>
+											<string>CB99D0A6100B1C7100F68636</string>
+											<string>CB99D0A7100B1C7100F68636</string>
+											<string>CB99D0A8100B1C7100F68636</string>
+											<string>CB99D0A9100B1C7100F68636</string>
+											<string>CB99D0AA100B1C7100F68636</string>
+											<string>CB99D0AB100B1C7100F68636</string>
+											<string>CB99D0AC100B1C7100F68636</string>
+											<string>CB99D0AF100B1C7100F68636</string>
+											<string>CB99D0B0100B1C7100F68636</string>
+											<string>CB99D0B1100B1C7100F68636</string>
+											<string>CB99D0B2100B1C7100F68636</string>
+											<string>CB99D0B3100B1C7100F68636</string>
+											<string>CB99D0B4100B1C7100F68636</string>
+											<string>CB99D0B7100B1C7100F68636</string>
+											<string>CB99D0B8100B1C7100F68636</string>
+											<string>CB99D0B9100B1C7100F68636</string>
+											<string>CB99D0BA100B1C7100F68636</string>
+											<string>CB99D0BB100B1C7100F68636</string>
+											<string>CB99D0BC100B1C7100F68636</string>
+											<string>CB99D0BD100B1C7100F68636</string>
+											<string>CB99D0BE100B1C7100F68636</string>
+											<string>CB99D0BF100B1C7100F68636</string>
+											<string>CB99D0C0100B1C7100F68636</string>
+											<string>CB99D0C1100B1C7100F68636</string>
+											<string>CB99D0C2100B1C7100F68636</string>
+											<string>CB99D0C3100B1C7100F68636</string>
+											<string>CB99D0C4100B1C7100F68636</string>
+											<string>CB99D0C5100B1C7100F68636</string>
+											<string>CB99D0E1100B1DC200F68636</string>
+											<string>CB99D0E2100B1DC200F68636</string>
+											<string>CB99D0E3100B1DC200F68636</string>
+											<string>CB99D0E4100B1DC200F68636</string>
+											<string>CB99D0E5100B1DC200F68636</string>
+											<string>CB99D0E6100B1DC200F68636</string>
+											<string>CB99D0E7100B1DC200F68636</string>
+											<string>CB99D0E8100B1DC200F68636</string>
+											<string>CB99D0E9100B1DC200F68636</string>
+											<string>CB99D0EA100B1DC200F68636</string>
+											<string>CB99D0FF100B203900F68636</string>
+											<string>CB99D100100B203900F68636</string>
+											<string>CB99D101100B203900F68636</string>
+											<string>CB99D102100B203900F68636</string>
+											<string>CB99D103100B203900F68636</string>
+											<string>CB99D104100B203900F68636</string>
+											<string>CB99D105100B203900F68636</string>
+											<string>CB99D106100B203900F68636</string>
+											<string>CB99D107100B203900F68636</string>
+											<string>CB99D108100B203900F68636</string>
+											<string>CB99D109100B203900F68636</string>
+											<string>CB99D10A100B203900F68636</string>
+											<string>CB99D10B100B203900F68636</string>
+											<string>CB99D10C100B203900F68636</string>
+											<string>CB99D10D100B203900F68636</string>
+											<string>CB99D10E100B203900F68636</string>
+											<string>CB99D10F100B203900F68636</string>
+											<string>CB99D110100B203900F68636</string>
+											<string>CB99D111100B203900F68636</string>
+											<string>CB99D112100B203900F68636</string>
+											<string>CB99D113100B203900F68636</string>
+											<string>CB99D124100B265B00F68636</string>
+											<string>CB99D125100B265B00F68636</string>
+											<string>CB99D126100B265B00F68636</string>
+											<string>CB99D127100B265B00F68636</string>
+											<string>CB99D128100B265B00F68636</string>
+											<string>CB99D129100B265B00F68636</string>
+											<string>CB99D12A100B265B00F68636</string>
+											<string>CB99D12B100B265B00F68636</string>
+											<string>CB99D12C100B265B00F68636</string>
+											<string>CB99D13A100B275000F68636</string>
+											<string>CB99D13B100B275000F68636</string>
+											<string>CB99D13C100B275000F68636</string>
+											<string>CB99D13D100B275000F68636</string>
+											<string>CB99D13E100B275000F68636</string>
+											<string>CB99D13F100B275000F68636</string>
+											<string>CB99D140100B275000F68636</string>
+											<string>CB99D141100B275000F68636</string>
+											<string>CB99D142100B275000F68636</string>
+											<string>CB99D143100B275000F68636</string>
+											<string>CB99D144100B275000F68636</string>
+											<string>CB99D145100B275000F68636</string>
+											<string>CB99D146100B275000F68636</string>
+											<string>CB99D147100B275000F68636</string>
+											<string>CB99D148100B275000F68636</string>
+											<string>CB99D149100B275000F68636</string>
+											<string>CB99D14A100B275000F68636</string>
+											<string>CB99D14B100B275000F68636</string>
+											<string>CB99D14C100B275000F68636</string>
+											<string>CB99D14D100B275000F68636</string>
+											<string>CB99D14E100B275000F68636</string>
+											<string>CB99D15F100B27D300F68636</string>
+											<string>CB99D16A100B27FA00F68636</string>
+											<string>CB99D192100B28CC00F68636</string>
+											<string>CB99D193100B28CC00F68636</string>
+											<string>CB99D194100B28CC00F68636</string>
+											<string>CB99D195100B28CC00F68636</string>
+											<string>CB99D196100B28CC00F68636</string>
+											<string>CB99D197100B28CC00F68636</string>
+											<string>CB99D198100B28CC00F68636</string>
+											<string>CB99D199100B28CC00F68636</string>
+											<string>CB99D19A100B28CC00F68636</string>
+											<string>CB99D19B100B28CC00F68636</string>
+											<string>CB99D19C100B28CC00F68636</string>
+											<string>CB99D19D100B28CC00F68636</string>
+											<string>CB99D19E100B28CC00F68636</string>
+											<string>CB99D19F100B28CC00F68636</string>
+											<string>CB99D1A0100B28CC00F68636</string>
+											<string>CB99D1A1100B28CC00F68636</string>
+											<string>CB99D1A2100B28CC00F68636</string>
+											<string>CB99D1A3100B28CC00F68636</string>
+											<string>CB99D1A4100B28CC00F68636</string>
+											<string>CB99D1A5100B28CC00F68636</string>
+											<string>CB99D1A6100B28CC00F68636</string>
+											<string>CB99D1A7100B28CC00F68636</string>
+											<string>CB99D1A8100B28CC00F68636</string>
+											<string>CB99D1AE100B291900F68636</string>
+											<string>CB99D1AF100B291900F68636</string>
+											<string>CB99D1BB100B2A5C00F68636</string>
+											<string>CB99D1BC100B2A5C00F68636</string>
+											<string>CB99D1BD100B2A5C00F68636</string>
+											<string>CB99D1BE100B2A5C00F68636</string>
+											<string>CB99D1BF100B2A5C00F68636</string>
+											<string>CB99D1C0100B2A5C00F68636</string>
+											<string>CB99D1C1100B2A5C00F68636</string>
+											<string>CB99D1C2100B2A5C00F68636</string>
+											<string>CB99D1C3100B2A5C00F68636</string>
+											<string>CB99D1C4100B2A5C00F68636</string>
+											<string>CB99D1D1100B2BFF00F68636</string>
+											<string>CB99D1D2100B2BFF00F68636</string>
+											<string>CB99D1D3100B2BFF00F68636</string>
+											<string>CB99D1D4100B2BFF00F68636</string>
+											<string>CB99D1D5100B2BFF00F68636</string>
+											<string>CB99D1E2100B2CB400F68636</string>
+											<string>CB99D1E3100B2CB400F68636</string>
+											<string>CB99D1E4100B2CB400F68636</string>
+											<string>CB99D1E5100B2CB400F68636</string>
+											<string>CB99D1E6100B2CB400F68636</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -519,7 +717,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1029, 474}}</string>
 								<key>RubberWindowFrame</key>
-								<string>47 155 1236 723 0 0 1440 878 </string>
+								<string>48 155 1236 723 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -598,7 +796,7 @@
 										<key>Frame</key>
 										<string>{{10, 27}, {1029, 176}}</string>
 										<key>RubberWindowFrame</key>
-										<string>47 155 1236 723 0 0 1440 878 </string>
+										<string>48 155 1236 723 0 0 1440 878 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -812,14 +1010,14 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>CB99D01F100B0E2100F68636</string>
+		<string>CB99D1E9100B2CB400F68636</string>
 		<string>CB99CC281007151E00F68636</string>
 		<string>CB99CC291007151E00F68636</string>
 		<string>CB99CFAF100B087F00F68636</string>
 		<string>/Users/per/Documents/programming/jugglemaster2/src/jmtouch/jmtouch.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>47 155 1236 723 0 0 1440 878 </string>
+	<string>48 155 1236 723 0 0 1440 878 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

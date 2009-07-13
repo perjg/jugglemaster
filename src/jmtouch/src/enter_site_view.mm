@@ -22,29 +22,27 @@
  *
  */
 
-#import "settings_view_controller.h"
-#import "enter_site_view_controller.h"
-#include "jmlib.h"
+#import "enter_site_view.h"
 
-@class jmtouchAppDelegate;
- 
-//@interface MainViewController : UINavigationController <FlipsideViewControllerDelegate> {
-@interface MainViewController : UIViewController <FlipsideViewControllerDelegate, EnterSiteViewControllerDelegate> {
-  IBOutlet UITableView *table;
-  
-  @private
-    NSArray* tableItems;
-  
-    NSArray* categories;
-    NSArray* fakeItems;
-  
-    jmtouchAppDelegate* appDelegate;
-    JMLib* jm;
+@implementation EnterSiteView
+
+
+- (id)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        // Initialization code
+    }
+    return self;
 }
 
-@property JMLib* jm;
-- (IBAction)done;
-- (void)setAppDelegate:(jmtouchAppDelegate*)appDelegate_;
-//- (void)setJMLib:(JMLib*)jm_;
+
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+
+
+- (void)dealloc {
+    [super dealloc];
+}
+
 
 @end

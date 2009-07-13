@@ -22,32 +22,49 @@
  *
  */
 
-#import "settings_view_controller.h"
+#import "enter_site_view_controller.h"
 
 
-@implementation FlipsideViewController
+@implementation EnterSiteViewController
 
 @synthesize delegate;
 
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor viewFlipsideBackgroundColor];      
+/*
+ // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        // Custom initialization
+    }
+    return self;
 }
-
-
-- (IBAction)done {
-	[self.delegate flipsideViewControllerDidFinish:self];	
-}
-
+*/
 
 /*
- // Override to allow orientations other than the default portrait orientation.
- - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
- // Return YES for supported orientations
- return (interfaceOrientation == UIInterfaceOrientationPortrait);
- }
- */
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+- (void)viewDidLoad {
+    [super viewDidLoad];
+}
+*/
+
+- (IBAction)done {
+	[self.delegate enterSiteViewControllerDidFinish:self];	
+}
+
+- (IBAction)stylePress {
+  [style setTitle:@"Reverse" forState:UIControlStateNormal];
+}
+
+- (IBAction)jugglePress {
+  
+}
+
+/*
+// Override to allow orientations other than the default portrait orientation.
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    // Return YES for supported orientations
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+*/
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.

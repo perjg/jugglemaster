@@ -112,7 +112,7 @@ public:
   virtual JML_INT32 getSiteposLen(void) { return 0; }
   virtual JML_INT32 getiterations(void) { return 0; } // fixme  
   virtual JML_INT32 getBallRadius(void);
-	virtual JML_BOOL isValidPattern(char* patt);
+	virtual JML_BOOL isValidPattern(const char* patt);
 
 	// camera placement functionality
 	virtual void trackballStart(JML_INT32 x, JML_INT32 y);

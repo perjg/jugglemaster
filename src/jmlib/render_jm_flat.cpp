@@ -383,7 +383,7 @@ void JMFlatOpenGL::renderJS(RENDER_STATE* pState) {
 	drawLine(0, 0, -(ShoulderPos[1]) * zoomFactorX_JS, 0);
 
 	// head
-	drawFilledCircle(0, 0.75f * zoomFactorX_JS, 0.5f * zoomFactorX_JS);
+	drawCircle(0, 0.75f * zoomFactorX_JS, 0.5f * zoomFactorX_JS);
 
 	// balls
 	for (int i = 0; i < pPattern->Objects; i++) {

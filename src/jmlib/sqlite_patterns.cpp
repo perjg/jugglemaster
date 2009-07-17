@@ -206,7 +206,9 @@ void JMPatterns::initializeDatabase(char* dbFilename, FILE* inJM, FILE* inJS) {
 		result = ParsePatterns(inJM, &groups, &styles);
   }
   else if (inJS && !inJM) {
+#ifdef JUGGLESAVER_SUPPORT
     result = ParseJSPatterns(inJS, &groups);
+#endif
   }
   else { // both
     result = ParseAllPatterns(inJM, inJS, &groups, &styles);

@@ -679,8 +679,8 @@ JML_CHAR  JMLibWrapper::getSiteposStop(void)  { return active->getSiteposStop();
 JML_INT32 JMLibWrapper::getSiteposLen(void)   { return active->getSiteposLen();   }
 JML_INT32 JMLibWrapper::getBallRadius(void)   { return active->getBallRadius();   }
 
-JML_BOOL JMLibWrapper::isValidPattern(char* patt) {
-	return JMSiteValidator::validateSite(patt) || JSValidator::validateJSPattern(patt);
+JML_BOOL JMLibWrapper::isValidPattern(const char* patt) {
+	return JMSiteValidator::validateSite((char*)patt) || JSValidator::validateJSPattern((char*)patt);
 }
 
 void JMLibWrapper::trackballStart(JML_INT32 x, JML_INT32 y) {
@@ -767,8 +767,19 @@ void JMLibWrapper::setRenderingMode(rendering_t mode) {
 
 rendering_t JMLibWrapper::getRenderingMode() { return render_mode; }
 
+void JMLibWrapper::toggleRenderingMode() {
+  if (render_mode == RENDERING_OPENGL_3D)
+    setRenderingMode(RENDERING_OPENGL_2D);
+  else if (render_mode == RENDERING_OPENGL_2D)
+    setRenderingMode(RENDERING_OPENGL_3D);
+}
+
 void JMLibWrapper::setObjectType(object_type_t type) {
   objectType = type;
+}
+
+object_type_t JMLibWrapper::getObjectType() {
+  return objectType;
 }
 
 #endif // JUGGLESAVER_SUPPORT

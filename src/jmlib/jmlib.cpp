@@ -1503,8 +1503,8 @@ void JuggleMaster::doStepcalc(void) {
   }
 }
 
-JML_BOOL JuggleMaster::isValidPattern(char* patt) {
-	return JMSiteValidator::validateSite(patt);
+JML_BOOL JuggleMaster::isValidPattern(const char* patt) {
+	return JMSiteValidator::validateSite((char*)patt);
 }
 
 //fixme:
@@ -1516,6 +1516,10 @@ void JuggleMaster::setRenderingMode(rendering_t mode) {
 
 rendering_t JuggleMaster::getRenderingMode() {
   return RENDERING_NONE;
+}
+
+void JuggleMaster::toggleRenderingMode() {
+  
 }
 
 #endif

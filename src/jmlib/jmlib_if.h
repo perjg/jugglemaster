@@ -278,7 +278,7 @@ public:
    * JuggleSaver: Any valid JuggleSaver pattern that contains a valid vanilla siteswap
    * JMLibWrapper: Any valid JuggleMaster or JuggleSaver pattern
    */
-	virtual JML_BOOL isValidPattern(char* patt) = 0;
+	virtual JML_BOOL isValidPattern(const char* patt) = 0;
 
   /** Rendering functions
    * Currently valid for OpenGL rendering when using JMLibWrapper and JuggleSaver
@@ -304,14 +304,15 @@ public:
   virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, camera* cam, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF) { return FALSE; }
   
   /** Set the rendering mode. Only valid for JMLibWrapper.
-   * Use to toggle between 3D and classic 2D rendering for JuggleMaster
-   * This setting is valid only when the currently active juggling engine is JuggleMaster,
-   * JuggleSaver patterns are always rendered in 3D.
+   * Use to toggle between 3D and classic 2D rendering
    */
   virtual void setRenderingMode(rendering_t mode) {}
   
-  /** Get the current rendering mode. */
+  /** Get the current rendering mode. Only valid for JMLibWrapper. */
   virtual rendering_t getRenderingMode() { return RENDERING_NONE; }
+  
+  /** Toggle render mode between 2D and 3D. No effect if rendering mode is RENDERING_NONE. Only valid for JMLibWrapper. */
+  virtual void toggleRenderingMode() {}
   
   /** Set the objects to juggle.
    * OBJECT_TYPE_DEFAULT: JuggleMaster, select object type by random
@@ -324,6 +325,8 @@ public:
    * This function switches the objects used immediately, even in the middle of a pattern
    */
   virtual void setObjectType(object_type_t type) {}
+  
+  virtual object_type_t getObjectType() { return OBJECT_TYPE_DEFAULT; }
 };
 
 #endif

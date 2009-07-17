@@ -165,11 +165,12 @@ public:
   }
   
   virtual JML_INT32 getBallRadius(void);
-	virtual JML_BOOL isValidPattern(char* patt);
+	virtual JML_BOOL isValidPattern(const char* patt);
   
 #ifdef JUGGLEMASTER_OPENGL_SUPPORT
   virtual void setRenderingMode(rendering_t mode);
   virtual rendering_t getRenderingMode();
+  virtual void toggleRenderingMode();
 #endif
 };
 

@@ -135,7 +135,7 @@ public:
   virtual JML_CHAR  getSiteposStop(void);
   virtual JML_INT32 getSiteposLen(void);
   virtual JML_INT32 getBallRadius(void);
-	virtual JML_BOOL isValidPattern(char* patt);
+	virtual JML_BOOL isValidPattern(const char* patt);
 
 	// camera placement functionality
 	virtual void trackballStart(JML_INT32 x, JML_INT32 y);
@@ -151,7 +151,10 @@ public:
   // misc rendering functionality
   virtual void setRenderingMode(rendering_t mode);
   virtual rendering_t getRenderingMode();
+  virtual void toggleRenderingMode();
+  
   virtual void setObjectType(object_type_t type);
+  virtual object_type_t getObjectType();
 };
 
 #endif

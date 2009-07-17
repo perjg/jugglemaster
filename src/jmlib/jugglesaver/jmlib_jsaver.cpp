@@ -259,8 +259,8 @@ JML_INT32 JuggleSaver::numStyles(void) {
 
 }
 
-JML_BOOL JuggleSaver::isValidPattern(char* patt) {
-	return JSValidator::validateJSPattern(patt);
+JML_BOOL JuggleSaver::isValidPattern(const char* patt) {
+	return JSValidator::validateJSPattern((char*)patt);
 }
 
 void JuggleSaver::trackballStart(JML_INT32 x, JML_INT32 y) {

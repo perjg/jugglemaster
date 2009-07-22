@@ -44,6 +44,7 @@ struct pattern_group_t {
   // The following items are used by sqlite_patterns only
 	struct pattern_group_t *prev;
   int index;
+  int pattern_group_count;
 };
 
 struct pattern_t {
@@ -60,6 +61,7 @@ struct pattern_t {
   // The following items are used by sqlite_patterns only
   struct pattern_t *prev;
   int index;
+  int pattern_count;
 };
 
 struct groups_t {

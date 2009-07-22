@@ -19,6 +19,9 @@
  * Modified BSD License for more details.
  */ 
 
+#ifndef JMPATTERNS_HDR__
+#define JMPATTERNS_HDR__
+
 #include "patterns.h"
 extern "C" {
 #include "sqlite/sqlite3.h"
@@ -74,11 +77,11 @@ public:
 	 * @param inJM  JuggleMaster file
 	 * @param inJS  JuggleSaver file
 	 */
-	void initializeDatabase(char* dbFilename, FILE* inJM, FILE* inJS);
+	void initializeDatabase(const char* dbFilename, FILE* inJM, FILE* inJS);
   
-  void loadDatabase(char* dbFilename);
+  void loadDatabase(const char* dbFilename);
 private:
-  void createDB(char* dbFilename);
+  void createDB(const char* dbFilename);
   void closeDB();
   void queryDB(const char* query);
   void addCategory(pattern_group_t* group);
@@ -133,3 +136,6 @@ public:
   
   JMCategoryIterator* getCategoryIterator();
 };
+
+#endif
+

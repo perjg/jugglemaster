@@ -97,7 +97,7 @@ JMCategoryIterator* JMPatternIterator::getCategoryIterator() {
  */
 
 // create an empty sqlite database
-void JMPatterns::createDB(char* dbFileName) {
+void JMPatterns::createDB(const char* dbFileName) {
   const char* sql = "DROP TABLE IF EXISTS CameraData;"
                     "CREATE TABLE CameraData (id PRIMARY KEY);"
                     "DROP TABLE IF EXISTS Category;"
@@ -190,7 +190,7 @@ void JMPatterns::closeDB() {
 }
 
 // initializes an sql database from JuggleMaster and/or JuggleSaver pattern files
-void JMPatterns::initializeDatabase(char* dbFilename, FILE* inJM, FILE* inJS) {
+void JMPatterns::initializeDatabase(const char* dbFilename, FILE* inJM, FILE* inJS) {
 	groups_t groups;
   groups.first = NULL;
 	styles_t styles;
@@ -250,7 +250,7 @@ void JMPatterns::initializeDatabase(char* dbFilename, FILE* inJM, FILE* inJS) {
   */
 }
 
-void JMPatterns::loadDatabase(char* dbFilename) {
+void JMPatterns::loadDatabase(const char* dbFilename) {
   int rc;
 
   rc = sqlite3_open(dbFilename, &m_db);
@@ -341,6 +341,7 @@ pattern_group_t* JMPatterns::getCategories() {
     new_group->next = NULL;
     new_group->prev = cur_group;
     new_group->index = i;
+    new_group->pattern_group_count = nrows;
     
     if (!first_group) {
       first_group = new_group;
@@ -459,6 +460,7 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
     new_patt->next = NULL;
     new_patt->prev = cur_patt;
     new_patt->index = i;
+    new_patt->pattern_count = nrows;
     //fixme: add pointer to category
     
     if (!first_patt) {

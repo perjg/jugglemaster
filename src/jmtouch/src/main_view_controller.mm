@@ -26,6 +26,8 @@
 #import "main_view.h"
 #import "app_delegate.h"
 
+extern JMPatterns* g_pattern_lib;
+
 @implementation MainViewController
 
 @synthesize jm;
@@ -39,15 +41,46 @@
 
 
  // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
- - (void)viewDidLoad {
-   tableItems = [[NSArray alloc] initWithObjects:@"Enter Siteswap",@"Settings",@"Random Pattern",@"3D Mode",@"2D Mode",nil];
+- (void)viewDidLoad {
+  tableItems = [[NSArray alloc] initWithObjects:@"Enter Siteswap",@"Settings",@"Random Pattern",@"Set 2D Mode",nil];
 
-   categories = [[NSArray alloc] initWithObjects:@"Category 1", @"Category 2",@"Category 3",@"Category 4",@"Category 5",nil];
-   fakeItems = [[NSArray alloc] initWithObjects:@"Item 1",@"Item 2",@"Item 3",@"Item 4",@"Item 5",@"Item 6",@"Item 7",@"Item 8",@"Item 9",nil];
+  // Open pattern database
+  NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"patterns.db"];    
+  g_pattern_lib = new JMPatterns();
+  g_pattern_lib->loadDatabase([path cStringUsingEncoding:NSASCIIStringEncoding]);
+  
+  // Load categories
+  categories = [[NSMutableArray alloc] init];
+  patterns_in_category = [[NSMutableArray alloc] init];
+  //categories = [[NSArray alloc] initWithObjects:@"Category 1", @"Category 2",@"Category 3",@"Category 4",@"Category 5",nil];
+
+  pattern_group_t* temp = g_pattern_lib->getCategories();
+  NSString* name;
+  
+  while (temp) {
+    name = [NSString stringWithUTF8String: temp->name];
+    
+    [categories addObject:name];
+
+    pattern_t* cur_pattern = g_pattern_lib->getCategory(temp->name); // first pattern in this category
+    [patterns_in_category addObject:[NSValue valueWithPointer:cur_pattern]];
+    
+    temp = temp->next;
+  }
+  
+  fakeItems = [[NSArray alloc] initWithObjects:@"Item 1",@"Item 2",@"Item 3",@"Item 4",@"Item 5",@"Item 6",@"Item 7",@"Item 8",@"Item 9",nil];
    
-   [super viewDidLoad];
- }
+  //[table beginUpdates];
+  //[table endUpdates];
+   
+  [super viewDidLoad];
+}
 
+- (void)viewDidDisappear:(BOOL)animated {
+  [super viewDidDisappear:animated];
+  //[table deselectRowAtIndexPath:[table indexPathForSelectedRow] animated:NO];
+  [table reloadData];
+}
 
 /*
  // Override to allow orientations other than the default portrait orientation.
@@ -127,8 +160,12 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
   if (section == 0) 
     return [tableItems count];
-  else
-    return [fakeItems count];
+  else {
+    NSValue* ns_temp = [patterns_in_category objectAtIndex:section - 1];
+    pattern_t* first_patt = (pattern_t*)[ns_temp pointerValue]; 
+
+    return first_patt->pattern_count;
+  }
 }
 
 // Customize the appearance of table view cells.
@@ -143,20 +180,32 @@
   if (indexPath.section == 0) {
     if (indexPath.row <= 1)
       cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    else if (indexPath.row == 3 && jm->getRenderingMode() == RENDERING_OPENGL_3D)
-      cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    else if (indexPath.row == 4 && jm->getRenderingMode() == RENDERING_OPENGL_2D)
-      cell.accessoryType = UITableViewCellAccessoryCheckmark;
     else
       cell.accessoryType = UITableViewCellAccessoryNone;
   }
   else
     cell.accessoryType = UITableViewCellAccessoryNone;
   
-  if (indexPath.section == 0)
-    cell.textLabel.text = [tableItems objectAtIndex:indexPath.row];
-  else
-    cell.textLabel.text = [fakeItems objectAtIndex:indexPath.row];
+  if (indexPath.section == 0) {
+    NSString* str = [tableItems objectAtIndex:indexPath.row];
+    
+    if ([str isEqualToString:@"Set 2D Mode"] && g_jm->getRenderingMode() == RENDERING_OPENGL_2D)
+        cell.textLabel.text = @"Set 3D Mode";
+    else
+        cell.textLabel.text = str;
+  }
+  else {
+    const char* section_name = [[categories objectAtIndex:indexPath.section-1] cStringUsingEncoding:NSASCIIStringEncoding];
+    
+    NSValue* ns_temp = [patterns_in_category objectAtIndex:indexPath.section - 1];
+    pattern_t* first_patt = (pattern_t*)[ns_temp pointerValue]; 
+    
+    // skip to correct pattern
+    while (first_patt && first_patt->index < indexPath.row) first_patt = first_patt->next;
+    
+    NSString* str = [NSString stringWithUTF8String: first_patt->name];
+    cell.textLabel.text = str;
+  }
   
   return cell;
 }
@@ -169,9 +218,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-  NSString* str = [tableItems objectAtIndex:indexPath.row];
-  
-  if (indexPath.section == 0) { 
+  if (indexPath.section == 0) {
+    NSString* str = [tableItems objectAtIndex:indexPath.row];
+    
     if ([str isEqualToString:@"Enter Siteswap"]) {
       EnterSiteViewController *controller = [[EnterSiteViewController alloc] initWithNibName:@"EnterSiteView" bundle:nil];
       controller.delegate = self;
@@ -186,12 +235,8 @@
       jm->setPattern("3B@(1,-0.4)>(2,4.2)/(-2,1)3B@(-1.8,4.4)>(-2.1,0)");    
       [appDelegate showJuggler];
     }
-    else if ([str isEqualToString:@"3D Mode"]) {
-      jm->setRenderingMode(RENDERING_OPENGL_3D);
-      [appDelegate showJuggler];
-    }
-    else if ([str isEqualToString:@"2D Mode"]) {
-      jm->setRenderingMode(RENDERING_OPENGL_2D);    
+    else if ([str isEqualToString:@"Set 3D Mode"] || [str isEqualToString:@"Set 2D Mode"]) {
+      jm->toggleRenderingMode();
       [appDelegate showJuggler];
     }
     else if ([str isEqualToString:@"Settings"]) {
@@ -203,12 +248,12 @@
     
       [controller release];
     }
-    else {
-      
-    }
   }
   else {
-    
+    NSValue* ns_temp = [patterns_in_category objectAtIndex:indexPath.section - 1];
+    pattern_t* first_patt = (pattern_t*)[ns_temp pointerValue];
+    g_pattern_lib->loadPattern(first_patt, indexPath.row, g_jm);
+    [appDelegate showJuggler];
   }
 }
 

@@ -29,23 +29,43 @@ extern JMLib* g_jm;
 
 @protocol EnterSiteViewControllerDelegate;
 
-@interface EnterSiteViewController : UIViewController {
+@interface EnterSiteViewController : UIViewController <UITextFieldDelegate> {
 	id <EnterSiteViewControllerDelegate> delegate;
   IBOutlet UITextField* site;
   IBOutlet UIButton* style;
+  IBOutlet UIButton* objects;
   IBOutlet UISlider* speed;
   
   @private
+    int cur_object;
+    NSArray* objectTypes;
     int cur_style;
 }
 
 @property (nonatomic, assign) id <EnterSiteViewControllerDelegate> delegate;
-- (IBAction)done;
 - (IBAction)stylePress;
+- (IBAction)objectsPress;
 - (IBAction)jugglePress;
+- (IBAction)cancelPress;
 
+// Number keypad buttons
+- (IBAction)button0Press;
+- (IBAction)button1Press;
+- (IBAction)button2Press;
+- (IBAction)button3Press;
+- (IBAction)button4Press;
+- (IBAction)button5Press;
+- (IBAction)button6Press;
+- (IBAction)button7Press;
+- (IBAction)button8Press;
+- (IBAction)button9Press;
+- (IBAction)buttonParenPress;
+- (IBAction)buttonBracketPress;
+- (IBAction)buttonCommaPress;
+- (IBAction)buttonXPress;
+- (IBAction)buttonTogglePress;
+- (IBAction)buttonBackspacePress;
 @end
-
 
 @protocol EnterSiteViewControllerDelegate
 - (void)enterSiteViewControllerDidFinish:(EnterSiteViewController *)controller;

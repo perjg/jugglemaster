@@ -11,6 +11,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		CB55A24D1016DCB200D3DB4A /* patterns.db in Resources */ = {isa = PBXBuildFile; fileRef = CB55A24C1016DCB200D3DB4A /* patterns.db */; };
 		CB99CE76100AD75300F68636 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB99CE75100AD75300F68636 /* CoreGraphics.framework */; };
 		CB99CFDA100B0C8600F68636 /* main_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB99CFD7100B0C8600F68636 /* main_view.mm */; };
 		CB99CFDB100B0C8600F68636 /* main_view_controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB99CFD9100B0C8600F68636 /* main_view_controller.mm */; };
@@ -52,6 +53,7 @@
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB55A24C1016DCB200D3DB4A /* patterns.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = patterns.db; path = resources/patterns.db; sourceTree = "<group>"; };
 		CB99CE75100AD75300F68636 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		CB99CFD6100B0C8600F68636 /* main_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main_view.h; path = src/main_view.h; sourceTree = SOURCE_ROOT; };
 		CB99CFD7100B0C8600F68636 /* main_view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = main_view.mm; path = src/main_view.mm; sourceTree = SOURCE_ROOT; };
@@ -181,6 +183,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CB55A24C1016DCB200D3DB4A /* patterns.db */,
 				CB99D02A100B1A8600F68636 /* EnterSiteView.xib */,
 				CB99D012100B0E0900F68636 /* MainView.xib */,
 				CB99D013100B0E0900F68636 /* MainWindow.xib */,
@@ -319,6 +322,7 @@
 				CB99D016100B0E0900F68636 /* MainWindow.xib in Resources */,
 				CB99D017100B0E0900F68636 /* SettingsView.xib in Resources */,
 				CB99D02B100B1A8600F68636 /* EnterSiteView.xib in Resources */,
+				CB55A24D1016DCB200D3DB4A /* patterns.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

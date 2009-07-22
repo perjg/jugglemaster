@@ -24,8 +24,10 @@
 
 #import <UIKit/UIKit.h>
 #include "jmlib.h"
+#include "sqlite_patterns.h"
 
 extern JMLib* g_jm;
+extern JMPatterns* g_pattern_lib;
 
 @class MainViewController;
 @class EAGLView;

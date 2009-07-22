@@ -25,17 +25,22 @@
 #import "settings_view_controller.h"
 #import "enter_site_view_controller.h"
 #include "jmlib.h"
+#include "sqlite_patterns.h"
+
+extern JMPatterns* g_pattern_lib;
 
 @class jmtouchAppDelegate;
  
 //@interface MainViewController : UINavigationController <FlipsideViewControllerDelegate> {
 @interface MainViewController : UIViewController <FlipsideViewControllerDelegate, EnterSiteViewControllerDelegate> {
-  IBOutlet UITableView *table;
+  IBOutlet UITableView*  table;
+  IBOutlet UISearchBar* search;
   
   @private
     NSArray* tableItems;
   
-    NSArray* categories;
+    NSMutableArray* categories;
+    NSMutableArray* patterns_in_category;
     NSArray* fakeItems;
   
     jmtouchAppDelegate* appDelegate;

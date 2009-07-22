@@ -29,6 +29,12 @@
 
 #define USE_DEPTH_BUFFER 1
 
+#include <math.h>
+
+float GetDistance(int x1, int y1, int x2, int y2) {
+  return sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
+}
+
 // A class extension to declare private methods
 @interface EAGLView ()
 
@@ -79,14 +85,14 @@
 
 
 - (void)drawView {
-  jm->doJuggle();
+  g_jm->doJuggle();
   
 	[EAGLContext setCurrentContext:context];
 	
 	glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
 	glViewport(0, 0, backingWidth, backingHeight);  
     
-  jm->render();
+  g_jm->render();
 
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
 	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
@@ -223,9 +229,69 @@
 	[super dealloc];
 }
 
-- (void)setJMLib:(JMLib*)jm_
-{
-	jm = jm_;
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = [touches anyObject];
+	CGPoint pt = [touch locationInView:nil];
+	CGRect rect = [[UIScreen mainScreen] bounds];
+
+  NSSet* allTouches = [event allTouches];
+  
+  if ([allTouches count] == 1) // record only the first touch's down coord
+	  m_down_point = pt;
+	
+  g_jm->trackballStart(pt.x, pt.y);
+  m_action_on_touch_ended = true;
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+  NSSet* allTouches = [event allTouches];
+  
+  if ([allTouches count] == 1) { // rotate on single touch
+    UITouch *touch = [[allTouches allObjects] objectAtIndex:0];
+  	//UITouch *touch = [touches anyObject];
+	  CGPoint pt = [touch locationInView:nil];
+  
+    g_jm->setAutoRotate(false);
+    g_jm->trackballTrack(pt.x, pt.y);
+  }
+  else { // move on multitouch
+    UITouch *touch = [[allTouches allObjects] objectAtIndex:0];
+	  CGPoint pt = [touch locationInView:nil];
+    CGRect rect = [[UIScreen mainScreen] bounds];
+
+    
+    float dx = -(pt.x - m_down_point.x) * 10.0f / rect.size.width;
+    float dy =  (pt.y - m_down_point.y) * 10.0f / rect.size.height;
+    
+    g_jm->setAutoRotate(false);
+    g_jm->move(dx, dy);
+    
+    m_down_point = pt;
+    m_action_on_touch_ended = false;
+  }
+}
+
+- (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event {
+  NSSet* allTouches = [event allTouches];
+  UITouch *touch = [[allTouches allObjects] objectAtIndex:0];
+  //UITouch *touch = [touches anyObject];
+	CGPoint pt = [touch locationInView:nil];
+	CGRect rect = [[UIScreen mainScreen] bounds];
+
+	float distance = GetDistance(m_down_point.x, m_down_point.y, pt.x, pt.y);
+	printf("Distance between mouse down and up point: %f\n", distance);
+  
+  if (distance > 7.5f || !m_action_on_touch_ended) return;
+  
+  if ([touch tapCount] == 1) {
+    if ([allTouches count] == 1)
+      g_jm->toggleAutoRotate();
+    else
+      g_jm->togglePause();
+  }
+  else {
+		g_jm->resetCamera();
+  }
 }
 
 @end

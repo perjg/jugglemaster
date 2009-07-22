@@ -24,6 +24,9 @@
 
 #import "enter_site_view_controller.h"
 
+/*@interface EnterSiteViewController
+- (void)insertNumber: (int)number;
+@end*/
 
 @implementation EnterSiteViewController
 
@@ -39,34 +42,262 @@
 }
 */
 
+- (void)updateStyleButtonText {
+  char** styles = g_jm->getStyles();
+
+  NSString* styleStr = [[NSString alloc] initWithUTF8String:styles[cur_style]];
+  [style setTitle:styleStr forState:UIControlStateNormal];
+}
+
+- (void)updateObjectTypeButtonText {
+  [objects setTitle:[objectTypes objectAtIndex:cur_object] forState:UIControlStateNormal];
+}
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-  cur_style = 0;
+  cur_object = 0;
+  
+  objectTypes = [[NSArray alloc] initWithObjects:@"Random", @"Balls", @"Clubs", @"Rings", @"Mixed",nil];
   
   NSString* siteStr = [[NSString alloc] initWithUTF8String:g_jm->getSite()];
   [site setText:siteStr];
-
+  site.backgroundColor = [UIColor greenColor];
+  [site setDelegate:self];
+  
+  // Set style to match current style
+  const char* style_str = g_jm->getStyle();
+  char** styles = g_jm->getStyles();
+  cur_style = 0;
+  
+  for (int i = 0; i < g_jm->numStyles(); i++) {
+    if (strcmp(styles[i], style_str) == 0)
+      cur_style = i;
+  }
+  
+  [self updateStyleButtonText];
+  
+  // Set object type to match current object type
+  cur_object = (int)g_jm->getObjectType();
+  [self updateObjectTypeButtonText];
+  
+  // update speed slider
+  float cur_speed = g_jm->speed();
+  [speed setValue:cur_speed];
+  
   [super viewDidLoad];
 }
 
-- (IBAction)done {
-	[self.delegate enterSiteViewControllerDidFinish:self];	
-}
-
 - (IBAction)stylePress {
-  char** styles = g_jm->getStyles();
   if (cur_style < g_jm->numStyles()-1)
     cur_style++;
   else
     cur_style = 0;
   
-  NSString* styleStr = [[NSString alloc] initWithUTF8String:styles[cur_style]];
+  [self updateStyleButtonText];
+}
+
+- (IBAction)objectsPress {
+  if (cur_object < [objectTypes count]-1)
+    cur_object++;
+  else
+    cur_object = 0;
   
-  [style setTitle:styleStr forState:UIControlStateNormal];
+  [self updateObjectTypeButtonText];
+}
+
+- (bool)verifyCurrentPattern: (bool)changeColor {
+  NSString* siteStr = [site text];
+  const char* str = [siteStr cStringUsingEncoding:NSASCIIStringEncoding];
+  
+  bool valid = g_jm->isValidPattern(str);
+  
+  if (changeColor && valid) {
+    site.backgroundColor = [UIColor greenColor];
+  }
+  else if (changeColor && !valid) {
+    site.backgroundColor = [UIColor redColor];    
+  }
+  
+  return valid;
+}
+
+- (void)insertNumber: (int)number {
+  NSString* siteStr = [[NSString alloc] initWithFormat:@"%@%d", [site text], number];
+  [site setText:siteStr];
+  [self verifyCurrentPattern:true];
+}
+
+- (void)insertChar: (char)ch {
+  NSString* siteStr = [[NSString alloc] initWithFormat:@"%@%c", [site text], ch];
+  [site setText:siteStr];  
+  [self verifyCurrentPattern:true];
+}
+
+// Inserts matching paren / bracket
+- (void)insertMatching: (char)left withRight: (char)right {
+  NSString* current_ns = [site text];
+  const char* current = [current_ns cStringUsingEncoding:NSASCIIStringEncoding];
+  
+  // search backward for opening paren
+  if (current) {
+    int idx = strlen(current) - 1;
+    
+    while (idx >= 0) {
+      if (current[idx] == left) {
+        [self insertChar:right];
+        return;
+      }
+      else if (current[idx] == right) {
+        [self insertChar:left];
+        return;        
+      }
+      
+      idx--;
+    }
+  }
+  
+  [self insertChar:left];
+}
+
+- (void)insertParen {
+  [self insertMatching:'(' withRight:')'];
+}
+
+- (void)insertBracket {
+  [self insertMatching:'[' withRight:']'];
+}
+
+- (void)backSpace {
+  NSString* s = [site text];
+  if ([s length] == 0) return;
+  [site setText: [s substringToIndex: [s length]-1]];  
+  [self verifyCurrentPattern:true];
+}
+
+// toggles between letters (for old fashioned cellphone text input)
+// fixme: This needs refinement: Add timer, highlight active letter until timer expires
+- (void)toggleLetters:(char)from withTo: (char)to {
+  NSString* current_ns = [site text];
+  const char* current = [current_ns cStringUsingEncoding:NSASCIIStringEncoding];
+  
+  char last_char = current[ strlen(current)-1 ];
+  
+  if (last_char >= from && last_char < to) {
+    last_char++;
+    [self backSpace];
+    [self insertChar:last_char];
+  }
+  else if (last_char == to) {
+    last_char = from;
+    [self backSpace];
+    [self insertChar:last_char];
+  }
+  else {
+    [self insertChar:from];
+  }
+}
+
+- (IBAction)button0Press {
+  [self insertNumber:0];
+}
+
+- (IBAction)button1Press {
+  //[self insertNumber:1];
+  [self toggleLetters:'a' withTo:'c'];
+}
+
+- (IBAction)button2Press {
+  [self insertNumber:2];
+}
+
+- (IBAction)button3Press {
+  [self insertNumber:3];
+}
+
+- (IBAction)button4Press {
+  [self insertNumber:4];
+}
+
+- (IBAction)button5Press {
+  [self insertNumber:5];
+}
+
+- (IBAction)button6Press {
+  [self insertNumber:6];
+}
+
+- (IBAction)button7Press {
+  [self insertNumber:7];
+}
+
+- (IBAction)button8Press {
+  [self insertNumber:8];
+}
+
+- (IBAction)button9Press {
+  [self insertNumber:9];
+}
+
+- (IBAction)buttonParenPress {
+  [self insertParen];
+}
+
+- (IBAction)buttonBracketPress {
+  [self insertBracket];
+}
+
+- (IBAction)buttonCommaPress {
+  [self insertChar:','];
+}
+
+- (IBAction)buttonXPress {
+  [self insertChar:'x'];
+}
+
+- (IBAction)buttonBackspacePress {
+  [self backSpace];
+}
+
+- (IBAction)buttonTogglePress {
+  [self insertChar:'T'];  
 }
 
 - (IBAction)jugglePress {
-  
+  if ([self verifyCurrentPattern:false]) {
+    NSString* siteStr = [site text];
+    const char* str = [siteStr cStringUsingEncoding:NSASCIIStringEncoding];
+    char** styles = g_jm->getStyles();
+    
+		g_jm->stopJuggle();
+		g_jm->setPattern((char*) str);
+    g_jm->setStyle(styles[cur_style]);
+    g_jm->setObjectType((object_type_t)cur_object);    
+    g_jm->setSpeed([speed value]);
+		g_jm->startJuggle();
+    
+    [self.delegate enterSiteViewControllerDidFinish:self];	
+  }
+}
+
+- (IBAction)cancelPress {
+  [self.delegate enterSiteViewControllerDidFinish:self];
+}
+
+- (BOOL)shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+  return YES; 
+}
+
+// Terminates the editing session
+- (BOOL)textFieldShouldReturn:(UITextField*)textField {
+	//Terminate editing
+  //fixme: causes crash
+	//[textField resignFirstResponder];
+	
+	return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField*)textField {
+  //[self jugglePress];
 }
 
 /*

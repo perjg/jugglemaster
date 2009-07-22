@@ -26,13 +26,14 @@
 #import "main_view_controller.h"
 #import "eagl_view.h"
 
+JMLib* g_jm = NULL;
+JMPatterns* g_pattern_lib = NULL;
+
 @implementation jmtouchAppDelegate
 
 @synthesize window;
 @synthesize mainViewController;
 @synthesize glView;
-
-JMLib* g_jm = NULL;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
   /*
@@ -64,9 +65,15 @@ JMLib* g_jm = NULL;
   jm->setScalingMethod(SCALING_METHOD_DYNAMIC);
   jm->startJuggle();
 
-	[glView setJMLib:jm];
 	glView.animationInterval = 1.0 / 60.0;
 	[glView startAnimation];
+
+  /*
+  // Open pattern database
+  NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"patterns.db"];    
+  g_pattern_lib = new JMPatterns();
+  g_pattern_lib->loadDatabase([path cStringUsingEncoding:NSASCIIStringEncoding]);
+  */
 }
 
 - (IBAction)showInfo {

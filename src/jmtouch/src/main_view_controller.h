@@ -40,6 +40,7 @@ extern JMPatterns* g_pattern_lib;
     NSArray* tableItems;
   
     NSMutableArray* categories;
+    NSMutableArray* categoriesIndex;
     NSMutableArray* patterns_in_category;
     NSArray* fakeItems;
   
@@ -49,6 +50,8 @@ extern JMPatterns* g_pattern_lib;
 
 @property JMLib* jm;
 - (IBAction)done;
+- (IBAction)settings;
+
 - (void)setAppDelegate:(jmtouchAppDelegate*)appDelegate_;
 //- (void)setJMLib:(JMLib*)jm_;
 

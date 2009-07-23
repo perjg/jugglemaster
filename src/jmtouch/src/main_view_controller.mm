@@ -42,7 +42,7 @@ extern JMPatterns* g_pattern_lib;
 
  // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-  tableItems = [[NSArray alloc] initWithObjects:@"Enter Siteswap",@"Settings",@"Random Pattern",@"Set 2D Mode",nil];
+  tableItems = [[NSArray alloc] initWithObjects:@"Enter Siteswap",@"Settings",@"Random Pattern",@"Set 2D Mode",@"About",nil];
 
   // Open pattern database
   NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"patterns.db"];    
@@ -51,16 +51,22 @@ extern JMPatterns* g_pattern_lib;
   
   // Load categories
   categories = [[NSMutableArray alloc] init];
+  categoriesIndex = [[NSMutableArray alloc] init];
   patterns_in_category = [[NSMutableArray alloc] init];
   //categories = [[NSArray alloc] initWithObjects:@"Category 1", @"Category 2",@"Category 3",@"Category 4",@"Category 5",nil];
 
   pattern_group_t* temp = g_pattern_lib->getCategories();
   NSString* name;
   
+  [categoriesIndex addObject:@"0"];
+  
   while (temp) {
     name = [NSString stringWithUTF8String: temp->name];
     
     [categories addObject:name];
+    //NSString* str = [[NSString alloc] initWithFormat:@"%d", temp->index];
+    //[categoriesIndex addObject:@"X"];
+    [categoriesIndex addObject:[[NSString alloc] initWithFormat:@"%d", temp->index+1]];
 
     pattern_t* cur_pattern = g_pattern_lib->getCategory(temp->name); // first pattern in this category
     [patterns_in_category addObject:[NSValue valueWithPointer:cur_pattern]];
@@ -118,6 +124,16 @@ extern JMPatterns* g_pattern_lib;
 
 - (IBAction)done {
   [appDelegate showJuggler];
+}
+
+- (IBAction)settings {
+  FlipsideViewController *controller = [[FlipsideViewController alloc] initWithNibName:@"SettingsView" bundle:nil];
+  controller.delegate = self;
+  
+  controller.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+  [self presentModalViewController:controller animated:YES];
+  
+  [controller release];
 }
 
 
@@ -232,7 +248,7 @@ extern JMPatterns* g_pattern_lib;
       
     }
     else if ([str isEqualToString:@"Random Pattern"]) {
-      jm->setPattern("3B@(1,-0.4)>(2,4.2)/(-2,1)3B@(-1.8,4.4)>(-2.1,0)");    
+      g_pattern_lib->loadRandomPattern(g_jm, NULL, true);
       [appDelegate showJuggler];
     }
     else if ([str isEqualToString:@"Set 3D Mode"] || [str isEqualToString:@"Set 2D Mode"]) {
@@ -240,13 +256,10 @@ extern JMPatterns* g_pattern_lib;
       [appDelegate showJuggler];
     }
     else if ([str isEqualToString:@"Settings"]) {
-      FlipsideViewController *controller = [[FlipsideViewController alloc] initWithNibName:@"SettingsView" bundle:nil];
-      controller.delegate = self;
-    
-      controller.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-      [self presentModalViewController:controller animated:YES];
-    
-      [controller release];
+      [self settings];
+    }
+    else if ([str isEqualToString:@"About"]) {
+      
     }
   }
   else {
@@ -255,6 +268,10 @@ extern JMPatterns* g_pattern_lib;
     g_pattern_lib->loadPattern(first_patt, indexPath.row, g_jm);
     [appDelegate showJuggler];
   }
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+  return categoriesIndex;
 }
 
 @end

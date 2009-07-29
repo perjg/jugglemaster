@@ -80,11 +80,53 @@ float GetDistance(int x1, int y1, int x2, int y2) {
 		
 		animationInterval = 1.0 / 60.0;
 	}
+  
+	site = [[UILabel alloc] initWithFrame:CGRectMake(0, 25, [self bounds].size.width, 25)];
+	[site setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
+	[site setTextColor:[UIColor whiteColor]];
+	[site setFont:[UIFont fontWithName:kFontName size:kLabelFontSize]];
+  site.textAlignment = UITextAlignmentCenter;
+
+  // test 2
+	overlay = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, [self bounds].size.width, 50)];
+	[overlay setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
+	[overlay setTextColor:[UIColor redColor]];
+	[overlay setFont:[UIFont fontWithName:kFontName size:kLabelFontSize]];
+  overlay.textAlignment = UITextAlignmentLeft;
+
+  [self addSubview:site]; 
+  [self addSubview:overlay];
+  
 	return self;
 }
 
+- (void)drawSite {
+  int start = g_jm->getSiteposStart();
+  int stop =  g_jm->getSiteposStop();
+  int diff = stop - start;
+
+  NSString* ss = [[NSString alloc] initWithUTF8String:g_jm->getSite()];
+  NSString* inactive = [ss substringWithRange:NSMakeRange(0, start)];
+  NSString* sub = [ss substringWithRange:NSMakeRange(start,diff)];
+
+  site.text = ss;
+  overlay.text = sub;
+  
+  // calculate proper placement of overlay string
+  int full_length = [ss sizeWithFont:[UIFont fontWithName:kFontName size:kLabelFontSize]].width;
+  int inactive_length = [inactive sizeWithFont:[UIFont fontWithName:kFontName size:kLabelFontSize]].width;
+  int sub_length = [sub sizeWithFont:[UIFont fontWithName:kFontName size:kLabelFontSize]].width;
+  
+  int start_coord = [self bounds].size.width / 2 - full_length / 2 + inactive_length;
+
+  site.text = ss;
+  overlay.text = sub;
+  [overlay setFrame:CGRectMake(start_coord, 25, sub_length, 25)];
+}
 
 - (void)drawView {
+  [self drawSite];
+  
   g_jm->doJuggle();
   
 	[EAGLContext setCurrentContext:context];
@@ -96,47 +138,6 @@ float GetDistance(int x1, int y1, int x2, int y2) {
 
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
 	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
-  
-  /*
-	// Replace the implementation of this method to do your own custom drawing
-	
-	const GLfloat squareVertices[] = {
-		-0.5f, -0.5f,
-		0.5f,  -0.5f,
-		-0.5f,  0.5f,
-		0.5f,   0.5f,
-	};
-	const GLubyte squareColors[] = {
-		255, 255,   0, 255,
-		0,   255, 255, 255,
-		0,     0,   0,   0,
-		255,   0, 255, 255,
-	};
-	
-	[EAGLContext setCurrentContext:context];
-	
-	glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
-	glViewport(0, 0, backingWidth, backingHeight);
-	
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrthof(-1.0f, 1.0f, -1.5f, 1.5f, -1.0f, 1.0f);
-	glMatrixMode(GL_MODELVIEW);
-	glRotatef(3.0f, 0.0f, 0.0f, 1.0f);
-	
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	glVertexPointer(2, GL_FLOAT, 0, squareVertices);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors);
-	glEnableClientState(GL_COLOR_ARRAY);
-	
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	
-	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
-	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
-  */
 }
 
 

@@ -202,8 +202,8 @@
 }
 
 - (IBAction)button1Press {
-  //[self insertNumber:1];
-  [self toggleLetters:'a' withTo:'c'];
+  [self insertNumber:1];
+  //[self toggleLetters:'a' withTo:'c'];
 }
 
 - (IBAction)button2Press {

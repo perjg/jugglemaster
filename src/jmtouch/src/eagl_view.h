@@ -31,6 +31,9 @@
 extern JMLib* g_jm;
 JML_FLOAT GetDistance(JML_INT32 x1, JML_INT32 y1, JML_INT32 x2, JML_INT32 y2);
 
+#define kFontName					@"Arial"
+#define kLabelFontSize				14
+
 /*
 This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
 The view content is basically an EAGL surface you render your OpenGL scene into.
@@ -56,6 +59,11 @@ Note that setting the view non-opaque will only work if the EAGL surface has an 
   
   CGPoint m_down_point;
   bool m_action_on_touch_ended;
+  
+  // text rendering
+  UILabel* site;
+  UILabel* overlay;
+  //Texture2D* test;
 }
 
 @property NSTimeInterval animationInterval;

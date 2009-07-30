@@ -44,7 +44,23 @@
 		CB31A5BB102047E30096DADB /* render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5B3102047E30096DADB /* render.cpp */; };
 		CB31A5BC102047E30096DADB /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5B4102047E30096DADB /* trackball.cpp */; };
 		CB31A5C1102047FA0096DADB /* glues.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5BE102047FA0096DADB /* glues.cpp */; };
+		CB80FB8B10208E2C00F530A4 /* key-1.png in Resources */ = {isa = PBXBuildFile; fileRef = CB80FB8810208E2C00F530A4 /* key-1.png */; };
+		CB80FB8C10208E2C00F530A4 /* key-2.png in Resources */ = {isa = PBXBuildFile; fileRef = CB80FB8910208E2C00F530A4 /* key-2.png */; };
+		CB80FB8D10208E2C00F530A4 /* key-3.png in Resources */ = {isa = PBXBuildFile; fileRef = CB80FB8A10208E2C00F530A4 /* key-3.png */; };
 		CBA21D981020468D0023BBF7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBA21D971020468D0023BBF7 /* CoreGraphics.framework */; };
+		CBCBAE381021A355000652A3 /* key-0.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE2F1021A355000652A3 /* key-0.png */; };
+		CBCBAE391021A355000652A3 /* key-4.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE301021A355000652A3 /* key-4.png */; };
+		CBCBAE3A1021A355000652A3 /* key-5.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE311021A355000652A3 /* key-5.png */; };
+		CBCBAE3B1021A355000652A3 /* key-6.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE321021A355000652A3 /* key-6.png */; };
+		CBCBAE3C1021A355000652A3 /* key-7.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE331021A355000652A3 /* key-7.png */; };
+		CBCBAE3D1021A355000652A3 /* key-8.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE341021A355000652A3 /* key-8.png */; };
+		CBCBAE3E1021A355000652A3 /* key-9.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE351021A355000652A3 /* key-9.png */; };
+		CBCBAE3F1021A355000652A3 /* key-backspace.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE361021A355000652A3 /* key-backspace.png */; };
+		CBCBAE401021A355000652A3 /* key-left.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE371021A355000652A3 /* key-left.png */; };
+		CBCBAE571021B988000652A3 /* key-brackets.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE551021B988000652A3 /* key-brackets.png */; };
+		CBCBAE581021B988000652A3 /* key-paren.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE561021B988000652A3 /* key-paren.png */; };
+		CBCBAE5B1021BB32000652A3 /* key-comma.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE5A1021BB32000652A3 /* key-comma.png */; };
+		CBCBAE621021BBEE000652A3 /* key-shift.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE611021BBEE000652A3 /* key-shift.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -118,7 +134,23 @@
 		CB31A5BE102047FA0096DADB /* glues.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = glues.cpp; path = ../jmlib/jugglesaver/opengl_es/glues.cpp; sourceTree = SOURCE_ROOT; };
 		CB31A5BF102047FA0096DADB /* glues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glues.h; path = ../jmlib/jugglesaver/opengl_es/glues.h; sourceTree = SOURCE_ROOT; };
 		CB31A5C0102047FA0096DADB /* glues_sin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glues_sin.h; path = ../jmlib/jugglesaver/opengl_es/glues_sin.h; sourceTree = SOURCE_ROOT; };
+		CB80FB8810208E2C00F530A4 /* key-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-1.png"; path = "resources/key-1.png"; sourceTree = "<group>"; };
+		CB80FB8910208E2C00F530A4 /* key-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-2.png"; path = "resources/key-2.png"; sourceTree = "<group>"; };
+		CB80FB8A10208E2C00F530A4 /* key-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-3.png"; path = "resources/key-3.png"; sourceTree = "<group>"; };
 		CBA21D971020468D0023BBF7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		CBCBAE2F1021A355000652A3 /* key-0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-0.png"; path = "resources/key-0.png"; sourceTree = "<group>"; };
+		CBCBAE301021A355000652A3 /* key-4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-4.png"; path = "resources/key-4.png"; sourceTree = "<group>"; };
+		CBCBAE311021A355000652A3 /* key-5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-5.png"; path = "resources/key-5.png"; sourceTree = "<group>"; };
+		CBCBAE321021A355000652A3 /* key-6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-6.png"; path = "resources/key-6.png"; sourceTree = "<group>"; };
+		CBCBAE331021A355000652A3 /* key-7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-7.png"; path = "resources/key-7.png"; sourceTree = "<group>"; };
+		CBCBAE341021A355000652A3 /* key-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-8.png"; path = "resources/key-8.png"; sourceTree = "<group>"; };
+		CBCBAE351021A355000652A3 /* key-9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-9.png"; path = "resources/key-9.png"; sourceTree = "<group>"; };
+		CBCBAE361021A355000652A3 /* key-backspace.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-backspace.png"; path = "resources/key-backspace.png"; sourceTree = "<group>"; };
+		CBCBAE371021A355000652A3 /* key-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-left.png"; path = "resources/key-left.png"; sourceTree = "<group>"; };
+		CBCBAE551021B988000652A3 /* key-brackets.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-brackets.png"; path = "resources/key-brackets.png"; sourceTree = "<group>"; };
+		CBCBAE561021B988000652A3 /* key-paren.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-paren.png"; path = "resources/key-paren.png"; sourceTree = "<group>"; };
+		CBCBAE5A1021BB32000652A3 /* key-comma.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-comma.png"; path = "resources/key-comma.png"; sourceTree = "<group>"; };
+		CBCBAE611021BBEE000652A3 /* key-shift.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-shift.png"; path = "resources/key-shift.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +225,22 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CBCBAE2F1021A355000652A3 /* key-0.png */,
+				CB80FB8810208E2C00F530A4 /* key-1.png */,
+				CB80FB8910208E2C00F530A4 /* key-2.png */,
+				CB80FB8A10208E2C00F530A4 /* key-3.png */,
+				CBCBAE301021A355000652A3 /* key-4.png */,
+				CBCBAE311021A355000652A3 /* key-5.png */,
+				CBCBAE321021A355000652A3 /* key-6.png */,
+				CBCBAE331021A355000652A3 /* key-7.png */,
+				CBCBAE341021A355000652A3 /* key-8.png */,
+				CBCBAE351021A355000652A3 /* key-9.png */,
+				CBCBAE361021A355000652A3 /* key-backspace.png */,
+				CBCBAE5A1021BB32000652A3 /* key-comma.png */,
+				CBCBAE551021B988000652A3 /* key-brackets.png */,
+				CBCBAE561021B988000652A3 /* key-paren.png */,
+				CBCBAE371021A355000652A3 /* key-left.png */,
+				CBCBAE611021BBEE000652A3 /* key-shift.png */,
 				CB31A564102047130096DADB /* EnterSiteView.xib */,
 				CB31A565102047130096DADB /* MainView.xib */,
 				CB31A566102047130096DADB /* MainWindow.xib */,
@@ -335,6 +383,22 @@
 				CB31A56B102047130096DADB /* MainWindow.xib in Resources */,
 				CB31A56C102047130096DADB /* patterns.db in Resources */,
 				CB31A56D102047130096DADB /* SettingsView.xib in Resources */,
+				CB80FB8B10208E2C00F530A4 /* key-1.png in Resources */,
+				CB80FB8C10208E2C00F530A4 /* key-2.png in Resources */,
+				CB80FB8D10208E2C00F530A4 /* key-3.png in Resources */,
+				CBCBAE381021A355000652A3 /* key-0.png in Resources */,
+				CBCBAE391021A355000652A3 /* key-4.png in Resources */,
+				CBCBAE3A1021A355000652A3 /* key-5.png in Resources */,
+				CBCBAE3B1021A355000652A3 /* key-6.png in Resources */,
+				CBCBAE3C1021A355000652A3 /* key-7.png in Resources */,
+				CBCBAE3D1021A355000652A3 /* key-8.png in Resources */,
+				CBCBAE3E1021A355000652A3 /* key-9.png in Resources */,
+				CBCBAE3F1021A355000652A3 /* key-backspace.png in Resources */,
+				CBCBAE401021A355000652A3 /* key-left.png in Resources */,
+				CBCBAE571021B988000652A3 /* key-brackets.png in Resources */,
+				CBCBAE581021B988000652A3 /* key-paren.png in Resources */,
+				CBCBAE5B1021BB32000652A3 /* key-comma.png in Resources */,
+				CBCBAE621021BBEE000652A3 /* key-shift.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

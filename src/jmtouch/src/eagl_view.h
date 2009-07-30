@@ -63,7 +63,6 @@ Note that setting the view non-opaque will only work if the EAGL surface has an 
   // text rendering
   UILabel* site;
   UILabel* overlay;
-  //Texture2D* test;
 }
 
 @property NSTimeInterval animationInterval;

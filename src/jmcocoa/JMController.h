@@ -1,5 +1,9 @@
-/* JMConterller */
+/* JMController */
 
+//#import "JMView.h"
+#include "jmlib.h"
+#include "sqlite_patterns.h"
+#import "JMOpenGLView.h"
 #import <Cocoa/Cocoa.h>
 #import <QuickTime/QuickTime.h>
 #import <QTKit/QTKit.h>
@@ -20,12 +24,16 @@ typedef enum
 
 @interface JMController : NSObject
 {
-	IBOutlet JMView *view;
+	IBOutlet JMOpenGLView *view;
 	IBOutlet NSImageView *errorReporter;
 	IBOutlet NSMatrix *patternStyleButtons;
 	IBOutlet NSPanel *inspectorPanel;
-	IBOutlet NSPopUpButton *styleSelect;
 	IBOutlet NSMenuItem *recordingMenuItem;
+	IBOutlet NSPopUpButton *styleSelect;
+	IBOutlet NSPopUpButton *objectSelect;
+	IBOutlet NSPopUpButton *categorySelect;
+	IBOutlet NSPopUpButton *patternSelect;
+  IBOutlet NSSegmentedControl *switchPattern;
 	
 	IBOutlet NSView *movieExportView;
 	IBOutlet NSPopUpButton *movieExportSelection;
@@ -41,16 +49,28 @@ typedef enum
 		QTMovie *movie;
 		pat currentPat;
 		DataHandler mDataHandlerRef;
+    
+    JMPatterns* patternLib;
+    pattern_group_t* categories;
+    pattern_t* cur_pattern; // patterns in currently selected category
 }
 
 - (IBAction)showInspector:(id)sender;
 - (IBAction)setPattern:(id)sender;
 - (IBAction)setStyle:(id)sender;
+- (IBAction)setObjectType:(id)sender;
 - (IBAction)setSpeed:(id)sender;
 - (IBAction)toggleShowPattern:(id)sender;
 - (IBAction)setPatternStyle:(id)sender;
 - (IBAction)toggleRecording:(id)sender;
 - (IBAction)cancelExport:(id)sender;
+
+- (IBAction)setLoadedCategory:(id)sender;
+- (IBAction)setLoadedPattern:(id)sender;
+- (IBAction)switchLoadedPattern:(id)sender;
+
+- (void)updatePatterns:(NSString*)str;
+- (void)updateObjectPopUp;
 
 - (void)setFrame:(NSRect)frameRect;
 

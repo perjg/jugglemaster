@@ -1,0 +1,173 @@
+// !$*UTF8*$!
+{
+	CB6ABAEF0DB25168000FD76F /* Project object */ = {
+		activeArchitecture = i386;
+		activeBuildConfigurationName = Debug;
+		activeExecutable = CB6ABB2D0DB2551C000FD76F /* jmdlx */;
+		activeTarget = CB6ABB2A0DB2551C000FD76F /* jmdlx */;
+		addToTargets = (
+			CB6ABB2A0DB2551C000FD76F /* jmdlx */,
+		);
+		codeSenseManager = CB6ABAF40DB25168000FD76F /* Code sense */;
+		executables = (
+			CB6ABB2D0DB2551C000FD76F /* jmdlx */,
+		);
+		ignoreBreakpointsInProjectsDict = {
+		};
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					790,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					750,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 229866939;
+			PBXWorkspaceStateSaveDate = 229866939;
+		};
+		sourceControlManager = CB6ABAF30DB25168000FD76F /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	CB6ABAF30DB25168000FD76F /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	CB6ABAF40DB25168000FD76F /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	CB6ABB2A0DB2551C000FD76F /* jmdlx */ = {
+		activeExec = 0;
+		executables = (
+			CB6ABB2D0DB2551C000FD76F /* jmdlx */,
+		);
+	};
+	CB6ABB2D0DB2551C000FD76F /* jmdlx */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = jmdlx;
+		sourceDirectories = (
+		);
+	};
+	CB6ABB320DB2557B000FD76F /* advsite.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {968, 2576}}";
+			sepNavSelRange = "{1053, 0}";
+			sepNavVisRange = "{672, 832}";
+		};
+	};
+	CB6ABB330DB2557B000FD76F /* advsite.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {968, 854}}";
+			sepNavSelRange = "{646, 19}";
+			sepNavVisRange = "{0, 788}";
+		};
+	};
+	CB6ABB340DB2557B000FD76F /* choosepatt.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {968, 2352}}";
+			sepNavSelRange = "{4337, 81}";
+			sepNavVisRange = "{634, 752}";
+		};
+	};
+	CB6ABB350DB2557B000FD76F /* choosepatt.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {968, 700}}";
+			sepNavSelRange = "{651, 0}";
+			sepNavVisRange = "{301, 814}";
+		};
+	};
+	CB6ABB370DB2557B000FD76F /* choosestyle.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {968, 686}}";
+			sepNavSelRange = "{1099, 0}";
+			sepNavVisRange = "{631, 686}";
+			sepNavWindowFrame = "{{59, -5}, {750, 778}}";
+		};
+	};
+	CB6ABB380DB2557B000FD76F /* jmdlx.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {968, 5040}}";
+			sepNavSelRange = "{10772, 0}";
+			sepNavVisRange = "{10532, 713}";
+		};
+	};
+	CB6ABB390DB2557B000FD76F /* jmdlx.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {968, 2310}}";
+			sepNavSelRange = "{3359, 3}";
+			sepNavVisRange = "{2871, 651}";
+		};
+	};
+	CB6ABB3A0DB2557B000FD76F /* newsemaphore.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {968, 1190}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 953}";
+		};
+	};
+	CB6ABB3B0DB2557B000FD76F /* newsemaphore.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {968, 560}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 861}";
+		};
+	};
+}

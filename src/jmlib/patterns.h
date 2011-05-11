@@ -1,10 +1,13 @@
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
- * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
+ * Version 2.1
+ * (C) Per Johan Groland 2000-2008, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
+ *
+ * JuggleSaver support based on Juggler3D
+ * Copyright (c) 2005-2008 Brian Apps <brian@jugglesaver.co.uk>
  *
  * You may redistribute and/or modify JMLib under the terms of the
  * Modified BSD License as published in various places online or in the
@@ -37,6 +40,11 @@ struct pattern_group_t {
 	JML_CHAR *name;
 	struct pattern_t *first_patt;
 	struct pattern_group_t *next;
+
+  // The following items are used by sqlite_patterns only
+	struct pattern_group_t *prev;
+  int index;
+  int pattern_group_count;
 };
 
 struct pattern_t {
@@ -49,6 +57,11 @@ struct pattern_t {
 	int bgred, bggreen, bgblue; /* Background color */
 	int bp, hd, pd, mr; /* Beep, Hand, Pattern, Mirror */
 	struct pattern_t *next;
+  
+  // The following items are used by sqlite_patterns only
+  struct pattern_t *prev;
+  int index;
+  int pattern_count;
 };
 
 struct groups_t {
@@ -61,6 +74,9 @@ struct styles_t {
 
 /* groups and styles better both exist and be allocated.
    If you pass it null pointers, it will instantly, silently, bail. */
+int ParseAllPatterns(FILE *jm_input, FILE* js_input, 
+	struct groups_t *groups, struct styles_t *styles);
+   
 int ParsePatterns(FILE *input,
 	struct groups_t *groups, struct styles_t *styles);
 
@@ -97,7 +113,7 @@ int legal_pattern_first_char(char c);
 
 
 /* MSVC++ doesn't have strcasecmp, so add our own version that wraps _stricmp */
-#ifdef WIN32 ///FIX ME - DO THIS RIGHT
+#ifdef _WIN32
     #define strcasecmp(a, b) _stricmp(a, b)
 #endif
 

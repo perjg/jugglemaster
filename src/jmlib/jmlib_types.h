@@ -1,12 +1,13 @@
-// 	$Id$	 
-
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
- * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
+ * Version 2.1
+ * (C) Per Johan Groland 2000-2008, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
+ *
+ * JuggleSaver support based on Juggler3D
+ * Copyright (c) 2005-2008 Brian Apps <brian@jugglesaver.co.uk>
  *
  * You may redistribute and/or modify JMLib under the terms of the
  * Modified BSD License as published in various places online or in the
@@ -70,9 +71,9 @@ typedef unsigned char JML_BOOL;
 #elif (SCHAR_MAX == 255)
 
 typedef char          JML_CHAR;
-typedef signed char   JML_UINT8;
+typedef unsigned char JML_UINT8;
 typedef signed char   JML_INT8;
-typedef signed char   JML_BOOL;
+typedef unsigned char JML_BOOL;
 
 // No 8-bit types found
 #else
@@ -122,5 +123,7 @@ typedef float JML_FLOAT;
 #undef FALSE
 #endif
 #define FALSE (JML_BOOL)0
+
+#define JML_CHAR char
 
 #endif // JMLIB_TYPES__HDR_

@@ -1,0 +1,533 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
+		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		CB31A563102047010096DADB /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB31A562102047010096DADB /* Icon.png */; };
+		CB31A569102047130096DADB /* EnterSiteView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB31A564102047130096DADB /* EnterSiteView.xib */; };
+		CB31A56A102047130096DADB /* MainView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB31A565102047130096DADB /* MainView.xib */; };
+		CB31A56B102047130096DADB /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB31A566102047130096DADB /* MainWindow.xib */; };
+		CB31A56C102047130096DADB /* patterns.db in Resources */ = {isa = PBXBuildFile; fileRef = CB31A567102047130096DADB /* patterns.db */; };
+		CB31A56D102047130096DADB /* SettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB31A568102047130096DADB /* SettingsView.xib */; };
+		CB31A57F1020478E0096DADB /* app_delegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5701020478E0096DADB /* app_delegate.mm */; };
+		CB31A5801020478E0096DADB /* eagl_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5721020478E0096DADB /* eagl_view.mm */; };
+		CB31A5811020478E0096DADB /* enter_site_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5741020478E0096DADB /* enter_site_view.mm */; };
+		CB31A5821020478E0096DADB /* enter_site_view_controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5761020478E0096DADB /* enter_site_view_controller.mm */; };
+		CB31A5831020478E0096DADB /* main_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5781020478E0096DADB /* main_view.mm */; };
+		CB31A5841020478E0096DADB /* main_view_controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB31A57A1020478E0096DADB /* main_view_controller.mm */; };
+		CB31A5851020478E0096DADB /* settings_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB31A57C1020478E0096DADB /* settings_view.mm */; };
+		CB31A5861020478E0096DADB /* settings_view_controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB31A57E1020478E0096DADB /* settings_view_controller.mm */; };
+		CB31A59C102047AE0096DADB /* jmlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A587102047AE0096DADB /* jmlib.cpp */; };
+		CB31A59D102047AE0096DADB /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A58C102047AE0096DADB /* jmlib_wrapper.cpp */; };
+		CB31A59E102047AE0096DADB /* patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A58E102047AE0096DADB /* patterns.cpp */; };
+		CB31A59F102047AE0096DADB /* prefs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A590102047AE0096DADB /* prefs.cpp */; };
+		CB31A5A0102047AE0096DADB /* randompatt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A592102047AE0096DADB /* randompatt.cpp */; };
+		CB31A5A1102047AE0096DADB /* render_jm_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A594102047AE0096DADB /* render_jm_flat.cpp */; };
+		CB31A5A2102047AE0096DADB /* sqlite_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A596102047AE0096DADB /* sqlite_patterns.cpp */; };
+		CB31A5A3102047AE0096DADB /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A598102047AE0096DADB /* util.cpp */; };
+		CB31A5A4102047AE0096DADB /* validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A59A102047AE0096DADB /* validator.cpp */; };
+		CB31A5A8102047CD0096DADB /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5A5102047CD0096DADB /* sqlite3.c */; };
+		CB31A5B6102047E30096DADB /* engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5A9102047E30096DADB /* engine.cpp */; };
+		CB31A5B7102047E30096DADB /* gltrackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5AA102047E30096DADB /* gltrackball.cpp */; };
+		CB31A5B8102047E30096DADB /* jmlib_jsaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5AC102047E30096DADB /* jmlib_jsaver.cpp */; };
+		CB31A5B9102047E30096DADB /* js_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5AE102047E30096DADB /* js_patterns.cpp */; };
+		CB31A5BA102047E30096DADB /* js_validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5B0102047E30096DADB /* js_validator.cpp */; };
+		CB31A5BB102047E30096DADB /* render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5B3102047E30096DADB /* render.cpp */; };
+		CB31A5BC102047E30096DADB /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5B4102047E30096DADB /* trackball.cpp */; };
+		CB31A5C1102047FA0096DADB /* glues.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB31A5BE102047FA0096DADB /* glues.cpp */; };
+		CB80FB8B10208E2C00F530A4 /* key-1.png in Resources */ = {isa = PBXBuildFile; fileRef = CB80FB8810208E2C00F530A4 /* key-1.png */; };
+		CB80FB8C10208E2C00F530A4 /* key-2.png in Resources */ = {isa = PBXBuildFile; fileRef = CB80FB8910208E2C00F530A4 /* key-2.png */; };
+		CB80FB8D10208E2C00F530A4 /* key-3.png in Resources */ = {isa = PBXBuildFile; fileRef = CB80FB8A10208E2C00F530A4 /* key-3.png */; };
+		CBA21D981020468D0023BBF7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBA21D971020468D0023BBF7 /* CoreGraphics.framework */; };
+		CBCBAE381021A355000652A3 /* key-0.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE2F1021A355000652A3 /* key-0.png */; };
+		CBCBAE391021A355000652A3 /* key-4.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE301021A355000652A3 /* key-4.png */; };
+		CBCBAE3A1021A355000652A3 /* key-5.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE311021A355000652A3 /* key-5.png */; };
+		CBCBAE3B1021A355000652A3 /* key-6.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE321021A355000652A3 /* key-6.png */; };
+		CBCBAE3C1021A355000652A3 /* key-7.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE331021A355000652A3 /* key-7.png */; };
+		CBCBAE3D1021A355000652A3 /* key-8.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE341021A355000652A3 /* key-8.png */; };
+		CBCBAE3E1021A355000652A3 /* key-9.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE351021A355000652A3 /* key-9.png */; };
+		CBCBAE3F1021A355000652A3 /* key-backspace.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE361021A355000652A3 /* key-backspace.png */; };
+		CBCBAE401021A355000652A3 /* key-left.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE371021A355000652A3 /* key-left.png */; };
+		CBCBAE571021B988000652A3 /* key-brackets.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE551021B988000652A3 /* key-brackets.png */; };
+		CBCBAE581021B988000652A3 /* key-paren.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE561021B988000652A3 /* key-paren.png */; };
+		CBCBAE5B1021BB32000652A3 /* key-comma.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE5A1021BB32000652A3 /* key-comma.png */; };
+		CBCBAE621021BBEE000652A3 /* key-shift.png in Resources */ = {isa = PBXBuildFile; fileRef = CBCBAE611021BBEE000652A3 /* key-shift.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D6058910D05DD3D006BFB54 /* JuggleMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JuggleMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* JuggleMaster_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuggleMaster_Prefix.pch; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* JuggleMaster-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "JuggleMaster-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		CB31A562102047010096DADB /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		CB31A564102047130096DADB /* EnterSiteView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EnterSiteView.xib; path = resources/EnterSiteView.xib; sourceTree = "<group>"; };
+		CB31A565102047130096DADB /* MainView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainView.xib; path = resources/MainView.xib; sourceTree = "<group>"; };
+		CB31A566102047130096DADB /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = resources/MainWindow.xib; sourceTree = "<group>"; };
+		CB31A567102047130096DADB /* patterns.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = patterns.db; path = resources/patterns.db; sourceTree = "<group>"; };
+		CB31A568102047130096DADB /* SettingsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsView.xib; path = resources/SettingsView.xib; sourceTree = "<group>"; };
+		CB31A56F1020478E0096DADB /* app_delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = app_delegate.h; path = src/app_delegate.h; sourceTree = SOURCE_ROOT; };
+		CB31A5701020478E0096DADB /* app_delegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = app_delegate.mm; path = src/app_delegate.mm; sourceTree = SOURCE_ROOT; };
+		CB31A5711020478E0096DADB /* eagl_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = eagl_view.h; path = src/eagl_view.h; sourceTree = SOURCE_ROOT; };
+		CB31A5721020478E0096DADB /* eagl_view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = eagl_view.mm; path = src/eagl_view.mm; sourceTree = SOURCE_ROOT; };
+		CB31A5731020478E0096DADB /* enter_site_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = enter_site_view.h; path = src/enter_site_view.h; sourceTree = SOURCE_ROOT; };
+		CB31A5741020478E0096DADB /* enter_site_view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = enter_site_view.mm; path = src/enter_site_view.mm; sourceTree = SOURCE_ROOT; };
+		CB31A5751020478E0096DADB /* enter_site_view_controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = enter_site_view_controller.h; path = src/enter_site_view_controller.h; sourceTree = SOURCE_ROOT; };
+		CB31A5761020478E0096DADB /* enter_site_view_controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = enter_site_view_controller.mm; path = src/enter_site_view_controller.mm; sourceTree = SOURCE_ROOT; };
+		CB31A5771020478E0096DADB /* main_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main_view.h; path = src/main_view.h; sourceTree = SOURCE_ROOT; };
+		CB31A5781020478E0096DADB /* main_view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = main_view.mm; path = src/main_view.mm; sourceTree = SOURCE_ROOT; };
+		CB31A5791020478E0096DADB /* main_view_controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main_view_controller.h; path = src/main_view_controller.h; sourceTree = SOURCE_ROOT; };
+		CB31A57A1020478E0096DADB /* main_view_controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = main_view_controller.mm; path = src/main_view_controller.mm; sourceTree = SOURCE_ROOT; };
+		CB31A57B1020478E0096DADB /* settings_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = settings_view.h; path = src/settings_view.h; sourceTree = SOURCE_ROOT; };
+		CB31A57C1020478E0096DADB /* settings_view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = settings_view.mm; path = src/settings_view.mm; sourceTree = SOURCE_ROOT; };
+		CB31A57D1020478E0096DADB /* settings_view_controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = settings_view_controller.h; path = src/settings_view_controller.h; sourceTree = SOURCE_ROOT; };
+		CB31A57E1020478E0096DADB /* settings_view_controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = settings_view_controller.mm; path = src/settings_view_controller.mm; sourceTree = SOURCE_ROOT; };
+		CB31A587102047AE0096DADB /* jmlib.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = jmlib.cpp; path = ../jmlib/jmlib.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A588102047AE0096DADB /* jmlib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = jmlib.h; path = ../jmlib/jmlib.h; sourceTree = SOURCE_ROOT; };
+		CB31A589102047AE0096DADB /* jmlib_if.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_if.h; path = ../jmlib/jmlib_if.h; sourceTree = SOURCE_ROOT; };
+		CB31A58A102047AE0096DADB /* jmlib_jugglemaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jugglemaster.h; path = ../jmlib/jmlib_jugglemaster.h; sourceTree = SOURCE_ROOT; };
+		CB31A58B102047AE0096DADB /* jmlib_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_types.h; path = ../jmlib/jmlib_types.h; sourceTree = SOURCE_ROOT; };
+		CB31A58C102047AE0096DADB /* jmlib_wrapper.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = jmlib_wrapper.cpp; path = ../jmlib/jmlib_wrapper.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A58D102047AE0096DADB /* jmlib_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_wrapper.h; path = ../jmlib/jmlib_wrapper.h; sourceTree = SOURCE_ROOT; };
+		CB31A58E102047AE0096DADB /* patterns.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = patterns.cpp; path = ../jmlib/patterns.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A58F102047AE0096DADB /* patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = patterns.h; path = ../jmlib/patterns.h; sourceTree = SOURCE_ROOT; };
+		CB31A590102047AE0096DADB /* prefs.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = prefs.cpp; path = ../jmlib/prefs.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A591102047AE0096DADB /* prefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefs.h; path = ../jmlib/prefs.h; sourceTree = SOURCE_ROOT; };
+		CB31A592102047AE0096DADB /* randompatt.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = randompatt.cpp; path = ../jmlib/randompatt.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A593102047AE0096DADB /* randompatt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = randompatt.h; path = ../jmlib/randompatt.h; sourceTree = SOURCE_ROOT; };
+		CB31A594102047AE0096DADB /* render_jm_flat.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = render_jm_flat.cpp; path = ../jmlib/render_jm_flat.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A595102047AE0096DADB /* render_jm_flat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = render_jm_flat.h; path = ../jmlib/render_jm_flat.h; sourceTree = SOURCE_ROOT; };
+		CB31A596102047AE0096DADB /* sqlite_patterns.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = sqlite_patterns.cpp; path = ../jmlib/sqlite_patterns.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A597102047AE0096DADB /* sqlite_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite_patterns.h; path = ../jmlib/sqlite_patterns.h; sourceTree = SOURCE_ROOT; };
+		CB31A598102047AE0096DADB /* util.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = util.cpp; path = ../jmlib/util.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A599102047AE0096DADB /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = ../jmlib/util.h; sourceTree = SOURCE_ROOT; };
+		CB31A59A102047AE0096DADB /* validator.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = validator.cpp; path = ../jmlib/validator.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A59B102047AE0096DADB /* validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = validator.h; path = ../jmlib/validator.h; sourceTree = SOURCE_ROOT; };
+		CB31A5A5102047CD0096DADB /* sqlite3.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; name = sqlite3.c; path = ../jmlib/sqlite/sqlite3.c; sourceTree = SOURCE_ROOT; };
+		CB31A5A6102047CD0096DADB /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../jmlib/sqlite/sqlite3.h; sourceTree = SOURCE_ROOT; };
+		CB31A5A7102047CD0096DADB /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../jmlib/sqlite/sqlite3ext.h; sourceTree = SOURCE_ROOT; };
+		CB31A5A9102047E30096DADB /* engine.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = engine.cpp; path = ../jmlib/jugglesaver/engine.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A5AA102047E30096DADB /* gltrackball.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = gltrackball.cpp; path = ../jmlib/jugglesaver/gltrackball.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A5AB102047E30096DADB /* gltrackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gltrackball.h; path = ../jmlib/jugglesaver/gltrackball.h; sourceTree = SOURCE_ROOT; };
+		CB31A5AC102047E30096DADB /* jmlib_jsaver.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = jmlib_jsaver.cpp; path = ../jmlib/jugglesaver/jmlib_jsaver.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A5AD102047E30096DADB /* jmlib_jsaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jsaver.h; path = ../jmlib/jugglesaver/jmlib_jsaver.h; sourceTree = SOURCE_ROOT; };
+		CB31A5AE102047E30096DADB /* js_patterns.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = js_patterns.cpp; path = ../jmlib/jugglesaver/js_patterns.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A5AF102047E30096DADB /* js_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_patterns.h; path = ../jmlib/jugglesaver/js_patterns.h; sourceTree = SOURCE_ROOT; };
+		CB31A5B0102047E30096DADB /* js_validator.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = js_validator.cpp; path = ../jmlib/jugglesaver/js_validator.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A5B1102047E30096DADB /* js_validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_validator.h; path = ../jmlib/jugglesaver/js_validator.h; sourceTree = SOURCE_ROOT; };
+		CB31A5B2102047E30096DADB /* jugglesaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jugglesaver.h; path = ../jmlib/jugglesaver/jugglesaver.h; sourceTree = SOURCE_ROOT; };
+		CB31A5B3102047E30096DADB /* render.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = render.cpp; path = ../jmlib/jugglesaver/render.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A5B4102047E30096DADB /* trackball.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = trackball.cpp; path = ../jmlib/jugglesaver/trackball.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A5B5102047E30096DADB /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = ../jmlib/jugglesaver/trackball.h; sourceTree = SOURCE_ROOT; };
+		CB31A5BE102047FA0096DADB /* glues.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = glues.cpp; path = ../jmlib/jugglesaver/opengl_es/glues.cpp; sourceTree = SOURCE_ROOT; };
+		CB31A5BF102047FA0096DADB /* glues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glues.h; path = ../jmlib/jugglesaver/opengl_es/glues.h; sourceTree = SOURCE_ROOT; };
+		CB31A5C0102047FA0096DADB /* glues_sin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glues_sin.h; path = ../jmlib/jugglesaver/opengl_es/glues_sin.h; sourceTree = SOURCE_ROOT; };
+		CB80FB8810208E2C00F530A4 /* key-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-1.png"; path = "resources/key-1.png"; sourceTree = "<group>"; };
+		CB80FB8910208E2C00F530A4 /* key-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-2.png"; path = "resources/key-2.png"; sourceTree = "<group>"; };
+		CB80FB8A10208E2C00F530A4 /* key-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-3.png"; path = "resources/key-3.png"; sourceTree = "<group>"; };
+		CBA21D971020468D0023BBF7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		CBCBAE2F1021A355000652A3 /* key-0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-0.png"; path = "resources/key-0.png"; sourceTree = "<group>"; };
+		CBCBAE301021A355000652A3 /* key-4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-4.png"; path = "resources/key-4.png"; sourceTree = "<group>"; };
+		CBCBAE311021A355000652A3 /* key-5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-5.png"; path = "resources/key-5.png"; sourceTree = "<group>"; };
+		CBCBAE321021A355000652A3 /* key-6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-6.png"; path = "resources/key-6.png"; sourceTree = "<group>"; };
+		CBCBAE331021A355000652A3 /* key-7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-7.png"; path = "resources/key-7.png"; sourceTree = "<group>"; };
+		CBCBAE341021A355000652A3 /* key-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-8.png"; path = "resources/key-8.png"; sourceTree = "<group>"; };
+		CBCBAE351021A355000652A3 /* key-9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-9.png"; path = "resources/key-9.png"; sourceTree = "<group>"; };
+		CBCBAE361021A355000652A3 /* key-backspace.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-backspace.png"; path = "resources/key-backspace.png"; sourceTree = "<group>"; };
+		CBCBAE371021A355000652A3 /* key-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-left.png"; path = "resources/key-left.png"; sourceTree = "<group>"; };
+		CBCBAE551021B988000652A3 /* key-brackets.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-brackets.png"; path = "resources/key-brackets.png"; sourceTree = "<group>"; };
+		CBCBAE561021B988000652A3 /* key-paren.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-paren.png"; path = "resources/key-paren.png"; sourceTree = "<group>"; };
+		CBCBAE5A1021BB32000652A3 /* key-comma.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-comma.png"; path = "resources/key-comma.png"; sourceTree = "<group>"; };
+		CBCBAE611021BBEE000652A3 /* key-shift.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "key-shift.png"; path = "resources/key-shift.png"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
+				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
+				CBA21D981020468D0023BBF7 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				CB31A56F1020478E0096DADB /* app_delegate.h */,
+				CB31A5701020478E0096DADB /* app_delegate.mm */,
+				CB31A5711020478E0096DADB /* eagl_view.h */,
+				CB31A5721020478E0096DADB /* eagl_view.mm */,
+				CB31A5731020478E0096DADB /* enter_site_view.h */,
+				CB31A5741020478E0096DADB /* enter_site_view.mm */,
+				CB31A5751020478E0096DADB /* enter_site_view_controller.h */,
+				CB31A5761020478E0096DADB /* enter_site_view_controller.mm */,
+				CB31A5771020478E0096DADB /* main_view.h */,
+				CB31A5781020478E0096DADB /* main_view.mm */,
+				CB31A5791020478E0096DADB /* main_view_controller.h */,
+				CB31A57A1020478E0096DADB /* main_view_controller.mm */,
+				CB31A57B1020478E0096DADB /* settings_view.h */,
+				CB31A57C1020478E0096DADB /* settings_view.mm */,
+				CB31A57D1020478E0096DADB /* settings_view_controller.h */,
+				CB31A57E1020478E0096DADB /* settings_view_controller.mm */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* JuggleMaster.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				CBA21D941020460B0023BBF7 /* jmlib */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* JuggleMaster_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CBCBAE2F1021A355000652A3 /* key-0.png */,
+				CB80FB8810208E2C00F530A4 /* key-1.png */,
+				CB80FB8910208E2C00F530A4 /* key-2.png */,
+				CB80FB8A10208E2C00F530A4 /* key-3.png */,
+				CBCBAE301021A355000652A3 /* key-4.png */,
+				CBCBAE311021A355000652A3 /* key-5.png */,
+				CBCBAE321021A355000652A3 /* key-6.png */,
+				CBCBAE331021A355000652A3 /* key-7.png */,
+				CBCBAE341021A355000652A3 /* key-8.png */,
+				CBCBAE351021A355000652A3 /* key-9.png */,
+				CBCBAE361021A355000652A3 /* key-backspace.png */,
+				CBCBAE5A1021BB32000652A3 /* key-comma.png */,
+				CBCBAE551021B988000652A3 /* key-brackets.png */,
+				CBCBAE561021B988000652A3 /* key-paren.png */,
+				CBCBAE371021A355000652A3 /* key-left.png */,
+				CBCBAE611021BBEE000652A3 /* key-shift.png */,
+				CB31A564102047130096DADB /* EnterSiteView.xib */,
+				CB31A565102047130096DADB /* MainView.xib */,
+				CB31A566102047130096DADB /* MainWindow.xib */,
+				CB31A567102047130096DADB /* patterns.db */,
+				CB31A568102047130096DADB /* SettingsView.xib */,
+				CB31A562102047010096DADB /* Icon.png */,
+				8D1107310486CEB800E47090 /* JuggleMaster-Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CBA21D971020468D0023BBF7 /* CoreGraphics.framework */,
+				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
+				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CB31A5BD102047E70096DADB /* opengl_es */ = {
+			isa = PBXGroup;
+			children = (
+				CB31A5BE102047FA0096DADB /* glues.cpp */,
+				CB31A5BF102047FA0096DADB /* glues.h */,
+				CB31A5C0102047FA0096DADB /* glues_sin.h */,
+			);
+			name = opengl_es;
+			sourceTree = "<group>";
+		};
+		CBA21D941020460B0023BBF7 /* jmlib */ = {
+			isa = PBXGroup;
+			children = (
+				CBA21D951020461C0023BBF7 /* jugglesaver */,
+				CBA21D96102046260023BBF7 /* sqlite */,
+				CB31A587102047AE0096DADB /* jmlib.cpp */,
+				CB31A588102047AE0096DADB /* jmlib.h */,
+				CB31A589102047AE0096DADB /* jmlib_if.h */,
+				CB31A58A102047AE0096DADB /* jmlib_jugglemaster.h */,
+				CB31A58B102047AE0096DADB /* jmlib_types.h */,
+				CB31A58C102047AE0096DADB /* jmlib_wrapper.cpp */,
+				CB31A58D102047AE0096DADB /* jmlib_wrapper.h */,
+				CB31A58E102047AE0096DADB /* patterns.cpp */,
+				CB31A58F102047AE0096DADB /* patterns.h */,
+				CB31A590102047AE0096DADB /* prefs.cpp */,
+				CB31A591102047AE0096DADB /* prefs.h */,
+				CB31A592102047AE0096DADB /* randompatt.cpp */,
+				CB31A593102047AE0096DADB /* randompatt.h */,
+				CB31A594102047AE0096DADB /* render_jm_flat.cpp */,
+				CB31A595102047AE0096DADB /* render_jm_flat.h */,
+				CB31A596102047AE0096DADB /* sqlite_patterns.cpp */,
+				CB31A597102047AE0096DADB /* sqlite_patterns.h */,
+				CB31A598102047AE0096DADB /* util.cpp */,
+				CB31A599102047AE0096DADB /* util.h */,
+				CB31A59A102047AE0096DADB /* validator.cpp */,
+				CB31A59B102047AE0096DADB /* validator.h */,
+			);
+			name = jmlib;
+			sourceTree = "<group>";
+		};
+		CBA21D951020461C0023BBF7 /* jugglesaver */ = {
+			isa = PBXGroup;
+			children = (
+				CB31A5BD102047E70096DADB /* opengl_es */,
+				CB31A5A9102047E30096DADB /* engine.cpp */,
+				CB31A5AA102047E30096DADB /* gltrackball.cpp */,
+				CB31A5AB102047E30096DADB /* gltrackball.h */,
+				CB31A5AC102047E30096DADB /* jmlib_jsaver.cpp */,
+				CB31A5AD102047E30096DADB /* jmlib_jsaver.h */,
+				CB31A5AE102047E30096DADB /* js_patterns.cpp */,
+				CB31A5AF102047E30096DADB /* js_patterns.h */,
+				CB31A5B0102047E30096DADB /* js_validator.cpp */,
+				CB31A5B1102047E30096DADB /* js_validator.h */,
+				CB31A5B2102047E30096DADB /* jugglesaver.h */,
+				CB31A5B3102047E30096DADB /* render.cpp */,
+				CB31A5B4102047E30096DADB /* trackball.cpp */,
+				CB31A5B5102047E30096DADB /* trackball.h */,
+			);
+			name = jugglesaver;
+			sourceTree = "<group>";
+		};
+		CBA21D96102046260023BBF7 /* sqlite */ = {
+			isa = PBXGroup;
+			children = (
+				CB31A5A5102047CD0096DADB /* sqlite3.c */,
+				CB31A5A6102047CD0096DADB /* sqlite3.h */,
+				CB31A5A7102047CD0096DADB /* sqlite3ext.h */,
+			);
+			name = sqlite;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* JuggleMaster */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "JuggleMaster" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JuggleMaster;
+			productName = JuggleMaster;
+			productReference = 1D6058910D05DD3D006BFB54 /* JuggleMaster.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JuggleMaster" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* JuggleMaster */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB31A563102047010096DADB /* Icon.png in Resources */,
+				CB31A569102047130096DADB /* EnterSiteView.xib in Resources */,
+				CB31A56A102047130096DADB /* MainView.xib in Resources */,
+				CB31A56B102047130096DADB /* MainWindow.xib in Resources */,
+				CB31A56C102047130096DADB /* patterns.db in Resources */,
+				CB31A56D102047130096DADB /* SettingsView.xib in Resources */,
+				CB80FB8B10208E2C00F530A4 /* key-1.png in Resources */,
+				CB80FB8C10208E2C00F530A4 /* key-2.png in Resources */,
+				CB80FB8D10208E2C00F530A4 /* key-3.png in Resources */,
+				CBCBAE381021A355000652A3 /* key-0.png in Resources */,
+				CBCBAE391021A355000652A3 /* key-4.png in Resources */,
+				CBCBAE3A1021A355000652A3 /* key-5.png in Resources */,
+				CBCBAE3B1021A355000652A3 /* key-6.png in Resources */,
+				CBCBAE3C1021A355000652A3 /* key-7.png in Resources */,
+				CBCBAE3D1021A355000652A3 /* key-8.png in Resources */,
+				CBCBAE3E1021A355000652A3 /* key-9.png in Resources */,
+				CBCBAE3F1021A355000652A3 /* key-backspace.png in Resources */,
+				CBCBAE401021A355000652A3 /* key-left.png in Resources */,
+				CBCBAE571021B988000652A3 /* key-brackets.png in Resources */,
+				CBCBAE581021B988000652A3 /* key-paren.png in Resources */,
+				CBCBAE5B1021BB32000652A3 /* key-comma.png in Resources */,
+				CBCBAE621021BBEE000652A3 /* key-shift.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				CB31A57F1020478E0096DADB /* app_delegate.mm in Sources */,
+				CB31A5801020478E0096DADB /* eagl_view.mm in Sources */,
+				CB31A5811020478E0096DADB /* enter_site_view.mm in Sources */,
+				CB31A5821020478E0096DADB /* enter_site_view_controller.mm in Sources */,
+				CB31A5831020478E0096DADB /* main_view.mm in Sources */,
+				CB31A5841020478E0096DADB /* main_view_controller.mm in Sources */,
+				CB31A5851020478E0096DADB /* settings_view.mm in Sources */,
+				CB31A5861020478E0096DADB /* settings_view_controller.mm in Sources */,
+				CB31A59C102047AE0096DADB /* jmlib.cpp in Sources */,
+				CB31A59D102047AE0096DADB /* jmlib_wrapper.cpp in Sources */,
+				CB31A59E102047AE0096DADB /* patterns.cpp in Sources */,
+				CB31A59F102047AE0096DADB /* prefs.cpp in Sources */,
+				CB31A5A0102047AE0096DADB /* randompatt.cpp in Sources */,
+				CB31A5A1102047AE0096DADB /* render_jm_flat.cpp in Sources */,
+				CB31A5A2102047AE0096DADB /* sqlite_patterns.cpp in Sources */,
+				CB31A5A3102047AE0096DADB /* util.cpp in Sources */,
+				CB31A5A4102047AE0096DADB /* validator.cpp in Sources */,
+				CB31A5A8102047CD0096DADB /* sqlite3.c in Sources */,
+				CB31A5B6102047E30096DADB /* engine.cpp in Sources */,
+				CB31A5B7102047E30096DADB /* gltrackball.cpp in Sources */,
+				CB31A5B8102047E30096DADB /* jmlib_jsaver.cpp in Sources */,
+				CB31A5B9102047E30096DADB /* js_patterns.cpp in Sources */,
+				CB31A5BA102047E30096DADB /* js_validator.cpp in Sources */,
+				CB31A5BB102047E30096DADB /* render.cpp in Sources */,
+				CB31A5BC102047E30096DADB /* trackball.cpp in Sources */,
+				CB31A5C1102047FA0096DADB /* glues.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = JuggleMaster_Prefix.pch;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "JuggleMaster-Info.plist";
+				PRODUCT_NAME = JuggleMaster;
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = JuggleMaster_Prefix.pch;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "JuggleMaster-Info.plist";
+				PRODUCT_NAME = JuggleMaster;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					JUGGLESAVER_SUPPORT,
+					__IPHONE__,
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos3.0;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					JUGGLESAVER_SUPPORT,
+					__IPHONE__,
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "JuggleMaster" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JuggleMaster" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

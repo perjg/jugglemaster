@@ -1,12 +1,13 @@
-// 	$Id$	 
-
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
- * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
+ * Version 2.1
+ * (C) Per Johan Groland 2000-2008, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
+ *
+ * JuggleSaver support based on Juggler3D
+ * Copyright (c) 2005-2008 Brian Apps <brian@jugglesaver.co.uk>
  *
  * You may redistribute and/or modify JMLib under the terms of the
  * Modified BSD License as published in various places online or in the
@@ -222,11 +223,17 @@ bool JMSiteValidator::validateVSS(JML_CHAR* site) {
 
   if(1 == len && -1 != siteDigit(site[0])) return true;
 
-  ls = new JML_CHAR[len];
+  ls = new JML_CHAR[len+1];
   memset(ls, 1, len);
 
   for (i = 0; i < len; i++) {
     x = siteDigit(site[i]);
+
+		if (x == -1) {
+			delete ls;	
+			return false;
+		}
+
     ls[(i+x)%len]--;
   }
   
@@ -346,6 +353,38 @@ bool JMSiteValidator::validateMSS(JML_CHAR* site) {
   return true;
 }
 
+bool JMSiteValidator::isMSS(JML_CHAR* site) {
+  JML_INT32 len = (JML_INT32)strlen(site);
+  
+  if (!validateSiteSyntax(site)) return false;
+  if (site[0] == '(') return false;
+
+  // reject invalid site (neither vss or mss)
+  if (!validateMSS(site)) return false;
+  
+  for (int i = 0; i < len; i++) {
+    if (site[i] == '[')
+      return true; // a valid site with a bracket is a mss
+  }
+  
+  return false; // this means we have a vss
+}
+
+bool JMSiteValidator::isSSS(JML_CHAR* site) {
+  JML_INT32 len = (JML_INT32)strlen(site);
+  
+  // reject invalid site (neither vss or mss or sss)
+  if (!validateSSS(site)) return false;
+  
+  for (int i = 0; i < len; i++) {
+    if (site[i] == '(')
+      return true; // a valid site with a parenthesis is a sss
+  }
+  
+  return false; // this means we have a vss
+}
+
+
 bool JMSiteValidator::transSyncMSS(JML_CHAR* MSS, JML_CHAR* SSS) {
   JML_INT32 i, x;
   JML_INT32 len = (JML_INT32)strlen(SSS);
@@ -436,7 +475,7 @@ int main(void) {
   foo("(7,4)(4,5)");
   foo("(4,2x)(2x,4)");
   foo("(7x,2)(2,5x)");
-  foo("spam spam spam!\"#!#ค#\"#ค%");
+  foo("spam spam spam!\"#!#ยง#\"#ยง%");
   foo("");
   foo(NULL);
   foo("[543]3[45][27]2");

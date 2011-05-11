@@ -1,6 +1,5 @@
 #import "QTMovieExtensions.h"
-#import "JMView.h"
-#include "jmlib.h"
+#import "JMOpenGLView.h"
 #include "validator.h"
 #import "JMController.h"
 #include <math.h>
@@ -20,32 +19,70 @@
 
 @implementation JMController
 
-static JML_CHAR patterns[7][12]
+static JML_CHAR* patterns[]
 	= {"Normal", "Reverse", "Shower", "Mills Mess",
-	   "Center", "Windmill", "Random"};
-	
+	   "Center", "Windmill", "Random", "JuggleSaver"};
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+  jm = JMLib::alloc();
+	jm->setWindowSize([view frame].size.width, [view frame].size.height);
+  jm->setPatternDefault();
+  jm->setStyleDefault();
+  jm->setScalingMethod(SCALING_METHOD_DYNAMIC);
+  jm->startJuggle();
+  jm->initialize();
+
+ 	[view setJMLib:jm];
+  
+  // Load patterns
+  //patternLib = new JMPatterns();
+  
+  //NSString *path = [[NSBundle mainBundle] pathForResource: @"patterns.jm" 
+  //                       ofType: @"jm" inDirectory: @"Contents/Resources"];
+  
+  //fixme: get bundle path
+  char* fname = "JuggleMaster.app/Contents/Resources/patterns.db";
+  FILE* jm_f = fopen("JuggleMaster.app/Contents/Resources/patterns.jm", "r");
+  FILE* js_f = fopen("JuggleMaster.app/Contents/Resources/moresites.txt", "r");
+  patternLib = new JMPatterns();
+  patternLib->initializeDatabase(fname, jm_f, js_f);
+  //patternLib->loadDatabase(fname);
+  
+  // Initialize list of categories and patterns
+  categories = patternLib->getCategories();
+  cur_pattern = NULL;
+
+  [categorySelect removeAllItems];
+  
+  pattern_group_t* temp = categories;
+  NSString* name;
+  bool first = true;
+  
+  while (temp) {
+    name = [NSString stringWithUTF8String: temp->name];
+    
+    if (first) {
+      [self updatePatterns:name];
+      first = false;
+    }
+    
+    [categorySelect addItemWithTitle: name];
+    temp = temp->next;
+  }
+    
+	renderTimer = [[NSTimer scheduledTimerWithTimeInterval:1/60 target:self selector:@selector(doRender:) userInfo:nil repeats:YES] retain];
+}
+
 - (id)init
 {
 	if (self = [super init])
 	{
-		jm = new JMLib();
-		
-		jm->setWindowSize([view frame].size.width, [view frame].size.height);
-		jm->setPatternDefault();
-		jm->setStyleDefault();
-		jm->setSpeed(1.0);
-        jm->setScalingMethod(SCALING_METHOD_DYNAMIC);
-		jm->startJuggle();
-		jm->doJuggle();
-		
 		showPattern = NO;
 		currentPat = karaoke;
 		encodeSheetShown = NO;
 		
 		[self showInspector:self];
-		
-		renderTimer = [[NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(doRender:) userInfo:nil repeats:YES] retain];
-	}
+  }
 	
 	return self;
 }
@@ -56,6 +93,44 @@ static JML_CHAR patterns[7][12]
 	
 	[renderTimer release];
 	[super dealloc];
+}
+
+- (void)updatePatterns:(NSString*)str
+{
+  [patternSelect removeAllItems];
+  
+  if (cur_pattern != NULL) {
+    patternLib->freeSearchResult(cur_pattern);
+    cur_pattern = NULL;
+  }
+  
+  cur_pattern = patternLib->getCategory([str UTF8String]);
+  
+  pattern_t* temp = cur_pattern;
+  NSString* name;
+  
+  while (temp) {
+    name = [NSString stringWithUTF8String: temp->name];
+    [patternSelect addItemWithTitle: name];
+    temp = temp->next;
+  }
+}
+
+- (void)updateObjectPopUp
+{
+  int idx = [objectSelect indexOfSelectedItem];
+
+  // change text for objects box to reflect juggling engine
+  if (jm->getType() == JUGGLING_ENGINE_JUGGLEMASTER) {
+    [objectSelect removeItemAtIndex:0];
+    [objectSelect insertItemWithTitle:@"Random" atIndex:0];
+  }
+  else {
+    [objectSelect removeItemAtIndex:0];
+    [objectSelect insertItemWithTitle:@"Pattern Default" atIndex:0];
+  }
+  
+  [objectSelect selectItemAtIndex:idx];
 }
 
 - (IBAction)copy:(id)sender
@@ -77,30 +152,101 @@ static JML_CHAR patterns[7][12]
 	NSString *pattern = [sender stringValue];
 	JML_CHAR *pat = (JML_CHAR *)[pattern cString];
 	
-	if (JMSiteValidator::validateSite(pat))
+  if (jm->isValidPattern(pat))
 	{
+    if (JSValidator::isJSOnly(pat)) {
+      [styleSelect setEnabled:false];
+      [objectSelect setEnabled:false];
+    }
+    else {
+      [styleSelect setEnabled:true];
+      [objectSelect setEnabled:true];
+    }
+  
 		[errorReporter setHidden:YES];
 		jm->stopJuggle();
-		jm->setPattern("", pat);
+		jm->setPattern(pat);
+    jm->setStyle(patterns[[[styleSelect selectedItem] tag]]);
 		jm->startJuggle();
+    [self updateObjectPopUp];
 	}
 	else
 	{
 		[errorReporter setHidden:NO];
-		jm->stopJuggle();
 	}
 }
 
 - (IBAction)setStyle:(id)sender
 {
 	jm->setStyle(patterns[[[sender selectedItem] tag]]);
+  [self updateObjectPopUp];
+}
+
+- (IBAction)setObjectType:(id)sender
+{
+	jm->setObjectType(object_type_t([[sender selectedItem] tag]));
 }
 
 - (IBAction)setSpeed:(id)sender
 {
-	jm->stopJuggle();
 	jm->setSpeed([sender floatValue]);
-	jm->startJuggle();
+}
+
+- (IBAction)setLoadedCategory:(id)sender
+{
+  [self updatePatterns:[sender titleOfSelectedItem]];
+  [self setLoadedPattern:0];
+}
+
+- (IBAction)setLoadedPattern:(id)sender
+{
+  int offset = [sender indexOfSelectedItem];
+  
+  patternLib->loadPattern(cur_pattern, offset, jm);
+}
+
+- (IBAction)switchLoadedPattern:(id)sender
+{
+  int seg = [sender selectedSegment];
+  
+  switch (seg) {
+  case 0: // prev
+    if ([patternSelect indexOfSelectedItem] > 0) { // prev pattern
+      [patternSelect selectItemAtIndex:[patternSelect indexOfSelectedItem]-1]; 
+    }
+    else if ([categorySelect indexOfSelectedItem] != 0) { // prev category
+      [categorySelect selectItemAtIndex:[categorySelect indexOfSelectedItem]-1];
+      [self updatePatterns:[categorySelect titleOfSelectedItem]];
+      [patternSelect selectItemAtIndex:[patternSelect numberOfItems]-1]; 
+    }
+    else { // last item in last category
+      [categorySelect selectItemAtIndex:[categorySelect numberOfItems]-1];
+      [self updatePatterns:[categorySelect titleOfSelectedItem]];
+      [patternSelect selectItemAtIndex:[patternSelect numberOfItems]-1]; 
+    }
+    break;
+  case 1: // random
+  
+    break;
+  case 2: // next
+    if ([patternSelect indexOfSelectedItem] < [patternSelect numberOfItems]-1) {
+      [patternSelect selectItemAtIndex:[patternSelect indexOfSelectedItem]+1];
+    }
+    else if ([categorySelect indexOfSelectedItem] < [categorySelect numberOfItems]-1) {
+      [categorySelect selectItemAtIndex:[categorySelect indexOfSelectedItem]+1];
+      [self updatePatterns:[categorySelect titleOfSelectedItem]];
+      [patternSelect selectItemAtIndex:0]; 
+    }
+    else { // first item in first category
+      [categorySelect selectItemAtIndex:0];
+      [self updatePatterns:[categorySelect titleOfSelectedItem]];
+      [patternSelect selectItemAtIndex:0]; 
+    }
+    break;
+  }
+  
+  patternLib->loadPattern(cur_pattern, [patternSelect indexOfSelectedItem], jm);
+  [self updateObjectPopUp];
 }
 
 - (IBAction)toggleShowPattern:(id)sender
@@ -126,7 +272,7 @@ static JML_CHAR patterns[7][12]
 	{
 		[recordingMenuItem setTitle:@"Stop Movie Capture"];
 		//movie = [[QTMovie qtMovieWithDataHandler:&mDataHandlerRef] retain];
-		movie = [[QTMovie movieForAddingImagesWithFirstFrame:[view frameGrab]] retain];
+		//movie = [[QTMovie movieForAddingImagesWithFirstFrame:[view frameGrab]] retain];
 	}
 	else
 	{
@@ -328,10 +474,12 @@ static JML_CHAR patterns[7][12]
 {
 	jm->doJuggle();
 	[view setNeedsDisplay:YES];
+  /*
 	if (isRecording)
 	{
 		[movie addImageToMovie:[view frameGrab]];
 	}
+  */
 }
 
 - (BOOL)shouldShowPattern

@@ -28,6 +28,11 @@
 #include "regprefs.h"
 #include "colorentry.h"
 
+//#include "../../jmgfx/opengl_renderer.h"
+#include "gl/gl.h"
+#include "gl/glu.h"
+#include "gl/glaux.h"
+
 class JMView : public CView {
 protected: // create from serialization only
 	JMView();
@@ -36,6 +41,12 @@ protected: // create from serialization only
 // Attributes
 public:
 	JMDoc* GetDocument() const;
+
+	// OpenGL support
+	HGLRC	m_myhRC;		// Permanent Rendering Context
+	HDC		m_myhDC;	// Private GDI Device Context
+	int    m_height; // Stores the height of the View
+	int    m_width; // Stores the width of the view
 
 // Operations
 public:
@@ -49,6 +60,8 @@ protected:
 
 // Implementation
 public:
+	void GLInit();
+	BOOL SetupPixelFormat();
 	virtual ~JMView();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -60,6 +73,7 @@ protected:
   JMPatternLoader* pl;
   bool patternLibraryLoaded;
   JMRegPreferences* prefs;
+	//JMOpenGLRenderer* renderer;
 
   // Color table
   JMColorEntry* jugglerColor;
@@ -82,6 +96,11 @@ protected:
 protected:
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnTimer(UINT nIDEvent);
+		afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+		afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+		afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+		afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+		afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	  //afx_msg void OnAppAbout();
     afx_msg void OnLeftButton();
     afx_msg void OnFileEnterSite();

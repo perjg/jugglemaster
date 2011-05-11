@@ -14,7 +14,6 @@
 		1F16C6140A9F71BB002CDC4A /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F16C6050A9F71BB002CDC4A /* CoreServices.framework */; };
 		1F9AEC740A9F7636004BB7E4 /* QTMovieExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F16C58F0A9F691E002CDC4A /* QTMovieExtensions.m */; };
 		1F9AF0480AA2495B004BB7E4 /* emptyMovie.mov in Resources */ = {isa = PBXBuildFile; fileRef = 1F9AF0470AA2495B004BB7E4 /* emptyMovie.mov */; };
-		1FD17BBC0A9BD85D00668490 /* JMView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1FD17BBA0A9BD85D00668490 /* JMView.mm */; };
 		1FD17CC50A9BFCCF00668490 /* JMInspector.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1FD17CC40A9BFCCF00668490 /* JMInspector.nib */; };
 		1FD17D970A9C838A00668490 /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD17D960A9C838A00668490 /* error.png */; };
 		1FD17E410A9C8E9E00668490 /* jmlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FD17B350A9BD45800668490 /* jmlib.cpp */; };
@@ -30,6 +29,22 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		CB1AD77F0DCB51900047D6B9 /* gltrackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB1AD7790DCB51900047D6B9 /* gltrackball.cpp */; };
+		CB1AD7800DCB51900047D6B9 /* js_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB1AD77B0DCB51900047D6B9 /* js_patterns.cpp */; };
+		CB1AD7810DCB51900047D6B9 /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB1AD77D0DCB51900047D6B9 /* trackball.cpp */; };
+		CB3345520DFA5A9F004611F2 /* glfont.c in Sources */ = {isa = PBXBuildFile; fileRef = CB3345500DFA5A9F004611F2 /* glfont.c */; };
+		CB5297F10DED9B3A006B8600 /* moresites.txt in Resources */ = {isa = PBXBuildFile; fileRef = CB5297EF0DED9B3A006B8600 /* moresites.txt */; };
+		CB5297F20DED9B3A006B8600 /* patterns.jm in Resources */ = {isa = PBXBuildFile; fileRef = CB5297F00DED9B3A006B8600 /* patterns.jm */; };
+		CBA2E1480DBCC20900618F0B /* engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1410DBCC20900618F0B /* engine.cpp */; };
+		CBA2E1490DBCC20900618F0B /* jmlib_jsaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1420DBCC20900618F0B /* jmlib_jsaver.cpp */; };
+		CBA2E14A0DBCC20900618F0B /* js_validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1440DBCC20900618F0B /* js_validator.cpp */; };
+		CBA2E14B0DBCC20900618F0B /* render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1470DBCC20900618F0B /* render.cpp */; };
+		CBA2E1510DBCC24000618F0B /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E14F0DBCC24000618F0B /* jmlib_wrapper.cpp */; };
+		CBA2E16A0DBCC37500618F0B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBA2E1690DBCC37500618F0B /* OpenGL.framework */; };
+		CBA2E1780DBCC63C00618F0B /* JMOpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E1770DBCC63C00618F0B /* JMOpenGLView.mm */; };
+		CBBC40E70DCEDE9F00FBC66E /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = CBBC40E40DCEDE9F00FBC66E /* sqlite3.c */; };
+		CBC9EDD30DE8044400E8B435 /* render_jm_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBC9EDD10DE8044400E8B435 /* render_jm_flat.cpp */; };
+		CBCC8D1A0DDEDC5500C25D41 /* sqlite_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBCC8D180DDEDC5500C25D41 /* sqlite_patterns.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,7 +62,6 @@
 		1FD17B350A9BD45800668490 /* jmlib.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = jmlib.cpp; sourceTree = "<group>"; };
 		1FD17B360A9BD45800668490 /* jmlib.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = jmlib.h; sourceTree = "<group>"; };
 		1FD17B370A9BD45800668490 /* jmlib_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = jmlib_types.h; sourceTree = "<group>"; };
-		1FD17B380A9BD45800668490 /* juggler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = juggler.h; sourceTree = "<group>"; };
 		1FD17B3A0A9BD45800668490 /* patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = patterns.cpp; sourceTree = "<group>"; };
 		1FD17B3B0A9BD45800668490 /* patterns.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = patterns.h; sourceTree = "<group>"; };
 		1FD17B3C0A9BD45800668490 /* prefs.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = prefs.cpp; sourceTree = "<group>"; };
@@ -59,8 +73,6 @@
 		1FD17B430A9BD45800668490 /* validator.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = validator.cpp; sourceTree = "<group>"; };
 		1FD17B440A9BD45800668490 /* validator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = validator.h; sourceTree = "<group>"; };
 		1FD17BB70A9BD85500668490 /* JMController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = JMController.h; sourceTree = "<group>"; };
-		1FD17BBA0A9BD85D00668490 /* JMView.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = JMView.mm; sourceTree = "<group>"; };
-		1FD17BBB0A9BD85D00668490 /* JMView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = JMView.h; sourceTree = "<group>"; };
 		1FD17CC40A9BFCCF00668490 /* JMInspector.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = JMInspector.nib; sourceTree = "<group>"; };
 		1FD17D960A9C838A00668490 /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error.png; sourceTree = "<group>"; };
 		1FD17EC40A9CB6B300668490 /* error2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error2.png; sourceTree = "<group>"; };
@@ -73,7 +85,39 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* jmcocoa_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmcocoa_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Juggle Master.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Juggle Master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* JuggleMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JuggleMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB1AD7790DCB51900047D6B9 /* gltrackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gltrackball.cpp; path = jugglesaver/gltrackball.cpp; sourceTree = "<group>"; };
+		CB1AD77A0DCB51900047D6B9 /* gltrackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gltrackball.h; path = jugglesaver/gltrackball.h; sourceTree = "<group>"; };
+		CB1AD77B0DCB51900047D6B9 /* js_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = js_patterns.cpp; path = jugglesaver/js_patterns.cpp; sourceTree = "<group>"; };
+		CB1AD77C0DCB51900047D6B9 /* js_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_patterns.h; path = jugglesaver/js_patterns.h; sourceTree = "<group>"; };
+		CB1AD77D0DCB51900047D6B9 /* trackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = trackball.cpp; path = jugglesaver/trackball.cpp; sourceTree = "<group>"; };
+		CB1AD77E0DCB51900047D6B9 /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = jugglesaver/trackball.h; sourceTree = "<group>"; };
+		CB3345500DFA5A9F004611F2 /* glfont.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glfont.c; path = glfont/glfont.c; sourceTree = "<group>"; };
+		CB3345510DFA5A9F004611F2 /* glfont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glfont.h; path = glfont/glfont.h; sourceTree = "<group>"; };
+		CB5297EF0DED9B3A006B8600 /* moresites.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = moresites.txt; path = ../../data/moresites.txt; sourceTree = SOURCE_ROOT; };
+		CB5297F00DED9B3A006B8600 /* patterns.jm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = patterns.jm; path = ../../data/patterns.jm; sourceTree = SOURCE_ROOT; };
+		CBA2E1410DBCC20900618F0B /* engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = engine.cpp; path = jugglesaver/engine.cpp; sourceTree = "<group>"; };
+		CBA2E1420DBCC20900618F0B /* jmlib_jsaver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_jsaver.cpp; path = jugglesaver/jmlib_jsaver.cpp; sourceTree = "<group>"; };
+		CBA2E1430DBCC20900618F0B /* jmlib_jsaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jsaver.h; path = jugglesaver/jmlib_jsaver.h; sourceTree = "<group>"; };
+		CBA2E1440DBCC20900618F0B /* js_validator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = js_validator.cpp; path = jugglesaver/js_validator.cpp; sourceTree = "<group>"; };
+		CBA2E1450DBCC20900618F0B /* js_validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_validator.h; path = jugglesaver/js_validator.h; sourceTree = "<group>"; };
+		CBA2E1460DBCC20900618F0B /* jugglesaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jugglesaver.h; path = jugglesaver/jugglesaver.h; sourceTree = "<group>"; };
+		CBA2E1470DBCC20900618F0B /* render.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render.cpp; path = jugglesaver/render.cpp; sourceTree = "<group>"; };
+		CBA2E14C0DBCC24000618F0B /* jmlib_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmlib_base.h; sourceTree = "<group>"; };
+		CBA2E14D0DBCC24000618F0B /* jmlib_if.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmlib_if.h; sourceTree = "<group>"; };
+		CBA2E14E0DBCC24000618F0B /* jmlib_jugglemaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmlib_jugglemaster.h; sourceTree = "<group>"; };
+		CBA2E14F0DBCC24000618F0B /* jmlib_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jmlib_wrapper.cpp; sourceTree = "<group>"; };
+		CBA2E1500DBCC24000618F0B /* jmlib_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmlib_wrapper.h; sourceTree = "<group>"; };
+		CBA2E1690DBCC37500618F0B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		CBA2E1760DBCC63C00618F0B /* JMOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMOpenGLView.h; sourceTree = "<group>"; };
+		CBA2E1770DBCC63C00618F0B /* JMOpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JMOpenGLView.mm; sourceTree = "<group>"; };
+		CBBC40E40DCEDE9F00FBC66E /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = sqlite/sqlite3.c; sourceTree = "<group>"; };
+		CBBC40E50DCEDE9F00FBC66E /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = sqlite/sqlite3.h; sourceTree = "<group>"; };
+		CBBC40E60DCEDE9F00FBC66E /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = sqlite/sqlite3ext.h; sourceTree = "<group>"; };
+		CBC9EDD10DE8044400E8B435 /* render_jm_flat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = render_jm_flat.cpp; sourceTree = "<group>"; };
+		CBC9EDD20DE8044400E8B435 /* render_jm_flat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = render_jm_flat.h; sourceTree = "<group>"; };
+		CBCC8D180DDEDC5500C25D41 /* sqlite_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite_patterns.cpp; sourceTree = "<group>"; };
+		CBCC8D190DDEDC5500C25D41 /* sqlite_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite_patterns.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +129,7 @@
 				1F16C6030A9F71AB002CDC4A /* QTKit.framework in Frameworks */,
 				1F16C6040A9F71AB002CDC4A /* QuickTime.framework in Frameworks */,
 				1F16C6140A9F71BB002CDC4A /* CoreServices.framework in Frameworks */,
+				CBA2E16A0DBCC37500618F0B /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,7 +169,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* Juggle Master.app */,
+				8D1107320486CEB800E47090 /* JuggleMaster.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -132,10 +177,10 @@
 		1F4D31B10A9D0BA4002B80C0 /* jmcocoa */ = {
 			isa = PBXGroup;
 			children = (
+				CBA2E1760DBCC63C00618F0B /* JMOpenGLView.h */,
+				CBA2E1770DBCC63C00618F0B /* JMOpenGLView.mm */,
 				1FD17BB70A9BD85500668490 /* JMController.h */,
 				1F0A29BE0AA26CE70052FE03 /* JMController.mm */,
-				1FD17BBB0A9BD85D00668490 /* JMView.h */,
-				1FD17BBA0A9BD85D00668490 /* JMView.mm */,
 				1FD17EFD0A9CD0DA00668490 /* InstantTextField.h */,
 				1FD17EFE0A9CD0DA00668490 /* InstantTextField.m */,
 				1F16C58E0A9F691E002CDC4A /* QTMovieExtensions.h */,
@@ -147,16 +192,27 @@
 		1FD17B340A9BD45800668490 /* jmlib */ = {
 			isa = PBXGroup;
 			children = (
+				CB33454F0DFA5A8F004611F2 /* glfont */,
+				CBA2E13F0DBCC1D600618F0B /* jugglesaver */,
+				CBBC40E80DCEDEA200FBC66E /* sqlite */,
+				CBCC8D180DDEDC5500C25D41 /* sqlite_patterns.cpp */,
+				CBCC8D190DDEDC5500C25D41 /* sqlite_patterns.h */,
+				CBA2E14C0DBCC24000618F0B /* jmlib_base.h */,
+				CBA2E14D0DBCC24000618F0B /* jmlib_if.h */,
+				CBA2E14E0DBCC24000618F0B /* jmlib_jugglemaster.h */,
+				CBA2E14F0DBCC24000618F0B /* jmlib_wrapper.cpp */,
+				CBA2E1500DBCC24000618F0B /* jmlib_wrapper.h */,
 				1FD17B350A9BD45800668490 /* jmlib.cpp */,
 				1FD17B360A9BD45800668490 /* jmlib.h */,
 				1FD17B370A9BD45800668490 /* jmlib_types.h */,
-				1FD17B380A9BD45800668490 /* juggler.h */,
 				1FD17B3A0A9BD45800668490 /* patterns.cpp */,
 				1FD17B3B0A9BD45800668490 /* patterns.h */,
 				1FD17B3C0A9BD45800668490 /* prefs.cpp */,
 				1FD17B3D0A9BD45800668490 /* prefs.h */,
 				1FD17B3E0A9BD45800668490 /* randompatt.cpp */,
 				1FD17B3F0A9BD45800668490 /* randompatt.h */,
+				CBC9EDD10DE8044400E8B435 /* render_jm_flat.cpp */,
+				CBC9EDD20DE8044400E8B435 /* render_jm_flat.h */,
 				1FD17B410A9BD45800668490 /* util.cpp */,
 				1FD17B420A9BD45800668490 /* util.h */,
 				1FD17B430A9BD45800668490 /* validator.cpp */,
@@ -190,6 +246,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CB5297EF0DED9B3A006B8600 /* moresites.txt */,
+				CB5297F00DED9B3A006B8600 /* patterns.jm */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				1F9AF0470AA2495B004BB7E4 /* emptyMovie.mov */,
 				1FD17D960A9C838A00668490 /* error.png */,
@@ -206,10 +264,50 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CBA2E1690DBCC37500618F0B /* OpenGL.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CB33454F0DFA5A8F004611F2 /* glfont */ = {
+			isa = PBXGroup;
+			children = (
+				CB3345500DFA5A9F004611F2 /* glfont.c */,
+				CB3345510DFA5A9F004611F2 /* glfont.h */,
+			);
+			name = glfont;
+			sourceTree = "<group>";
+		};
+		CBA2E13F0DBCC1D600618F0B /* jugglesaver */ = {
+			isa = PBXGroup;
+			children = (
+				CB1AD7790DCB51900047D6B9 /* gltrackball.cpp */,
+				CB1AD77A0DCB51900047D6B9 /* gltrackball.h */,
+				CB1AD77B0DCB51900047D6B9 /* js_patterns.cpp */,
+				CB1AD77C0DCB51900047D6B9 /* js_patterns.h */,
+				CB1AD77D0DCB51900047D6B9 /* trackball.cpp */,
+				CB1AD77E0DCB51900047D6B9 /* trackball.h */,
+				CBA2E1410DBCC20900618F0B /* engine.cpp */,
+				CBA2E1420DBCC20900618F0B /* jmlib_jsaver.cpp */,
+				CBA2E1430DBCC20900618F0B /* jmlib_jsaver.h */,
+				CBA2E1440DBCC20900618F0B /* js_validator.cpp */,
+				CBA2E1450DBCC20900618F0B /* js_validator.h */,
+				CBA2E1460DBCC20900618F0B /* jugglesaver.h */,
+				CBA2E1470DBCC20900618F0B /* render.cpp */,
+			);
+			name = jugglesaver;
+			sourceTree = "<group>";
+		};
+		CBBC40E80DCEDEA200FBC66E /* sqlite */ = {
+			isa = PBXGroup;
+			children = (
+				CBBC40E40DCEDE9F00FBC66E /* sqlite3.c */,
+				CBBC40E50DCEDE9F00FBC66E /* sqlite3.h */,
+				CBBC40E60DCEDE9F00FBC66E /* sqlite3ext.h */,
+			);
+			name = sqlite;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,7 +328,7 @@
 			name = jmcocoa;
 			productInstallPath = "$(HOME)/Applications";
 			productName = jmcocoa;
-			productReference = 8D1107320486CEB800E47090 /* Juggle Master.app */;
+			productReference = 8D1107320486CEB800E47090 /* JuggleMaster.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -239,9 +337,11 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "jmcocoa" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* jmcocoa */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* jmcocoa */,
 			);
@@ -261,6 +361,8 @@
 				1FD17F080A9CD77C00668490 /* JuggleMaster.icns in Resources */,
 				1F9AF0480AA2495B004BB7E4 /* emptyMovie.mov in Resources */,
 				1F0A2A2D0AA352440052FE03 /* stopExport.tif in Resources */,
+				CB5297F10DED9B3A006B8600 /* moresites.txt in Resources */,
+				CB5297F20DED9B3A006B8600 /* patterns.jm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +374,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				1FD17BBC0A9BD85D00668490 /* JMView.mm in Sources */,
 				1FD17E410A9C8E9E00668490 /* jmlib.cpp in Sources */,
 				1FD17E420A9C8E9E00668490 /* patterns.cpp in Sources */,
 				1FD17E430A9C8E9E00668490 /* prefs.cpp in Sources */,
@@ -282,6 +383,19 @@
 				1FD17EFF0A9CD0DA00668490 /* InstantTextField.m in Sources */,
 				1F9AEC740A9F7636004BB7E4 /* QTMovieExtensions.m in Sources */,
 				1F0A29BF0AA26CE70052FE03 /* JMController.mm in Sources */,
+				CBA2E1480DBCC20900618F0B /* engine.cpp in Sources */,
+				CBA2E1490DBCC20900618F0B /* jmlib_jsaver.cpp in Sources */,
+				CBA2E14A0DBCC20900618F0B /* js_validator.cpp in Sources */,
+				CBA2E14B0DBCC20900618F0B /* render.cpp in Sources */,
+				CBA2E1510DBCC24000618F0B /* jmlib_wrapper.cpp in Sources */,
+				CBA2E1780DBCC63C00618F0B /* JMOpenGLView.mm in Sources */,
+				CB1AD77F0DCB51900047D6B9 /* gltrackball.cpp in Sources */,
+				CB1AD7800DCB51900047D6B9 /* js_patterns.cpp in Sources */,
+				CB1AD7810DCB51900047D6B9 /* trackball.cpp in Sources */,
+				CBBC40E70DCEDE9F00FBC66E /* sqlite3.c in Sources */,
+				CBCC8D1A0DDEDC5500C25D41 /* sqlite_patterns.cpp in Sources */,
+				CBC9EDD30DE8044400E8B435 /* render_jm_flat.cpp in Sources */,
+				CB3345520DFA5A9F004611F2 /* glfont.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +443,7 @@
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
 				PREBINDING = NO;
-				PRODUCT_NAME = "Juggle Master";
+				PRODUCT_NAME = JuggleMaster;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -358,7 +472,7 @@
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Debug\"";
 				PREBINDING = NO;
-				PRODUCT_NAME = "Juggle Master";
+				PRODUCT_NAME = JuggleMaster;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -366,9 +480,14 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GLFONT_SUPPORT,
+					JUGGLESAVER_SUPPORT,
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
+				PRODUCT_NAME = JuggleMaster;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;

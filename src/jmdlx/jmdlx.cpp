@@ -1,6 +1,6 @@
 /*
  * JMDeluxe - Portable JuggleMaster based on wxWindows
- * (C) Per Johan Persson 2002, Gary Briggs 2003
+ * (C) Per Johan Groland 2002, Gary Briggs 2003
  *
  * JuggleMaster is  free software; you can redistribute  it and/or modify
  * it under the  terms of the GNU General  Public License as published
@@ -27,7 +27,9 @@ bool JMApp::OnInit() {
   windowx = min(480,wxGetDisplaySize().x);
   windowy = min(400,wxGetDisplaySize().y);
 
-  jmlib = new JMLib();
+  jmlib = JMLib::alloc();
+  //jmlib = JMLib::alloc_JuggleMaster();
+  //jmlib = JMLib::alloc_JuggleSaver();
   jmlib->setWindowSize(windowx, windowy);
   jmlib->setPatternDefault();
   jmlib->setStyleDefault();
@@ -175,7 +177,7 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 #endif
 
   // Initialise Pattern Loader
-  patterns = new PatternLoader();
+  patterns = new PatternLoader(NULL, DEFAULT_PATTERNFILE, DEFAULT_JUGGLESAVER_PATTERNFILE);
   semaphores = new PatternLoader(NULL, DEFAULT_SEMAPHOREFILE);
 
 }
@@ -197,8 +199,8 @@ void JMFrame::changeMirror(wxCommandEvent& WXUNUSED(event)) {
 void JMFrame::reDownload(wxCommandEvent& WXUNUSED(event)) {
 	delete patterns;
 	delete semaphores;
-	patterns = new PatternLoader(this, DEFAULT_PATTERNFILE, 1);
-	semaphores = new PatternLoader(this, DEFAULT_SEMAPHOREFILE, 1);
+	patterns = new PatternLoader(this, DEFAULT_PATTERNFILE, DEFAULT_JUGGLESAVER_PATTERNFILE, 1);
+	semaphores = new PatternLoader(this, DEFAULT_SEMAPHOREFILE, NULL, 1);
 }
 
 void JMFrame::setPause() {
@@ -502,7 +504,7 @@ JMTimer::JMTimer(JMCanvas *c, JMOpenGLCanvas* glc, JMLib *j) : wxTimer() {
 	canvas = c;
 	glCanvas = glc;
 	jmlib = j;
-	current_delay = 30;
+	current_delay = 1;
 	Start(current_delay);
 }
 #else

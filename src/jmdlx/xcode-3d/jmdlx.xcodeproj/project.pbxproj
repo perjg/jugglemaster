@@ -1,0 +1,515 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CB33454B0DFA5A18004611F2 /* glfont.c in Sources */ = {isa = PBXBuildFile; fileRef = CB3345490DFA5A18004611F2 /* glfont.c */; };
+		CB398D690DB787A6004DBEAC /* jmlib_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */; };
+		CB3EDB870DC82AFD004F2E1A /* sqlite_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB3EDB850DC82AFD004F2E1A /* sqlite_patterns.cpp */; };
+		CB4FFB930DCC270D00952DDA /* render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB4FFB920DCC270D00952DDA /* render.cpp */; };
+		CB611D400DE07B87007D5E3F /* render_jm_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB611D3E0DE07B87007D5E3F /* render_jm_flat.cpp */; };
+		CB6ABB420DB2557B000FD76F /* advsite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB320DB2557B000FD76F /* advsite.cpp */; };
+		CB6ABB430DB2557B000FD76F /* choosepatt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB340DB2557B000FD76F /* choosepatt.cpp */; };
+		CB6ABB440DB2557B000FD76F /* choosestyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB360DB2557B000FD76F /* choosestyle.cpp */; };
+		CB6ABB450DB2557B000FD76F /* jmdlx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB380DB2557B000FD76F /* jmdlx.cpp */; };
+		CB6ABB460DB2557B000FD76F /* newsemaphore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB3A0DB2557B000FD76F /* newsemaphore.cpp */; };
+		CB6ABB480DB2557B000FD76F /* patt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB3E0DB2557B000FD76F /* patt.cpp */; };
+		CB6ABB490DB2557B000FD76F /* print.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB400DB2557B000FD76F /* print.cpp */; };
+		CB6ABB5A0DB255A9000FD76F /* jmlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB4C0DB255A9000FD76F /* jmlib.cpp */; };
+		CB6ABB5B0DB255A9000FD76F /* patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB500DB255A9000FD76F /* patterns.cpp */; };
+		CB6ABB5C0DB255A9000FD76F /* prefs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB520DB255A9000FD76F /* prefs.cpp */; };
+		CB6ABB5D0DB255A9000FD76F /* randompatt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB540DB255A9000FD76F /* randompatt.cpp */; };
+		CB6ABB5E0DB255A9000FD76F /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB560DB255A9000FD76F /* util.cpp */; };
+		CB6ABB5F0DB255A9000FD76F /* validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB6ABB580DB255A9000FD76F /* validator.cpp */; };
+		CB6ABB830DB2569E000FD76F /* libwx_base_carbon-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB680DB2569E000FD76F /* libwx_base_carbon-2.8.a */; };
+		CB6ABB840DB2569E000FD76F /* libwx_base_carbon_net-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB690DB2569E000FD76F /* libwx_base_carbon_net-2.8.a */; };
+		CB6ABB850DB2569E000FD76F /* libwx_base_carbon_xml-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB6A0DB2569E000FD76F /* libwx_base_carbon_xml-2.8.a */; };
+		CB6ABB860DB2569E000FD76F /* libwx_base_carbonu-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB6B0DB2569E000FD76F /* libwx_base_carbonu-2.8.a */; };
+		CB6ABB870DB2569E000FD76F /* libwx_base_carbonu_net-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB6C0DB2569E000FD76F /* libwx_base_carbonu_net-2.8.a */; };
+		CB6ABB880DB2569E000FD76F /* libwx_base_carbonu_xml-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB6D0DB2569E000FD76F /* libwx_base_carbonu_xml-2.8.a */; };
+		CB6ABB890DB2569E000FD76F /* libwx_mac_adv-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB6E0DB2569E000FD76F /* libwx_mac_adv-2.8.a */; };
+		CB6ABB8A0DB2569E000FD76F /* libwx_mac_aui-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB6F0DB2569E000FD76F /* libwx_mac_aui-2.8.a */; };
+		CB6ABB8B0DB2569E000FD76F /* libwx_mac_core-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB700DB2569E000FD76F /* libwx_mac_core-2.8.a */; };
+		CB6ABB8C0DB2569E000FD76F /* libwx_mac_gl-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB710DB2569E000FD76F /* libwx_mac_gl-2.8.a */; };
+		CB6ABB8D0DB2569E000FD76F /* libwx_mac_html-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB720DB2569E000FD76F /* libwx_mac_html-2.8.a */; };
+		CB6ABB8E0DB2569E000FD76F /* libwx_mac_qa-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB730DB2569E000FD76F /* libwx_mac_qa-2.8.a */; };
+		CB6ABB8F0DB2569E000FD76F /* libwx_mac_richtext-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB740DB2569E000FD76F /* libwx_mac_richtext-2.8.a */; };
+		CB6ABB900DB2569E000FD76F /* libwx_mac_xrc-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB750DB2569E000FD76F /* libwx_mac_xrc-2.8.a */; };
+		CB6ABB990DB2569E000FD76F /* libwxexpat-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB7E0DB2569E000FD76F /* libwxexpat-2.8.a */; };
+		CB6ABB9A0DB2569E000FD76F /* libwxjpeg-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB7F0DB2569E000FD76F /* libwxjpeg-2.8.a */; };
+		CB6ABB9C0DB2569F000FD76F /* libwxregexu-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB810DB2569E000FD76F /* libwxregexu-2.8.a */; };
+		CB6ABB9D0DB2569F000FD76F /* libwxtiff-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABB820DB2569E000FD76F /* libwxtiff-2.8.a */; };
+		CB6ABBC80DB26137000FD76F /* libwxpng-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABBC70DB26137000FD76F /* libwxpng-2.8.a */; };
+		CB6ABBCB0DB26998000FD76F /* libwxzlib-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6ABBCA0DB26998000FD76F /* libwxzlib-2.8.a */; };
+		CBA2DFF80DBBB26F00618F0B /* js_validator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2DFF60DBBB26F00618F0B /* js_validator.cpp */; };
+		CBA2E2CE0DBCD83C00618F0B /* js_patterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E2CC0DBCD83C00618F0B /* js_patterns.cpp */; };
+		CBA2E4850DC0DB2D00618F0B /* gltrackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E4830DC0DB2D00618F0B /* gltrackball.cpp */; };
+		CBA2E4860DC0DB2D00618F0B /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA2E4840DC0DB2D00618F0B /* trackball.cpp */; };
+		CBBC40680DCED5C900FBC66E /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = CBBC40670DCED5C900FBC66E /* sqlite3.c */; };
+		CBEAE29A0DB37E1E0019833A /* opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE2980DB37E1E0019833A /* opengl.cpp */; };
+		CBEAE3040DB39ACD0019833A /* jmlib_jsaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE3020DB39ACD0019833A /* jmlib_jsaver.cpp */; };
+		CBEAE3170DB3A8D10019833A /* engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBEAE3150DB3A8D10019833A /* engine.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		CB3345490DFA5A18004611F2 /* glfont.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glfont.c; path = ../../jmlib/glfont/glfont.c; sourceTree = SOURCE_ROOT; };
+		CB33454A0DFA5A18004611F2 /* glfont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glfont.h; path = ../../jmlib/glfont/glfont.h; sourceTree = SOURCE_ROOT; };
+		CB398B0A0DB64335004DBEAC /* jmlib_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_wrapper.h; path = ../../jmlib/jmlib_wrapper.h; sourceTree = SOURCE_ROOT; };
+		CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_wrapper.cpp; path = ../../jmlib/jmlib_wrapper.cpp; sourceTree = SOURCE_ROOT; };
+		CB3991AD0DB9B026004DBEAC /* jmlib_jugglemaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jugglemaster.h; path = ../../jmlib/jmlib_jugglemaster.h; sourceTree = SOURCE_ROOT; };
+		CB3EDB850DC82AFD004F2E1A /* sqlite_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite_patterns.cpp; path = ../../jmlib/sqlite_patterns.cpp; sourceTree = SOURCE_ROOT; };
+		CB3EDB860DC82AFD004F2E1A /* sqlite_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite_patterns.h; path = ../../jmlib/sqlite_patterns.h; sourceTree = SOURCE_ROOT; };
+		CB4FFB920DCC270D00952DDA /* render.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render.cpp; path = ../../jmlib/jugglesaver/render.cpp; sourceTree = SOURCE_ROOT; };
+		CB611D3E0DE07B87007D5E3F /* render_jm_flat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render_jm_flat.cpp; path = ../../jmlib/render_jm_flat.cpp; sourceTree = SOURCE_ROOT; };
+		CB611D3F0DE07B87007D5E3F /* render_jm_flat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = render_jm_flat.h; path = ../../jmlib/render_jm_flat.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB2B0DB2551C000FD76F /* jmdlx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jmdlx.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB6ABB2E0DB2551C000FD76F /* jmdlx-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "jmdlx-Info.plist"; sourceTree = "<group>"; };
+		CB6ABB320DB2557B000FD76F /* advsite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = advsite.cpp; path = ../advsite.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB330DB2557B000FD76F /* advsite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = advsite.h; path = ../advsite.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB340DB2557B000FD76F /* choosepatt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = choosepatt.cpp; path = ../choosepatt.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB350DB2557B000FD76F /* choosepatt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = choosepatt.h; path = ../choosepatt.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB360DB2557B000FD76F /* choosestyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = choosestyle.cpp; path = ../choosestyle.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB370DB2557B000FD76F /* choosestyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = choosestyle.h; path = ../choosestyle.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB380DB2557B000FD76F /* jmdlx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmdlx.cpp; path = ../jmdlx.cpp; sourceTree = "<group>"; };
+		CB6ABB390DB2557B000FD76F /* jmdlx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmdlx.h; path = ../jmdlx.h; sourceTree = "<group>"; };
+		CB6ABB3A0DB2557B000FD76F /* newsemaphore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = newsemaphore.cpp; path = ../newsemaphore.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB3B0DB2557B000FD76F /* newsemaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = newsemaphore.h; path = ../newsemaphore.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB3E0DB2557B000FD76F /* patt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = patt.cpp; path = ../patt.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB3F0DB2557B000FD76F /* patt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = patt.h; path = ../patt.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB400DB2557B000FD76F /* print.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = print.cpp; path = ../print.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB410DB2557B000FD76F /* print.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = print.h; path = ../print.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB4C0DB255A9000FD76F /* jmlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib.cpp; path = ../../jmlib/jmlib.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB4D0DB255A9000FD76F /* jmlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib.h; path = ../../jmlib/jmlib.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB4E0DB255A9000FD76F /* jmlib_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_types.h; path = ../../jmlib/jmlib_types.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB500DB255A9000FD76F /* patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = patterns.cpp; path = ../../jmlib/patterns.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB510DB255A9000FD76F /* patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = patterns.h; path = ../../jmlib/patterns.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB520DB255A9000FD76F /* prefs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = prefs.cpp; path = ../../jmlib/prefs.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB530DB255A9000FD76F /* prefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefs.h; path = ../../jmlib/prefs.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB540DB255A9000FD76F /* randompatt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = randompatt.cpp; path = ../../jmlib/randompatt.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB550DB255A9000FD76F /* randompatt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = randompatt.h; path = ../../jmlib/randompatt.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB560DB255A9000FD76F /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = ../../jmlib/util.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB570DB255A9000FD76F /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = ../../jmlib/util.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB580DB255A9000FD76F /* validator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = validator.cpp; path = ../../jmlib/validator.cpp; sourceTree = SOURCE_ROOT; };
+		CB6ABB590DB255A9000FD76F /* validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = validator.h; path = ../../jmlib/validator.h; sourceTree = SOURCE_ROOT; };
+		CB6ABB680DB2569E000FD76F /* libwx_base_carbon-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_base_carbon-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_base_carbon-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB690DB2569E000FD76F /* libwx_base_carbon_net-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_base_carbon_net-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_base_carbon_net-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB6A0DB2569E000FD76F /* libwx_base_carbon_xml-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_base_carbon_xml-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_base_carbon_xml-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB6B0DB2569E000FD76F /* libwx_base_carbonu-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_base_carbonu-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_base_carbonu-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB6C0DB2569E000FD76F /* libwx_base_carbonu_net-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_base_carbonu_net-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_base_carbonu_net-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB6D0DB2569E000FD76F /* libwx_base_carbonu_xml-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_base_carbonu_xml-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_base_carbonu_xml-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB6E0DB2569E000FD76F /* libwx_mac_adv-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac_adv-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_mac_adv-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB6F0DB2569E000FD76F /* libwx_mac_aui-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac_aui-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_mac_aui-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB700DB2569E000FD76F /* libwx_mac_core-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac_core-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_mac_core-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB710DB2569E000FD76F /* libwx_mac_gl-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac_gl-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_mac_gl-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB720DB2569E000FD76F /* libwx_mac_html-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac_html-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_mac_html-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB730DB2569E000FD76F /* libwx_mac_qa-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac_qa-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_mac_qa-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB740DB2569E000FD76F /* libwx_mac_richtext-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac_richtext-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_mac_richtext-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB750DB2569E000FD76F /* libwx_mac_xrc-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac_xrc-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwx_mac_xrc-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB7E0DB2569E000FD76F /* libwxexpat-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxexpat-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwxexpat-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB7F0DB2569E000FD76F /* libwxjpeg-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxjpeg-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwxjpeg-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB810DB2569E000FD76F /* libwxregexu-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxregexu-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwxregexu-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABB820DB2569E000FD76F /* libwxtiff-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxtiff-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwxtiff-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABBC70DB26137000FD76F /* libwxpng-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxpng-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwxpng-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB6ABBCA0DB26998000FD76F /* libwxzlib-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxzlib-2.8.a"; path = "../../../../wxMac-2.8.7/osx-build/lib/libwxzlib-2.8.a"; sourceTree = SOURCE_ROOT; };
+		CB97E3B10DB5E1FC00BD2DBA /* jmlib_if.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_if.h; path = ../../jmlib/jmlib_if.h; sourceTree = SOURCE_ROOT; };
+		CBA2DFF60DBBB26F00618F0B /* js_validator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = js_validator.cpp; path = ../../jmlib/jugglesaver/js_validator.cpp; sourceTree = SOURCE_ROOT; };
+		CBA2DFF70DBBB26F00618F0B /* js_validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_validator.h; path = ../../jmlib/jugglesaver/js_validator.h; sourceTree = SOURCE_ROOT; };
+		CBA2E2CC0DBCD83C00618F0B /* js_patterns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = js_patterns.cpp; path = ../../jmlib/jugglesaver/js_patterns.cpp; sourceTree = SOURCE_ROOT; };
+		CBA2E2CD0DBCD83C00618F0B /* js_patterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = js_patterns.h; path = ../../jmlib/jugglesaver/js_patterns.h; sourceTree = SOURCE_ROOT; };
+		CBA2E4770DC0D8A500618F0B /* gltrackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gltrackball.h; path = ../../jmlib/jugglesaver/gltrackball.h; sourceTree = SOURCE_ROOT; };
+		CBA2E4790DC0D8A500618F0B /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = ../../jmlib/jugglesaver/trackball.h; sourceTree = SOURCE_ROOT; };
+		CBA2E4830DC0DB2D00618F0B /* gltrackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gltrackball.cpp; path = ../../jmlib/jugglesaver/gltrackball.cpp; sourceTree = SOURCE_ROOT; };
+		CBA2E4840DC0DB2D00618F0B /* trackball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = trackball.cpp; path = ../../jmlib/jugglesaver/trackball.cpp; sourceTree = SOURCE_ROOT; };
+		CBBC40440DCED09400FBC66E /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../../jmlib/sqlite/sqlite3.h; sourceTree = SOURCE_ROOT; };
+		CBBC40450DCED09400FBC66E /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../../jmlib/sqlite/sqlite3ext.h; sourceTree = SOURCE_ROOT; };
+		CBBC40670DCED5C900FBC66E /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../../jmlib/sqlite/sqlite3.c; sourceTree = SOURCE_ROOT; };
+		CBEAE2980DB37E1E0019833A /* opengl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = opengl.cpp; path = ../opengl.cpp; sourceTree = SOURCE_ROOT; };
+		CBEAE2990DB37E1E0019833A /* opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opengl.h; path = ../opengl.h; sourceTree = SOURCE_ROOT; };
+		CBEAE2DE0DB38F230019833A /* jugglesaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jugglesaver.h; path = ../../jmlib/jugglesaver/jugglesaver.h; sourceTree = SOURCE_ROOT; };
+		CBEAE3020DB39ACD0019833A /* jmlib_jsaver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jmlib_jsaver.cpp; path = ../../jmlib/jugglesaver/jmlib_jsaver.cpp; sourceTree = SOURCE_ROOT; };
+		CBEAE3030DB39ACD0019833A /* jmlib_jsaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jmlib_jsaver.h; path = ../../jmlib/jugglesaver/jmlib_jsaver.h; sourceTree = SOURCE_ROOT; };
+		CBEAE3150DB3A8D10019833A /* engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = engine.cpp; path = ../../jmlib/jugglesaver/engine.cpp; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CB6ABB290DB2551C000FD76F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB6ABB830DB2569E000FD76F /* libwx_base_carbon-2.8.a in Frameworks */,
+				CB6ABB840DB2569E000FD76F /* libwx_base_carbon_net-2.8.a in Frameworks */,
+				CB6ABB850DB2569E000FD76F /* libwx_base_carbon_xml-2.8.a in Frameworks */,
+				CB6ABB860DB2569E000FD76F /* libwx_base_carbonu-2.8.a in Frameworks */,
+				CB6ABB870DB2569E000FD76F /* libwx_base_carbonu_net-2.8.a in Frameworks */,
+				CB6ABB880DB2569E000FD76F /* libwx_base_carbonu_xml-2.8.a in Frameworks */,
+				CB6ABB890DB2569E000FD76F /* libwx_mac_adv-2.8.a in Frameworks */,
+				CB6ABB8A0DB2569E000FD76F /* libwx_mac_aui-2.8.a in Frameworks */,
+				CB6ABB8B0DB2569E000FD76F /* libwx_mac_core-2.8.a in Frameworks */,
+				CB6ABB8C0DB2569E000FD76F /* libwx_mac_gl-2.8.a in Frameworks */,
+				CB6ABB8D0DB2569E000FD76F /* libwx_mac_html-2.8.a in Frameworks */,
+				CB6ABB8E0DB2569E000FD76F /* libwx_mac_qa-2.8.a in Frameworks */,
+				CB6ABB8F0DB2569E000FD76F /* libwx_mac_richtext-2.8.a in Frameworks */,
+				CB6ABB900DB2569E000FD76F /* libwx_mac_xrc-2.8.a in Frameworks */,
+				CB6ABB990DB2569E000FD76F /* libwxexpat-2.8.a in Frameworks */,
+				CB6ABB9A0DB2569E000FD76F /* libwxjpeg-2.8.a in Frameworks */,
+				CB6ABB9C0DB2569F000FD76F /* libwxregexu-2.8.a in Frameworks */,
+				CB6ABB9D0DB2569F000FD76F /* libwxtiff-2.8.a in Frameworks */,
+				CB6ABBC80DB26137000FD76F /* libwxpng-2.8.a in Frameworks */,
+				CB6ABBCB0DB26998000FD76F /* libwxzlib-2.8.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CB33453F0DFA57CB004611F2 /* glfont */ = {
+			isa = PBXGroup;
+			children = (
+				CB3345490DFA5A18004611F2 /* glfont.c */,
+				CB33454A0DFA5A18004611F2 /* glfont.h */,
+			);
+			name = glfont;
+			sourceTree = "<group>";
+		};
+		CB6ABAED0DB25168000FD76F = {
+			isa = PBXGroup;
+			children = (
+				CBEAE2B10DB380750019833A /* libraries */,
+				CB6ABB4B0DB25583000FD76F /* jmlib */,
+				CBEAE2B20DB3808C0019833A /* src */,
+				CB6ABB2C0DB2551C000FD76F /* Products */,
+				CB6ABB2E0DB2551C000FD76F /* jmdlx-Info.plist */,
+			);
+			sourceTree = "<group>";
+		};
+		CB6ABB2C0DB2551C000FD76F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CB6ABB2B0DB2551C000FD76F /* jmdlx.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CB6ABB4B0DB25583000FD76F /* jmlib */ = {
+			isa = PBXGroup;
+			children = (
+				CB33453F0DFA57CB004611F2 /* glfont */,
+				CBBC40420DCED07D00FBC66E /* sqlite */,
+				CBEAE2D60DB38E390019833A /* jugglesaver */,
+				CB6ABB4D0DB255A9000FD76F /* jmlib.h */,
+				CB3991AD0DB9B026004DBEAC /* jmlib_jugglemaster.h */,
+				CB6ABB4C0DB255A9000FD76F /* jmlib.cpp */,
+				CB97E3B10DB5E1FC00BD2DBA /* jmlib_if.h */,
+				CB398D680DB787A6004DBEAC /* jmlib_wrapper.cpp */,
+				CB398B0A0DB64335004DBEAC /* jmlib_wrapper.h */,
+				CB6ABB4E0DB255A9000FD76F /* jmlib_types.h */,
+				CB6ABB500DB255A9000FD76F /* patterns.cpp */,
+				CB6ABB510DB255A9000FD76F /* patterns.h */,
+				CB6ABB520DB255A9000FD76F /* prefs.cpp */,
+				CB6ABB530DB255A9000FD76F /* prefs.h */,
+				CB6ABB540DB255A9000FD76F /* randompatt.cpp */,
+				CB6ABB550DB255A9000FD76F /* randompatt.h */,
+				CB611D3E0DE07B87007D5E3F /* render_jm_flat.cpp */,
+				CB611D3F0DE07B87007D5E3F /* render_jm_flat.h */,
+				CB3EDB850DC82AFD004F2E1A /* sqlite_patterns.cpp */,
+				CB3EDB860DC82AFD004F2E1A /* sqlite_patterns.h */,
+				CB6ABB560DB255A9000FD76F /* util.cpp */,
+				CB6ABB570DB255A9000FD76F /* util.h */,
+				CB6ABB580DB255A9000FD76F /* validator.cpp */,
+				CB6ABB590DB255A9000FD76F /* validator.h */,
+			);
+			name = jmlib;
+			sourceTree = "<group>";
+		};
+		CBBC40420DCED07D00FBC66E /* sqlite */ = {
+			isa = PBXGroup;
+			children = (
+				CBBC40670DCED5C900FBC66E /* sqlite3.c */,
+				CBBC40440DCED09400FBC66E /* sqlite3.h */,
+				CBBC40450DCED09400FBC66E /* sqlite3ext.h */,
+			);
+			name = sqlite;
+			sourceTree = "<group>";
+		};
+		CBEAE2B10DB380750019833A /* libraries */ = {
+			isa = PBXGroup;
+			children = (
+				CB6ABBCA0DB26998000FD76F /* libwxzlib-2.8.a */,
+				CB6ABBC70DB26137000FD76F /* libwxpng-2.8.a */,
+				CB6ABB680DB2569E000FD76F /* libwx_base_carbon-2.8.a */,
+				CB6ABB690DB2569E000FD76F /* libwx_base_carbon_net-2.8.a */,
+				CB6ABB6A0DB2569E000FD76F /* libwx_base_carbon_xml-2.8.a */,
+				CB6ABB6B0DB2569E000FD76F /* libwx_base_carbonu-2.8.a */,
+				CB6ABB6C0DB2569E000FD76F /* libwx_base_carbonu_net-2.8.a */,
+				CB6ABB6D0DB2569E000FD76F /* libwx_base_carbonu_xml-2.8.a */,
+				CB6ABB6E0DB2569E000FD76F /* libwx_mac_adv-2.8.a */,
+				CB6ABB6F0DB2569E000FD76F /* libwx_mac_aui-2.8.a */,
+				CB6ABB700DB2569E000FD76F /* libwx_mac_core-2.8.a */,
+				CB6ABB710DB2569E000FD76F /* libwx_mac_gl-2.8.a */,
+				CB6ABB720DB2569E000FD76F /* libwx_mac_html-2.8.a */,
+				CB6ABB730DB2569E000FD76F /* libwx_mac_qa-2.8.a */,
+				CB6ABB740DB2569E000FD76F /* libwx_mac_richtext-2.8.a */,
+				CB6ABB750DB2569E000FD76F /* libwx_mac_xrc-2.8.a */,
+				CB6ABB7E0DB2569E000FD76F /* libwxexpat-2.8.a */,
+				CB6ABB7F0DB2569E000FD76F /* libwxjpeg-2.8.a */,
+				CB6ABB810DB2569E000FD76F /* libwxregexu-2.8.a */,
+				CB6ABB820DB2569E000FD76F /* libwxtiff-2.8.a */,
+			);
+			name = libraries;
+			sourceTree = "<group>";
+		};
+		CBEAE2B20DB3808C0019833A /* src */ = {
+			isa = PBXGroup;
+			children = (
+				CB6ABB330DB2557B000FD76F /* advsite.h */,
+				CB6ABB320DB2557B000FD76F /* advsite.cpp */,
+				CB6ABB340DB2557B000FD76F /* choosepatt.cpp */,
+				CB6ABB350DB2557B000FD76F /* choosepatt.h */,
+				CB6ABB360DB2557B000FD76F /* choosestyle.cpp */,
+				CB6ABB370DB2557B000FD76F /* choosestyle.h */,
+				CB6ABB380DB2557B000FD76F /* jmdlx.cpp */,
+				CB6ABB390DB2557B000FD76F /* jmdlx.h */,
+				CB6ABB3A0DB2557B000FD76F /* newsemaphore.cpp */,
+				CB6ABB3B0DB2557B000FD76F /* newsemaphore.h */,
+				CBEAE2980DB37E1E0019833A /* opengl.cpp */,
+				CBEAE2990DB37E1E0019833A /* opengl.h */,
+				CB6ABB3E0DB2557B000FD76F /* patt.cpp */,
+				CB6ABB3F0DB2557B000FD76F /* patt.h */,
+				CB6ABB400DB2557B000FD76F /* print.cpp */,
+				CB6ABB410DB2557B000FD76F /* print.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		CBEAE2D60DB38E390019833A /* jugglesaver */ = {
+			isa = PBXGroup;
+			children = (
+				CBA2E4830DC0DB2D00618F0B /* gltrackball.cpp */,
+				CBA2E4840DC0DB2D00618F0B /* trackball.cpp */,
+				CBA2E4770DC0D8A500618F0B /* gltrackball.h */,
+				CBA2E4790DC0D8A500618F0B /* trackball.h */,
+				CBA2E2CC0DBCD83C00618F0B /* js_patterns.cpp */,
+				CBA2E2CD0DBCD83C00618F0B /* js_patterns.h */,
+				CBA2DFF60DBBB26F00618F0B /* js_validator.cpp */,
+				CBA2DFF70DBBB26F00618F0B /* js_validator.h */,
+				CBEAE3150DB3A8D10019833A /* engine.cpp */,
+				CB4FFB920DCC270D00952DDA /* render.cpp */,
+				CBEAE3020DB39ACD0019833A /* jmlib_jsaver.cpp */,
+				CBEAE3030DB39ACD0019833A /* jmlib_jsaver.h */,
+				CBEAE2DE0DB38F230019833A /* jugglesaver.h */,
+			);
+			name = jugglesaver;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CB6ABB2A0DB2551C000FD76F /* jmdlx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB6ABB310DB2551D000FD76F /* Build configuration list for PBXNativeTarget "jmdlx" */;
+			buildPhases = (
+				CB6ABB270DB2551C000FD76F /* Resources */,
+				CB6ABB280DB2551C000FD76F /* Sources */,
+				CB6ABB290DB2551C000FD76F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = jmdlx;
+			productName = jmdlx;
+			productReference = CB6ABB2B0DB2551C000FD76F /* jmdlx.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CB6ABAEF0DB25168000FD76F /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = CB6ABAF20DB25168000FD76F /* Build configuration list for PBXProject "jmdlx" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 0;
+			mainGroup = CB6ABAED0DB25168000FD76F;
+			productRefGroup = CB6ABB2C0DB2551C000FD76F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CB6ABB2A0DB2551C000FD76F /* jmdlx */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CB6ABB270DB2551C000FD76F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CB6ABB280DB2551C000FD76F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB6ABB420DB2557B000FD76F /* advsite.cpp in Sources */,
+				CB6ABB430DB2557B000FD76F /* choosepatt.cpp in Sources */,
+				CB6ABB440DB2557B000FD76F /* choosestyle.cpp in Sources */,
+				CB6ABB450DB2557B000FD76F /* jmdlx.cpp in Sources */,
+				CB6ABB460DB2557B000FD76F /* newsemaphore.cpp in Sources */,
+				CB6ABB480DB2557B000FD76F /* patt.cpp in Sources */,
+				CB6ABB490DB2557B000FD76F /* print.cpp in Sources */,
+				CB6ABB5A0DB255A9000FD76F /* jmlib.cpp in Sources */,
+				CB6ABB5B0DB255A9000FD76F /* patterns.cpp in Sources */,
+				CB6ABB5C0DB255A9000FD76F /* prefs.cpp in Sources */,
+				CB6ABB5D0DB255A9000FD76F /* randompatt.cpp in Sources */,
+				CB6ABB5E0DB255A9000FD76F /* util.cpp in Sources */,
+				CB6ABB5F0DB255A9000FD76F /* validator.cpp in Sources */,
+				CBEAE29A0DB37E1E0019833A /* opengl.cpp in Sources */,
+				CBEAE3040DB39ACD0019833A /* jmlib_jsaver.cpp in Sources */,
+				CBEAE3170DB3A8D10019833A /* engine.cpp in Sources */,
+				CB398D690DB787A6004DBEAC /* jmlib_wrapper.cpp in Sources */,
+				CBA2DFF80DBBB26F00618F0B /* js_validator.cpp in Sources */,
+				CBA2E2CE0DBCD83C00618F0B /* js_patterns.cpp in Sources */,
+				CBA2E4850DC0DB2D00618F0B /* gltrackball.cpp in Sources */,
+				CBA2E4860DC0DB2D00618F0B /* trackball.cpp in Sources */,
+				CB3EDB870DC82AFD004F2E1A /* sqlite_patterns.cpp in Sources */,
+				CB4FFB930DCC270D00952DDA /* render.cpp in Sources */,
+				CBBC40680DCED5C900FBC66E /* sqlite3.c in Sources */,
+				CB611D400DE07B87007D5E3F /* render_jm_flat.cpp in Sources */,
+				CB33454B0DFA5A18004611F2 /* glfont.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CB6ABAF00DB25168000FD76F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = JUGGLESAVER_SUPPORT;
+			};
+			name = Debug;
+		};
+		CB6ABAF10DB25168000FD76F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Release;
+		};
+		CB6ABB2F0DB2551D000FD76F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				HEADER_SEARCH_PATHS = (
+					"/Users/per/dev/wxMac-2.8.7/osx-build/lib/wx/include/mac-ansi-release-static-2.8",
+					"/Users/per/dev/wxMac-2.8.7/include",
+					"/Users/per/dev/wxMac-2.8.7/contrib/include",
+				);
+				INFOPLIST_FILE = "jmdlx-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../../wxMac-2.8.7/osx-build/lib\"";
+				OTHER_CFLAGS = (
+					"-D__WXMAC__",
+					"-D_FILE_OFFSET_BITS=64",
+					"-D_LARGE_FILES",
+					"-DNO_GCC_PRAGMA",
+					"-DOPENGL_SUPPORT",
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					System,
+					"-liconv",
+					"-framework",
+					Cocoa,
+					"-framework",
+					QuickTime,
+					"-framework",
+					OpenGL,
+					"-framework",
+					AGL,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = jmdlx;
+			};
+			name = Debug;
+		};
+		CB6ABB300DB2551D000FD76F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				INFOPLIST_FILE = "jmdlx-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../../wxMac-2.8.7/osx-build/lib\"";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = jmdlx;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CB6ABAF20DB25168000FD76F /* Build configuration list for PBXProject "jmdlx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB6ABAF00DB25168000FD76F /* Debug */,
+				CB6ABAF10DB25168000FD76F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB6ABB310DB2551D000FD76F /* Build configuration list for PBXNativeTarget "jmdlx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB6ABB2F0DB2551D000FD76F /* Debug */,
+				CB6ABB300DB2551D000FD76F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CB6ABAEF0DB25168000FD76F /* Project object */;
+}

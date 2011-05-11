@@ -1,37 +1,124 @@
-{
-    IBClasses = (
-        {
-            ACTIONS = {"" = id; }; 
-            CLASS = FirstResponder; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = InstantTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
-        {
-            ACTIONS = {
-                endExportSheet = id; 
-                setPattern = id; 
-                setPatternStyle = id; 
-                setSpeed = id; 
-                setStyle = id; 
-                showInspector = id; 
-                toggleRecording = id; 
-                toggleShowPattern = id; 
-            }; 
-            CLASS = JMController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                errorReporter = NSImageView; 
-                inspectorPanel = NSPanel; 
-                movieExportSelection = NSPopUpButton; 
-                movieExportView = NSView; 
-                patternStyleButtons = NSMatrix; 
-                recordingMenuItem = NSMenuItem; 
-                styleSelect = NSPopUpButton; 
-                view = JMView; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>copy</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>JMOpenGLView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>dataSource</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSOpenGLView</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>InstantTextField</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSTextField</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>cancelExport</key>
+				<string>id</string>
+				<key>endExportSheet</key>
+				<string>id</string>
+				<key>setLoadedCategory</key>
+				<string>id</string>
+				<key>setLoadedPattern</key>
+				<string>id</string>
+				<key>setObjectType</key>
+				<string>id</string>
+				<key>setPattern</key>
+				<string>id</string>
+				<key>setPatternStyle</key>
+				<string>id</string>
+				<key>setSpeed</key>
+				<string>id</string>
+				<key>setStyle</key>
+				<string>id</string>
+				<key>showInspector</key>
+				<string>id</string>
+				<key>switchLoadedPattern</key>
+				<string>id</string>
+				<key>toggleRecording</key>
+				<string>id</string>
+				<key>toggleShowPattern</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>JMController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>categorySelect</key>
+				<string>NSPopUpButton</string>
+				<key>errorReporter</key>
+				<string>NSImageView</string>
+				<key>inspectorPanel</key>
+				<string>NSPanel</string>
+				<key>movieExportProgress</key>
+				<string>NSProgressIndicator</string>
+				<key>movieExportSelection</key>
+				<string>NSPopUpButton</string>
+				<key>movieExportView</key>
+				<string>NSView</string>
+				<key>objectSelect</key>
+				<string>NSPopUpButton</string>
+				<key>patternSelect</key>
+				<string>NSPopUpButton</string>
+				<key>patternStyleButtons</key>
+				<string>NSMatrix</string>
+				<key>recordingMenuItem</key>
+				<string>NSMenuItem</string>
+				<key>styleSelect</key>
+				<string>NSPopUpButton</string>
+				<key>switchPattern</key>
+				<string>NSSegmentedControl</string>
+				<key>view</key>
+				<string>JMOpenGLView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSPopUpButton</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSButton</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key></key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

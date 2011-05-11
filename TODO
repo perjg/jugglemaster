@@ -1,20 +1,91 @@
 JMDlx:
-OS9 - Find a build box
-Fix The Timing/ Speed up/ slow down/ pause [speed in jmlib]
-Command-line named pattern
-Keyboard shortcuts
-Fix OSX proxy stuff
-
-JMLib:
-Speed stuff
-Stop his arms crossing?
-Add "bugger up" feature where dude drops all the balls.
-Add a sync-de-sync option
+* OS9 - Find a build box
+* Fix The Timing/ Speed up/ slow down/ pause [speed in jmlib]
+* Command-line named pattern
+* Keyboard shortcuts
+* Fix OSX proxy stuff
+* 
 
 AAJM:
-Find more stupid uses and add to webpage
+* Find more stupid uses and add to webpage
 
-PocketPC:
+JMCocoa:
+* Finish it
 
-JMQt:
-Fix it :-)
+JMLib 2.1:
+
+BUGS
+
+JuggleSaver
+* Cannot toggle spin on and off for JuggleSaver
+* Some JuggleSaver patterns are loaded twice
+* Pattern parsing: * -1 not parsed correctly
+* Timing is strange
+* Site validator a-z / A-Z not parsed properly
+
+JuggleMaster
+* Club spinning is strange while holding for certain patterns
+* Clubs are held too low for certain patterns
+* Pattern parsing not safe for incorrect pattern files
+* Integrate timing functionality (JUGGLEMASTER_NEW_TIMING)
+* Camera placement is wrong for JuggleMaster patterns that include
+  a-z in their siteswap. Corresponding JuggleSaver pattern should
+  have uppercase A-Z.
+
+CLEANUP
+
+* Add documentation to headers
+
+NEW STUFF AND ENHANCEMENTS
+
+OpenGL Stuff
+* Add font support (pattern display & fps counter) (OPENGL_FONT_SUPPORT)
+* Rotate function
+* Load new pattern without changing 
+* Flat OpenGL rendering for JuggleMaster plus switching
+* Flat OpenGL rendering for JuggleSaver (?)
+  (fixed camera, white background, black stick figure, balls only, no shadows)
+* Flat rendering enhancements:
+  - inverted color scheme
+  - background image or background gradient (like jmlib-js)
+* Better / smoother camera control
+
+SQL Pattern loader
+* Get random pattern from library
+* Load pattern with style
+* Pattern navigation: next/prev pattern/category
+
+Misc
+* Mixed object type
+* Select object type when loading pattern
+* Load / Save camera stuff
+* JuggleMaster pattern file additions:
+  - Object types: Mixed, Balls, Rings, Clubs
+  - camera placement
+  - Embed JuggleSaver patterns
+* Switch to random pattern
+* sqlite pattern loading / search
+* Currently active throw for JuggleSaver
+* fps counter
+* Currently active pattern info on screen
+* Bounce juggler's head for JuggleMaster patterns
+
+
+IFDEF documentation
+* JUGGLESAVER_SUPPORT - Turns on JuggleSaver support and JuggleSaver rendering engine
+* OPENGL_ES_SUPPORT - Compile all OpenGL functionality in OpenGL ES compatibility mode. Requires JUGGLESAVER_SUPPORT
+* JUGGLEMASTER_OPENGL_SUPPORT - Turns on flat OpenGL rendering for JuggleMaster. Automatically turned on with JUGGLESAVER_SUPPORT. Use this to get simple 2D OpenGL support without JuggleSaver compatibility
+* SMALL_MEMORY_DEVICE - Reduces memory requirement of JuggleMaster at the expense of losing compatibility for patterns with 630 balls. Should be unneccesary for most platforms, currently only used in the Palm OS version.
+
+Other:
+* JMWIN - Enabled in JMWin, required for proper OpenGL support on that platform. Don't use for other platforms.
+
+STUFF FOR THE FUTURE
+
+* Add fish club and other objects
+* Skinning for the juggler
+* Stop the juggler's arms crossing
+* Add "bugger up" feature where dude drops all the balls.
+* Add a sync-de-sync option (?)
+
+

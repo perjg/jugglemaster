@@ -1,12 +1,13 @@
-// 	$Id$	
-
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
- * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
+ * Version 2.1
+ * (C) Per Johan Groland 2000-2008, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
+ *
+ * JuggleSaver support based on Juggler3D
+ * Copyright (c) 2005-2008 Brian Apps <brian@jugglesaver.co.uk>
  *
  * You may redistribute and/or modify JMLib under the terms of the
  * Modified BSD License as published in various places online or in the
@@ -20,25 +21,98 @@
 
 #include "jmlib.h"
 
-JMLib::JMLib() {
+// Create an instance of JMLib that can switch automatically
+// between the JuggleMaster and JuggleSaver engine
+JMLib* JMLib::alloc() {
+#ifdef JUGGLESAVER_SUPPORT
+  return new JMLibWrapper();
+#else
+  return new JuggleMaster();
+#endif
+}
+
+// Create an instance of JMLib that supports JuggleMaster only
+JMLib* JMLib::alloc_JuggleMaster() {
+  return new JuggleMaster();
+}
+
+// Create an instance of JMLib that supports JuggleSaver only
+JMLib* JMLib::alloc_JuggleSaver() {
+#ifdef JUGGLESAVER_SUPPORT
+  return new JuggleSaver();
+#else
+  return new JuggleMaster();
+#endif
+}
+
+#ifdef _WIN32
+
+// Wrapper for gettimeofday functionality on windows
+#include <windows.h>
+#include <time.h>
+     
+#if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
+  #define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
+#else
+  #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
+#endif
+ 
+int gettimeofday(struct timeval *tv, struct timezone *tz) {
+  FILETIME ft;
+  unsigned __int64 tmpres = 0;
+  static int tzflag;
+ 
+  if (NULL != tv)
+  {
+    GetSystemTimeAsFileTime(&ft);
+ 
+    tmpres |= ft.dwHighDateTime;
+    tmpres <<= 32;
+    tmpres |= ft.dwLowDateTime;
+ 
+    /*converting file time to unix epoch*/
+    tmpres /= 10;  /*convert into microseconds*/
+    tmpres -= DELTA_EPOCH_IN_MICROSECS; 
+    tv->tv_sec = (long)(tmpres / 1000000UL);
+    tv->tv_usec = (long)(tmpres % 1000000UL);
+  }
+ 
+  if (NULL != tz)
+  {
+    if (!tzflag)
+    {
+      _tzset();
+      tzflag++;
+    }
+    tz->tz_minuteswest = _timezone / 60;
+    tz->tz_dsttime = _daylight;
+  }
+ 
+  return 0;
+}
+#else
+#include <sys/time.h>
+#endif
+
+JuggleMaster::JuggleMaster() {
   initialize();
   use_cpp_callback = 0;
   cb = (ERROR_CALLBACK*)NULL;
   mCallback = NULL;
+  
+#ifdef JUGGLEMASTER_NEW_TIMING
+  CurrentFrameRate = 0.0f;
+  JuggleSpeed = 2.2f;
+  FramesSinceSync = 0;
+  LastSyncTime = 0;
+#endif
 }
 
-JMLib::JMLib(ERROR_CALLBACK* _cb) {
-  initialize();
-  use_cpp_callback = 0;
-  cb = _cb;
-  mCallback = NULL;
-}
-
-JMLib::~JMLib() {
+JuggleMaster::~JuggleMaster() {
   shutdown();
 }
 
-JML_CHAR *JMLib::possible_styles[] = {
+JML_CHAR *JuggleMaster::possible_styles[] = {
 	"Normal",
 	"Reverse",
 	"Shower",
@@ -50,7 +124,11 @@ JML_CHAR *JMLib::possible_styles[] = {
 #endif
 };
 
-void JMLib::initialize(void) {
+void JuggleMaster::initialize(void) {
+  static JML_BOOL initialized = FALSE;
+  if (initialized) return;
+  initialized = TRUE;
+
   // Set default values
   ga = 9.8F;
   dwell_ratio = 0.5F;
@@ -61,7 +139,6 @@ void JMLib::initialize(void) {
   hand_on = 1;
   hand_x = 0;
   hand_y = 0;
-  // frameSkip = FS_DEF;
   scalingMethod = SCALING_METHOD_CLASSIC;
   
   smode = 50.0;
@@ -80,31 +157,10 @@ void JMLib::initialize(void) {
   setPatternDefault();
 }
 
-void JMLib::shutdown(void) {
+void JuggleMaster::shutdown(void) {
 }
 
-void JMLib::setErrorCallback(void *aUData, void (*aCallback)
-			(void *, JML_CHAR *)) {
-  mUData = aUData;
-  use_cpp_callback = 1;
-  mCallback = aCallback;
-}
-
-void JMLib::setErrorCallback(ERROR_CALLBACK* _cb) {
-  cb = _cb;
-}
-
-void JMLib::error(JML_CHAR* msg) {
-  if(use_cpp_callback) {
-    if(mCallback != NULL) {
-      mCallback(mUData, msg);
-    }
-  } else if(cb != NULL) {
-    cb(msg);
-  }
-}
-
-JML_BOOL JMLib::setWindowSize(JML_INT32 width, JML_INT32 height) {
+JML_BOOL JuggleMaster::setWindowSize(JML_INT32 width, JML_INT32 height) {
   if (width <= 0 || height <= 0)
     return false;
 
@@ -133,7 +189,7 @@ JML_BOOL JMLib::setWindowSize(JML_INT32 width, JML_INT32 height) {
   return true;
 }
 
-void JMLib::setScalingMethod(JML_INT32 scalingMethod) {
+void JuggleMaster::setScalingMethod(JML_INT32 scalingMethod) {
   // no change
   if (this->scalingMethod == scalingMethod) return;
 
@@ -149,21 +205,21 @@ void JMLib::setScalingMethod(JML_INT32 scalingMethod) {
   }
 }
 
-JML_INT32 JMLib::getImageWidth() {
+JML_INT32 JuggleMaster::getImageWidth() {
   if (scalingMethod == SCALING_METHOD_CLASSIC)
     return imageWidth;
   else // SCALING_METHOD_DYNAMIC
     return scaleImageWidth;
 }
 
-JML_INT32 JMLib::getImageHeight() {
+JML_INT32 JuggleMaster::getImageHeight() {
   if (scalingMethod == SCALING_METHOD_CLASSIC)
     return imageHeight;
   else // SCALING_METHOD_DYNAMIC
     return scaleImageHeight;
 }
 
-JML_INT32 JMLib::getBallRadius() {
+JML_INT32 JuggleMaster::getBallRadius() {
   JML_INT32 baseRadius = 11 * dpm / DW;
 
   if (scalingMethod == SCALING_METHOD_CLASSIC) {
@@ -180,8 +236,8 @@ JML_INT32 JMLib::getBallRadius() {
   }
 }
 
-
-void JMLib::doCoordTransform() {
+// Coordinate transform for SCALING_METHOD_DYNAMIC
+void JuggleMaster::doCoordTransform() {
   JML_FLOAT zoomFactorX = (float)scaleImageWidth  / (float)imageWidth;
   JML_FLOAT zoomFactorY = (float)scaleImageHeight / (float)imageHeight;
 
@@ -258,7 +314,7 @@ void JMLib::doCoordTransform() {
   }
 }
 
-void JMLib::setMirror(JML_BOOL mir) {
+void JuggleMaster::setMirror(JML_BOOL mir) {
   // store current status and stop juggling
   JML_INT32 oldStatus = status;
   stopJuggle();
@@ -273,7 +329,7 @@ void JMLib::setMirror(JML_BOOL mir) {
   status = oldStatus;
 }
 
-JML_BOOL JMLib::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
+JML_BOOL JuggleMaster::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
   JML_INT32 jml_errno;
   
   if (strlen(site) > JML_MAX_SITELEN) {
@@ -354,7 +410,7 @@ JML_BOOL JMLib::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLO
   }
 }
 
-JML_BOOL JMLib::setStyle(JML_CHAR* name, JML_UINT8 length,
+JML_BOOL JuggleMaster::setStyle(JML_CHAR* name, JML_UINT8 length,
                      JML_INT8* data, JML_INT32 offset) {
   if (strlen((char*)data) > JML_MAX_STYLELEN) {
     error("Style too large");
@@ -373,7 +429,7 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name, JML_UINT8 length,
   return true;
 }
 
-JML_BOOL JMLib::setStyle(JML_CHAR* name) {
+JML_BOOL JuggleMaster::setStyle(JML_CHAR* name) {
 // After adding a style here, also add to possible_styles_list at line 36
   if (strcmp(name, "Reverse") == 0 || strcmp(name, "reverse") == 0) {
     JML_INT8 style[] = { 4, 0, 13, 0 };
@@ -401,15 +457,16 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name) {
     JML_INT8 *style;
     style = new JML_INT8[(size_t)(4*sizeof(JML_INT8)*strlen(getSite()))];
     if(style != NULL) {
-	for(i=0;i<(int)strlen(getSite())*4;) {
-	  style[i++] = (rand()%30)-15;
-	  style[i++] = (rand()%10);
-	}
-	setStyle("Random", (JML_UINT8)strlen(getSite()), style);
-	delete style;
-	startJuggle();
-    } else {
-	setStyleDefault();
+      for(i=0;i<(int)strlen(getSite())*4;) {
+        style[i++] = (rand()%30)-15;
+        style[i++] = (rand()%10);
+      }
+      setStyle("Random", (JML_UINT8)strlen(getSite()), style);
+      delete[] style;
+      startJuggle();
+      }
+      else {
+        setStyleDefault();
     }
   }
 #endif
@@ -420,26 +477,25 @@ JML_BOOL JMLib::setStyle(JML_CHAR* name) {
   return true;
 }
 
-JML_CHAR **JMLib::getStyles(void) {
+JML_CHAR **JuggleMaster::getStyles(void) {
   return possible_styles;
 }
 
-JML_INT32 JMLib::numStyles(void) {
+JML_INT32 JuggleMaster::numStyles(void) {
   return (int)(sizeof(possible_styles)/sizeof(possible_styles[0]));
-
 }
 
-void JMLib::setPatternDefault(void) {
+void JuggleMaster::setPatternDefault(void) {
   setPattern("3 Cascade", "3", HR_DEF, DR_DEF);
   setStyleDefault();
 }
 
-void JMLib::setStyleDefault(void) {
+void JuggleMaster::setStyleDefault(void) {
   JML_INT8 defStyle[] = { 13, 0, 4, 0 };
   setStyle("Normal", 1, defStyle);
 }
 
-void JMLib::setHR(JML_FLOAT HR) {
+void JuggleMaster::setHR(JML_FLOAT HR) {
 	if (HR > HR_MAX) {
 		height_ratio = HR_MAX;
 	} else if (HR < HR_MIN) {
@@ -449,11 +505,11 @@ void JMLib::setHR(JML_FLOAT HR) {
 	}
 }
 
-JML_FLOAT JMLib::getHR() {
+JML_FLOAT JuggleMaster::getHR() {
 	return(height_ratio);
 }
 
-void JMLib::setDR(JML_FLOAT DR) {
+void JuggleMaster::setDR(JML_FLOAT DR) {
 	if (DR > DR_MAX) {
 		dwell_ratio = DR_MAX;
 	} else if (DR < DR_MIN) {
@@ -463,17 +519,16 @@ void JMLib::setDR(JML_FLOAT DR) {
 	}
 }
 
-JML_FLOAT JMLib::getDR() {
+JML_FLOAT JuggleMaster::getDR() {
 	return(dwell_ratio);
 }
 
-JML_INT32 JMLib::numBalls(void) {
+JML_INT32 JuggleMaster::numBalls(void) {
 	return balln;
 }
 
-
 // Internal functions
-void JMLib::arm_line(void){
+void JuggleMaster::arm_line(void){
   JML_INT32 mx,my;
   JML_INT32 sx,sy;
   
@@ -525,7 +580,7 @@ void JMLib::arm_line(void){
   }
 }
 
-void JMLib::applyCorrections(void) {
+void JuggleMaster::applyCorrections(void) {
   // Correct ball coordinates
   for(JML_INT32 i = balln - 1; i >= 0; i--) {
     b[i].gx += bm1;
@@ -533,7 +588,7 @@ void JMLib::applyCorrections(void) {
   }
 }
 
-void JMLib::hand_pos(JML_INT32 c, JML_INT32 h, JML_INT32* x, JML_INT32* z) {
+void JuggleMaster::hand_pos(JML_INT32 c, JML_INT32 h, JML_INT32* x, JML_INT32* z) {
   JML_UINT32 a;
   
   if(mirror){
@@ -553,7 +608,7 @@ void JMLib::hand_pos(JML_INT32 c, JML_INT32 h, JML_INT32* x, JML_INT32* z) {
   *z=styledata[a+1];
 }
 
-JML_INT32 JMLib::juggle(struct ball *d) {
+JML_INT32 JuggleMaster::juggle(struct ball *d) {
   JML_INT32 tp,flag=0,i,tpox,rpox,tpoz,rpoz;
   JML_INT32 x,y;
   
@@ -777,7 +832,7 @@ JML_INT32 JMLib::juggle(struct ball *d) {
   return flag;
 }
 
-JML_INT32 JMLib::set_ini(JML_INT32 rr) {
+JML_INT32 JuggleMaster::set_ini(JML_INT32 rr) {
   JML_INT32 i,j,k;
   JML_FLOAT tw0,aw0;
   
@@ -901,7 +956,7 @@ JML_INT32 JMLib::set_ini(JML_INT32 rr) {
 }
 
 /* original set_dpm
-   void JMLib::set_dpm(void){
+   void JuggleMaster::set_dpm(void){
    float cSpeed0;
    int i;
    
@@ -975,7 +1030,7 @@ JML_INT32 JMLib::set_ini(JML_INT32 rr) {
    }
 */
 
-void JMLib::set_dpm(void) {
+void JuggleMaster::set_dpm(void) {
   JML_FLOAT cSpeed0;
   JML_INT32 i;
   
@@ -1063,8 +1118,10 @@ void JMLib::set_dpm(void) {
   cSpeed=cSpeed0;
 }
 
-JML_INT32 JMLib::set_patt(JML_CHAR* s) {
+JML_INT32 JuggleMaster::set_patt(JML_CHAR* s) {
   JML_INT32 i, l, flag = 0, flag2 = 0, a = 0;
+  
+  resetSpin();
   
   l = (JML_INT32)strlen(s);
   
@@ -1146,7 +1203,7 @@ JML_INT32 JMLib::set_patt(JML_CHAR* s) {
   return 0;
 }
 
-JML_INT32 JMLib::ctod(JML_CHAR c){
+JML_INT32 JuggleMaster::ctod(JML_CHAR c){
   if(c>='0' && c<='9') return c-'0';
   else if(c>='a' && c<='z') return c-'a'+10;
   else if(c>='A' && c<='Z') return c-'A'+10;
@@ -1154,7 +1211,7 @@ JML_INT32 JMLib::ctod(JML_CHAR c){
   return -1;
 }
 
-void JMLib::startJuggle(void) {
+void JuggleMaster::startJuggle(void) {
   set_dpm();
   if (set_ini(1) != 0)
     return;
@@ -1166,20 +1223,21 @@ void JMLib::startJuggle(void) {
   time_period=0;
   
   status = ST_JUGGLE;
+  doJuggleEx(); // skip gruff
 }
 
-void JMLib::stopJuggle(void) {
+void JuggleMaster::stopJuggle(void) {
   status = ST_NONE;
 }
 
-void JMLib::togglePause(void) {
+void JuggleMaster::togglePause(void) {
   if (status == ST_JUGGLE)
     status = ST_PAUSE;
   else if (status == ST_PAUSE)
     status = ST_JUGGLE;
 }
 
-void JMLib::setPause(JML_BOOL pauseOn) {
+void JuggleMaster::setPause(JML_BOOL pauseOn) {
   if (status != ST_NONE) {
     if (pauseOn)
       status = ST_PAUSE;
@@ -1188,16 +1246,16 @@ void JMLib::setPause(JML_BOOL pauseOn) {
   }
 }
 
-JML_INT32 JMLib::getStatus(void) {
+JML_INT32 JuggleMaster::getStatus(void) {
   return status;
 }
 
-JML_FLOAT JMLib::fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t) {
+JML_FLOAT JuggleMaster::fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t) {
   return (JML_FLOAT)(JML_INT32((x+t)*xpow(10,k)+.5)/xpow(10,k));
   //return (JML_FLOAT)(floor((x+t)*xpow(10,k)+.5)/xpow(10,k));
 }
 
-/* JML_BOOL JMLib::setFrameskip(JML_INT32 fs) {
+/* JML_BOOL JuggleMaster::setFrameskip(JML_INT32 fs) {
 	frameSkip = fs;
 	if(fs > FS_MAX) {
 		frameSkip = FS_MAX;
@@ -1209,34 +1267,55 @@ JML_FLOAT JMLib::fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t) {
 	return(true);
 } */
 
-/* FIXME */
-void JMLib::speedUp(void) {
+#ifdef JUGGLEMASTER_NEW_TIMING
+void JuggleMaster::speedUp(void) {
+  if (JuggleSpeed <= 10.0f) JuggleSpeed++;
+}
+
+void JuggleMaster::speedDown(void) {
+  if (JuggleSpeed >= 0.1f) JuggleSpeed--;
+}
+
+void JuggleMaster::speedReset(void) {
+  JuggleSpeed = 2.2f;
+}
+
+void JuggleMaster::setSpeed(float s) {
+  if (s < 0.1) s= 0.1f;
+  if (s > 10.0) s = 10.0f;
+  JuggleSpeed = s;
+}
+
+float JuggleMaster::speed(void) {
+  return JuggleSpeed;
+}
+#else
+void JuggleMaster::speedUp(void) {
 	cSpeed = SPEED_MAX;
 	set_ini(0);
 }
 
-/* FIXME */
-void JMLib::speedDown(void) {
+void JuggleMaster::speedDown(void) {
 	cSpeed = SPEED_MIN;
 	set_ini(0);
 }
 
-/* FIXME */
-void JMLib::speedReset(void) {
+void JuggleMaster::speedReset(void) {
 	cSpeed = SPEED_DEF;
 	set_ini(0);
 }
 
-void JMLib::setSpeed(float s) {
+void JuggleMaster::setSpeed(float s) {
 	cSpeed = s;
 	set_ini(0);
 }
 
-float JMLib::speed(void) {
+float JuggleMaster::speed(void) {
 	return cSpeed;
 }
+#endif
 
-JML_INT32 JMLib::doJuggle(void) {
+JML_INT32 JuggleMaster::doJuggleEx(void) {
   JML_INT32 i;
   JML_INT32 tone = 0;
   
@@ -1272,8 +1351,59 @@ JML_INT32 JMLib::doJuggle(void) {
   return tone;
 }
 
+JML_INT32 JuggleMaster::doJuggle(void) {
+#ifdef JUGGLEMASTER_NEW_TIMING
+  static float timeDelta = 0;
+
+  if (FramesSinceSync >=  1 * (unsigned int) CurrentFrameRate) {
+    struct timeval tvnow;
+    unsigned now;
+            
+    # ifdef GETTIMEOFDAY_TWO_ARGS
+      struct timezone tzp;
+      gettimeofday(&tvnow, &tzp);
+    # else
+      gettimeofday(&tvnow);
+    # endif
+        
+    now = (unsigned) (tvnow.tv_sec * 1000000 + tvnow.tv_usec);
+
+    if (FramesSinceSync == 0) {
+      LastSyncTime = now;
+    }
+    else {
+      unsigned Delta = now - LastSyncTime;
+      if (Delta > 20000) {
+        LastSyncTime = now;
+        CurrentFrameRate = (FramesSinceSync * 1.0e6f) / Delta;
+        FramesSinceSync = 0;
+      }
+    }
+  }
+    
+  FramesSinceSync++;
+    
+  if (CurrentFrameRate > 1.0e-6f) {
+    if (getStatus() == ST_JUGGLE) {
+      timeDelta += JuggleSpeed / CurrentFrameRate;
+
+      if (timeDelta > 0.06f) {
+        doJuggleEx();
+        timeDelta = 0;
+      }
+    }
+  }
+
+	return 1;
+
+#else
+  doJuggleEx();
+	return 1;
+#endif
+}
+
 // Modify to include hand calculations
-void JMLib::xbitset(void) {
+void JuggleMaster::xbitset(void) {
   JML_INT32 i, j = 0;
   
   // DATA is used to create the hand bitmaps
@@ -1317,7 +1447,7 @@ void JMLib::xbitset(void) {
   }
 }
 
-void JMLib::doStepcalc(void) {
+void JuggleMaster::doStepcalc(void) {
   JML_INT32 i;
   /* pos: position in string
      stp: position in steps array */
@@ -1372,3 +1502,24 @@ void JMLib::doStepcalc(void) {
     }
   }
 }
+
+JML_BOOL JuggleMaster::isValidPattern(const char* patt) {
+	return JMSiteValidator::validateSite((char*)patt);
+}
+
+//fixme:
+#ifdef JUGGLEMASTER_OPENGL_SUPPORT
+
+void JuggleMaster::setRenderingMode(rendering_t mode) {
+
+}
+
+rendering_t JuggleMaster::getRenderingMode() {
+  return RENDERING_NONE;
+}
+
+void JuggleMaster::toggleRenderingMode() {
+  
+}
+
+#endif

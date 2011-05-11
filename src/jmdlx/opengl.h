@@ -1,6 +1,6 @@
 /*
  * JMDeluxe - Portable JuggleMaster based on wxWindows
- * (C) Per Johan Groland 2002, 2006, Gary Briggs 2003
+ * (C) Per Johan Groland 2002-8, Gary Briggs 2003
  *
  * JuggleMaster is  free software; you can redistribute  it and/or modify
  * it under the  terms of the GNU General  Public License as published
@@ -18,7 +18,7 @@
 
 #include <wx/wx.h>
 #include "../jmlib/jmlib.h"
-#include "../jmgfx/opengl_renderer.h"
+#include "../jmlib/jugglesaver/jmlib_jsaver.h"
 
 // OpenGL
 #if !wxUSE_GLCANVAS
@@ -38,19 +38,27 @@ public:
   void OnEraseBackground(wxEraseEvent& event);
   void OnSize(wxSizeEvent &event);
   void OnLMouseDown(wxMouseEvent &event);
+  void OnLMouseUp(wxMouseEvent &event);
+  void OnRMouseDown(wxMouseEvent &event);
+  void OnLMouseDClick(wxMouseEvent& event);
+  void OnMouseMove(wxMouseEvent& event);
+  void OnMouseWheel(wxMouseEvent& event);
+  void OnKeyDown(wxKeyEvent& event);
 
   void setRenderMode3D();
   void setRenderModeFlat();
 
-  void enableAutoRotate()  { renderer->enableAutoRotate();  }
-  void disableAutoRotate() { renderer->disableAutoRotate(); }
+  void enableAutoRotate()  { jmlib->setAutoRotate(true);  }
+  void disableAutoRotate() { jmlib->setAutoRotate(false); }
 
   void ballColors(bool on);
 private:
   JMFrame* parent;
   JMLib* jmlib;
-  JMOpenGLRenderer* renderer;
-  //GLuint m_gllist;
+
+  long cur_x;
+  long cur_y;
+  bool toggleRotate;
 
   void SetBallColor(int color);
   DECLARE_EVENT_TABLE()

@@ -46,6 +46,11 @@ IMPLEMENT_DYNCREATE(JMView, CView)
 BEGIN_MESSAGE_MAP(JMView, CView)
 	ON_WM_CREATE()
   ON_WM_TIMER()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
+	ON_WM_MOUSEWHEEL()
+	ON_WM_LBUTTONDBLCLK()
 	//ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
   ON_COMMAND(ID_FILE_NEW, OnLeftButton)
 	ON_COMMAND(ID_FILE_ENTERSITE, OnFileEnterSite)
@@ -99,11 +104,12 @@ JMView::~JMView() {
   prefs->savePreferences();
   delete prefs;
   delete jmlib;
+	//delete renderer;
 }
 
 BOOL JMView::PreCreateWindow(CREATESTRUCT& cs) {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	// Add Window styles required for OpenGL before window is created
+  cs.style |= (WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CS_OWNDC);
 
 	return CView::PreCreateWindow(cs);
 }
@@ -114,7 +120,12 @@ void JMView::OnDraw(CDC* pDC) {
   //JMDoc* pDoc = GetDocument();
   //ASSERT_VALID(pDoc);
 
-  PaintBuffer(pDC);
+  //PaintBuffer(pDC);
+  wglMakeCurrent(m_myhDC,m_myhRC);
+  //renderer->draw();
+	jmlib->render();
+	SwapBuffers(m_myhDC);
+	//Invalidate(FALSE);
 }
 
 
@@ -136,22 +147,22 @@ int JMView::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	if (CWnd ::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-  // Initialize jmlib here
-  jmlib = new JMLib(messageCallback);
+	//jmlib = JMLib::alloc_JuggleMaster();
+	//jmlib = JMLib::alloc_JuggleSaver();
+	jmlib = JMLib::alloc();
 
+  jmlib->setPatternDefault();
+  jmlib->setStyleDefault();
+  //jmlib->setScalingMethod(SCALING_METHOD_DYNAMIC);
   jmlib->setMirror(mirror ? true : false);
-  //jmlib = new JMLib();
-  //jmlib->setErrorCallback(messageCallback);
+  jmlib->startJuggle();
 
+	// Setup OpenGL
+	SetupPixelFormat();
+	wglMakeCurrent(NULL,NULL);
+	
   //int width  = ::GetSystemMetrics(SM_CXSCREEN);
   //int height = ::GetSystemMetrics(SM_CYSCREEN);
-
-  /* This only seems to work from within CMainFrame
-  CRect rect;
-  GetClientRect(&rect);
-  int width = rect.Width();
-  int height = rect.Height();
-  */
 
   // load pattern library
   //***fixme: do not use absolute path. Allow configuration of path
@@ -183,12 +194,6 @@ int JMView::OnCreate(LPCREATESTRUCT lpCreateStruct) {
   //fixme add quickbrowser support
   //if (patternLibraryLoaded)
   //  ((JMFrame*)(AfxGetApp()->m_pMainWnd))->initQuickBrowserData(this, jmlib, pl, prefs);
-
-  //***fixme: Load previous pattern here
-  jmlib->setPattern("3-Cascade", "534", 0.2F, 0.5F);
-  jmlib->setStyleDefault();
-  jmlib->setScalingMethod(SCALING_METHOD_DYNAMIC);
-  jmlib->startJuggle();
   
   SetTimer(1, curSpeed, 0);
   
@@ -205,6 +210,50 @@ void JMView::OnTimer(UINT nIDEvent) {
   UpdateWindow();
 	
 	CWnd::OnTimer(nIDEvent);
+}
+
+static CPoint p;
+
+void JMView::OnLButtonDown(UINT nFlags, CPoint point) {
+	jmlib->trackballStart(point.x, point.y);
+}
+
+void JMView::OnRButtonDown(UINT nFlags, CPoint point) {
+	p = point;
+}
+
+void JMView::OnMouseMove(UINT nFlags, CPoint point) {
+	// rotate
+	if (nFlags & MK_LBUTTON) {
+		jmlib->trackballTrack(point.x, point.y);
+	}
+	// move camera
+	else if (nFlags & MK_RBUTTON) {
+		float dx = -(point.x - p.x)*10.0f / m_width;
+		float dy = (point.y - p.y)*10.0f / m_height;
+
+		jmlib->move(dx, dy);
+		p = point;
+	}
+}
+
+// zDelta is a multiple of 120. Assume each zDelta equals 10 % rotation
+// or 5 % zoom
+BOOL JMView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) {
+	// Shift: zoom in/out
+	if (nFlags & MK_SHIFT) {
+		jmlib->zoom( (zDelta / 120 * 5) / 100.0f);
+		return true;
+	}
+
+	// Control: horizontal rotation
+	// No modifier: vertical rotation
+  jmlib->trackballMousewheel(zDelta / 120 * 10, nFlags & MK_CONTROL);
+	return true;
+}
+
+void JMView::OnLButtonDblClk(UINT nFlags, CPoint point) {
+	jmlib->resetCamera();
 }
 
 /*
@@ -438,7 +487,15 @@ BOOL JMView::OnEraseBkgnd(CDC* pDC) {
 
 void JMView::OnSize(UINT nType, int cx, int cy) {
 	CWnd ::OnSize(nType, cx, cy);
-	
+
+	if (cx == 0 || cy == 0) return;
+
+	wglMakeCurrent(m_myhDC,m_myhRC);	
+  glViewport(0, 0, cx, cy);
+  m_height= cy;
+  m_width = cx;
+	//renderer->resize(cx, cy);
+
   if (cx != 0 && cy != 0)
     jmlib->setWindowSize(cx, cy);
 }
@@ -520,5 +577,77 @@ void JMView::saveColorTable() {
   for (int i = PREF_BALL_COLOR01; i <= PREF_BALL_COLOR10; i++) {
     prefs->setPref(i, (int)ballColorTable[i - PREF_BALL_COLOR01]->rgb);
   }
+}
+
+// OpenGL support
+BOOL JMView::SetupPixelFormat()
+{
+	
+	GLuint	PixelFormat;
+	static	PIXELFORMATDESCRIPTOR pfd=
+	{
+		sizeof(PIXELFORMATDESCRIPTOR),		// Size Of This Pixel Format Descriptor
+			1,									// Version Number (?)
+			PFD_DRAW_TO_WINDOW |				// Format Must Support Window
+			PFD_SUPPORT_OPENGL |				// Format Must Support OpenGL
+			PFD_DOUBLEBUFFER,					// Must Support Double Buffering
+			PFD_TYPE_RGBA,						// Request An RGBA Format
+			24,									// Select A 16Bit Color Depth
+			0, 0, 0, 0, 0, 0,					// Color Bits Ignored (?)
+			0,									// No Alpha Buffer
+			0,									// Shift Bit Ignored (?)
+			0,									// No Accumulation Buffer
+			0, 0, 0, 0,							// Accumulation Bits Ignored (?)
+			16,									// 16Bit Z-Buffer (Depth Buffer)  
+			0,									// No Stencil Buffer
+			0,									// No Auxiliary Buffer (?)
+			PFD_MAIN_PLANE,						// Main Drawing Layer
+			0,									// Reserved (?)
+			0, 0, 0								// Layer Masks Ignored (?)
+	};
+	
+	
+	m_myhDC = ::GetDC(m_hWnd);				// Gets A Device Context For The Window
+	PixelFormat = ChoosePixelFormat(m_myhDC, &pfd);		// Finds The Closest Match To The Pixel Format We Set Above
+	
+	if (!PixelFormat)
+	{
+		AfxMessageBox(_T("OpenGL initialization failed"));
+		PostQuitMessage(0);			// This Sends A 'Message' Telling The Program To Quit
+		return false ;						// Prevents The Rest Of The Code From Running
+	}
+	
+	if(!SetPixelFormat(m_myhDC,PixelFormat,&pfd))
+	{
+		AfxMessageBox(_T("OpenGL initialization failed"));
+		PostQuitMessage(0);
+		return false;
+	}
+	
+	m_myhRC = wglCreateContext(m_myhDC);
+	if(!m_myhRC)
+	{
+		AfxMessageBox(_T("OpenGL initialization failed"));
+		PostQuitMessage(0);
+		return false;
+	}
+	
+	if(!wglMakeCurrent(m_myhDC, m_myhRC))
+	{
+		AfxMessageBox(_T("OpenGL initialization failed"));
+		PostQuitMessage(0);
+		return false;
+	}
+	
+	// Now that the screen is setup we can 
+	// initialize OpenGL();
+
+	//renderer = new JMOpenGLRenderer();
+  //renderer->initialize(jmlib, 100, 100, JMOpenGLRenderer::RENDER_MODE_FLAT);
+	//GLInit();
+	jmlib->initialize();
+	
+	return true;
+	
 }
 

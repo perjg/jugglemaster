@@ -1,10 +1,13 @@
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
- * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
+ * Version 2.1
+ * (C) Per Johan Groland 2000-2008, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
+ *
+ * JuggleSaver support based on Juggler3D
+ * Copyright (c) 2005-2008 Brian Apps <brian@jugglesaver.co.uk>
  *
  * You may redistribute and/or modify JMLib under the terms of the
  * Modified BSD License as published in various places online or in the
@@ -19,12 +22,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <errno.h>
-#include "./patterns.h"
-
+//#include <errno.h>
+#include "patterns.h"
 
 /*
-
 From the default patterns.jm:
 #GA=9.8         ;Gravity (0<f<=98) [meter/second^2]
 #DR=0.50        ;Dwell ratio (0.10<=f<=0.90)
@@ -36,6 +37,35 @@ From the default patterns.jm:
 #PD=1           ;Pattern ON (n=0,1)
 #MR=0           ;Switch right and left (n=0,1)
 */
+
+#ifdef JUGGLESAVER_SUPPORT
+#include "jugglesaver/js_patterns.h"
+#endif
+
+// parse and combine JuggleMaster and JuggleSaver patterns
+int ParseAllPatterns(FILE *jm_input, FILE* js_input, 
+	struct groups_t *groups, struct styles_t *styles) {
+  int jm = ParsePatterns(jm_input, groups, styles);
+  if (!jm) return 0;
+
+#ifdef JUGGLESAVER_SUPPORT  
+  if (!js_input) return 1;
+  
+  struct pattern_group_t* last = groups->first;
+  
+  while (last->next != NULL) last = last->next;
+  
+  struct groups_t *js_groups = new groups_t;
+  js_groups->first = NULL;
+  
+  int js = ParseJSPatterns(js_input, js_groups);
+  if (!js) { delete js_groups; return 0; }
+  
+  last->next = js_groups->first;
+  delete js_groups;
+#endif
+  return 1;
+}
 
 int ParsePatterns(FILE *input, 
 	struct groups_t *groups, struct styles_t *styles) {

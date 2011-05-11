@@ -1,12 +1,13 @@
-// 	$Id$	 
-
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.0
- * (C) Per Johan Groland 2000-2002, Gary Briggs 2003
+ * Version 2.1
+ * (C) Per Johan Groland 2000-2008, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
+ *
+ * JuggleSaver support based on Juggler3D
+ * Copyright (c) 2005-2008 Brian Apps <brian@jugglesaver.co.uk>
  *
  * You may redistribute and/or modify JMLib under the terms of the
  * Modified BSD License as published in various places online or in the
@@ -21,9 +22,9 @@
 #ifndef JM__HDR_
 #define JM__HDR_
 
-//#include <stdlib.h>
+#include <stdlib.h>
 #include <stdio.h>
-//#include <math.h>
+#include <math.h>
 #include <string.h>
 
 // time.h is not available for PPC,
@@ -34,6 +35,26 @@
 // No time.h on Palm OS
 #else
 #include <time.h>
+#endif
+
+// gettimeofday functions are unavailable on Windows, provide replacements
+#ifdef _WIN32
+#define GETTIMEOFDAY_TWO_ARGS
+struct timeval {
+	long tv_sec;
+	long tv_usec;	
+};
+
+struct timezone {
+  int  tz_minuteswest; // minutes W of Greenwich
+  int  tz_dsttime;     // type of dst correction
+};
+
+int gettimeofday(struct timeval *tv, struct timezone *tz);
+#else
+//fixme: add other platforms as needed here
+#include <sys/time.h>
+#define GETTIMEOFDAY_TWO_ARGS
 #endif
 
 // For JMPalm support
@@ -51,6 +72,9 @@
 #include "jmlib_types.h"
 #include "util.h"
 #include "validator.h"
+#ifdef JUGGLESAVER_SUPPORT
+#include "jugglesaver/js_validator.h"
+#endif
 
 // PPC and Palm OS have custom pattern loading
 #ifndef _WIN32_WCE
@@ -154,9 +178,35 @@ struct ball {
   JML_INT32 st;       // object status (OBJECT_HAND etc.)
   JML_FLOAT t;        // for spin calculation
 
+  JML_FLOAT prevSpin;
+
+  ball() : prevSpin(2*PI - 0.2f) {}
+
+  void resetSpin() { prevSpin = 2*PI - 0.2f; }
+
+  float getBallSpin() {
+    return (PI + (float)t * PI) * ((bh - 1) / 2) / 6;
+  }
+
+  // when holding, save the current spin and use it for the entire hold
   float getSpin(int spins) {
-    if (isHolding()) return HALF_PI;
-    else return (HALF_PI + (float)t * PI) * ((spins * bh - 1) / 2);
+    float spin;
+
+    if (isHolding()) {
+      return prevSpin;
+    }
+    else if (!(st & OBJECT_MOVE)) {
+      return prevSpin;
+    }
+    else {
+      spin = (PI + (float)t * PI) * ((spins * bh - 1) / 2);
+
+      if (bh == -2) spin = 0; // 2x throws in sync patterns have no spin
+
+      prevSpin = spin;
+    }
+    
+    return spin;
   }
 
   JML_BOOL isHolding() {
@@ -175,161 +225,43 @@ struct hand {
   JML_INT32 lx[10], ly[10]; // polygon for the left hand
 };
 
-// The JMLib class
-class JMLib {
- public:
-  // read-only (add access methods)
-  struct arm ap;
-  struct ball rhand,lhand;
-  struct hand handpoly;
-  struct ball b[BMAX];
-  JML_INT32 dpm;
-  JML_INT32 gx_max, gx_min, gy_max, gy_min;
-  JML_INT32 imageWidth, imageHeight;
-  // read-write
-  JML_INT32 status;
- protected:
-  JML_INT32 balln;
-  JML_INT32 bm1;
-  JML_INT32 arm_x;
-  JML_INT32 arm_y;
-  JML_INT32 hand_x;
-  JML_INT32 hand_y;
-  JML_INT32 horCenter, verCenter;
-  JML_CHAR styledata[STYLEMAX*4];
-  JML_INT32 style_len;
-  JML_FLOAT ga;
-  JML_FLOAT dwell_ratio;
-  JML_FLOAT height_ratio;
-  JML_INT32 base;
-  JML_INT32 mirror;
-  JML_UINT32 time_count;
-  JML_INT32 time_period;
-  JML_FLOAT cSpeed;
-  JML_INT32 beep;
-  JML_INT32 syn;
-  JML_INT32 hand_on;
-  JML_INT32 fpu;
-  JML_INT32 tw;
-  JML_INT32 aw;
-  JML_INT32 pmax;
-  JML_INT32 patt[LMAX][MMAX];
-  JML_INT32 patts[LMAX];
-  JML_INT32 pattw;
-  JML_INT32 r[LMAX*2];
-  JML_FLOAT smode;
-  JML_INT32 high0[BMAX+1];
-  JML_FLOAT high[BMAX+1];
-  JML_INT32 kw0;       // XR/KW [m]
-  // JML_INT32 frameSkip; // frameskip counter
-  JML_CHAR siteswap[JML_MAX_SITELEN]; // The current siteswap
-  JML_CHAR pattname[LMAX]; // The name of the current pattern
-  JML_INT8 steps[LMAX]; // used to print the site on screen
-  JML_CHAR stylename[JML_MAX_NAMELEN]; // The name of the current style
-  static JML_CHAR *possible_styles[]; // Contains list of all possible styles
-
-  void (*mCallback)(void *, JML_CHAR *);
-  void *mUData;
-  ERROR_CALLBACK* cb;
-  JML_BOOL use_cpp_callback;
-
-  // Scaling
-  JML_INT32 scalingMethod;
-  JML_INT32 scaleImageWidth, scaleImageHeight;
-  void doCoordTransform();
-
-  // internal methods
-  JML_INT32 ctod(JML_CHAR c) EXTRA_SECTION_TWO;
-  JML_FLOAT fadd(JML_FLOAT x, JML_INT32 k, JML_FLOAT t)  EXTRA_SECTION_TWO;
-  void hand_pos(JML_INT32 c, JML_INT32 h, JML_INT32* x, JML_INT32* z)  EXTRA_SECTION_TWO;
-  JML_INT32 juggle(struct ball *)  EXTRA_SECTION_TWO;
-  void set_dpm(void)  EXTRA_SECTION_TWO;
-  JML_INT32 set_ini(JML_INT32 rr)  EXTRA_SECTION_TWO;
-  JML_INT32 set_patt(JML_CHAR* w)  EXTRA_SECTION_TWO;
-  void xbitset(void);
-  void arm_line(void);
-  void applyCorrections(void);
-  void doStepcalc(void);
-  // The juggler class contains all data neccesary for drawing
-  //Juggler juggler;
-  struct hand handpoly_ex;
-public:
-  // Constructor / Destructor
-  JMLib();
-  JMLib(ERROR_CALLBACK* _cb);
-  ~JMLib();
-
-  void initialize();
-  void shutdown();
-
-  void setErrorCallback(ERROR_CALLBACK* _cb);
-  void setErrorCallback(void *aUData, void (*aCallback)
-				(void *, JML_CHAR *));
-  void error(JML_CHAR* msg);
-
-  JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
-  JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0);
-  JML_BOOL setStyle(JML_CHAR* name);
-  JML_CHAR **getStyles(void);
-  JML_INT32 numStyles();
-  void setPatternDefault(void);
-  void setStyleDefault(void);
-
-  void setHR(JML_FLOAT HR);
-  JML_FLOAT getHR();
-  void setDR(JML_FLOAT DR);
-  JML_FLOAT getDR();
-  // repeat for all toggleable settings
-
-  JML_INT32 numBalls(void);
-  
-  void setScalingMethod(JML_INT32 scalingMethod);
-
-  void startJuggle(void);
-  void stopJuggle(void);
-  void togglePause(void);
-  void setPause(JML_BOOL pauseOn = true);
-  JML_INT32  getStatus(void);
-
-  JML_INT32 doJuggle(void);
-
-  // JML_BOOL setFrameskip(JML_INT32 fs);
-  JML_BOOL setWindowSize(JML_INT32 width, JML_INT32 height);
-  void     setWindowSizeDefault() { setWindowSize(480, 400); }
-  void setMirror(JML_BOOL mir = true);
-
-  JML_CHAR* getSite(void) { return siteswap; }
-  JML_CHAR* getPattName(void) { return pattname; }
-  JML_CHAR* getStyle(void) { return stylename; }
-
-  JML_INT32 getImageWidth();
-  JML_INT32 getImageHeight();
-
-  void speedUp(void);
-  void speedDown(void);
-  void speedReset(void);
-  void setSpeed(float s);
-  float speed(void);
-
-  JML_CHAR getSiteposStart(void) {
-    if (syn && time_period % 2 == 1) return steps[time_period-1];
-	return steps[time_period];
-  }
-
-  JML_CHAR getSiteposStop(void) {
-	if (syn && time_period % 2 == 0) return steps[time_period+2];
-	return steps[time_period+1];
-  }
-
-  JML_INT32 getSiteposLen(void) {
-    return getSiteposStop() - getSiteposStart();
-  }
-
-  JML_INT32 getiterations(void) {
-    return (dpm); /* FIXME */
-  }
-  
-  JML_INT32 getBallRadius(void);
+#ifndef JUGGLESAVER_SUPPORT
+struct trackball_state {
+  int dummy;
 };
+#endif
+
+// holds internal data neccesary to re-create the current camera position
+struct camera {
+  camera(JML_FLOAT spinAngle_, JML_FLOAT translateAngle_, JML_FLOAT extraZoom_, JML_FLOAT deltaX_,
+         JML_FLOAT deltaY_, JML_BOOL spin_, trackball_state* trackball_) {
+    spinAngle = spinAngle_; translateAngle = translateAngle_; extraZoom = extraZoom_;
+    deltaX = deltaX_; deltaY = deltaY_; spin = spin_; trackball = trackball_;
+  }
+private:
+  JML_FLOAT spinAngle;
+  JML_FLOAT translateAngle;
+  JML_FLOAT extraZoom;
+  JML_FLOAT deltaX;
+  JML_FLOAT deltaY;
+  JML_BOOL spin;
+	trackball_state* trackball;
+};
+
+// The JMLib base class
+#include "jmlib_if.h"
+
+// The JuggleSaver class
+#ifdef JUGGLESAVER_SUPPORT
+#include "jugglesaver/jmlib_jsaver.h"
+#endif
+
+// The JuggleMaster class
+#include "jmlib_jugglemaster.h"
+
+// The JMLib class
+#ifdef JUGGLESAVER_SUPPORT
+#include "jmlib_wrapper.h"
+#endif
 
 #endif

@@ -2,14 +2,14 @@ include ../../Makefile.cfg
 
 CXXFLAGS+=-Wall -pedantic -fsigned-char
 CFLAGS+=-Wall -pedantic -fsigned-char
-LIBS+=-lm -ldl
+LIBS+=-lm -ldl -lsqlite3
 
 ifeq ($(DEBUG), 1)
 CXXFLAGS+=-g -Werror
 endif
 
 DATA=../../data/patterns.jm ../../data/semaphore.jm
-OBJ=jmlib.o prefs.o util.o validator.o patterns.o randompatt.o
+OBJ=jmlib.o prefs.o util.o validator.o patterns.o randompatt.o sqlite_patterns.o
 
 LIBNAME=libjm.a
 all: $(LIBNAME)

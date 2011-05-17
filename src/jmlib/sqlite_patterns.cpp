@@ -103,7 +103,7 @@ void JMPatterns::createDB(const char* dbFileName) {
                     "DROP TABLE IF EXISTS Category;"
                     "CREATE TABLE Category (name PRIMARY KEY);"
                     "DROP TABLE IF EXISTS Pattern;"
-                    "CREATE TABLE Pattern (name PRIMARY KEY, data NOT NULL, category REFERENCES Category, style NOT NULL,"
+                    "CREATE TABLE Pattern (id INTEGER PRIMARY KEY, name TEXT, data NOT NULL, category REFERENCES Category, style NOT NULL,"
                       "author, hr, dr, object_count, cameradata REFERENCES CameraData);"
                     "DROP TABLE IF EXISTS Style;"
                     "CREATE TABLE Style (name PRIMARY KEY, data NOT NULL, length NOT NULL);";
@@ -163,7 +163,7 @@ void JMPatterns::addPattern(pattern_t* patt, pattern_group_t* group) {
 	}
 
   // fixme: add index
-  char* sql = sqlite3_mprintf("INSERT INTO Pattern VALUES (%Q, %Q, %Q, %Q, %Q, %f, %f, %d, NULL)",
+  char* sql = sqlite3_mprintf("INSERT INTO Pattern VALUES (NULL,%Q, %Q, %Q, %Q, %Q, %f, %f, %d, NULL)",
           patt->name, patt->data, group->name, patt->style, patt->author, patt->hr, patt->dr, object_count);
   queryDB(sql);
   sqlite3_free(sql);

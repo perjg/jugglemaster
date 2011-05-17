@@ -523,7 +523,8 @@ int main(int argc, char **argv) {
 	char optch;
 	int option_index = 0;
 
-	jmlib = new JMLib(errorCB);
+	//jmlib = new JMLib(errorCB);
+    jmlib = JMLib::alloc();
 	jmlib->setPatternDefault();
 	jmlib->setStyleDefault();
 	jmlib->startJuggle();

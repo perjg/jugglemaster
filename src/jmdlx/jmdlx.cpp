@@ -37,38 +37,38 @@ bool JMApp::OnInit() {
   jmlib->startJuggle();
 
   wxCmdLineParser cmdline(cmdLineDesc, argc, argv);
-  cmdline.SetLogo("JuggleMaster Deluxe");
+  cmdline.SetLogo(_T("JuggleMaster Deluxe"));
   
   if(cmdline.Parse() == -1) {
 	exit(0);
   }
   wxString initialsiteswap,initialstyle,named_pattern,semaphore;
 
-  if(cmdline.Found("help")) {
+  if(cmdline.Found(_T("help"))) {
 	cmdline.Usage();
-	printf("\n Style can be anything in the \"Change Style\" menu, eg \"Mills Mess\"\n");
+	printf((const char*)_T("\n Style can be anything in the \"Change Style\" menu, eg \"Mills Mess\"\n"));
 	exit(0);
   }
-  if(cmdline.Found("style",&initialstyle)) {
-	jmlib->setStyle((JML_CHAR *)(const char *)initialstyle);
+  if(cmdline.Found(_T("style"),&initialstyle)) {
+	jmlib->setStyle((JML_CHAR *)(const char *)initialstyle.mb_str(wxConvUTF8));
   }
-  if(cmdline.Found("pattern",&named_pattern)) {
+  if(cmdline.Found(_T("pattern"),&named_pattern)) {
 	/* FIXME */
-	printf("Named Pattern: %s\n",(const char *)named_pattern);
+	printf((const char*)_T("Named Pattern: %s\n"),(const char *)named_pattern.mb_str(wxConvUTF8));
   }
-  if(cmdline.Found("semaphore",&semaphore)) {
+  if(cmdline.Found(_T("semaphore"),&semaphore)) {
 	/* FIXME */
-	printf("Semaphore Requested: %s\n",(const char *)semaphore);
+	printf((const char*)_T("Semaphore Requested: %s\n"),(const char *)semaphore.mb_str(wxConvUTF8));
   }
   if (cmdline.GetParamCount() > 0) {
     initialsiteswap = cmdline.GetParam(0);
     if(!initialsiteswap.IsEmpty()) {
-  		jmlib->setPattern((JML_CHAR *)(const char *)initialsiteswap,
-				(JML_CHAR *)(const char *)initialsiteswap,HR_DEF, DR_DEF);
+  		jmlib->setPattern((JML_CHAR *)(const char *)initialsiteswap.mb_str(wxConvUTF8),
+				(JML_CHAR *)(const char *)initialsiteswap.mb_str(wxConvUTF8),HR_DEF, DR_DEF);
     }
   }
 
-	frame = new JMFrame(NULL, -1, "JuggleMaster Deluxe",
+	frame = new JMFrame(NULL, -1, _T("JuggleMaster Deluxe"),
 		wxDefaultPosition, wxSize(windowx,windowy), jmlib);
 
 	// Show the frame
@@ -108,53 +108,53 @@ END_EVENT_TABLE()
 JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
                        const wxPoint& pos, const wxSize& size, JMLib *j) :
                        wxFrame(parent,id,title,pos,size) {
-	SetIcon(wxIcon("IDI_WIZICON"));
+	SetIcon(wxIcon(wxT("IDI_WIZICON")));
 
   fileMenu = new wxMenu();
   optionsMenu = new wxMenu();
   helpMenu = new wxMenu();
   speedMenu = new wxMenu();
 
-  fileMenu->Append(CHANGE_SITESWAP_S, "Change &SiteSwap (Simple)");
-  fileMenu->Append(CHANGE_SITESWAP_A, "Change SiteSwap (Advanced)");
-  fileMenu->Append(CHANGE_SITESWAP_R, "Change SiteSwap (Random)");
+  fileMenu->Append(CHANGE_SITESWAP_S, _T("Change &SiteSwap (Simple)"));
+  fileMenu->Append(CHANGE_SITESWAP_A, _T("Change SiteSwap (Advanced)"));
+  fileMenu->Append(CHANGE_SITESWAP_R, _T("Change SiteSwap (Random)"));
   fileMenu->AppendSeparator();
-  fileMenu->Append(CHANGE_STYLE_S, "Change S&tyle");
+  fileMenu->Append(CHANGE_STYLE_S, _T("Change S&tyle"));
   fileMenu->AppendSeparator();
-  fileMenu->Append(CHOOSE_PATTERN, "Choose P&attern");
-  fileMenu->Append(CHOOSE_SEMAPHORE, "Show Se&maphore");
+  fileMenu->Append(CHOOSE_PATTERN, _T("Choose P&attern"));
+  fileMenu->Append(CHOOSE_SEMAPHORE, _T("Show Se&maphore"));
   fileMenu->AppendSeparator();
-  fileMenu->Append(PRINT_PS, "&Print...");
+  fileMenu->Append(PRINT_PS, _T("&Print..."));
   fileMenu->AppendSeparator();
-  fileMenu->Append(ID_EXIT, "E&xit");
+  fileMenu->Append(ID_EXIT, _T("E&xit"));
 
-  optionsMenu->AppendCheckItem(OPTION_MIRROR, "&Mirror");
-  optionsMenu->AppendCheckItem(OPTION_PAUSE, "&Pause");
-  optionsMenu->AppendCheckItem(OPTION_COLORBALLS, "&Color Balls");
-  optionsMenu->Append(OPTION_REDOWNLOAD, "Re&Download Patterns");
+  optionsMenu->AppendCheckItem(OPTION_MIRROR, _T("&Mirror"));
+  optionsMenu->AppendCheckItem(OPTION_PAUSE, _T("&Pause"));
+  optionsMenu->AppendCheckItem(OPTION_COLORBALLS, _T("&Color Balls"));
+  optionsMenu->Append(OPTION_REDOWNLOAD, _T("Re&Download Patterns"));
 
   // OpenGL specific options
 #ifdef OPENGL_SUPPORT
-  optionsMenu->AppendCheckItem(OPTION_OGL_AUTOROTATE, "&Rotate Automatically");
-  optionsMenu->AppendCheckItem(OPTION_OGL_3D_MODE, "3&D Mode");
+  optionsMenu->AppendCheckItem(OPTION_OGL_AUTOROTATE, _T("&Rotate Automatically"));
+  optionsMenu->AppendCheckItem(OPTION_OGL_3D_MODE, _T("3&D Mode"));
 
   optionsMenu->Check(OPTION_OGL_AUTOROTATE, TRUE);
   optionsMenu->Check(OPTION_OGL_3D_MODE, TRUE);
 #endif
 
-  speedMenu->Append(SPEED_UP,"&Up");
-  speedMenu->Append(SPEED_DOWN,"&Down");
-  speedMenu->Append(SPEED_RESET,"&Reset");
+  speedMenu->Append(SPEED_UP,_T("&Up"));
+  speedMenu->Append(SPEED_DOWN,_T("&Down"));
+  speedMenu->Append(SPEED_RESET,_T("&Reset"));
 
-  helpMenu->Append(ID_ABOUT, "&About");
+  helpMenu->Append(ID_ABOUT, _T("&About"));
 
   // The menu bar
   wxMenuBar* menuBar = new wxMenuBar();
 
-  menuBar->Append(fileMenu, "&File");
-  menuBar->Append(optionsMenu, "&Options");
-  menuBar->Append(speedMenu, "&Speed");
-  menuBar->Append(helpMenu, "&Help");
+  menuBar->Append(fileMenu, _T("&File"));
+  menuBar->Append(optionsMenu, _T("&Options"));
+  menuBar->Append(speedMenu, _T("&Speed"));
+  menuBar->Append(helpMenu, _T("&Help"));
   SetMenuBar(menuBar);
 
   // Initialize jmlib
@@ -189,7 +189,7 @@ JMFrame::~JMFrame() {
 }
 
 void JMFrame::OnAbout(wxCommandEvent &WXUNUSED(event)) {
-	wxMessageBox("(C) Ken Matsuoka 1995-6, Per Johan Groland 2002, Gary Briggs 2003", "About JMDeluxe", wxOK, this);
+	wxMessageBox(_T("(C) Ken Matsuoka 1995-6, Per Johan Groland 2002, Gary Briggs 2003"), _T("About JMDeluxe"), wxOK, this);
 }
 
 void JMFrame::changeMirror(wxCommandEvent& WXUNUSED(event)) {
@@ -233,26 +233,26 @@ void JMFrame::changeSiteSwapRandom(wxCommandEvent& WXUNUSED(event)) {
   new RandomSiteSwap(this,jmlib);
 }
 void JMFrame::setSiteSwap(wxString *newsite) {
-  jmlib->setPattern((JML_CHAR *)(const char *)*newsite,
-		(JML_CHAR *)(const char *)*newsite,HR_DEF, DR_DEF);
+  jmlib->setPattern((JML_CHAR *)(const char *)*newsite->mb_str(wxConvUTF8),
+		(JML_CHAR *)(const char *)*newsite->mb_str(wxConvUTF8),HR_DEF, DR_DEF);
 }
 
 void JMFrame::setStyle(wxString *newstyle) {
-  jmlib->setStyle((JML_CHAR *)(const char *)*newstyle);
+  jmlib->setStyle((JML_CHAR *)(const char *)*newstyle->mb_str(wxConvUTF8));
 }
 
 void JMFrame::changeSiteSwap(wxCommandEvent& WXUNUSED(event))
 {
   JML_CHAR *newpattern;
   wxTextEntryDialog dialog(this,
-                           "Change SiteSwap",
-                           "Please Enter SiteSwap Here",
-			   jmlib->getSite(),
+                           _T("Change SiteSwap"),
+                           _T("Please Enter SiteSwap Here"),
+			   wxString(jmlib->getSite(),wxConvUTF8),
                            wxOK | wxCANCEL | wxCENTRE);
 
   if (dialog.ShowModal() == wxID_OK)
   {
-	newpattern = (JML_CHAR *)(const char *)dialog.GetValue();
+	newpattern = (JML_CHAR *)(const char *)dialog.GetValue().mb_str(wxConvUTF8);
         jmlib->stopJuggle();
 	jmlib->setPattern(newpattern,newpattern,HR_DEF, DR_DEF);
         jmlib->setStyleDefault();
@@ -277,7 +277,7 @@ void JMFrame::choosePattern(wxCommandEvent& WXUNUSED(event))
 		return;
 	}
   }
-  wxMessageDialog *popup = new wxMessageDialog(this, "No Patterns Loaded!", "Error", wxOK|wxICON_ERROR);
+  wxMessageDialog *popup = new wxMessageDialog(this, _T("No Patterns Loaded!"), _T("Error"), wxOK|wxICON_ERROR);
   popup->ShowModal();
 }
 
@@ -289,7 +289,7 @@ void JMFrame::chooseSemaphore(wxCommandEvent& WXUNUSED(event))
 		return;
 	}
   }
-  wxMessageDialog *popup = new wxMessageDialog(this, "No Semaphores Loaded!", "Error", wxOK|wxICON_ERROR);
+  wxMessageDialog *popup = new wxMessageDialog(this, _T("No Semaphores Loaded!"), _T("Error"), wxOK|wxICON_ERROR);
   popup->ShowModal();
 }
 
@@ -346,8 +346,8 @@ void JMFrame::speedReset(wxCommandEvent& WXUNUSED(event)) {
 void JMFrame::ErrorCallBack(void *aUData, JML_CHAR *aErrMsg) {
   /* Massive thanks go to Colin Bayer for his teaching me how this works */
   wxString error_message;
-  error_message = aErrMsg;
-  wxMessageDialog *message = new wxMessageDialog((JMFrame *)aUData, error_message, "Error", wxOK|wxICON_ERROR);
+  error_message = wxString(aErrMsg,wxConvUTF8);
+  wxMessageDialog *message = new wxMessageDialog((JMFrame *)aUData, error_message, _T("Error"), wxOK|wxICON_ERROR);
   message->ShowModal();
 }
 
@@ -443,8 +443,8 @@ void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
   wxCoord strWidth = 0;
   wxCoord strHeight = 0;
 
-  wxString sitetext("Site: ");
-  wxString site(jmlib->getSite());
+  wxString sitetext(_T("Site: "));
+  wxString site(wxString(jmlib->getSite(),wxConvUTF8));
 
   dc.DrawText(sitetext, x, y);
   dc.GetTextExtent(sitetext, &strWidth, &strHeight);
@@ -471,7 +471,8 @@ void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
 
   // More pattern information
   wxString balltext;
-  balltext.Printf("    Style: %s    Balls: %i", jmlib->getStyle(), jmlib->numBalls());
+  wxString stylestr(jmlib->getStyle(),wxConvUTF8); 
+  balltext.Printf(_T("    Style: %s    Balls: %i"), stylestr.c_str(), jmlib->numBalls());
   dc.DrawText(balltext, x, y);
 
   // flip

@@ -21,12 +21,12 @@
 #include "../jmlib/jmlib.h"
 #include "jmdlx.h"
 
-const wxString possible_styles[] = {   "Normal",
-                              "Mills Mess",
-                              "Windmill",
-                              "Reverse",
-                              "Shower",
-                              "Center"
+const wxString possible_styles[] = {   _T("Normal"),
+                              _T("Mills Mess"),
+                              _T("Windmill"),
+                              _T("Reverse"),
+                              _T("Shower"),
+                              _T("Center")
                                 };
 
 

@@ -34,7 +34,7 @@ BEGIN_EVENT_TABLE(Print, wxDialog)
 END_EVENT_TABLE()
 
 Print::Print(wxWindow *parent, JMLib *j)
-	: wxDialog(parent, -1, "Print",
+	: wxDialog(parent, -1, _T("Print"),
 			wxDefaultPosition, wxDefaultSize,
 			wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER) {
 
@@ -44,8 +44,8 @@ Print::Print(wxWindow *parent, JMLib *j)
 
   // Filename
 	wxBoxSizer *filenamesizer = new wxBoxSizer(wxHORIZONTAL);
-	filename = new wxTextCtrl(this,-1,jmlib->getPattName());
-	filenamesizer->Add(new wxStaticText(this, 0, "Filename"),
+	filename = new wxTextCtrl(this,-1,wxString(jmlib->getPattName(),wxConvUTF8));
+	filenamesizer->Add(new wxStaticText(this, 0, _T("Filename")),
                                         0,
                                         wxALIGN_CENTER_VERTICAL|wxALL,
                                         5);
@@ -54,7 +54,7 @@ Print::Print(wxWindow *parent, JMLib *j)
                         wxALIGN_CENTRE_VERTICAL|wxALL,
                         5);
 
-	filenamesizer->Add(new wxButton(this, CHOOSEFILE, "Choose File"),
+	filenamesizer->Add(new wxButton(this, CHOOSEFILE, _T("Choose File")),
                         1,
                         wxALIGN_CENTRE_VERTICAL|wxALL,
                         5);
@@ -62,17 +62,17 @@ Print::Print(wxWindow *parent, JMLib *j)
   // Output Type
 	wxBoxSizer *typesizer = new wxBoxSizer(wxHORIZONTAL);
 	output_type = new wxChoice(this,-1);
-	output_type->Append("Image");
-	output_type->Append("PostScript");
-	output_type->SetStringSelection("PostScript");
-	output_type->Append("FlipBook");
+	output_type->Append(_T("Image"));
+	output_type->Append(_T("PostScript"));
+	output_type->SetStringSelection(_T("PostScript"));
+	output_type->Append(_T("FlipBook"));
 
 #ifdef HAVE_AVCODEC_H
-	output_type->Append("MPEG");
-	output_type->SetStringSelection("MPEG");
+	output_type->Append(_T("MPEG"));
+	output_type->SetStringSelection(_T("MPEG"));
 #endif
 
-	typesizer->Add(new wxStaticText(this, 0, "Output Type"),
+	typesizer->Add(new wxStaticText(this, 0, _T("Output Type")),
                                         0,
                                         wxALIGN_CENTER_VERTICAL|wxALL,
                                         5);
@@ -85,9 +85,9 @@ Print::Print(wxWindow *parent, JMLib *j)
 	wxFlexGridSizer *whdm = new wxFlexGridSizer(2,5,5);
 
 	handed = new wxChoice(this,-1);
-	handed->Append("Left");
-	handed->Append("Right");
-	handed->SetStringSelection("Left");
+	handed->Append(_T("Left"));
+	handed->Append(_T("Right"));
+	handed->SetStringSelection(_T("Left"));
 
 	delay = new wxSpinCtrl(this,
 				-1,
@@ -109,22 +109,22 @@ Print::Print(wxWindow *parent, JMLib *j)
 				10000,
 				1000);
 
-	whdm->Add(new wxStaticText(this, 0, "Delay"),
+	whdm->Add(new wxStaticText(this, 0, _T("Delay")),
 				1, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	whdm->Add(delay,
 				1, wxALIGN_LEFT|wxALL, 5);
-	whdm->Add(new wxStaticText(this, 0, "Max Frames"),
+	whdm->Add(new wxStaticText(this, 0, _T("Max Frames")),
 				1, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	whdm->Add(max_iterations,
 				1, wxALIGN_LEFT|wxALL, 5);
-	whdm->Add(new wxStaticText(this, 0, "FlipBook Handedness"),
+	whdm->Add(new wxStaticText(this, 0, _T("FlipBook Handedness")),
 				1, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL, 5);
 	whdm->Add(handed,
 				1, wxALIGN_LEFT|wxALL, 5);
 
   // Width, Height, Delay, Max Frames
-	wxButton *ok = new wxButton(this, wxID_OK, "OK");
-	wxButton *cancel = new wxButton(this, wxID_CANCEL, "Cancel");
+	wxButton *ok = new wxButton(this, wxID_OK, _T("OK"));
+	wxButton *cancel = new wxButton(this, wxID_CANCEL, _T("Cancel"));
 	wxBoxSizer *buttonsizer = new wxBoxSizer(wxHORIZONTAL);
 	buttonsizer->Add(ok, 1, wxALIGN_CENTRE|wxALL, 5);
 	buttonsizer->Add(cancel, 1, wxALIGN_CENTRE|wxALL, 5);
@@ -155,10 +155,10 @@ void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	struct stat buf; /* for stat */
 	wxMessageDialog* message;
 
-	if(stat((const char *)filename->GetValue(),&buf) != -1) {
+	if(stat((const char *)filename->GetValue().mb_str(wxConvUTF8),&buf) != -1) {
 		message = new wxMessageDialog(this,
-			"File Already Exists! Overwrite?",
-			"Overwrite?",
+			_T("File Already Exists! Overwrite?"),
+			_T("Overwrite?"),
 			wxYES_NO|wxICON_EXCLAMATION);
 		if(message->ShowModal() != wxID_YES) {
 			delete outputfile;
@@ -168,27 +168,27 @@ void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	}
 
 
-	if (output_type->GetStringSelection() == "Image") {
+	if (output_type->GetStringSelection() == _T("Image")) {
 		print_success = printImage();
 	}
 
-	if (output_type->GetStringSelection() == "PostScript") {
+	if (output_type->GetStringSelection() == _T("PostScript")) {
 		print_success = printPS();
 	}
 
-	if (output_type->GetStringSelection() == "FlipBook") {
+	if (output_type->GetStringSelection() == _T("FlipBook")) {
 		print_success = printFlipBook();
 	}
 
 #ifdef HAVE_AVCODEC_H
-	if (output_type->GetStringSelection() == "MPEG") {
+	if (output_type->GetStringSelection() == _T("MPEG")) {
 		print_success = printMPEG();
 	}
 #endif
 
 	if(print_success != 0) {
 		wxMessageDialog message(this,
-				"Printing Aborted!", "Aborted",
+				_T("Printing Aborted!"), _T("Aborted"),
 				wxOK|wxICON_EXCLAMATION);
 		message.ShowModal();
 		wxRemoveFile(filename->GetValue());
@@ -207,9 +207,9 @@ void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 }
 
 void Print::OnChooseFile(wxCommandEvent &WXUNUSED(event)) {
-	wxFileDialog filedialog(this, _("Choose a File to Print to"),
-		lastpath, "",
-		"All Files|*",
+	wxFileDialog filedialog(this, _T("Choose a File to Print to"),
+		lastpath, wxT(""),
+		_T("All Files|*"),
 		wxSAVE);
 
 	if(filedialog.ShowModal() != wxID_OK) return;
@@ -225,7 +225,7 @@ WX_DEFINE_LIST(HandlerList);
 
 
 int Print::printImage() {
-	wxDialog formatchooser(this, -1, "Choose Format",
+	wxDialog formatchooser(this, -1, _T("Choose Format"),
 			wxDefaultPosition, wxDefaultSize,
 			wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
 
@@ -248,11 +248,11 @@ int Print::printImage() {
 		extn = handler->GetExtension();
 		/* Don't append if wx doesn't support writing */
 		if(extn.Len() > 0 &&
-			extn != "cur" && /* Silly format */
-			extn != "ico" && /* Silly format */
-			extn != "iff" && /* wx Doesn't support writing */
-			extn != "gif" && /* wx Doesn't support writing */
-			extn != "ani" /* wx Doesn't support writing */
+			extn != wxT("cur") && /* Silly format */
+			extn != wxT("ico") && /* Silly format */
+			extn != wxT("iff") && /* wx Doesn't support writing */
+			extn != wxT("gif") && /* wx Doesn't support writing */
+			extn != wxT("ani") /* wx Doesn't support writing */
 			) {
 			formatchoice->Append(handler->GetExtension(), (void *)handler);
 			if(extn == fileextn) {
@@ -264,14 +264,14 @@ int Print::printImage() {
 	}
 
 	if(formatfound == 0) {
-		int png_pos = formatchoice->FindString("png");
+		int png_pos = formatchoice->FindString(wxT("png"));
 		if(-1 != png_pos) formatchoice->SetSelection(png_pos);
 		else formatchoice->SetSelection(0);
 	}
 
 
-	wxButton *ok = new wxButton(&formatchooser, wxID_OK, "OK");
-	wxButton *cancel = new wxButton(&formatchooser, wxID_CANCEL, "Cancel");
+	wxButton *ok = new wxButton(&formatchooser, wxID_OK, _T("OK"));
+	wxButton *cancel = new wxButton(&formatchooser, wxID_CANCEL, _T("Cancel"));
 	wxBoxSizer *buttonsizer = new wxBoxSizer(wxHORIZONTAL);
 	buttonsizer->Add(ok, 1, wxALIGN_CENTRE|wxALL, 5);
 	buttonsizer->Add(cancel, 1, wxALIGN_CENTRE|wxALL, 5);
@@ -322,7 +322,7 @@ int Print::printPS(void) {
 				balls were when we started, and check
 				against it */
 
-	wxProgressDialog progress("Progress","Creating PostScript",
+	wxProgressDialog progress(_T("Progress"),_T("Creating PostScript"),
 		max_iterations->GetValue(), this,
 		wxPD_APP_MODAL|wxPD_CAN_ABORT);
 
@@ -337,7 +337,7 @@ int Print::printPS(void) {
 	ball* lhand = &(jmlib->lhand);
 	hand* handp = &(jmlib->handpoly);
 
-	outputfile = fopen((const char *)filename->GetValue(),"w");
+	outputfile = fopen((const char *)filename->GetValue().mb_str(wxConvUTF8),"w");
 	if(outputfile == NULL) return 1;
 
 	/* Some PS guff */
@@ -510,7 +510,7 @@ int Print::printFlipBook(void) {
 	int frame_width;
 	int frame_height;
 
-	wxProgressDialog progress("Progress","Creating FlipBook",
+	wxProgressDialog progress(_T("Progress"),_T("Creating FlipBook"),
 		max_iterations->GetValue(), this,
 		wxPD_APP_MODAL|wxPD_CAN_ABORT);
 
@@ -525,7 +525,7 @@ int Print::printFlipBook(void) {
 	ball* lhand = &(jmlib->lhand);
 	hand* handp = &(jmlib->handpoly);
 
-	outputfile = fopen((const char *)filename->GetValue(),"w");
+	outputfile = fopen((const char *)filename->GetValue().mb_str(wxConvUTF8),"w");
 	if(outputfile == NULL) return 1;
 
 
@@ -611,14 +611,14 @@ int Print::printFlipBook(void) {
 
 				fprintf(outputfile, "%i %i moveto\n"	
 					"( %i ) show\n",
-					(handed->GetStringSelection() == "Right"?
+					(handed->GetStringSelection() == wxT("Right")?
 						f_offs_x + 20:
 						f_offs_x + frame_width - 20),
 					f_offs_y + frame_height/2,
 					current_frames);
 
 
-				if (handed->GetStringSelection() == "Right") {
+				if (handed->GetStringSelection() == wxT("Right")) {
 					f_offs_x += (jmlib->getImageWidth()/4);
 				}
 
@@ -757,7 +757,7 @@ int Print::printMPEG() {
 	wxMemoryDC dc;
 	struct ball firstpos[BMAX];
 
-	wxProgressDialog progress("Progress","Creating MPEG",
+	wxProgressDialog progress(_T("Progress"),_T("Creating MPEG"),
 		max_iterations->GetValue(), this, wxPD_APP_MODAL|wxPD_CAN_ABORT);
 
 	int current_frames = 0;
@@ -954,7 +954,7 @@ void Print::RenderFrame(wxDC *dc, JMLib *j) {
 		dc->DrawEllipse(j->b[i].gx, j->b[i].gy, diam, diam);
 	}
 	wxString balltext;
-	balltext.Printf("Site: %s    Style: %s    Balls: %i",j->getSite(),j->getStyle(),j->numBalls());
+	balltext.Printf(_T("Site: %s    Style: %s    Balls: %i"),j->getSite(),j->getStyle(),j->numBalls());
 	dc->DrawText(balltext, 10, 10);
 
 }

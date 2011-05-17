@@ -22,7 +22,7 @@ BEGIN_EVENT_TABLE(ChooseStyle, wxDialog)
 END_EVENT_TABLE()
 
 ChooseStyle::ChooseStyle(wxWindow *parent, JMLib *j)
-	: wxDialog(parent, -1, "Change Style",
+	: wxDialog(parent, -1, _T("Change Style"),
 			wxDefaultPosition, wxDefaultSize,
 			wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER) {
 
@@ -35,16 +35,16 @@ ChooseStyle::ChooseStyle(wxWindow *parent, JMLib *j)
   stylechoice = new wxChoice ( this,-1,wxDefaultPosition, wxDefaultSize);
 
   for(i=0;i<jmlib->numStyles();i++) {
-	stylechoice->Append(style_list[i]);
+	stylechoice->Append(wxString(style_list[i], wxConvUTF8));
   }
 
   stylechoice->SetSelection(0);
 
  // Buttons
 
-  wxButton *ok = new wxButton(this, wxID_OK, "OK");
-  wxButton *apply = new wxButton(this, wxID_APPLY, "Apply");
-  wxButton *cancel = new wxButton(this, wxID_CANCEL, "Cancel");
+  wxButton *ok = new wxButton(this, wxID_OK, _T("OK"));
+  wxButton *apply = new wxButton(this, wxID_APPLY, _T("Apply"));
+  wxButton *cancel = new wxButton(this, wxID_CANCEL, _T("Cancel"));
   wxBoxSizer *buttonsizer = new wxBoxSizer(wxHORIZONTAL);
   buttonsizer->Add(ok, 1, wxALIGN_CENTRE|wxALL, 5);
   buttonsizer->Add(apply, 1, wxALIGN_CENTRE|wxALL, 5);
@@ -67,7 +67,7 @@ ChooseStyle::ChooseStyle(wxWindow *parent, JMLib *j)
 void ChooseStyle::ApplySettings() {
   JML_CHAR *newstyle;
 
-  newstyle = (JML_CHAR *)(const char *)stylechoice->GetStringSelection();
+  newstyle = (JML_CHAR *)(const char *)stylechoice->GetStringSelection().mb_str(wxConvUTF8);
   jmlib->setStyle(newstyle);
 }
 

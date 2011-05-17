@@ -30,7 +30,7 @@ BEGIN_EVENT_TABLE(AdvancedSiteSwap, wxDialog)
 END_EVENT_TABLE()
 
 AdvancedSiteSwap::AdvancedSiteSwap(wxWindow *p, JMLib *j)
-	: wxDialog(p, -1, "New SiteSwap",
+	: wxDialog(p, -1, _T("New SiteSwap"),
 			wxDefaultPosition, wxDefaultSize,
 			wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER) {
 
@@ -40,8 +40,8 @@ AdvancedSiteSwap::AdvancedSiteSwap(wxWindow *p, JMLib *j)
   int i;
  // SiteSwap
   wxBoxSizer *siteswapsizer = new wxBoxSizer(wxHORIZONTAL);
-  newsiteswap = new wxTextCtrl(this,-1,jmlib->getSite());
-  siteswapsizer->Add(new wxStaticText(this, 0, "Enter New Siteswap"),
+  newsiteswap = new wxTextCtrl(this,-1,wxString(jmlib->getSite(),wxConvUTF8));
+  siteswapsizer->Add(new wxStaticText(this, 0, _T("Enter New Siteswap")),
 					0,
 					wxALIGN_CENTER_VERTICAL|wxALL,
 					5);
@@ -58,12 +58,12 @@ AdvancedSiteSwap::AdvancedSiteSwap(wxWindow *p, JMLib *j)
   newstyle = new wxChoice ( this,-1,wxDefaultPosition, wxDefaultSize);
 
   for(i=0;i<jmlib->numStyles();i++) {
-        newstyle->Append(style_list[i]);
+        newstyle->Append(wxString(style_list[i],wxConvUTF8));
   }
   
   newstyle->SetSelection(0);
 
-  stylesizer->Add(new wxStaticText(this, 0, "Style"),
+  stylesizer->Add(new wxStaticText(this, 0, _T("Style")),
 					0,
 					wxALIGN_CENTER_VERTICAL|wxALL,
 					5);
@@ -85,7 +85,7 @@ AdvancedSiteSwap::AdvancedSiteSwap(wxWindow *p, JMLib *j)
 					(int)(HR_MIN * 100.0F),
 					(int)(HR_MAX * 100.0F),
 					(int)(jmlib->getHR() * 100.0F));
-  hrdrsizer->Add(new wxStaticText(this, 0, "Height Ratio %"),
+  hrdrsizer->Add(new wxStaticText(this, 0, _T("Height Ratio %")),
 				1,
 				wxALIGN_RIGHT|wxALL,
 				5);
@@ -104,7 +104,7 @@ AdvancedSiteSwap::AdvancedSiteSwap(wxWindow *p, JMLib *j)
 					(int)(DR_MIN*100.0F),
 					(int)(DR_MAX*100.0F),
 					(int)(jmlib->getDR() * 100.0F));
-  hrdrsizer->Add(new wxStaticText(this, 0, "Dwell Ratio %"),
+  hrdrsizer->Add(new wxStaticText(this, 0, _T("Dwell Ratio %")),
 				1,
 				wxALIGN_CENTRE|wxALL,
 				5);
@@ -115,9 +115,9 @@ AdvancedSiteSwap::AdvancedSiteSwap(wxWindow *p, JMLib *j)
 
  // Buttons
 
-  wxButton *ok = new wxButton(this, wxID_OK, "OK");
-  wxButton *apply = new wxButton(this, wxID_APPLY, "Apply");
-  wxButton *cancel = new wxButton(this, wxID_CANCEL, "Cancel");
+  wxButton *ok = new wxButton(this, wxID_OK, _T("OK"));
+  wxButton *apply = new wxButton(this, wxID_APPLY, _T("Apply"));
+  wxButton *cancel = new wxButton(this, wxID_CANCEL, _T("Cancel"));
   wxBoxSizer *buttonsizer = new wxBoxSizer(wxHORIZONTAL);
   buttonsizer->Add(ok, 1, wxALIGN_CENTRE|wxALL, 5);
   buttonsizer->Add(apply, 1, wxALIGN_CENTRE|wxALL, 5);
@@ -146,14 +146,14 @@ void AdvancedSiteSwap::ApplySettings() {
   JML_FLOAT dr = (JML_FLOAT)drspinner->GetValue()/100.0F;
 
   jmlib->stopJuggle();
-  jmlib->setPattern("Something",(JML_CHAR *)(const char *)newpattern, hr, dr);
-  jmlib->setStyle((JML_CHAR *)(const char *)style);
+  jmlib->setPattern((char *)_T("Something"),(char *)(const char *)newpattern.mb_str(wxConvUTF8), hr, dr);
+  jmlib->setStyle((JML_CHAR *)(const char *)style.mb_str(wxConvUTF8));
   jmlib->startJuggle();
   haschanged=0;
 }
 
 void AdvancedSiteSwap::OnApply(wxCommandEvent &WXUNUSED(event)) {
-	if(haschanged || newstyle->GetStringSelection()=="Random") {
+	if(haschanged || newstyle->GetStringSelection()==_T("Random")) {
 		ApplySettings();
 	}
 }
@@ -184,13 +184,13 @@ BEGIN_EVENT_TABLE(RandomSiteSwap, wxDialog)
 END_EVENT_TABLE()
 
 RandomSiteSwap::RandomSiteSwap(wxWindow *p, JMLib *j)
-	: wxDialog(p, -1, "Random SiteSwap",
+	: wxDialog(p, -1, _T("Random SiteSwap"),
 			wxDefaultPosition, wxDefaultSize,
 			wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER) {
 
   jmlib = j;
 
-  newsiteswap = new wxTextCtrl(this,-1,jmlib->getSite(),
+  newsiteswap = new wxTextCtrl(this,-1,wxString(jmlib->getSite(),wxConvUTF8),
 	wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
 
   numballs = new wxSpinCtrl(this, -1,
@@ -218,36 +218,36 @@ RandomSiteSwap::RandomSiteSwap(wxWindow *p, JMLib *j)
 
   wxFlexGridSizer *settings = new wxFlexGridSizer(2,5,5);
 
-  settings->Add(new wxStaticText(this, 0, "Num Balls"),
+  settings->Add(new wxStaticText(this, 0, _T("Num Balls")),
 				1, wxALIGN_CENTRE|wxALL, 5);
   settings->Add(numballs,
 		1, wxALIGN_CENTRE|wxALL|wxEXPAND, 5);
-  settings->Add(new wxStaticText(this, 0, "Pattern Length"),
+  settings->Add(new wxStaticText(this, 0, _T("Pattern Length")),
 				1, wxALIGN_CENTRE|wxALL, 5);
   settings->Add(pattlen,
 		1, wxALIGN_CENTRE|wxALL|wxEXPAND, 5);
-  settings->Add(new wxStaticText(this, 0, "Permutations"),
+  settings->Add(new wxStaticText(this, 0, _T("Permutations")),
 				1, wxALIGN_CENTRE|wxALL, 5);
   settings->Add(mutations,
 		1, wxALIGN_CENTRE|wxALL|wxEXPAND, 5);
-  settings->Add(new wxStaticText(this, 0, "Max Multiplex Throws"),
+  settings->Add(new wxStaticText(this, 0, _T("Max Multiplex Throws")),
 				1, wxALIGN_CENTRE|wxALL, 5);
   settings->Add(multiplex,
 		1, wxALIGN_CENTRE|wxALL|wxEXPAND, 5);
-  settings->Add(new wxStaticText(this, 0, "Synchronous Pattern"),
+  settings->Add(new wxStaticText(this, 0, _T("Synchronous Pattern")),
 				1, wxALIGN_CENTRE|wxALL, 5);
   settings->Add(synchronous,
 		1, wxALIGN_CENTRE|wxALL|wxEXPAND, 5);
 
-  wxButton *create = new wxButton(this, CREATE_BUTTON, "Create");
-  wxButton *totallyrandom = new wxButton(this, RANDOM_BUTTON, "Totally Random");
+  wxButton *create = new wxButton(this, CREATE_BUTTON, _T("Create"));
+  wxButton *totallyrandom = new wxButton(this, RANDOM_BUTTON, _T("Totally Random"));
   wxBoxSizer *randbuttonsizer = new wxBoxSizer(wxHORIZONTAL);
   randbuttonsizer->Add(create, 1, wxALIGN_CENTRE|wxALL, 5);
   randbuttonsizer->Add(totallyrandom, 1, wxALIGN_CENTRE|wxALL, 5);
 
-  wxButton *ok = new wxButton(this, wxID_OK, "OK");
-  wxButton *apply = new wxButton(this, wxID_APPLY, "Apply");
-  wxButton *cancel = new wxButton(this, wxID_CANCEL, "Cancel");
+  wxButton *ok = new wxButton(this, wxID_OK, _T("OK"));
+  wxButton *apply = new wxButton(this, wxID_APPLY, _T("Apply"));
+  wxButton *cancel = new wxButton(this, wxID_CANCEL, _T("Cancel"));
   wxBoxSizer *buttonsizer = new wxBoxSizer(wxHORIZONTAL);
   buttonsizer->Add(ok, 1, wxALIGN_CENTRE|wxALL, 5);
   buttonsizer->Add(apply, 1, wxALIGN_CENTRE|wxALL, 5);
@@ -273,8 +273,8 @@ void RandomSiteSwap::ApplySettings() {
   wxString newpattern = newsiteswap->GetValue();
 
   jmlib->stopJuggle();
-  jmlib->setPattern("Something",(JML_CHAR *)(const char *)newpattern, HR_DEF, DR_DEF);
-  jmlib->setStyle("Normal");
+  jmlib->setPattern((char *)_T("Something"),(char *)(const char *)newpattern.mb_str(wxConvUTF8), HR_DEF, DR_DEF);
+  jmlib->setStyle((char *)_T("Normal"));
   jmlib->startJuggle();
 }
 
@@ -291,7 +291,7 @@ void RandomSiteSwap::OnRandom(wxCommandEvent &WXUNUSED(event)) {
 	JML_CHAR *newsite;
 	newsite = jm_randnoparam();
 	if(newsite != NULL) {
-		newsiteswap->SetValue(newsite);
+		newsiteswap->SetValue(wxString(newsite,wxConvUTF8));
 		delete newsite;
 	}
 }
@@ -302,7 +302,7 @@ void RandomSiteSwap::OnCreate(wxCommandEvent &WXUNUSED(event)) {
 		mutations->GetValue(), synchronous->GetValue(),
 		multiplex->GetValue());
 	if(newsite != NULL) {
-		newsiteswap->SetValue(newsite);
+		newsiteswap->SetValue(wxString(newsite,wxConvUTF8));
 		delete newsite;
 	}
 }

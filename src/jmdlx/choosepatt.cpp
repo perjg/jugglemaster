@@ -25,7 +25,7 @@ BEGIN_EVENT_TABLE(ChoosePatt, wxDialog)
 END_EVENT_TABLE()
 
 ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
-	: wxDialog(parent, -1, "Choose Pattern",
+	: wxDialog(parent, -1, _T("Choose Pattern"),
 			wxDefaultPosition, wxDefaultSize,
 			wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER) {
 
@@ -43,7 +43,7 @@ ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
                                 wxDefaultSize);
   const char *curr_sect;
   for(curr_sect = patterns->GetFirstSection(); curr_sect ; curr_sect=patterns->GetNextSection()) {
-        sectionChoice->Append(curr_sect);
+        sectionChoice->Append(wxString(curr_sect,wxConvUTF8));
   }
   sectionChoice->SetSelection(0);
 
@@ -66,33 +66,33 @@ ChoosePatt::ChoosePatt(wxWindow *parent, JMLib *j, PatternLoader *p)
   choicesizer->Add(patternListBox,1,wxALIGN_CENTER|wxEXPAND|wxALL,5);
 
   wxBoxSizer *showSitesizer = new wxBoxSizer(wxHORIZONTAL);
-  showSitesizer->Add(new wxStaticText(this, 0, "Site"),
+  showSitesizer->Add(new wxStaticText(this, 0, _T("Site")),
                                         0,
                                         wxALIGN_CENTER_VERTICAL|wxALL,
                                         3);
 
   showSite = new wxTextCtrl(this, -1,
-				jmlib->getSite(),
+				wxString(jmlib->getSite(),wxConvUTF8),
 				wxDefaultPosition,
 				wxDefaultSize,
 				wxTE_READONLY);
   showSitesizer->Add(showSite, 1, wxALIGN_CENTRE|wxEXPAND|wxALL, 3);
 
   wxBoxSizer *showStylesizer = new wxBoxSizer(wxHORIZONTAL);
-  showStylesizer->Add(new wxStaticText(this, 0, "Style"),
+  showStylesizer->Add(new wxStaticText(this, 0, _T("Style")),
                                         0,
                                         wxALIGN_CENTER_VERTICAL|wxALL,
                                         3);
   showStyle = new wxTextCtrl(this, -1,
-				jmlib->getStyle(),
+				wxString(jmlib->getStyle(),wxConvUTF8),
 				wxDefaultPosition,
 				wxDefaultSize,
 				wxTE_READONLY);
   showStylesizer->Add(showStyle, 1, wxALIGN_CENTRE|wxEXPAND|wxALL, 3);
 
-  wxButton *ok = new wxButton(this, wxID_OK, "OK");
-  wxButton *apply = new wxButton(this, wxID_APPLY, "Apply");
-  wxButton *cancel = new wxButton(this, wxID_CANCEL, "Cancel");
+  wxButton *ok = new wxButton(this, wxID_OK, _T("OK"));
+  wxButton *apply = new wxButton(this, wxID_APPLY, _T("Apply"));
+  wxButton *cancel = new wxButton(this, wxID_CANCEL, _T("Cancel"));
   wxBoxSizer *buttonsizer = new wxBoxSizer(wxHORIZONTAL);
   buttonsizer->Add(ok, 1, wxALIGN_CENTRE|wxALL, 5);
   buttonsizer->Add(apply, 1, wxALIGN_CENTRE|wxALL, 5);
@@ -127,7 +127,7 @@ void ChoosePatt::ApplySettings() {
 	if(!newSection || !newPattern) {
 		return;
 	}
-	patt = patterns->GetPattern((const char *)newSection,(const char *)newPattern);
+	patt = patterns->GetPattern(newSection.mb_str(wxConvUTF8),newPattern.mb_str(wxConvUTF8));
 	jmlib->stopJuggle();
 	jmlib->setPattern((JML_CHAR *)Patt_GetName(patt),(JML_CHAR *)Patt_GetData(patt), Patt_GetHR(patt), Patt_GetDR(patt));
 	JML_UINT8 style_length = patterns->GetStyleLength(Patt_GetStyle(patt));
@@ -158,10 +158,10 @@ void ChoosePatt::UpdateShownValues() {
 	newPattern = patternListBox->GetStringSelection();
 	newSection = sectionChoice->GetStringSelection();
 
-	patt = patterns->GetPattern((const char *)newSection,(const char *)newPattern);
+	patt = patterns->GetPattern((const char *)newSection.mb_str(wxConvUTF8),(const char *)newPattern.mb_str(wxConvUTF8));
 
-	showStyle->SetValue(Patt_GetStyle(patt));
-	showSite->SetValue(Patt_GetData(patt));
+	showStyle->SetValue(wxString(Patt_GetStyle(patt),wxConvUTF8));
+	showSite->SetValue(wxString(Patt_GetData(patt), wxConvUTF8));
 }
 
 void ChoosePatt::OnApply(wxCommandEvent &WXUNUSED(event)) {
@@ -194,11 +194,11 @@ void ChoosePatt::SectionChangeEvt(wxCommandEvent &WXUNUSED(event)) {
 
 void ChoosePatt::SectionChange() {
 	wxString newSection=sectionChoice->GetStringSelection();
-	patterns->SetSection((const char *)newSection);
+	patterns->SetSection((const char *)newSection.mb_str(wxConvUTF8));
 	patternListBox->Clear();
 	const char *curr_patt;
 	while ((curr_patt = patterns->GetNextPatternName())) {
-		patternListBox->Append(curr_patt);
+		patternListBox->Append(wxString(curr_patt, wxConvUTF8));
 	}
 	patternListBox->SetSelection(0);
 	UpdateShownValues();

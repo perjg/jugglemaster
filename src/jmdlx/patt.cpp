@@ -73,36 +73,36 @@ FILE* PatternLoader::OpenFile(const char *filename, int redownload) {
 	struct stat buf;
 	targetfilename = wxGetHomeDir();
 	if(targetfilename.Len() > 0) {
-		targetfilename += "/.jugglemaster/";
+		targetfilename += wxT("/.jugglemaster/");
 		if(!wxDirExists(targetfilename)) {
 			if(!wxMkdir(targetfilename,0755)) {
-				targetfilename = "";
+				targetfilename = wxT("");
 			}
 		}
-		targetfilename += filename;
+		targetfilename += wxString(filename,wxConvUTF8);
 	} else {
-		targetfilename = filename;
+		targetfilename = wxString(filename,wxConvUTF8);
 	}
 
-	if(stat((const char *)targetfilename,&buf) != -1 && !redownload) {
-		return fopen((const char *)targetfilename,"r");
+	if(stat((const char *)targetfilename.mb_str(wxConvUTF8),&buf) != -1 && !redownload) {
+		return fopen((const char *)(targetfilename.mb_str(wxConvUTF8)),"r");
 	} else if(stat(filename,&buf) != -1 && !redownload) {
-		wxCopyFile(filename,targetfilename);
-		return fopen((const char *)targetfilename,"r");
+		wxCopyFile(wxString(filename,wxConvUTF8),targetfilename);
+		return fopen((const char *)targetfilename.mb_str(wxConvUTF8),"r");
 	} else {
-		wxString fullurl(WEB_PREFIX);
+		wxString fullurl(WEB_PREFIX, wxConvUTF8);
 		wxString proxy;
 		wxString message;
-		fullurl.Append(filename);
-		message.Printf("Downloading File: %s\n",(const char *)fullurl);
+		fullurl.Append(wxString(filename,wxConvUTF8));
+		message.Printf(_T("Downloading File: %s\n"),(const char *)fullurl.c_str());
 		unsigned int current_progress = 0;
 		char buffer[1024];
 
 		wxURL url(fullurl);
 
-		if(wxGetEnv("http_proxy",&proxy)) {
-			if(proxy.Find("//") > -1) {
-				proxy = proxy.Mid(proxy.Find("//")+2);
+		if(wxGetEnv(wxT("http_proxy"),&proxy)) {
+			if(proxy.Find(wxT("//")) > -1) {
+				proxy = proxy.Mid(proxy.Find(wxT("//"))+2);
 			}
 			url.SetProxy(proxy);
 		}
@@ -112,7 +112,7 @@ FILE* PatternLoader::OpenFile(const char *filename, int redownload) {
 		// wxInputStream *data = url.GetInputStream(fullurl);
 
 		if ( data ) {
-			wxProgressDialog progress("Progress",message,(int)data->GetSize());
+			wxProgressDialog progress(_T("Progress"),message,(int)data->GetSize());
 			wxFileOutputStream outputfile(targetfilename);
 			while(!data->Eof() && current_progress!=data->GetSize()) {
 				data->Read((void *)buffer,1024);
@@ -124,10 +124,10 @@ FILE* PatternLoader::OpenFile(const char *filename, int redownload) {
 			// printf("Downloading Done\n");
 			delete data;
 		} else {
-			wxMessageDialog errordlg(parent,"An error occured while downloading","Error",wxOK|wxICON_ERROR);
+			wxMessageDialog errordlg(parent,_T("An error occured while downloading"),_T("Error"),wxOK|wxICON_ERROR);
 			errordlg.ShowModal();
 		}
-		return fopen((const char *)targetfilename,"r");
+        return fopen((const char *)(targetfilename.mb_str(wxConvUTF8)),"r");
 	}
 }
 
@@ -138,10 +138,9 @@ int PatternLoader::ParseFiles() {
 
   if (testsql) {
     JMPatterns* p = new JMPatterns();
-  
     p->initializeDatabase(NULL, patternfile, patternfile_js);
-    rewind(patternfile);
-    rewind(patternfile_js);
+    //rewind(patternfile);
+    //rewind(patternfile_js);
     testsql = false;
   }
 
@@ -151,8 +150,8 @@ int PatternLoader::ParseFiles() {
 int PatternLoader::CloseFiles() {
   int r1 = true;
   int r2 = true;
-  if (patternfile) r1 = fclose(patternfile);
-  if (patternfile_js) r2 = fclose(patternfile_js);
+  //if (patternfile) r1 = fclose(patternfile);
+  //if (patternfile_js) r2 = fclose(patternfile_js);
   return r1 && r2;
 }
 
@@ -165,9 +164,9 @@ void PatternLoader::PrintStyles() {
 	current_style = FirstStyle(&styles);
 	while(current_style) {
 		int i;
-		printf(" Style Name: %s\n",Style_GetName(current_style));
-		printf("  Length: %i\n",Style_GetLength(current_style));
-		printf("  Data:\n");
+		printf((const char*)_T(" Style Name: %s\n"),Style_GetName(current_style));
+		printf((const char*)_T("  Length: %i\n"),Style_GetLength(current_style));
+		printf((const char *)_T("  Data:\n"));
 		for(i=0;i<(int)Style_GetLength(current_style);i++) {
 			if((i%4) == 0) {
 				printf("   {");
@@ -189,18 +188,18 @@ void PatternLoader::PrintStyles() {
 
 void PatternLoader::PrintSections() {
 	current_group = FirstGroup(&groups);
-	printf("Group Data\n");
+	printf((const char*)_T("Group Data\n"));
 	while(current_group) {
-		printf(" Group Name: %s\n",Group_GetName(current_group));
+		printf((const char*)_T(" Group Name: %s\n"),Group_GetName(current_group));
 
 		current_pattern = Group_GetPatterns(current_group);
 		while(current_pattern) {
-			printf("  Pattern Name: %s\n",Patt_GetName(current_pattern));
-			printf("   Style: %s\n",Patt_GetStyle(current_pattern));
-			printf("   Data: %s\n",Patt_GetData(current_pattern));
-			printf("   Height Ratio: %1.2f\n",Patt_GetHR(current_pattern));
-			printf("   Dwell Ratio: %1.2f\n",Patt_GetDR(current_pattern));
-			printf("   Author: %s\n",Patt_GetAuthor(current_pattern));
+			printf((const char*)_T("  Pattern Name: %s\n"),Patt_GetName(current_pattern));
+			printf((const char*)_T("   Style: %s\n"),Patt_GetStyle(current_pattern));
+			printf((const char*)_T("   Data: %s\n"),Patt_GetData(current_pattern));
+			printf((const char*)_T("   Height Ratio: %1.2f\n"),Patt_GetHR(current_pattern));
+			printf((const char*)_T("   Dwell Ratio: %1.2f\n"),Patt_GetDR(current_pattern));
+			printf((const char*)_T("   Author: %s\n"),Patt_GetAuthor(current_pattern));
 			current_pattern = NextPatt(current_pattern);
 		}
 

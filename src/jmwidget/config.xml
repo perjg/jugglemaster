@@ -1,21 +1,10 @@
-<?xml version="1.0"?>
-<widget>
-  <widgetname>JuggleMaster</widgetname>
-  <description>
-    A Siteswap juggling animator
-  </description>
-  <icon>icon.png</icon>
-  <width>300</width>
-  <height>340</height>
-  <author>
-    <name>Per Johan Groland</name>
-    <email>jm@jugglemaster.net</email>
-    <link>http://jugglemaster.net</link>
-    <organization>Per Johan Groland</organization>
-  </author>
-  <id>
-    <host>my.opera.com</host>
-    <name>JuggleMaster</name>
-    <revised>2007-01-31</revised>
-  </id>
+<?xml version="1.0" encoding="utf-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" id="http://github.com/perjg/jugglemaster" defaultlocale="en" viewmodes="minimized">
+	<name short="JuggleMaster">JuggleMaster</name>
+	<description>Learn how to juggle like a pro!</description>
+	<author href="http://github.com/perjg/">PerJG</author>
+	<icon src="images/icon_64.png"/> <!-- Icon source: http://www.openclipart.org/detail/17552 -->
+    <feature name="opera:speeddial" required="false">
+        <param name="url" value="http://github.com/perjg/jugglemaster"/>
+    </feature>
 </widget>

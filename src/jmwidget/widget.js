@@ -224,6 +224,16 @@ function flipWidgetBack()  { flipWidget("front"); }
 function flipWidgetFront() { flipWidget("back"); }
 function closeWindow()     { window.close(); }
 
+function fixsize() {
+  var canvas = document.getElementById('cv');
+  canvas.width = window.innerWidth;
+  canvas.heigth = window.innerHeight;
+  console.debug(jmlib);
+  console.log(canvas.width);
+  console.log(canvas.height);
+  jmlib.setWindowSize(canvas.width, canvas.height);
+}
+
 function initialize() {
   // IE specific event handlers
   // DOM 2 event model compliant browsers are registered through window.addEventListener
@@ -259,12 +269,12 @@ function initialize() {
     infoButton = new AppleInfoButton(document.getElementById("infobutton"),
                                      document.getElementById("front"),
                                      "black", "black", flipWidgetFront);
-
-    // Get rid of the standard buttons
-    document.getElementById("closefront").style.visibility = "hidden";
-    document.getElementById("flipfront").style.visibility = "hidden";
-    document.getElementById("closeback").style.visibility = "hidden";
   }
+
+  // Get rid of the standard buttons
+  document.getElementById("closefront").style.visibility = "hidden";
+  document.getElementById("flipfront").style.visibility = "hidden";
+  document.getElementById("closeback").style.visibility = "hidden";
   
   // load categories and patterns
   loadCategories();
@@ -370,6 +380,7 @@ function writeSettings() {
 }
 
 function setPref(name, value) {
+  return;
   if (typeof widget == "undefined") { return; }
 
   if (typeof value == "boolean" && value == true)
@@ -381,6 +392,7 @@ function setPref(name, value) {
 }
 
 function getPref(name) {
+  return null;
   if (typeof widget == "undefined") { return null; }
   
   var v = widget.preferenceForKey(name);

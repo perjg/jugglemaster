@@ -1,6 +1,6 @@
 include ../../Makefile.cfg
 
-CXXFLAGS+=-Wall -fsigned-char `aalib-config --cflags` -I../jmlib
+CXXFLAGS+=-Wall -fsigned-char `aalib-config --cflags` -I../jmlib -DLOCALEDIR=\"$(LOCALEDIR)\"
 CFLAGS+=-Wall -fsigned-char `aalib-config --cflags` -I../jmlib
 LIBS+=`aalib-config --libs` -L../jmlib -ljm
 BINARY=aajm
@@ -31,7 +31,10 @@ install:
 	mkdir -p $(INSTALLDIR)/bin
 	$(INSTALL) $(BINARY) $(INSTALLDIR)/bin
 	$(INSTALL) aajm-remote $(INSTALLDIR)/bin
+	mkdir -p $(LOCALEDIR)/es_AR/LC_MESSAGES
+	$(INSTALL) locale/es_AR/LC_MESSAGES/aajm.mo $(LOCALEDIR)/es_AR/LC_MESSAGES/aajm.mo
 
 clean:
 	rm -f *.o core aajm aajm-remote
 	$(MAKE) -C ../jmlib clean
+	rm -f $(LOCALEDIR)/es_AR/LC_MESSAGES/aajm.mo

@@ -1,0 +1,183 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-11-10 06:54-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: aajm.cpp:600
+#, c-format
+msgid "  -S, --rsiteswap=XX         Randomize siteswap every XX seconds (%f)\n"
+msgstr "  -S, --rsiteswap=XX         Hacer aleatorio el siteswap cada XX segundos (%f)"
+
+#: aajm.cpp:601
+#, c-format
+msgid "  -T, --rstyle=XX            Randomize style every XX seconds (%f)\n"
+msgstr "  -T, --rstyle=XX            Hacer aleatorio el estilo cada XX segundos (%f)\n"
+
+#: aajm.cpp:610
+#, c-format
+msgid ""
+"  -a, --aahelp               get help on AA options\n"
+"\n"
+msgstr "  -a, --aahelp               obtener ayuda con las opciones de AA\n"
+"\n"
+
+#: aajm.cpp:602
+#, c-format
+msgid "  -d, --delay=XX             delay XX ms between frames (%i)\n"
+msgstr "  -d, --delay=XX             demora de XX ms entre frames (%i)\n"
+
+#: aajm.cpp:609
+#, c-format
+msgid "  -h, --help                 get help [this screen]\n"
+msgstr "  -h, --help                 mostrar la ayuda [esta pantalla]\n"
+
+#: aajm.cpp:605
+#, c-format
+msgid "  -i, --ipc                  enable IPC\n"
+msgstr "  -i, --ipc                  habilitar IPC\n"
+
+#: aajm.cpp:604
+#, c-format
+msgid "  -j, --justoutput           only output [don't init kb or mouse]\n"
+msgstr "  -j, --justoutput           sólo la salida [no inicializa teclado o mouse]\n"
+
+#: aajm.cpp:607
+#, c-format
+msgid "  -l, --loadavg              change speed based on load average\n"
+msgstr "  -l, --loadavg              cambiar la velocidad basada en la carga promedio\n"
+
+#: aajm.cpp:603
+#, c-format
+msgid "  -m, --maxiterations=XX     do at most XX iterations\n"
+msgstr "  -m, --maxiterations=XX     realizar a lo sumo XX iteraciones\n"
+
+#: aajm.cpp:608
+#, c-format
+msgid ""
+"  -n, --normalload=XX        a normal load average for your machine (%2.2f)\n"
+msgstr ""
+"  -n, --normalload=XX        una carga normal promedio para su computadora (%2.2f)\n"
+
+#: aajm.cpp:606
+#, c-format
+msgid "  -p, --port=XX              use port XX for IPC (%i)\n"
+msgstr "  -p, --port=XX              usar el puerto XX para IPC (%i)\n"
+
+#: aajm.cpp:598
+#, c-format
+msgid "  -s, --siteswap=XX          show siteswap XX (3)\n"
+msgstr "  -s, --siteswap=XX          mostrar el siteswap XX (3)\n"
+
+#: aajm.cpp:599
+#, c-format
+msgid "  -t, --style=XX             use style XX (\"Normal\")\n"
+msgstr "  -t, --style=XX             usar el estilo XX (\"Normal\")\n"
+
+#: aajm.cpp:338
+msgid "+, -, enter - Speed up, down, reset"
+msgstr "+, -, enter - Aumentar velocidad, disminuir velocidad, reinicializar"
+
+#: aajm.cpp:593
+#, c-format
+msgid "AAJM, An ASCII Art Juggling program\n"
+msgstr "AAJM, Un programa para hacer malabares hecho en ASCII Art\n"
+
+#: aajm.cpp:613
+#, c-format
+msgid ""
+"AALib Options:\n"
+"%s\n"
+"\n"
+msgstr ""
+"Opciones de AALib:\n"
+"%s\n"
+"\n"
+
+#: aajm.cpp:298
+msgid "Choose New Style..."
+msgstr "Elegir nuevo estilo..."
+
+#: aajm.cpp:357
+msgid "Enter MPEG Name..."
+msgstr "Escribir el nombre del MPEG"
+
+#: aajm.cpp:276
+msgid "Enter New SiteSwap..."
+msgstr "Escribir el nuevo SiteSwap..."
+
+#: aajm.cpp:622
+#, c-format
+msgid "Failed to initialize aalib\n"
+msgstr "La inicialización de aalib falló\n"
+
+#: aajm.cpp:597
+#, c-format
+msgid "Jugglemaster Options:\n"
+msgstr "Opciones de Jugglemaster:\n"
+
+#: aajm.cpp:317
+msgid "Key Help"
+msgstr "Ayuda - Teclas"
+
+#: aajm.cpp:98
+msgid "Paused"
+msgstr "En pausa"
+
+#: aajm.cpp:341
+msgid "Press any key to remove this menu"
+msgstr "Presione cualquier tecla para cerrar este menú"
+
+#: aajm.cpp:88
+#, c-format
+msgid "Site: %s    Style: %s    Balls: %i"
+msgstr "Sitio: %s    Estilo: %s    Pelotas: %i"
+
+#: aajm.cpp:594
+#, c-format
+msgid "Usage: %s [OPTIONS]\n"
+msgstr "Uso: %s [OPTIONS]\n"
+
+#: aajm.cpp:320
+msgid "h - This screen"
+msgstr "h - esta pantalla"
+
+#: aajm.cpp:328
+msgid "l - Toggle Load Monitoring"
+msgstr "l - Activar/desactivar monitoreo de carga"
+
+#: aajm.cpp:331
+msgid "m - Dump MPEG"
+msgstr "m - Exportar a MPEG"
+
+#: aajm.cpp:334
+msgid "q - Quit"
+msgstr "q - Salir"
+
+#: aajm.cpp:324
+msgid "r - Random Pattern"
+msgstr "r - Patrón aleatorio"
+
+#: aajm.cpp:322
+msgid "s - Change Siteswap"
+msgstr "s - Cambiar Siteswap"
+
+#: aajm.cpp:336
+msgid "space - Pause"
+msgstr "space - Pausa"
+
+#: aajm.cpp:326
+msgid "t - Change Style"
+msgstr "t - Cambiar estilo"

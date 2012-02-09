@@ -15,6 +15,9 @@
 
 #include "./aajm.h"
 
+#include <libintl.h>
+#include <locale.h>
+
 aa_context *context;
 aa_renderparams *params;
 JMLib* jmlib;
@@ -82,7 +85,7 @@ void draw_juggler(int show_loadavg, aa_context *c, JMLib *j) {
 		aa_imgwidth(c), aa_imgheight(c));
 
 	aa_printf(c, 0, 0, AA_SPECIAL,
-		"Site: %s    Style: %s    Balls: %i",
+		gettext("Site: %s    Style: %s    Balls: %i"),
 		j->getSite(), j->getStyle(), j->numBalls());
 
 	if(show_loadavg) {
@@ -92,7 +95,7 @@ void draw_juggler(int show_loadavg, aa_context *c, JMLib *j) {
 			load.one, load.five, load.fifteen);
 	}
 	if(j->getStatus() == ST_PAUSE) {
-		aa_puts(c, 1, 3, AA_SPECIAL, "Paused");
+		aa_puts(c, 1, 3, AA_SPECIAL, gettext("Paused"));
 	}
 	aa_flush(c);
 
@@ -270,7 +273,7 @@ void main_loop(int max_iterations, int delay,
 			memset(newsite,0,JML_MAX_SITELEN);
 			strncpy(newsite, jmlib->getSite(), JML_MAX_SITELEN);
 			aa_puts(context, 1, 4, AA_SPECIAL,
-				"Enter New SiteSwap...");
+				gettext("Enter New SiteSwap..."));
 			aa_edit(context, 1, 5, 20,
 				newsite, JML_MAX_SITELEN);
 			if(newsite[0]!=0) {
@@ -292,7 +295,7 @@ void main_loop(int max_iterations, int delay,
 		} else if(c=='t' || c=='T') {
 			/* Change Style */
 			aa_puts(context, 3, 4, AA_SPECIAL,
-				"Choose New Style...");
+				gettext("Choose New Style..."));
 			for (i=0;i<jmlib->numStyles();i++) {
 				aa_printf(context, 3, 5+i, AA_SPECIAL,
 					"%i: %s",i+1,possible_styles[i]);
@@ -311,31 +314,31 @@ void main_loop(int max_iterations, int delay,
 			/* Help */
 			int curr_height = 4;
 			aa_puts(context, 3, curr_height, AA_SPECIAL,
-				"Key Help");
+				gettext("Key Help"));
 			++curr_height;
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
-				"h - This screen");
+				gettext("h - This screen"));
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
-				"s - Change Siteswap");
+				gettext("s - Change Siteswap"));
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
-				"r - Random Pattern");
+				gettext("r - Random Pattern"));
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
-				"t - Change Style");
+				gettext("t - Change Style"));
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
-				"l - Toggle Load Monitoring");
+				gettext("l - Toggle Load Monitoring"));
 #ifdef HAVE_AVCODEC_H
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
-				"m - Dump MPEG");
+				gettext("m - Dump MPEG"));
 #endif
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
-				"q - Quit");
+				gettext("q - Quit"));
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
-				"space - Pause");
+				gettext("space - Pause"));
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
-				"+, -, enter - Speed up, down, reset");
+				gettext("+, -, enter - Speed up, down, reset"));
 			++curr_height;
 			aa_puts(context, 3, ++curr_height, AA_SPECIAL,
-				"Press any key to remove this menu");
+				gettext("Press any key to remove this menu"));
 			aa_flush(context);
 			aa_getkey(context, 1);
 		} else if(c=='+' || c=='=' || c=='k') {
@@ -351,7 +354,7 @@ void main_loop(int max_iterations, int delay,
 			char mpegname[20];
 			memset(mpegname,0,20);
 			aa_puts(context, 1, 4, AA_SPECIAL,
-				"Enter MPEG Name...");
+				gettext("Enter MPEG Name..."));
 			aa_edit(context, 1, 5, 20,
 				mpegname, JML_MAX_SITELEN);
 			if(mpegname[0]!=0) {
@@ -500,6 +503,10 @@ int main(int argc, char **argv) {
 	float randomizesitetime  = 0;
 	char *endptr;
 
+	setlocale(LC_ALL, "");
+	bindtextdomain("aajm", LOCALEDIR);
+	textdomain("aajm");
+
 	char options[] = "aljhip:n:d:m:t:s:T:S:";
 	static struct option long_options[] =
         {
@@ -583,27 +590,27 @@ int main(int argc, char **argv) {
 		}
 
 	if(aahelp_flag || help_flag) {
-		printf("AAJM, An ASCII Art Juggling program\n");
-		printf("Usage: %s [OPTIONS]\n",argv[0]);
+		printf(gettext("AAJM, An ASCII Art Juggling program\n"));
+		printf(gettext("Usage: %s [OPTIONS]\n"),argv[0]);
 	}
 	if(help_flag) {
-		printf("Jugglemaster Options:\n");
-		printf("  -s, --siteswap=XX          show siteswap XX (3)\n");
-		printf("  -t, --style=XX             use style XX (\"Normal\")\n");
-		printf("  -S, --rsiteswap=XX         Randomize siteswap every XX seconds (%f)\n", DEFRANDOMSITETIME);
-		printf("  -T, --rstyle=XX            Randomize style every XX seconds (%f)\n", DEFRANDOMSTYLETIME);
-		printf("  -d, --delay=XX             delay XX ms between frames (%i)\n", (int)DEFSPEED/1000);
-		printf("  -m, --maxiterations=XX     do at most XX iterations\n");
-		printf("  -j, --justoutput           only output [don't init kb or mouse]\n");
-		printf("  -i, --ipc                  enable IPC\n");
-		printf("  -p, --port=XX              use port XX for IPC (%i)\n",DEFPORT);
-		printf("  -l, --loadavg              change speed based on load average\n");
-		printf("  -n, --normalload=XX        a normal load average for your machine (%2.2f)\n",DEFLOAD);
-		printf("  -h, --help                 get help [this screen]\n");
-		printf("  -a, --aahelp               get help on AA options\n\n");
+		printf(gettext("Jugglemaster Options:\n"));
+		printf(gettext("  -s, --siteswap=XX          show siteswap XX (3)\n"));
+		printf(gettext("  -t, --style=XX             use style XX (\"Normal\")\n"));
+		printf(gettext("  -S, --rsiteswap=XX         Randomize siteswap every XX seconds (%f)\n"), DEFRANDOMSITETIME);
+		printf(gettext("  -T, --rstyle=XX            Randomize style every XX seconds (%f)\n"), DEFRANDOMSTYLETIME);
+		printf(gettext("  -d, --delay=XX             delay XX ms between frames (%i)\n"), (int)DEFSPEED/1000);
+		printf(gettext("  -m, --maxiterations=XX     do at most XX iterations\n"));
+		printf(gettext("  -j, --justoutput           only output [don't init kb or mouse]\n"));
+		printf(gettext("  -i, --ipc                  enable IPC\n"));
+		printf(gettext("  -p, --port=XX              use port XX for IPC (%i)\n"),DEFPORT);
+		printf(gettext("  -l, --loadavg              change speed based on load average\n"));
+		printf(gettext("  -n, --normalload=XX        a normal load average for your machine (%2.2f)\n"),DEFLOAD);
+		printf(gettext("  -h, --help                 get help [this screen]\n"));
+		printf(gettext("  -a, --aahelp               get help on AA options\n\n"));
 	}
 	if(aahelp_flag) {
-		printf("AALib Options:\n%s\n\n",aa_help);
+		printf(gettext("AALib Options:\n%s\n\n"),aa_help);
 	}
 	if(aahelp_flag || help_flag) {
 		return 0;
@@ -612,7 +619,7 @@ int main(int argc, char **argv) {
 
 	context = aa_autoinit(&aa_defparams);
 	if (context == NULL) {
-		printf("Failed to initialize aalib\n");
+		printf(gettext("Failed to initialize aalib\n"));
 		exit(1);
 	}
 

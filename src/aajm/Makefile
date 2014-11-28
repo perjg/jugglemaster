@@ -2,9 +2,13 @@ include ../../Makefile.cfg
 
 CXXFLAGS+=-Wall -fsigned-char `aalib-config --cflags` -I../jmlib -DLOCALEDIR=\"$(LOCALEDIR)\"
 CFLAGS+=-Wall -fsigned-char `aalib-config --cflags` -I../jmlib
-LIBS+=`aalib-config --libs` -L../jmlib -ljm -lintl
+LIBS+=`aalib-config --libs` -L../jmlib -ljm
 BINARY=aajm
 INSTALL=install
+
+ifeq ($(shell uname), Darwin)
+LIBS+=`aalib-config --libs` -L../jmlib -ljm -lintl
+endif
 
 ifeq ($(HAVE_FFMPEG), 1)
 CXXFLAGS+=-DHAVE_AVCODEC_H -I$(FFMPEG_PREFIX)/libavcodec

@@ -2,7 +2,7 @@ include ../../Makefile.cfg
 
 CXXFLAGS+=-Wall -fsigned-char `aalib-config --cflags` -I../jmlib -DLOCALEDIR=\"$(LOCALEDIR)\"
 CFLAGS+=-Wall -fsigned-char `aalib-config --cflags` -I../jmlib
-LIBS+=`aalib-config --libs` -L../jmlib -ljm
+LIBS+=`aalib-config --libs` -L../jmlib -ljm -lintl
 BINARY=aajm
 INSTALL=install
 

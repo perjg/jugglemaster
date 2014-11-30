@@ -6,6 +6,10 @@ LIBS+=`aalib-config --libs` -L../jmlib -ljm
 BINARY=aajm
 INSTALL=install
 
+ifeq ($(shell uname), Darwin)
+LIBS+=`aalib-config --libs` -L../jmlib -ljm -lintl
+endif
+
 ifeq ($(HAVE_FFMPEG), 1)
 CXXFLAGS+=-DHAVE_AVCODEC_H -I$(FFMPEG_PREFIX)/libavcodec
 CFLAGS+=-DHAVE_AVCODEC_H -I$(FFMPEG_PREFIX)/libavcodec

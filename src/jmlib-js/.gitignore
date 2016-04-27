@@ -1,0 +1,20 @@
+# Misc Files
+.DS_Store
+.sass-cache
+
+# Editor Files
+*.sw[a-z]
+*.orig
+
+# Packages
+node_modules/
+
+# Node/NPM
+*.log
+
+
+# IDE files
+*.iml
+.idea
+*.sublime-*
+.settings

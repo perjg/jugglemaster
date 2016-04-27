@@ -2,8 +2,8 @@
 
 /*
  * jmlib-js - Portable JuggleMaster Library (JavaScript Version)
- * Version 1.0
- * (C) Per Johan Groland 2006
+ * Version 2.0
+ * (C) Per Johan Groland 2006-2016
  *
  * Based on JMLib 2.0, (C) Per Johan Groland and Gary Briggs
  *

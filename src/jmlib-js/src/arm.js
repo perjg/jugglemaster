@@ -18,37 +18,14 @@
  * Modified BSD License for more details.
  */
 
+function Arm() {
+	this.rx = new Array(6); // coordinates of the right arm
+	this.ry = new Array(6);
+	this.lx = new Array(6); // coordinates of the left arm
+	this.ly = new Array(6);
+	this.hx = 0; // coordinates of the head
+	this.hy = 0;
+	this.hr = 0;
+}
 
-const gulp = require('gulp'),
-	babel = require('gulp-babel'),
-	eslint = require('gulp-eslint');
-
-gulp.task('default', ['lint', 'build']);
-
-gulp.task('lint', () => {
-	gulp.src(['src/**/*.js'])
-		.pipe(eslint({
-			extends: 'eslint:recommended',
-			rules: {
-				'no-var': 'error',
-				'no-unused-vars': 'error',
-				eqeqeq: ['error', 'allow-null'],
-				semi: ['error', 'always'],
-				//quotes: ['error', 'single'],
-				'comma-dangle': ['error', 'always'],
-			},
-			envs: [
-				'es6',
-				'node',
-			],
-		}))
-		.pipe(eslint.formatEach('stylish', process.stderr));
-});
-
-gulp.task('build', () => {
-	return gulp.src('src/**/*.js')
-		.pipe(babel({
-			presets: ['es2015']
-		}))
-		.pipe(gulp.dest('dist'));
-});
+module.exports = Arm;

@@ -18,78 +18,17 @@
  * Modified BSD License for more details.
  */
 
-// Ball class
-function Ball() {
-	this.bh = 0;     // throw height
-	this.gx = 0;     // x position
-	this.gy = 0;     // y position
-	this.gx0 = 0;    // previous position
-	this.gy0 = 0;    // ???
-	this.gx1 = 0;    // ???
-	this.gy1 = 0;    // ???
-	this.c = 0;      // ???
-	this.c0 = 0;     // ???
-	this.chand = 0;  // catching hand (0-left, 1-right)
-	this.thand = 0;  // throwing hand (0-left, 1-right)
-	this.st = 0;     // object status (OBJECT_HAND etc.)
-	this.t = 0;      // for spin calculation
-}
-
-Ball.prototype.getSpin = function (spins) {
-	if (this.isHolding()) {
-		return JMLib.HALF_PI;
-	}
-	else {
-		return (JMLib.HALF_PI + this.t * JMLib.PI) * ((spins * this.bh - 1) / 2);
-	}
-}
-
-Ball.prototype.isHolding = function () {
-	return (this.st & JMLib.OBJECT_UNDER);
-}
-
-Ball.prototype.toString = function () {
-	return "gx=" + this.gx + ",gy=" + this.gy;
-}
-// end Ball class
-
-// Arm class
-function Arm() {
-	this.rx = new Array(6); // coordinates of the right arm
-	this.ry = new Array(6);
-	this.lx = new Array(6); // coordinates of the left arm
-	this.ly = new Array(6);
-	this.hx = 0; // coordinates of the head
-	this.hy = 0;
-	this.hr = 0;
-}
-
-Arm.prototype.toString = function () {
-	var as = new String();
-
-	for (var i = 0; i < 6; i++) {
-		as = as.concat(" rx[" + i + "]=" + jmlib.ap.rx[i] +
-			" ry[" + i + "]=" + jmlib.ap.ry[i] +
-			" lx[" + i + "]=" + jmlib.ap.lx[i] +
-			" ly[" + i + "]=" + jmlib.ap.ly[i] + "\n");
-	}
-
-	return as + " hx=" + this.hx + " hy=" + this.hy + " hr=" + this.hr;
-}
-// end Arm class
-
-// Hand class
-function Hand() {
-	this.rx = new Array(10); // polygon for the right hand
-	this.ry = new Array(10);
-	this.lx = new Array(10); // polygon for the left hand
-	this.ly = new Array(10);
-}
-// end Hand class
+/* eslint-disable no-var, eqeqeq, no-constant-condition */
+const Ball = require('./ball'),
+	Arm = require('./arm'),
+	Hand = require('./hand'),
+	validator = require('./validator');
 
 // JMLib class
-function JMLib(cb) {
-	this.cb = cb;
+function JMLib(errorCallback) {
+	var i;
+
+	this.errorCallback = errorCallback;
 
 	// public variables
 	this.ap = new Arm();
@@ -99,7 +38,7 @@ function JMLib(cb) {
 	this.handpoly_ex = new Hand();
 
 	this.b = new Array(JMLib.BMAX);
-	for (var i = 0; i < JMLib.BMAX; i++) {
+	for (i = 0; i < JMLib.BMAX; i++) {
 		this.b[i] = new Ball();
 	}
 
@@ -142,7 +81,7 @@ function JMLib(cb) {
 
 	//JML_INT32 patt[LMAX][MMAX];
 	this.patt = new Array(JMLib.LMAX);
-	for (var i = 0; i < JMLib.LMAX; i++) {
+	for (i = 0; i < JMLib.LMAX; i++) {
 		this.patt[i] = new Array(JMLib.MMAX);
 		for (var j = 0; j < JMLib.MMAX; j++) {
 			this.patt[i][j] = 0;
@@ -185,22 +124,22 @@ function JMLib(cb) {
 JMLib.max = function (a, b) {
 	if (a > b) return a;
 	return b;
-}
+};
 
 JMLib.min = function (a, b) {
 	if (a < b) return a;
 	return b;
-}
+};
 
 JMLib.jijo = function (x) {
 	return x * x;
-}
+};
 
 // Calculates |x|
 JMLib.xabs = function (x) {
 	if (x < 0) return -x;
 	return x;
-}
+};
 
 // Calculates x^y
 JMLib.xpow = function (x, y) {
@@ -209,11 +148,11 @@ JMLib.xpow = function (x, y) {
 		//document.write("i=" + i + " x=" + x + "<br>");
 	}
 	return x;
-}
+};
 
 JMLib.random = function (x) {
 	return Math.floor(x * Math.random() % 1);
-}
+};
 
 // For status
 JMLib.ST_NONE = 0;
@@ -263,9 +202,6 @@ JMLib.FS_MAX = 10;
 JMLib.FS_MIN = 1;
 JMLib.FS_DEF = 1;
 
-JMLib.PI = 3.14159265;
-JMLib.HALF_PI = 1.570796325;
-
 // Scaling methods
 JMLib.SCALING_METHOD_CLASSIC = 1;
 JMLib.SCALING_METHOD_DYNAMIC = 2;
@@ -275,22 +211,22 @@ JMLib.prototype.getSiteposStart = function () {
 		return this.steps[this.time_period - 1];
 	}
 	return this.steps[this.time_period];
-}
+};
 
 JMLib.prototype.getSiteposStop = function () {
 	if (this.syn && this.time_period % 2 == 0) {
 		return this.steps[this.time_period + 2];
 	}
 	return this.steps[this.time_period + 1];
-}
+};
 
 JMLib.prototype.getSiteposLen = function () {
 	return this.getSiteposStop() - this.getSiteposStart();
-}
+};
 
 JMLib.prototype.getiterations = function () {
 	return this.dpm;
-}
+};
 
 JMLib.prototype.initialize = function () {
 	// Set default values
@@ -312,22 +248,23 @@ JMLib.prototype.initialize = function () {
 
 	this.setWindowSize(480, 400);
 	this.setPatternDefault();
-}
+};
 
 JMLib.prototype.shutdown = function () {
 
-}
+};
 
 JMLib.prototype.error = function (msg) {
 	this.lastError = msg;
-	// fixme: add callback
-	//if (this.cb != null)
-	//  this.cb(msg);
-}
+
+	if (this.errorCallback) {
+		this.errorCallback(msg);
+	}
+};
 
 JMLib.prototype.setWindowSizeDefault = function () {
 	this.setWindowSize(480, 400);
-}
+};
 
 JMLib.prototype.setWindowSize = function (width, height) {
 	if (width <= 0 || height <= 0)
@@ -356,7 +293,7 @@ JMLib.prototype.setWindowSize = function (width, height) {
 	this.status = oldStatus;
 
 	return true;
-}
+};
 
 JMLib.prototype.setScalingMethod = function (scalingMethod) {
 	// no change
@@ -372,21 +309,24 @@ JMLib.prototype.setScalingMethod = function (scalingMethod) {
 		this.calingMethod = JMLib.SCALING_METHOD_CLASSIC;
 		this.setWindowSize(this.scaleImageWidth, this.scaleImageHeight);
 	}
-}
+};
+
+JMLib.prototype.SCALING_METHOD_CLASSIC = JMLib.SCALING_METHOD_CLASSIC;
+JMLib.prototype.SCALING_METHOD_DYNAMIC = JMLib.SCALING_METHOD_DYNAMIC;
 
 JMLib.prototype.getImageWidth = function () {
 	if (this.scalingMethod == JMLib.SCALING_METHOD_CLASSIC)
 		return this.imageWidth;
 	else // SCALING_METHOD_DYNAMIC
 		return this.scaleImageWidth;
-}
+};
 
 JMLib.prototype.getImageHeight = function () {
 	if (this.scalingMethod == JMLib.SCALING_METHOD_CLASSIC)
 		return this.imageHeight;
 	else // SCALING_METHOD_DYNAMIC
 		return this.scaleImageHeight;
-}
+};
 
 JMLib.prototype.getBallRadius = function () {
 	var baseRadius = parseInt(11 * this.dpm / JMLib.DW);
@@ -403,9 +343,10 @@ JMLib.prototype.getBallRadius = function () {
 
 		return parseInt(baseRadius * zoomFactorY); // convert return value to int
 	}
-}
+};
 
 JMLib.prototype.doCoordTransform = function () {
+	var i;
 	var zoomFactorX = this.scaleImageWidth / this.imageWidth;
 	var zoomFactorY = this.scaleImageHeight / this.imageHeight;
 
@@ -431,7 +372,7 @@ JMLib.prototype.doCoordTransform = function () {
 	this.ap.hy += parseInt(this.scaleImageHeight / 2);
 
 	// juggler
-	for (var i = 0; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		this.ap.rx[i] -= parseInt(this.imageWidth / 2);
 		this.ap.ry[i] -= parseInt(this.imageHeight / 2);
 		this.ap.rx[i] = parseInt(this.ap.rx[i] * zoomFactorX);
@@ -462,7 +403,7 @@ JMLib.prototype.doCoordTransform = function () {
 	this.lhand.gx += parseInt(this.scaleImageWidth / 2);
 	this.lhand.gy += parseInt(this.scaleImageHeight / 2);
 
-	for (var i = 0; i <= 9; i++) {
+	for (i = 0; i <= 9; i++) {
 		this.handpoly.rx[i] = parseInt(this.handpoly_ex.rx[i] * zoomFactorX);
 		this.handpoly.ry[i] = parseInt(this.handpoly_ex.ry[i] * zoomFactorY);
 		this.handpoly.lx[i] = parseInt(this.handpoly_ex.lx[i] * zoomFactorX);
@@ -470,7 +411,7 @@ JMLib.prototype.doCoordTransform = function () {
 	}
 
 	// balls
-	for (var i = this.numBalls() - 1; i >= 0; i--) {
+	for (i = this.numBalls() - 1; i >= 0; i--) {
 		this.b[i].gx -= parseInt(this.imageWidth / 2);
 		this.b[i].gy -= parseInt(this.imageHeight / 2);
 
@@ -480,7 +421,7 @@ JMLib.prototype.doCoordTransform = function () {
 		this.b[i].gx += parseInt(this.scaleImageWidth / 2);
 		this.b[i].gy += parseInt(this.scaleImageHeight / 2);
 	}
-}
+};
 
 JMLib.prototype.setMirror = function (mir) {
 	// store current status and stop juggling
@@ -495,11 +436,9 @@ JMLib.prototype.setMirror = function (mir) {
 
 	// restore state
 	this.status = oldStatus;
-}
+};
 
 JMLib.prototype.setPattern = function (name, site, hr, dr) {
-	var jml_errno;
-
 	if (site.length > JMLib.JML_MAX_SITELEN) {
 		this.error("Siteswap too long");
 		return false;
@@ -510,8 +449,7 @@ JMLib.prototype.setPattern = function (name, site, hr, dr) {
 		return false;
 	}
 
-	//fixme: validator does not seem to give correct results in IE
-	if (!JMValidator.validateSite(site)) {
+	if (!validator.validateSite(site)) {
 		this.error("Invalid siteswap");
 		return false;
 	}
@@ -526,7 +464,7 @@ JMLib.prototype.setPattern = function (name, site, hr, dr) {
 
 	// Check ratios
 	if (this.height_ratio < JMLib.HR_MIN || this.height_ratio > JMLib.HR_MAX)
-		height_ratio = JMLib.HR_DEF;
+		this.height_ratio = JMLib.HR_DEF;
 	if (this.dwell_ratio < JMLib.DR_MIN || this.dwell_ratio > JMLib.DR_MAX)
 		this.dwell_ratio = JMLib.DR_DEF;
 
@@ -568,7 +506,7 @@ JMLib.prototype.setPattern = function (name, site, hr, dr) {
 
 		return false;
 	}
-}
+};
 
 JMLib.prototype.setStyle = function (name, length, data) {
 	if (data.length > JMLib.JML_MAX_STYLELEN) {
@@ -586,33 +524,35 @@ JMLib.prototype.setStyle = function (name, length, data) {
 	this.style_len = length;
 
 	return true;
-}
+};
 
 //fixme: style data is passed as an array
 //       should perhaps add a style data class
 JMLib.prototype.setStyleEx = function (name) {
+	var style;
+
 	if (name == "Normal") {
-		var style = new Array(13, 0, 4, 0);
+		style = new Array(13, 0, 4, 0);
 		this.setStyle(name, 1, style);
 	}
 	else if (name == "Reverse") {
-		var style = new Array(4, 0, 13, 0);
+		style = new Array(4, 0, 13, 0);
 		this.setStyle(name, 1, style);
 	}
 	else if (name == "Shower") {
-		var style = new Array(5, 0, 10, 0, 10, 0, 5, 0);
+		style = new Array(5, 0, 10, 0, 10, 0, 5, 0);
 		this.setStyle(name, 2, style);
 	}
 	else if (name == "Mills Mess") {
-		var style = new Array(-1, 0, -12, 0, 0, 0, 12, 0, 1, 0, -12, 0);
+		style = new Array(-1, 0, -12, 0, 0, 0, 12, 0, 1, 0, -12, 0);
 		this.setStyle(name, 3, style);
 	}
 	else if (name == "Center") {
-		var style = new Array(13, 0, 0, 0);
+		style = new Array(13, 0, 0, 0);
 		this.setStyle(name, 1, style);
 	}
 	else if (name == "Windmill") {
-		var style = new Array(10, 0, -8, 0, -8, 0, 10, 0);
+		style = new Array(10, 0, -8, 0, -8, 0, 10, 0);
 		this.setStyle(name, 2, style);
 	}
 	// placeholder for adding random style support here
@@ -621,21 +561,20 @@ JMLib.prototype.setStyleEx = function (name) {
 	}
 
 	return true;
-}
+};
 
 JMLib.prototype.getStyles = function () {
 	return this.possible_styles;
-}
+};
 
 JMLib.prototype.numStyles = function () {
-	return this.possible_styles.length
-
-}
+	return this.possible_styles.length;
+};
 
 JMLib.prototype.setPatternDefault = function () {
 	this.setPattern("3 Cascade", "3", JMLib.HR_DEF, JMLib.DR_DEF);
 	this.setStyleDefault();
-}
+};
 
 JMLib.prototype.setStyleDefault = function () {
 	var defStyle = new Array(13, 0, 4, 0);
@@ -643,7 +582,7 @@ JMLib.prototype.setStyleDefault = function () {
 	this.stylename = "Normal";
 	this.styledata = defStyle;
 	this.style_len = 1;
-}
+};
 
 JMLib.prototype.setHR = function (HR) {
 	if (HR > JMLib.HR_MAX) {
@@ -655,11 +594,11 @@ JMLib.prototype.setHR = function (HR) {
 	else {
 		this.height_ratio = HR;
 	}
-}
+};
 
 JMLib.prototype.getHR = function () {
 	return this.height_ratio;
-}
+};
 
 JMLib.prototype.setDR = function (DR) {
 	if (DR > JMLib.DR_MAX) {
@@ -671,22 +610,19 @@ JMLib.prototype.setDR = function (DR) {
 	else {
 		this.dwell_ratio = DR;
 	}
-}
+};
 
 JMLib.prototype.getDR = function () {
 	return this.dwell_ratio;
-}
+};
 
 JMLib.prototype.numBalls = function () {
 	return this.balln;
-}
+};
 
 // Internal functions
 JMLib.prototype.arm_line = function () {
-	var mx;
-	var my;
-	var sx
-	var sy;
+	var mx, my, sx, sy;
 
 	if (this.hand_on) { // only bother calculating if hands are drawn
 		// Notes:
@@ -734,7 +670,7 @@ JMLib.prototype.arm_line = function () {
 		this.ap.ry[5] = this.ap.hy + parseInt(this.dpm / 13);
 		this.ap.ly[5] = parseInt(this.ap.ry[5]);
 	}
-}
+};
 
 JMLib.prototype.applyCorrections = function () {
 	// Correct ball coordinates
@@ -742,15 +678,13 @@ JMLib.prototype.applyCorrections = function () {
 		this.b[i].gx += this.bm1;
 		this.b[i].gy += this.bm1;
 	}
-}
+};
 
 JMLib.prototype.hand_pos = function (c, h, x, z) {
 	//fixme: for testing only, remove
 	// x and z must be arrays with one element (pass-by-reference emulation)
-	if (!(x instanceof Array)) document.write("hand_pos assert failure (x)<br>");
-	if (!(z instanceof Array)) document.write("hand_pos assert failure (z)<br>");
-
-	//opera.postError("BEFORE hand_pos(" + c + ", " + h + ", " + x[0] + ", " + z[0] + ")");
+	//if (!(x instanceof Array)) document.write("hand_pos assert failure (x)<br>");
+	//if (!(z instanceof Array)) document.write("hand_pos assert failure (z)<br>");
 
 	var a;
 
@@ -769,14 +703,12 @@ JMLib.prototype.hand_pos = function (c, h, x, z) {
 	else  x[0] = -this.styledata[a];
 
 	z[0] = this.styledata[a + 1];
-
-	//opera.postError("AFTER hand_pos(" + c + ", " + h + ", " + x[0] + ", " + z[0] + ")");
-}
+};
 
 JMLib.prototype.juggle = function (/*Ball*/ d) {
 	var tp;
 	var flag = 0;
-	var i;
+	var h, t;
 	var tpox = new Array(1);
 	tpox[0] = 0;
 	var rpox = new Array(1);
@@ -795,10 +727,11 @@ JMLib.prototype.juggle = function (/*Ball*/ d) {
 	d.gx0 = d.gx;
 	d.gy0 = d.gy;
 
-	if (d.c < 0)
+	if (d.c < 0) {
 		if (this.time_count >= -d.c * this.tw) d.c = -d.c;
+	}
 
-	while (1) {
+	while (true) {
 		tp = this.time_count - this.tw * JMLib.xabs(d.c);
 		if (tp < this.aw) break;
 		d.st &= ~JMLib.OBJECT_UNDER;
@@ -809,8 +742,6 @@ JMLib.prototype.juggle = function (/*Ball*/ d) {
 			this.flag = 1;
 		}
 		else {
-			var t;
-
 			t = d.c;
 
 			if (this.syn) {
@@ -843,9 +774,6 @@ JMLib.prototype.juggle = function (/*Ball*/ d) {
 			}
 		}
 		else {
-			var h;
-			var t;
-
 			t = d.c;
 
 			if (this.syn) {
@@ -921,8 +849,6 @@ JMLib.prototype.juggle = function (/*Ball*/ d) {
 			this.hand_pos(d.c, d.chand, rpox, rpoz);
 		}
 	}
-
-	//opera.postError("x=" + x + ", y=" + y);
 
 	if (this.fpu) {
 		var fx;
@@ -1023,9 +949,10 @@ JMLib.prototype.juggle = function (/*Ball*/ d) {
 	//d->gy = base - y - 11 * dpm / DW;
 
 	return flag;
-}
+};
 
 JMLib.prototype.set_ini = function (rr) {
+	var i, j;
 	var tw0;
 	var aw0;
 
@@ -1036,8 +963,8 @@ JMLib.prototype.set_ini = function (rr) {
 
 	if (this.pattw == 0) return 1;
 
-	for (var i = 0; i < this.pattw; i++) {
-		for (var j = 0; j < this.patts[i]; j++) {
+	for (i = 0; i < this.pattw; i++) {
+		for (j = 0; j < this.patts[i]; j++) {
 			this.balln += JMLib.xabs(this.patt[i][j]);
 			this.pmax = JMLib.max(this.pmax, JMLib.xabs(this.patt[i][j]));
 		}
@@ -1048,11 +975,11 @@ JMLib.prototype.set_ini = function (rr) {
 	if (this.balln == 0) return 9;
 	if (this.balln > JMLib.BMAX) return 9;
 
-	for (var i = 0; i < JMLib.LMAX * 2; i++)
+	for (i = 0; i < JMLib.LMAX * 2; i++)
 		this.r[i] = 0;
 
-	for (var i = 0; i <= this.balln; i++) {
-		var j = 0;
+	for (i = 0; i <= this.balln; i++) {
+		j = 0;
 		while (this.r[j] == this.patts[j % this.pattw] && j < this.pattw + this.pmax)
 			j++;
 
@@ -1120,18 +1047,18 @@ JMLib.prototype.set_ini = function (rr) {
 	if (this.fpu) {
 		this.high[0] = -0.2 * this.dpm;
 		this.high[1] = this.ga * JMLib.jijo(tw0 / this.smode * this.cSpeed) / 8 * this.dpm;
-		for (var i = 2; i <= this.pmax; i++)
+		for (i = 2; i <= this.pmax; i++)
 			this.high[i] = this.ga * JMLib.jijo((tw0 * i - aw0) / this.smode * this.cSpeed) / 8 * this.dpm;
 	}
 	else {
 		this.high0[0] = parseInt(-JMLib.jijo(JMLib.XR) / 0.2 * this.dpm);
 		this.high0[1] = parseInt(JMLib.jijo(JMLib.XR) / (this.ga * JMLib.jijo(tw0 / this.smode * this.cSpeed) / 8 * this.dpm));
-		for (var i = 2; i <= this.pmax; i++)
+		for (i = 2; i <= this.pmax; i++)
 			this.high0[i] = parseInt(JMLib.jijo(JMLib.XR) /
 				(this.ga * JMLib.jijo((tw0 * i - aw0) / this.smode * this.cSpeed) / 8 * this.dpm));
 	}
 
-	for (var i = 0; i < this.balln; i++) {
+	for (i = 0; i < this.balln; i++) {
 		this.b[i].bh = 0;
 		this.b[i].gx = this.horCenter;
 		this.b[i].gy = this.verCenter;
@@ -1174,10 +1101,10 @@ JMLib.prototype.set_ini = function (rr) {
 	this.lhand.gx1 = this.horCenter;
 	this.lhand.gy1 = this.verCenter;
 
-	for (var i = 0; i < this.pattw; i++) this.r[i] = 0;
+	for (i = 0; i < this.pattw; i++) this.r[i] = 0;
 
 	return 0;
-}
+};
 
 JMLib.prototype.set_dpm = function () {
 	var cSpeed0;
@@ -1227,7 +1154,7 @@ JMLib.prototype.set_dpm = function () {
 
 			this.arm_line();
 
-			for (var i = 0; i < 5; i++) {
+			for (i = 0; i < 5; i++) {
 				this.gx_max = JMLib.max(this.gx_max, this.ap.rx[i]);
 				this.gx_max = JMLib.max(this.gx_max, this.ap.lx[i]);
 				this.gx_min = JMLib.min(this.gx_min, this.ap.rx[i]);
@@ -1263,7 +1190,7 @@ JMLib.prototype.set_dpm = function () {
 	}
 
 	this.cSpeed = cSpeed0;
-}
+};
 
 JMLib.prototype.set_patt = function (s) {
 	var flag = 0;
@@ -1356,7 +1283,7 @@ JMLib.prototype.set_patt = function (s) {
 	if (this.balln > JMLib.BMAX) return 9;
 
 	return 0;
-}
+};
 
 // fixme: this function won't work
 // use similar function from validator instead
@@ -1382,7 +1309,7 @@ JMLib.prototype.ctod = function (s) {
 		return s.charCodeAt(0) - str_A.charCodeAt(0) + 10;
 	else
 		return -1;
-}
+};
 
 JMLib.prototype.startJuggle = function () {
 	this.set_dpm();
@@ -1396,63 +1323,63 @@ JMLib.prototype.startJuggle = function () {
 	this.time_period = 0;
 
 	this.status = JMLib.ST_JUGGLE;
-}
+};
 
 JMLib.prototype.stopJuggle = function () {
 	this.status = JMLib.ST_NONE;
-}
+};
 
 JMLib.prototype.togglePause = function () {
 	if (this.status == JMLib.ST_JUGGLE)
 		this.status = JMLib.ST_PAUSE;
 	else if (this.status == JMLib.ST_PAUSE)
 		this.status = JMLib.ST_JUGGLE;
-}
+};
 
 JMLib.prototype.setPause = function (pauseOn) {
 	if (this.status != JMLib.ST_NONE) {
-		if (this.pauseOn)
+		if (pauseOn)
 			this.status = JMLib.ST_PAUSE;
 		else
 			this.status = JMLib.ST_JUGGLE;
 	}
-}
+};
 
 JMLib.prototype.getStatus = function () {
 	return this.status;
-}
+};
 
 // fixme: xpos function seems to be wrong
 JMLib.prototype.fadd = function (x, k, t) {
 	return ((x + t) * JMLib.xpow(10, k) + .5) / JMLib.xpow(10, k);
-}
+};
 
 JMLib.prototype.speedUp = function () {
 	this.cSpeed = JMLib.SPEED_MAX;
 	this.set_ini(0);
-}
+};
 
 JMLib.prototype.speedDown = function () {
 	this.cSpeed = JMLib.SPEED_MIN;
 	this.set_ini(0);
-}
+};
 
 JMLib.prototype.speedReset = function () {
 	this.cSpeed = JMLib.SPEED_DEF;
 	this.set_ini(0);
-}
+};
 
 JMLib.prototype.setSpeed = function (s) {
 	this.cSpeed = s;
 	this.set_ini(0);
-}
+};
 
 JMLib.prototype.speed = function () {
 	return this.cSpeed;
-}
+};
 
 JMLib.prototype.doJuggle = function () {
-	var tone = 0;
+	var i, tone = 0;
 
 	if (this.status == JMLib.ST_PAUSE || this.status == JMLib.ST_NONE) {
 		return 0;
@@ -1466,7 +1393,7 @@ JMLib.prototype.doJuggle = function () {
 	this.time_period %= this.pattw;
 	//this.time_period = time_count % pattw;
 
-	for (var i = 0; i < this.balln; i++)
+	for (i = 0; i < this.balln; i++)
 		if (this.juggle(this.b[i]) && this.beep) tone = JMLib.max(tone, JMLib.xabs(this.b[i].bh));
 
 	if (this.juggle(this.rhand) + this.juggle(this.lhand) > 0) {
@@ -1480,21 +1407,21 @@ JMLib.prototype.doJuggle = function () {
 		this.doCoordTransform();
 
 	return tone;
-}
+};
 
 JMLib.prototype.xbitset = function () {
-	var j = 0;
+	var i, j = 0;
 
 	// data is used to create the hand bitmaps
-	var data = new Array(
+	var data = [
 		0, 18, 0, 23, 17, 23, 20, 22,
 		22, 20, 23, 17, 23, 12, 18, 12,
 		18, 16, 16, 18, 0, 18,
-		12, 15, 23, 17, 99, 99
-	);
+		12, 15, 23, 17, 99, 99,
+	];
 
 	// initialize the data array.
-	for (var i = 0; data[i] < 99; i++) data[i] = parseInt((data[i] - 11) * this.dpm / JMLib.DW);
+	for (i = 0; data[i] < 99; i++) data[i] = parseInt((data[i] - 11) * this.dpm / JMLib.DW);
 
 	// apply hand placement offsets
 	this.hand_x = data[i - 4] + 2;
@@ -1503,7 +1430,7 @@ JMLib.prototype.xbitset = function () {
 	this.arm_y = data[i - 1];
 
 	// calculate hand polygons
-	for (var i = 0; data[i + 6] < 99; i += 2) {
+	for (i = 0; data[i + 6] < 99; i += 2) {
 		if (j > 9) break;
 
 		this.handpoly_ex.rx[j] = 11 + data[i];
@@ -1515,13 +1442,13 @@ JMLib.prototype.xbitset = function () {
 		j++;
 	}
 
-	for (var i = 0; i <= 9; i++) {
+	for (i = 0; i <= 9; i++) {
 		this.handpoly.rx[i] = this.handpoly_ex.rx[i];
 		this.handpoly.ry[i] = this.handpoly_ex.ry[i];
 		this.handpoly.lx[i] = this.handpoly_ex.lx[i];
 		this.handpoly.ly[i] = this.handpoly_ex.ly[i];
 	}
-}
+};
 
 JMLib.prototype.doStepcalc = function () {
 	var i;
@@ -1574,5 +1501,6 @@ JMLib.prototype.doStepcalc = function () {
 			}
 		}
 	}
-}
-// end JMLib class
+};
+
+module.exports = JMLib;

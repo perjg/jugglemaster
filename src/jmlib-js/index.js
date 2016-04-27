@@ -18,3 +18,13 @@
  * Modified BSD License for more details.
  */
 
+var JMLib = require('./dist/jmlib'),
+	validator = require('./dist/validator');
+
+function JuggleMaster() {
+	this.jmlib = new JMLib();
+	this.validator = validator;
+}
+
+module.exports = JuggleMaster;
+

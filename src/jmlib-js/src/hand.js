@@ -18,37 +18,11 @@
  * Modified BSD License for more details.
  */
 
+function Hand() {
+	this.rx = new Array(10); // polygon for the right hand
+	this.ry = new Array(10);
+	this.lx = new Array(10); // polygon for the left hand
+	this.ly = new Array(10);
+}
 
-const gulp = require('gulp'),
-	babel = require('gulp-babel'),
-	eslint = require('gulp-eslint');
-
-gulp.task('default', ['lint', 'build']);
-
-gulp.task('lint', () => {
-	gulp.src(['src/**/*.js'])
-		.pipe(eslint({
-			extends: 'eslint:recommended',
-			rules: {
-				'no-var': 'error',
-				'no-unused-vars': 'error',
-				eqeqeq: ['error', 'allow-null'],
-				semi: ['error', 'always'],
-				//quotes: ['error', 'single'],
-				'comma-dangle': ['error', 'always'],
-			},
-			envs: [
-				'es6',
-				'node',
-			],
-		}))
-		.pipe(eslint.formatEach('stylish', process.stderr));
-});
-
-gulp.task('build', () => {
-	return gulp.src('src/**/*.js')
-		.pipe(babel({
-			presets: ['es2015']
-		}))
-		.pipe(gulp.dest('dist'));
-});
+module.exports = Hand;

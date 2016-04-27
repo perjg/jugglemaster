@@ -18,78 +18,78 @@
  * Modified BSD License for more details.
  */
 
+const patternLibrary = require('./patterns');
+
 function PatternLoader() {}
 
 PatternLoader.getGroups = function () {
-	return groups;
-}
+	return patternLibrary.groups;
+};
 
 PatternLoader.getPatterns = function () {
-	return patterns;
-}
+	return patternLibrary.patterns;
+};
 
 PatternLoader.getStyles = function () {
-	return styles;
-}
+	return patternLibrary.styles;
+};
 
 PatternLoader.getPattern = function (index) {
-	return patterns[index];
-}
+	return patternLibrary.patterns[index];
+};
 
 PatternLoader.getStyle = function (name) {
-	return styles[name];
-}
+	return patternLibrary.styles[name];
+};
 
 // load style by name
 PatternLoader.loadStyle = function (jmlib, name) {
-	var style = styles[name];
+	const style = patternLibrary.styles[name];
 
-	if (style == null) {
+	if (style === null) {
 		return false;
 	}
 
-	var length = style[0];
-	var data = style[1];
-
-	//opera.postError("Loading style name='" + name + " length = '" + length + "' data='" + data + "'");
+	const length = style[0],
+		data = style[1];
 
 	return jmlib.setStyle(name, length, data);
-}
+};
 
 // Load pattern by index
 PatternLoader.loadPatternEx = function (jmlib, index) {
-	var pattern = patterns[index];
+	const pattern = patternLibrary.patterns[index];
 
-	if (pattern == null) {
+	if (pattern === null) {
 		return false;
 	}
 
-	var name = pattern[0];
-	var site = pattern[1];
-	var style = pattern[2];
-	var hr = pattern[3];
-	var dr = pattern[4];
-
-	//opera.postError("Loading pattern " + index + " name='" + name + "' site='" + site + "' style='" + style + "' hr='" + hr + "' dr='" + dr +"'");
+	const name = pattern[0],
+		site = pattern[1],
+		style = pattern[2],
+		hr = pattern[3],
+		dr = pattern[4];
 
 	if (jmlib.setPattern(name, site, hr, dr)) {
 		return PatternLoader.loadStyle(jmlib, style);
 	}
 	return false;
-}
+};
 
 // Load pattern by name
 PatternLoader.loadPattern = function (jmlib, name) {
-	for (var i = 0; i < patterns.length; i++) {
-		var pattern = patterns[i];
+	for (let i = 0; i < patternLibrary.patterns.length; i++) {
+		let pattern = patternLibrary.patterns[i];
 
-		if (pattern == null) {
+		if (pattern === null) {
 			return false;
 		}
 
-		if (pattern[0] == name)
+		if (pattern[0] === name)
 			return PatternLoader.loadPatternEx(jmlib, i);
 	}
 
 	return false;
-}
+};
+
+module.exports = PatternLoader;

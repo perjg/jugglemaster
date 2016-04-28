@@ -26,7 +26,7 @@ const gulp = require('gulp'),
 gulp.task('default', ['lint', 'build']);
 
 gulp.task('lint', () => {
-	gulp.src(['src/**/*.js'])
+	gulp.src(['src/**/*.js', 'demo/src.js'])
 		.pipe(eslint({
 			extends: 'eslint:recommended',
 			rules: {

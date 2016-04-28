@@ -9,7 +9,7 @@ BASIC USAGE
 To initialize the library:
 
 ```javascript
-import JuggleMaster from '../index';
+import JuggleMaster from 'jmlib';
 
 const jm = new JuggleMaster(),
 	jmlib = jm.jmlib,

@@ -1,6 +1,6 @@
 {
   "name": "jmlib",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "JuggleMaster is a juggling siteswap animator.",
   "main": "index.js",
   "directories": {

@@ -17,9 +17,14 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
  * Modified BSD License for more details.
- */ 
+ */
 
 #include "render_jm_flat.h"
+
+#ifdef USE_OPENGL_ES
+#include "jugglesaver/shaders.h"
+#include <stdio.h>
+#endif
 
 float v_arr[2200];
 
@@ -46,8 +51,8 @@ void JMFlatOpenGL::doCoordTransform(bool flipY, bool centerOrigin) {
 
   ballRadius = jmlib->getBallRadius() * scalingFactor;
 
-  // Flip all y coordinates and center around origin
-  for(int i=0;i<=5;i++) { // arms
+  // Transform arm coordinates: flip Y if needed, center, and scale
+  for(int i=0;i<=5;i++) {
     if (flipY) {
       ap.rarm_y[i] = (JML_FLOAT)(h - jmlib_ap->ry[i]);
       ap.larm_y[i] = (JML_FLOAT)(h - jmlib_ap->ly[i]);
@@ -65,13 +70,10 @@ void JMFlatOpenGL::doCoordTransform(bool flipY, bool centerOrigin) {
     ap.larm_x[i] = (ap.larm_x[i] - half_w) * scalingFactor;
   }
 
-  // Calculate z coordinates for arms
+  // Calculate z coordinates for arms (layered depth)
   for(int i=0;i<=5;i++) {
     if (i == 1 || i == 2)
       currentZ -= ballRadius * 3.5f;
-    //fixme: to use calculateZDelta, make sure to calculate z coordinates
-    // only once each time the pattern changes.
-    //currentZ -= calculateZDelta(10.0, ap.rarm_y[i+1] - ap.rarm_y[i]);
     ap.rarm_z[i] = currentZ;
     ap.larm_z[i] = currentZ;
   }
@@ -93,11 +95,11 @@ void JMFlatOpenGL::doCoordTransform(bool flipY, bool centerOrigin) {
   rhand.gz = baseZoffset;
   lhand.gz = baseZoffset;
 
-  // Flip hand polygon
+  // Transform hand polygon coordinates
   JML_INT32 poly_max_y = 0;
 
   if (flipY) {
-    for (int i=0; i<10; i++) { // calculate polygon height
+    for (int i=0; i<10; i++) {
       if (jmlib_handp->ly[i] > poly_max_y)
 	    poly_max_y = jmlib_handp->ly[i];
     }
@@ -125,7 +127,7 @@ void JMFlatOpenGL::doCoordTransform(bool flipY, bool centerOrigin) {
   ap.head_z = currentZ;
   ap.head_radius = jmlib_ap->hr * scalingFactor;
 
-  // balls
+  // Transform ball coordinates
   for(int i = jmlib->numBalls() - 1; i >= 0; i--) {
     if (flipY) b[i].gy = (JML_FLOAT)(h - jmlib->b[i].gy);
     else       b[i].gy = (JML_FLOAT)jmlib->b[i].gy;
@@ -137,7 +139,11 @@ void JMFlatOpenGL::doCoordTransform(bool flipY, bool centerOrigin) {
 }
 
 void JMFlatOpenGL::doRotation(float angle) {
+#ifdef USE_OPENGL_ES
+  modelViewMatrix.rotate(angle, 0.0f, 1.0f, 0.0f);
+#else
   glRotatef(angle, 0.0f, 1.0f, 0.0f);
+#endif
 }
 
 float JMFlatOpenGL::calculateZDelta(float angle, float length) {
@@ -159,6 +165,42 @@ void JMFlatOpenGL::initializeFlatRenderMode() {
 	zoomFactorX_JS = 40.0f;
 	zoomFactorY_JS = 50.0f;
 
+#ifdef USE_OPENGL_ES
+  // Initialize shaders and VBO for ES 3.0 / WebGL 2.0
+  flatShader = new ShaderProgram();
+  lineShader = new ShaderProgram();
+
+  if(!flatShader->loadFromStrings(flatColorVertexShader, flatColorFragmentShader)) {
+    fprintf(stderr, "ERROR: Failed to load flat color shader\n");
+    delete flatShader;
+    flatShader = nullptr;
+  }
+
+  if(!lineShader->loadFromStrings(lineVertexShader, lineFragmentShader)) {
+    fprintf(stderr, "ERROR: Failed to load line shader\n");
+    delete lineShader;
+    lineShader = nullptr;
+  }
+
+  // Create dynamic VBO (VAO not needed for GLSL 1.20 / OpenGL 2.1)
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(v_arr), nullptr, GL_DYNAMIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  modelViewMatrix.loadIdentity();
+  currentColor[0] = 1.0f;
+  currentColor[1] = 1.0f;
+  currentColor[2] = 1.0f;
+  currentColor[3] = 1.0f;
+
+  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_CULL_FACE);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glLineWidth(1.0f);
+#else
+  // Desktop OpenGL
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
@@ -169,10 +211,10 @@ void JMFlatOpenGL::initializeFlatRenderMode() {
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_LINE_SMOOTH);
   glDisable(GL_CULL_FACE);
-  //glEnable(GL_POLYGON_SMOOTH);
 
   glLineWidth(1.0f);
   glShadeModel(GL_FLAT);
+#endif
 
   calculateZoomFactor();
 }
@@ -181,43 +223,45 @@ void JMFlatOpenGL::drawFlat() {
   doCoordTransform(false, true);
   int i = 0;
 
-  //glClearColor(255.0f, 255.0f, 255.0f, 1.0f);
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-  glMatrixMode(GL_PROJECTION);	
-  glLoadIdentity();
-#ifdef OPENGL_ES_SUPPORT
-  glOrthof(-width/2, width/2, height/2, -height/2, -10.0f, 10.0f);
-#else
-  glOrtho(-width/2, width/2, height/2, -height/2, -10.0f, 10.0f);
-#endif
-
   glClear(GL_COLOR_BUFFER_BIT);
-  //glRotatef(rotate, 0.0f, 0.0f, 1.0f);
 
-  // Scale to fit full window
+#ifdef USE_OPENGL_ES
+  // Setup orthographic projection and scaling for ES 3.0
+  projectionMatrix.loadIdentity();
+  Matrix4 projMat = ortho(-width/2.0f, width/2.0f, height/2.0f, -height/2.0f, -10.0f, 10.0f);
+  projectionMatrix.multiply(projMat);
+
+  modelViewMatrix.loadIdentity();
+  modelViewMatrix.scale(zoomFactorX, zoomFactorY, 1.0f);
+
+  currentColor[0] = 1.0f;
+  currentColor[1] = 1.0f;
+  currentColor[2] = 1.0f;
+  currentColor[3] = 1.0f;
+#else
+  // Desktop OpenGL fixed pipeline
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(-width/2, width/2, height/2, -height/2, -10.0f, 10.0f);
   glScalef(zoomFactorX, zoomFactorY, 0.0f);
 
-  // draw juggler
-  //glClearColor(255.0f, 255.0f, 255.0f, 1.0f);
-  //glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-  glColor4f(255.0f, 255.0f, 255.0f, 1.0f);
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+#endif
 
+  // Draw stick figure: arms, hands, head, and balls
   for(i=0;i<5;i++) {
     drawLine(ap.rarm_x[i], ap.rarm_y[i], ap.rarm_x[i+1], ap.rarm_y[i+1]);
     drawLine(ap.larm_x[i], ap.larm_y[i], ap.larm_x[i+1], ap.larm_y[i+1]);
   }
 
-  // draw right hand
   for (i=1; i<=10; i++) {
     drawLine(rhand.gx + handpoly.rx[i-1],
              rhand.gy + handpoly.ry[i-1],
-  	         rhand.gx + handpoly.rx[i%10],
+	         rhand.gx + handpoly.rx[i%10],
              rhand.gy + handpoly.ry[i%10]);
   }
-  	
-  // draw left hand
+
   for (i=1; i<=10; i++) {
     drawLine(lhand.gx + handpoly.lx[i-1],
              lhand.gy + handpoly.ly[i-1],
@@ -225,15 +269,19 @@ void JMFlatOpenGL::drawFlat() {
              lhand.gy + handpoly.ly[i%10]);
   }
 
-  // Draw head
   drawCircle(ap.head_x, ap.head_y, ap.head_radius);
-
-  // Draw balls
+#ifdef USE_OPENGL_ES
+  currentColor[0] = 1.0f;
+  currentColor[1] = 0.0f;
+  currentColor[2] = 0.0f;
+  currentColor[3] = 1.0f;
+#else
   glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+#endif
+
   int r = (11*jmlib->dpm/DW);
   for(i = jmlib->numBalls() - 1; i >= 0; i--) {
     if (coloredBalls) setBallColor(i%6);
-
     drawFilledCircle(b[i].gx+r, b[i].gy+r, ballRadius);
   }
 
@@ -252,6 +300,22 @@ JMFlatOpenGL::JMFlatOpenGL(JMLib* jmlib) {
   autoRotate = true;
   coloredBalls = true;
   this->jmlib = jmlib;
+#ifdef USE_OPENGL_ES
+  flatShader = NULL;
+  lineShader = NULL;
+  vao = 0;
+  vbo = 0;
+  currentColor[0] = currentColor[1] = currentColor[2] = currentColor[3] = 1.0f;
+#endif
+}
+
+JMFlatOpenGL::~JMFlatOpenGL() {
+#ifdef USE_OPENGL_ES
+  delete flatShader;
+  delete lineShader;
+  if (vbo) glDeleteBuffers(1, &vbo);
+  if (vao) glDeleteVertexArrays(1, &vao);
+#endif
 }
 
 void JMFlatOpenGL::resize(int width, int height) {
@@ -269,10 +333,36 @@ void JMFlatOpenGL::drawLine(float x1, float y1, float x2, float y2) {
   v_arr[1] = y1;
   v_arr[2] = x2;
   v_arr[3] = y2;
-  
+
+#ifdef USE_OPENGL_ES
+  if (!lineShader || !lineShader->isValid()) {
+    fprintf(stderr, "ERROR: Line shader not initialized in drawLine\n");
+    return;
+  }
+
+  lineShader->use();
+  Matrix4 mvp = projectionMatrix.top() * modelViewMatrix.top();
+  lineShader->setMatrix4("uMVPMatrix", mvp.m);
+  lineShader->setVec4("uColor", currentColor[0], currentColor[1], currentColor[2], currentColor[3]);
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(float), v_arr);
+
+  GLint posLoc = lineShader->getAttribLocation("aPosition");
+  if (posLoc >= 0) {
+    glVertexAttribPointer(posLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(posLoc);
+  }
+
+  glDrawArrays(GL_LINE_STRIP, 0, 2);
+
+  if (posLoc >= 0) glDisableVertexAttribArray(posLoc);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+#else
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_FLOAT , 0, v_arr);
   glDrawArrays(GL_LINE_STRIP, 0, 2);
+#endif
 }
 
 void JMFlatOpenGL::drawCircle(float x, float y, float radius) {
@@ -286,18 +376,44 @@ void JMFlatOpenGL::drawCircle(float x, float y, float radius) {
 
   int offset = 0;
 
-  for(angle=0.0f;angle<=(2.0f*3.14159f);angle+=0.02f) {		
+  for(angle=0.0f;angle<=(2.0f*3.14159f);angle+=0.02f) {
     vectorX=originX+(radius*(float)sin((double)angle));
-    vectorY=originY+(radius*(float)cos((double)angle));		
+    vectorY=originY+(radius*(float)cos((double)angle));
     v_arr[offset++] = vectorX1;
     v_arr[offset++] = vectorY1;
     vectorY1=vectorY;
-    vectorX1=vectorX;			
+    vectorX1=vectorX;
   }
 
+#ifdef USE_OPENGL_ES
+  if (!lineShader || !lineShader->isValid()) {
+    fprintf(stderr, "ERROR: Line shader not initialized in drawCircle\n");
+    return;
+  }
+
+  lineShader->use();
+  Matrix4 mvp = projectionMatrix.top() * modelViewMatrix.top();
+  lineShader->setMatrix4("uMVPMatrix", mvp.m);
+  lineShader->setVec4("uColor", currentColor[0], currentColor[1], currentColor[2], currentColor[3]);
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, offset * sizeof(float), v_arr);
+
+  GLint posLoc = lineShader->getAttribLocation("aPosition");
+  if (posLoc >= 0) {
+    glVertexAttribPointer(posLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(posLoc);
+  }
+
+  glDrawArrays(GL_LINE_STRIP, 0, offset/2);
+
+  if (posLoc >= 0) glDisableVertexAttribArray(posLoc);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+#else
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_FLOAT , 0, v_arr);
   glDrawArrays(GL_LINE_STRIP, 0, offset/2);
+#endif
 }
 
 void JMFlatOpenGL::drawFilledCircle(float x, float y, float radius) {
@@ -308,13 +424,13 @@ void JMFlatOpenGL::drawFilledCircle(float x, float y, float radius) {
   float angle    = 0.0;
   float vectorX;
   float vectorY;
- 
+
   int offset = 0;
 
   for(int i=0;i<=360;i+=2) {
-    angle = (float)(((double)i) / 57.29577957795135f);	
+    angle = (float)(((double)i) / 57.29577957795135f);
     vectorX = originX + (radius * (float)sin((double)angle));
-    vectorY = originY + (radius * (float)cos((double)angle));		
+    vectorY = originY + (radius * (float)cos((double)angle));
 
     v_arr[offset++] = originX;
     v_arr[offset++] = originY;
@@ -324,29 +440,65 @@ void JMFlatOpenGL::drawFilledCircle(float x, float y, float radius) {
     v_arr[offset++] = vectorY;
 
     vectorY1 = vectorY;
-    vectorX1 = vectorX;	
+    vectorX1 = vectorX;
   }
-    
+
+#ifdef USE_OPENGL_ES
+  if (!flatShader || !flatShader->isValid()) {
+    fprintf(stderr, "ERROR: Flat shader not initialized in drawFilledCircle\n");
+    return;
+  }
+
+  flatShader->use();
+  Matrix4 mvp = projectionMatrix.top() * modelViewMatrix.top();
+  flatShader->setMatrix4("uMVPMatrix", mvp.m);
+  flatShader->setVec4("uColor", currentColor[0], currentColor[1], currentColor[2], currentColor[3]);
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, offset * sizeof(float), v_arr);
+
+  GLint posLoc = flatShader->getAttribLocation("aPosition");
+  if (posLoc >= 0) {
+    glVertexAttribPointer(posLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(posLoc);
+  }
+
+  glDrawArrays(GL_TRIANGLES, 0, offset/2);
+
+  if (posLoc >= 0) glDisableVertexAttribArray(posLoc);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+#else
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_FLOAT , 0, v_arr);
   glDrawArrays(GL_TRIANGLES, 0, offset/2);
+#endif
 }
 
 
 void JMFlatOpenGL::setBallColor(int color) {
+#ifdef USE_OPENGL_ES
+  if      (color == 0) { currentColor[0] = 1.0f; currentColor[1] = 0.0f; currentColor[2] = 0.0f; }
+  else if (color == 1) { currentColor[0] = 0.0f; currentColor[1] = 1.0f; currentColor[2] = 0.0f; }
+  else if (color == 2) { currentColor[0] = 1.0f; currentColor[1] = 1.0f; currentColor[2] = 0.0f; }
+  else if (color == 3) { currentColor[0] = 0.0f; currentColor[1] = 0.0f; currentColor[2] = 1.0f; }
+  else if (color == 4) { currentColor[0] = 1.0f; currentColor[1] = 0.0f; currentColor[2] = 1.0f; }
+  else if (color == 5) { currentColor[0] = 0.0f; currentColor[1] = 1.0f; currentColor[2] = 1.0f; }
+  currentColor[3] = 1.0f;
+#else
   if      (color == 0) glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
   else if (color == 1) glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
   else if (color == 2) glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
   else if (color == 3) glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
   else if (color == 4) glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
   else if (color == 5) glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
+#endif
 }
 
 #ifdef JUGGLESAVER_SUPPORT
 
 #include <math.h>
 
-static float ShoulderPos[3] = {/*0.95f*/ 0.45f, /*2.1f*/ 1.05f, 1.7f};
+static float ShoulderPos[3] = {0.45f, 1.05f, 1.7f};
 static float BallRadius = 5.0f;
 
 // Quick and dirty 2D stickman rendering of JuggleSaver patterns
@@ -355,22 +507,30 @@ void JMFlatOpenGL::renderJS(RENDER_STATE* pState) {
   PATTERN_INFO* pPattern = pState->pPattern;
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-  glMatrixMode(GL_PROJECTION);	
-  glLoadIdentity();
-#ifdef OPENGL_ES_SUPPORT
-  glOrthof(-width/2, width/2, -height/2, height/2, -10.0f, 10.0f);
-#else
-  glOrtho(-width/2, width/2, -height/2, height/2, -10.0f, 10.0f);
-#endif
-
   glClear(GL_COLOR_BUFFER_BIT);
+
+#ifdef USE_OPENGL_ES
+  projectionMatrix.loadIdentity();
+  Matrix4 projMat = ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -10.0f, 10.0f);
+  projectionMatrix.multiply(projMat);
+
+  modelViewMatrix.loadIdentity();
+  modelViewMatrix.scale(zoomFactorX, zoomFactorY, 1.0f);
+
+  currentColor[0] = 1.0f;
+  currentColor[1] = 1.0f;
+  currentColor[2] = 1.0f;
+  currentColor[3] = 1.0f;
+#else
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(-width/2, width/2, -height/2, height/2, -10.0f, 10.0f);
 
   // Scale to fit full window
   glScalef(zoomFactorX, zoomFactorY, 0.0f);
 
-  glColor4f(255.0f, 255.0f, 255.0f, 1.0f);
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+#endif
 
 	drawArmJS(pState, Time, true);
 	drawArmJS(pState, Time, false);
@@ -420,7 +580,7 @@ void JMFlatOpenGL::resetJS(const char* site) {
 
 void JMFlatOpenGL::drawArmJS(RENDER_STATE* pState, float TimePos, bool is_left) {
   POS Pos;
-    
+
   GetHandPosition(pState->pPattern, is_left, TimePos, &Pos);
 
 	// hand

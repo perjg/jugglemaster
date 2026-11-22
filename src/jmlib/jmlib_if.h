@@ -17,7 +17,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
  * Modified BSD License for more details.
- */ 
+ */
 
 #ifndef JMLIB_IF_H
 #define JMLIB_IF_H
@@ -31,17 +31,19 @@ enum engine_t {
 // Rendering engine
 enum rendering_t {
   RENDERING_NONE = 0,  // no internal rendering done
-  RENDERING_OPENGL_2D, // OpenGL 2D rendering 
+  RENDERING_OPENGL_2D, // OpenGL 2D rendering
   RENDERING_OPENGL_3D, // OpenGL rendering using the JuggleSaver rendering engine
 };
 
 // Object types
 enum object_type_t {
-  OBJECT_TYPE_DEFAULT = 0,
+  OBJECT_TYPE_DEFAULT = 0,  // Balls for JuggleMaster, pattern default for JuggleSaver
   OBJECT_TYPE_BALL,
   OBJECT_TYPE_CLUB,
   OBJECT_TYPE_RING,
   OBJECT_TYPE_MIXED,
+  OBJECT_TYPE_RANDOM,
+  OBJECT_TYPE_FISH,
 };
 
 class JuggleMaster;
@@ -66,7 +68,7 @@ public:
   struct ball rhand,lhand;
   struct hand handpoly;
   struct ball b[BMAX];
-  
+
   JML_INT32 dpm;
   JML_INT32 gx_max, gx_min, gy_max, gy_min;
   JML_INT32 imageWidth, imageHeight;
@@ -83,7 +85,7 @@ public:
   virtual void setErrorCallback(ERROR_CALLBACK* _cb) {
     cb = _cb;
   }
-  
+
   virtual void setErrorCallback(void *aUData, void (*aCallback)(void *, JML_CHAR *)) {
     mUData = aUData;
     use_cpp_callback = 1;
@@ -103,24 +105,24 @@ public:
   // END error callback support
 
   virtual ~JMLib() {}
-  
+
   /** Initialize the rendering engine.
    * For JuggleMaster class instances, this has no effect.
    * Should be called after an OpenGL rendering surface has been initialized
    */
   virtual void initialize() = 0;
-  
+
   /** Shutdown */
   virtual void shutdown() = 0;
 
   /* Get the currently active juggling engine */
   virtual engine_t getType() = 0;
-  
+
   /** Render the current frame.
    * For JuggleMaster class instances, this has no effect.
    */
   virtual void render() {}
-  
+
   /** Set the current pattern to be juggled.
    * @param name  Name of the pattern. Can be any valid string
    * @param site  The siteswap to juggle.
@@ -136,9 +138,9 @@ public:
    *
    * To force rendering a pattern using JuggleSaver, call setStyle("JuggleSaver") after calling setPattern
    */
-  virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF) = 0;
-  virtual JML_BOOL setPattern(JML_CHAR* site) = 0;
-  
+  virtual JML_BOOL setPattern(const JML_CHAR* name, const JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF) = 0;
+  virtual JML_BOOL setPattern(const JML_CHAR* site) = 0;
+
   /** Set the style of the currently juggled pattern.
    * @param name   Name of the style
    * @param length Length of the style
@@ -151,8 +153,8 @@ public:
    *
    * JuggleSaver ignores styles.
    */
-  virtual JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0) = 0;
-  
+  virtual JML_BOOL setStyle(const JML_CHAR* name, JML_UINT8 length, const JML_INT8* data, JML_INT32 offset = 0) = 0;
+
   /** Set a built-in style for the currently juggled pattern.
    * Supported styles are: Normal, Reverse, Shower, Mills Mess, Center, Windmill, Random
    * and JuggleSaver.
@@ -168,8 +170,8 @@ public:
    * be ignored if the current pattern is not a valid JuggleSaver pattern (i.e. a sync or multiplex
    * site)
    */
-  virtual JML_BOOL setStyle(JML_CHAR* name) = 0;
-  
+  virtual JML_BOOL setStyle(const JML_CHAR* name) = 0;
+
   /** Get an array containing all built-in styles */
   virtual JML_CHAR **getStyles(void) = 0;
   /** Get the number of available built-in styles */
@@ -190,10 +192,10 @@ public:
 
   /** Get the amount of items in the current pattern */
   virtual JML_INT32 numBalls(void) = 0;
-  
+
   /** Set the scaling method to use. JuggleMaster only.
    * SCALING_METHOD_CLASSIC - The default scaling in JuggleMaster. Gives good results in general, but
-   *   works poorly for small screen resolutions (below aprox. 320x320). When resizing the screen, 
+   *   works poorly for small screen resolutions (below aprox. 320x320). When resizing the screen,
    *   the current pattern will be reset.
    * SCALING_METHOD_DYNAMIC - More intelligent scaling that makes sure all objects stay inside the screen
    *   for most patterns. Supports resizing the screen without resetting the current pattern.
@@ -227,30 +229,34 @@ public:
    * Timing is controlled internally. The calling application can call doJuggle
    * at a fixed rate (typically the maximum desired frame rate). Timing is controlled
    * through the set/getSpeed functions only.
-   * 
+   *
    * By turning on the define JUGGLEMASTER_NEW_TIMING, instances of JuggleMaster will
    * also use internal timing. This define has no effect for instances of JuggleSaver
    * or JMLibWrapper
    */
   virtual JML_INT32 doJuggle(void) = 0;
 
+  /** Pins the animation clock so each doJuggle advances a deterministic amount
+   * (for reproducible test frames). 0 restores wall-clock timing. */
+  virtual void setFixedFrameRate(float fps) {}
+
   /** Sets the window size. This should be called every time the window used for rendering
    * changes size. */
   virtual JML_BOOL setWindowSize(JML_INT32 width, JML_INT32 height) = 0;
-  
+
   /** Sets the window size to (480,400) which is the default JuggleMaster window size. */
   virtual void     setWindowSizeDefault() { setWindowSize(480, 400); }
-  
+
   /** Set mirroring on/off. With mirroring on, the entire pattern is mirrored.
    * JuggleSaver ignores mirroring */
   virtual void setMirror(JML_BOOL mir = true) = 0;
 
   /** Returns the current siteswap (or pattern) */
-  virtual JML_CHAR* getSite(void) = 0;
+  virtual const JML_CHAR* getSite(void) = 0;
   /** Returns the name of the current pattern */
-  virtual JML_CHAR* getPattName(void) = 0;
+  virtual const JML_CHAR* getPattName(void) = 0;
   /** Returns the name of the current style */
-  virtual JML_CHAR* getStyle(void) = 0;
+  virtual const JML_CHAR* getStyle(void) = 0;
 
   /** Gets the current window width */
   virtual JML_INT32 getImageWidth() = 0;
@@ -264,12 +270,12 @@ public:
   virtual void setSpeed(float s) = 0;
   virtual float speed(void) = 0;
 
-  /** Gets the position of the active throw. 
+  /** Gets the position of the active throw.
    * Use these functions to implement highlighting of the current throw */
   virtual JML_CHAR  getSiteposStart(void) = 0;
   virtual JML_CHAR  getSiteposStop(void) = 0;
   virtual JML_INT32 getSiteposLen(void) = 0;
-  
+
   /** Gets ball radius */
   virtual JML_INT32 getBallRadius(void) = 0;
 
@@ -290,30 +296,35 @@ public:
 	virtual void trackballTrack(JML_INT32 x, JML_INT32 y) {}
 	virtual void trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal = false) {}
 	virtual void resetCamera() {}
+	virtual void setCameraAngle(JML_FLOAT spinAngle, JML_FLOAT translateAngle = 0.0f, JML_FLOAT elevation = 0.0f) {}
+	virtual void orbitCamera(JML_FLOAT deltaNormX, JML_FLOAT deltaNormY) {}
 	virtual void zoom(float zoom) {}
+	virtual void resetZoom() {}
+	virtual float getZoom() { return 0.0f; }
 	virtual void move(float deltaX, float deltaY) {}
   virtual void toggleAutoRotate() {}
   virtual void setAutoRotate(JML_BOOL on) {}
   virtual void setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT translateSpeed) {}
-  
+  virtual JML_BOOL getAutoRotate() { return true; }
+
   /** Camera save and load support
    * Reserved future functionality: Not implemented yet
    */
   virtual camera* getCamera() { return NULL; }
   virtual void setCamera(camera* cam) {}
   virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, camera* cam, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF) { return FALSE; }
-  
+
   /** Set the rendering mode. Only valid for JMLibWrapper.
    * Use to toggle between 3D and classic 2D rendering
    */
   virtual void setRenderingMode(rendering_t mode) {}
-  
+
   /** Get the current rendering mode. Only valid for JMLibWrapper. */
   virtual rendering_t getRenderingMode() { return RENDERING_NONE; }
-  
+
   /** Toggle render mode between 2D and 3D. No effect if rendering mode is RENDERING_NONE. Only valid for JMLibWrapper. */
   virtual void toggleRenderingMode() {}
-  
+
   /** Set the objects to juggle.
    * OBJECT_TYPE_DEFAULT: JuggleMaster, select object type by random
    *                      JuggleSaver, use whatever is specified in the pattern
@@ -325,7 +336,7 @@ public:
    * This function switches the objects used immediately, even in the middle of a pattern
    */
   virtual void setObjectType(object_type_t type) {}
-  
+
   virtual object_type_t getObjectType() { return OBJECT_TYPE_DEFAULT; }
 };
 

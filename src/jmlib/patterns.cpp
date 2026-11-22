@@ -17,7 +17,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
  * Modified BSD License for more details.
- */ 
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -43,31 +43,31 @@ From the default patterns.jm:
 #endif
 
 // parse and combine JuggleMaster and JuggleSaver patterns
-int ParseAllPatterns(FILE *jm_input, FILE* js_input, 
+int ParseAllPatterns(FILE *jm_input, FILE* js_input,
 	struct groups_t *groups, struct styles_t *styles) {
   int jm = ParsePatterns(jm_input, groups, styles);
   if (!jm) return 0;
 
-#ifdef JUGGLESAVER_SUPPORT  
+#ifdef JUGGLESAVER_SUPPORT
   if (!js_input) return 1;
-  
+
   struct pattern_group_t* last = groups->first;
-  
+
   while (last->next != NULL) last = last->next;
-  
+
   struct groups_t *js_groups = new groups_t;
   js_groups->first = NULL;
-  
+
   int js = ParseJSPatterns(js_input, js_groups);
   if (!js) { delete js_groups; return 0; }
-  
+
   last->next = js_groups->first;
   delete js_groups;
 #endif
   return 1;
 }
 
-int ParsePatterns(FILE *input, 
+int ParsePatterns(FILE *input,
 	struct groups_t *groups, struct styles_t *styles) {
 
 	float currhr,currdr;
@@ -159,15 +159,15 @@ int ParsePatterns(FILE *input,
 			group->name[strlen(current_group)] = '\0';
 			group->first_patt = NULL;
 			group->next = NULL;
-		} else if(sscanf(buf, "%%%255[^\n]",current_style) == 1) {
-			/* New Style */
-			if(current_style && *current_style) {
-				if(Find_Style(styles,current_style) != NULL) {
-					continue;
-				}
-			} else {
-				strcpy(current_style,"Normal\0");
+	} else if(sscanf(buf, "%%%255[^\n]",current_style) == 1) {
+		/* New Style */
+		if(*current_style) {
+			if(Find_Style(styles,current_style) != NULL) {
 				continue;
+			}
+		} else {
+			strcpy(current_style,"Normal\0");
+			continue;
 			}
 
 			newstyle = new style_t;
@@ -248,7 +248,7 @@ int ParsePatterns(FILE *input,
 			patt->hr = currhr;
 			patt->dr = currdr;
 			patt->ga = currga;
-			patt->sp = currsp;	
+			patt->sp = currsp;
 			patt->bgred = currbgred;
 			patt->bggreen = currbggreen;
 			patt->bgblue = currbgblue;
@@ -404,7 +404,7 @@ const JML_UINT8 Style_GetLength(struct style_t *s) {
 
 struct style_t *Find_Style(styles_t *style_list, const char *name) {
 	struct style_t *styles;
-	
+
 	if(style_list == NULL || name == NULL || style_list->first == NULL) return NULL;
 	styles = style_list->first;
 	while(styles) {
@@ -461,7 +461,7 @@ int main(int argc, char *argv[]) {
 			printf("Group Data\n");
 			while(groups) {
 				printf(" Group Name: %s\n",Group_GetName(groups));
-		
+
 				patterns = Group_GetPatterns(groups);
 				while(patterns) {
 					printf("  Pattern Name: %s\n",Patt_GetName(patterns));
@@ -492,7 +492,7 @@ int main(int argc, char *argv[]) {
 						printf("}{");
 					}
 					printf(" %i",Style_GetData(styles)[i]);
-	
+
 					if ((i%4) == 0 || (i%4) == 2) {
 						printf(", ");
 					} else if ((i%4) == 3) {

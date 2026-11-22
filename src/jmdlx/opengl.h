@@ -11,7 +11,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the GNU
  * General Public License for more details.
- */ 
+ */
 
 #ifndef OPENGL_H
 #define OPENGL_H
@@ -52,13 +52,29 @@ public:
   void disableAutoRotate() { jmlib->setAutoRotate(false); }
 
   void ballColors(bool on);
+
+  void initializeGL();
+  void renderNow();  // Render immediately without waiting for paint event
+  void updateSiteswapDisplay();  // Update siteswap overlay text
+  void setShowSiteswap(bool show) { m_showSiteswap = show; }
 private:
   JMFrame* parent;
   JMLib* jmlib;
+  wxGLContext* m_context;
 
   long cur_x;
   long cur_y;
   bool toggleRotate;
+  bool m_initialized;
+  bool m_showSiteswap;  // Whether to show siteswap overlay
+  wxPanel* siteswapOverlayPanel;  // Panel containing siteswap overlay text widgets
+  wxStaticText* siteswapBefore;    // Text before active part
+  wxStaticText* siteswapActive;    // Active part (highlighted in red)
+  wxStaticText* siteswapAfter;     // Text after active part
+
+  wxPanel* cameraPresetsPanel;
+  wxButton* cameraPresetButtons[5];
+  void updateCameraPresetsPosition();
 
   void SetBallColor(int color);
   DECLARE_EVENT_TABLE()

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JuggleMaster Test Harness</title>
+    <style>
+        body { margin: 0; background: #000; }
+        #canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script>
+        var Module = {
+            canvas: document.getElementById('canvas'),
+            onRuntimeInitialized: function() {
+                Module._jm_init(800, 600);
+                // Consume the wrapper's first-frame engine switch-back before
+                // any pattern is set (it would override engine selection)
+                Module._jm_render();
+                // Same JS task as jm_init: the rAF loop never gets a free frame
+                Module._jm_set_paused(1);
+                Module._jm_set_fixed_framerate(60.0);
+                console.log('Test harness ready. Use setPattern(), setRenderMode(), setStyle(), stepFrames()');
+            }
+        };
+
+        // Helper functions for tests
+        function setPattern(site) {
+            var name = site + ' pattern';
+            Module.ccall('jm_set_pattern', null, ['string', 'string'], [name, site]);
+        }
+
+        function setRenderMode(mode) {
+            // 0=NONE, 1=2D, 2=3D
+            Module._jm_set_render_mode(mode);
+        }
+
+        function setStyle(style) {
+            Module.ccall('jm_set_style', null, ['string'], [style]);
+        }
+
+        // n frames at the pinned 60 fps clock always yields the same image
+        function stepFrames(n) {
+            Module._jm_step_frames(n);
+        }
+
+        function resumeAnimation() {
+            Module._jm_set_fixed_framerate(0.0);
+            Module._jm_set_paused(0);
+        }
+    </script>
+    <script src="jmwasm.js"></script>
+</body>
+</html>

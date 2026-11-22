@@ -1,7 +1,7 @@
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.1
- * Copyright (c) Per Johan Groland 2000-2008, Gary Briggs 2003
+ * Version 3.0
+ * Copyright (c) Per Johan Groland 2000-2008, 2025-2026, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
@@ -17,7 +17,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
  * Modified BSD License for more details.
- */ 
+ */
 
 #include "js_validator.h"
 #include "../validator.h"
@@ -73,13 +73,13 @@ bool JSValidator::validateVSS(char* site) {
     x = siteDigit(site[i]);
 
 		if (x == -1) {
-			delete ls;	
+			delete ls;
 			return false;
 		}
 
     ls[(i+x)%len]--;
   }
-  
+
   for (i = 0; i < len; i++) {
     if (ls[i] != 0) {
       ret = false;
@@ -114,7 +114,7 @@ bool JSValidator::validateJSPattern(char* patt) {
 bool JSValidator::isJSOnly(char* patt) {
   bool valid_js = validateJSPattern(patt);
   bool valid_jm = JMSiteValidator::validateSite(patt);
-  
+
   if (valid_js && !valid_jm)
     return true;
   return false;

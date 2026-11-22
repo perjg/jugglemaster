@@ -4,7 +4,7 @@ JMDlx:
 * Command-line named pattern
 * Keyboard shortcuts
 * Fix OSX proxy stuff
-* 
+*
 
 AAJM:
 * Find more stupid uses and add to webpage
@@ -41,7 +41,7 @@ NEW STUFF AND ENHANCEMENTS
 OpenGL Stuff
 * Add font support (pattern display & fps counter) (OPENGL_FONT_SUPPORT)
 * Rotate function
-* Load new pattern without changing 
+* Load new pattern without changing
 * Flat OpenGL rendering for JuggleMaster plus switching
 * Flat OpenGL rendering for JuggleSaver (?)
   (fixed camera, white background, black stick figure, balls only, no shadows)
@@ -73,7 +73,6 @@ Misc
 
 IFDEF documentation
 * JUGGLESAVER_SUPPORT - Turns on JuggleSaver support and JuggleSaver rendering engine
-* OPENGL_ES_SUPPORT - Compile all OpenGL functionality in OpenGL ES compatibility mode. Requires JUGGLESAVER_SUPPORT
 * JUGGLEMASTER_OPENGL_SUPPORT - Turns on flat OpenGL rendering for JuggleMaster. Automatically turned on with JUGGLESAVER_SUPPORT. Use this to get simple 2D OpenGL support without JuggleSaver compatibility
 * SMALL_MEMORY_DEVICE - Reduces memory requirement of JuggleMaster at the expense of losing compatibility for patterns with 630 balls. Should be unneccesary for most platforms, currently only used in the Palm OS version.
 
@@ -87,5 +86,3 @@ STUFF FOR THE FUTURE
 * Stop the juggler's arms crossing
 * Add "bugger up" feature where dude drops all the balls.
 * Add a sync-de-sync option (?)
-
-

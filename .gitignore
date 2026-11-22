@@ -1,0 +1,62 @@
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+
+# Compiled binaries
+src/jmdlx/jmdlx
+src/jmdlx/jmdlx-static
+src/jmdlx/patt
+
+# macOS application bundle
+src/jmdlx/JuggleMaster.app/
+
+# Pattern files (copied during build)
+src/jmdlx/*.jm
+src/jmdlx/moresites.txt
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Icon must end with two \r
+Icon
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Editor/IDE files
+*~
+*.swp
+*.swo
+.vscode/
+.idea/
+*.sublime-*
+
+# Core dumps
+core
+core.*
+
+# WebAssembly build artifacts
+src/jmwasm/jmwasm.html
+src/jmwasm/jmwasm.js
+src/jmwasm/jmwasm.wasm
+src/jmwasm/jmwasm.data

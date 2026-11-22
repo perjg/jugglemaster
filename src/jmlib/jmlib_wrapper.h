@@ -24,6 +24,8 @@
 
 #include "jugglesaver/jugglesaver.h"
 
+#include <vector>
+
 #ifdef GLFONT_SUPPORT
 #include "glfont/glfont.h"
 #endif
@@ -41,7 +43,7 @@ private:
   rendering_t render_mode;
 
   JMLibWrapper();
- 
+
   // OpenGL coordinates for JuggleMaster
   JUGGLEMASTER_RENDER_STATE jmState;
 	trackball_state* trackball;
@@ -52,9 +54,9 @@ private:
 
   int imageWidth, imageHeight;
 
-  float CurrentFrameRate;
-  unsigned FramesSinceSync;
-  unsigned LastSyncTime;
+  float fixedFrameRate;      // > 0 pins dt to 1/fps (deterministic test stepping)
+  unsigned lastFrameTime;    // wall clock of previous frame, microseconds
+  JML_BOOL haveLastFrameTime;
   float SpinSpeed;
   float TranslateSpeed;
   float SavedSpinSpeed;
@@ -65,19 +67,23 @@ private:
 
   JML_CHAR getHighestThrow(JML_CHAR* site, bool is_sss);
   void doCoordTransform(bool flipY = true, bool centerOrigin = false);
-  
+
   bool firstFrame;
-  static JML_CHAR *possible_styles[]; // Contains list of all possible styles
+  static const JML_CHAR *possible_styles[]; // Contains list of all possible styles
 
   int randomObjectType; // for default object type
   object_type_t objectType;
+  // Pattern-parsed object types, snapshotted before any override so that
+  // OBJECT_TYPE_DEFAULT can restore them without re-setting the pattern
+  std::vector<int> originalObjectTypes;
+  void captureOriginalObjectTypes();
   int getObjectTypeEx(int i);
 
 #ifdef GLFONT_SUPPORT
   GLFONT glFont;
   void renderFont();
 #endif
-  
+
 public:
   ~JMLibWrapper();
   virtual void initialize();
@@ -87,14 +93,14 @@ public:
 
   //virtual rendering_t getRenderingType() = 0;
   //virtual void setRenderingType(rendering_t r) = 0;
-  
+
   virtual void render();
 
-  virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
-  virtual JML_BOOL setPattern(JML_CHAR* site) { return setPattern(site, site); }
+  virtual JML_BOOL setPattern(const JML_CHAR* name, const JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
+  virtual JML_BOOL setPattern(const JML_CHAR* site) { return setPattern(site, site); }
   // fixme: Add a JuggleSaver style to force a pattern to juggle in JuggleSaver mode
-  virtual JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0);
-  virtual JML_BOOL setStyle(JML_CHAR* name);
+  virtual JML_BOOL setStyle(const JML_CHAR* name, JML_UINT8 length, const JML_INT8* data, JML_INT32 offset = 0);
+  virtual JML_BOOL setStyle(const JML_CHAR* name);
   virtual JML_CHAR **getStyles(void);
   virtual JML_INT32 numStyles();
   virtual void setPatternDefault(void);
@@ -114,13 +120,14 @@ public:
   virtual JML_INT32  getStatus(void);
 
   virtual JML_INT32 doJuggle(void);
+  virtual void setFixedFrameRate(float fps);
 
   virtual JML_BOOL setWindowSize(JML_INT32 width, JML_INT32 height);
   virtual void setMirror(JML_BOOL mir = true);
 
-  virtual JML_CHAR* getSite(void);
-  virtual JML_CHAR* getPattName(void);
-  virtual JML_CHAR* getStyle(void);
+  virtual const JML_CHAR* getSite(void);
+  virtual const JML_CHAR* getPattName(void);
+  virtual const JML_CHAR* getStyle(void);
 
   virtual JML_INT32 getImageWidth();
   virtual JML_INT32 getImageHeight();
@@ -142,19 +149,25 @@ public:
 	virtual void trackballTrack(JML_INT32 x, JML_INT32 y);
 	virtual void trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal = false);
 	virtual void resetCamera();
+	virtual void setCameraAngle(JML_FLOAT spinAngle, JML_FLOAT translateAngle = 0.0f, JML_FLOAT elevation = 0.0f);
+	virtual void orbitCamera(JML_FLOAT deltaNormX, JML_FLOAT deltaNormY);
 	virtual void zoom(float zoom);
+	virtual void resetZoom();
+	virtual float getZoom();
 	virtual void move(float deltaX, float deltaY);
   virtual void toggleAutoRotate();
   virtual void setAutoRotate(JML_BOOL on);
   virtual void setAutoRotate(JML_BOOL on, JML_FLOAT spinSpeed, JML_FLOAT translateSpeed);
-  
+  virtual JML_BOOL getAutoRotate() { return spin; }
+
   // misc rendering functionality
   virtual void setRenderingMode(rendering_t mode);
   virtual rendering_t getRenderingMode();
   virtual void toggleRenderingMode();
-  
+
   virtual void setObjectType(object_type_t type);
   virtual object_type_t getObjectType();
+  void applyObjectTypeOverride();
 };
 
 #endif

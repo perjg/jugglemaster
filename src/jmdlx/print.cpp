@@ -11,10 +11,10 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the GNU
  * General Public License for more details.
- */ 
+ */
 
 #include "print.h"
-#ifndef __WXMSW__   
+#ifndef __WXMSW__
 /*
 Not needed under Windows
 */
@@ -195,7 +195,7 @@ void Print::OnOK(wxCommandEvent &WXUNUSED(event)) {
 	}
 
 	if(do_change) {
-		jmlib->setWindowSize(oldwidth, 
+		jmlib->setWindowSize(oldwidth,
 			oldheight);
 
 		/* Just make sure it clears out any guff */
@@ -210,7 +210,7 @@ void Print::OnChooseFile(wxCommandEvent &WXUNUSED(event)) {
 	wxFileDialog filedialog(this, _T("Choose a File to Print to"),
 		lastpath, wxT(""),
 		_T("All Files|*"),
-		wxSAVE);
+		wxFD_SAVE);
 
 	if(filedialog.ShowModal() != wxID_OK) return;
 
@@ -230,7 +230,7 @@ int Print::printImage() {
 			wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
 
 	wxChoice *formatchoice = new wxChoice( &formatchooser, -1 );
-	
+
 	wxInitAllImageHandlers();
 
 	wxString fileextn;
@@ -241,7 +241,7 @@ int Print::printImage() {
 	HandlerList& handlers = (HandlerList&)wxImage::GetHandlers();
 	// wxList handlers = wxImage::GetHandlers();
 	// ArrayOfIH handlers = (ArrayOfIH&)wxImage::GetHandlers();
-	HandlerList::Node *node = handlers.GetFirst();
+	HandlerList::compatibility_iterator node = handlers.GetFirst();
 	wxString extn;
 	while(node) {
 		handler = (wxImageHandler *)node->GetData();
@@ -386,7 +386,7 @@ int Print::printPS(void) {
 		if(current_frames > max_iterations->GetValue()) done=1;
 
 		fprintf(outputfile, "erasepage\n");
-		fprintf(outputfile, "2 2 moveto\n"	
+		fprintf(outputfile, "2 2 moveto\n"
 				"( Site: %s  Style: %s  Balls: %i ) show\n",
 				jmlib->getSite(),
 				jmlib->getStyle(),
@@ -448,7 +448,7 @@ int Print::printPS(void) {
 
 
 		/* Left Hand */
-	
+
 		fprintf(outputfile, "%%Left Hand\n");
 		fprintf(outputfile, "newpath\n");
 		fprintf(outputfile, " %i %i moveto\n", lhand->gx + handp->lx[0],
@@ -609,7 +609,7 @@ int Print::printFlipBook(void) {
 				current_frames++;
 				jmlib->doJuggle();
 
-				fprintf(outputfile, "%i %i moveto\n"	
+				fprintf(outputfile, "%i %i moveto\n"
 					"( %i ) show\n",
 					(handed->GetStringSelection() == wxT("Right")?
 						f_offs_x + 20:
@@ -622,7 +622,7 @@ int Print::printFlipBook(void) {
 					f_offs_x += (jmlib->getImageWidth()/4);
 				}
 
-				fprintf(outputfile, "%i %i moveto\n"	
+				fprintf(outputfile, "%i %i moveto\n"
 					"( Site: %s  Style: %s  Balls: %i ) show\n",
 					f_offs_x + 4, f_offs_y + 4,
 					jmlib->getSite(),
@@ -685,7 +685,7 @@ int Print::printFlipBook(void) {
 
 
 				/* Left Hand */
-	
+
 				fprintf(outputfile, "%%Left Hand\n");
 				fprintf(outputfile, "newpath\n");
 				fprintf(outputfile, " %i %i moveto\n",

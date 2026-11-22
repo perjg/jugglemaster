@@ -17,7 +17,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
  * Modified BSD License for more details.
- */ 
+ */
 
 #include "jmlib.h"
 #include "sqlite_patterns.h"
@@ -27,7 +27,7 @@
 // JMPatternIterator
 pattern_t* JMPatternIterator::operator[] (unsigned int i) {
   pattern_t* temp = m_first;
-  
+
   while (i > 0 && temp) {
     i--;
     temp = temp->next;
@@ -44,7 +44,7 @@ pattern_t* JMPatternIterator::first() {
 
 pattern_t* JMPatternIterator::last() {
   pattern_t* temp = m_first;
-  
+
   while (temp->next) {
     temp = temp->next;
   }
@@ -107,7 +107,7 @@ void JMPatterns::createDB(const char* dbFileName) {
                       "author, hr, dr, object_count, cameradata REFERENCES CameraData);"
                     "DROP TABLE IF EXISTS Style;"
                     "CREATE TABLE Style (name PRIMARY KEY, data NOT NULL, length NOT NULL);";
-  
+
   char* zErr;
   int rc;
 
@@ -144,7 +144,7 @@ void JMPatterns::queryDB(const char* query) {
 void JMPatterns::addCategory(pattern_group_t* group) {
   // fixme: add index
   char* sql = sqlite3_mprintf("INSERT INTO Category VALUES (%Q)", group->name);
-  queryDB(sql);  
+  queryDB(sql);
   sqlite3_free(sql);
 }
 
@@ -173,10 +173,10 @@ void JMPatterns::addStyle(style_t* style) {
   char* data = new char[ style->length * 2 + 1];
   memset(data, 0, style->length * 2);
   char temp[4];
-  
+
   // pack data as hex values. Add 100 bias to make all style coordinates positive
   for (int i = 0; i < style->length; i++) {
-    sprintf(temp, "%02x", style->data[i] + 100);
+    snprintf(temp, sizeof(temp), "%02x", style->data[i] + 100);
     strcat(data, temp);
   }
 
@@ -195,7 +195,6 @@ void JMPatterns::initializeDatabase(const char* dbFilename, FILE* inJM, FILE* in
   groups.first = NULL;
 	styles_t styles;
   styles.first = NULL;
-  int result = false;
 
   createDB(dbFilename);
 
@@ -203,15 +202,15 @@ void JMPatterns::initializeDatabase(const char* dbFilename, FILE* inJM, FILE* in
 	if (!inJM && !inJS) return;
 
 	if (inJM && !inJS) {
-		result = ParsePatterns(inJM, &groups, &styles);
+		ParsePatterns(inJM, &groups, &styles);
   }
   else if (inJS && !inJM) {
 #ifdef JUGGLESAVER_SUPPORT
-    result = ParseJSPatterns(inJS, &groups);
+    ParseJSPatterns(inJS, &groups);
 #endif
   }
   else { // both
-    result = ParseAllPatterns(inJM, inJS, &groups, &styles);
+    ParseAllPatterns(inJM, inJS, &groups, &styles);
   }
 
 	pattern_group_t* cur_group = groups.first;
@@ -219,7 +218,7 @@ void JMPatterns::initializeDatabase(const char* dbFilename, FILE* inJM, FILE* in
 
 	while (cur_group) {
     addCategory(cur_group);
-  
+
 		cur_pattern = cur_group->first_patt;
 
 		while (cur_pattern) {
@@ -233,10 +232,10 @@ void JMPatterns::initializeDatabase(const char* dbFilename, FILE* inJM, FILE* in
 	style_t* cur_style = styles.first;
 
 	while (cur_style) {
-    addStyle(cur_style);  
+    addStyle(cur_style);
 		cur_style = cur_style->next;
 	}
-  
+
   /*
   // test
   pattern_t* patt = searchQuery("SELECT * FROM Pattern WHERE style LIKE 'JuggleSaver'");
@@ -266,12 +265,12 @@ style_t* JMPatterns::getStyle(const char* name) {
   if (!m_db) return NULL;
 
   char* sql = sqlite3_mprintf("SELECT * FROM Style WHERE name LIKE %Q", name);
-    
-  char** result; 
+
+  char** result;
   int nrows, ncols;
   char* zErr;
   int rc = sqlite3_get_table(m_db, sql, &result, &nrows, &ncols, &zErr);
-  
+
   if(rc != SQLITE_OK) {
     if (zErr != NULL) {
       fprintf(stderr, "SQL error: %s\n", zErr);
@@ -288,13 +287,13 @@ style_t* JMPatterns::getStyle(const char* name) {
   style->length = atoi(result[ncols+2]);
   style->data = new JML_INT8[style->length];
   memcpy(style->data, result[ncols+1], style->length);
-  
+
   // adjust for bias
   for (int i = 0; i < style->length; i++) {
     style->data[i] -= 100;
     //fprintf(stderr, "Data[%d] = %d\n", i, style->data[i]);
   }
-  
+
   sqlite3_free(sql);
   sqlite3_free_table(result);
   sqlite3_free(zErr);
@@ -305,22 +304,22 @@ pattern_t* JMPatterns::getCategory(const char* category) {
   char* sql = sqlite3_mprintf("SELECT * FROM Pattern WHERE category LIKE %Q", category);
   pattern_t* patt = searchQuery(sql);
   sqlite3_free(sql);
-  return patt;  
+  return patt;
 }
 
 pattern_group_t* JMPatterns::getCategories() {
   if (!m_db) return NULL;
 
-  char* sql = "SELECT * FROM Category";
+  const char* sql = "SELECT * FROM Category";
   pattern_group_t* first_group = NULL;
 	pattern_group_t* new_group = NULL;
   pattern_group_t* cur_group = NULL;
-  
-  char** result; 
+
+  char** result;
   int nrows, ncols;
   char* zErr;
   int rc = sqlite3_get_table(m_db, sql, &result, &nrows, &ncols, &zErr);
-  
+
   if(rc != SQLITE_OK) {
     if (zErr != NULL) {
       fprintf(stderr, "SQL error: %s\n", zErr);
@@ -334,7 +333,7 @@ pattern_group_t* JMPatterns::getCategories() {
 
   for(int i=0; i < nrows; i++) {
     char* name   = result[(i+1)*ncols];
-    
+
     new_group = new pattern_group_t;
     new_group->name = strdup(name);
     new_group->first_patt = NULL;
@@ -342,7 +341,7 @@ pattern_group_t* JMPatterns::getCategories() {
     new_group->prev = cur_group;
     new_group->index = i;
     new_group->pattern_group_count = nrows;
-    
+
     if (!first_group) {
       first_group = new_group;
       cur_group = new_group;
@@ -361,7 +360,7 @@ pattern_group_t* JMPatterns::getCategories() {
 //fixme: enter bug: jugglesaver not getting camera calculation?
 pattern_t* JMPatterns::loadPattern(const pattern_t* patt, int offset, JMLib* jm) {
   pattern_t* temp = (pattern_t*)patt;
-  
+
   while (offset > 0 && temp) {
     offset--;
     temp = temp->next;
@@ -382,10 +381,10 @@ pattern_t* JMPatterns::loadPattern(const pattern_t* patt, int offset, JMLib* jm)
     delete[] style;
   }
   else {
-    jm->setStyleDefault();  
+    jm->setStyleDefault();
   }
   jm->startJuggle();
-  
+
   return temp;
 }
 
@@ -421,12 +420,12 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
   pattern_t* first_patt = NULL;
 	pattern_t* new_patt = NULL;
   pattern_t* cur_patt = NULL;
-  
-  char** result; 
+
+  char** result;
   int nrows, ncols;
   char* zErr;
   int rc = sqlite3_get_table(m_db, query, &result, &nrows, &ncols, &zErr);
-  
+
   if(rc != SQLITE_OK) {
     if (zErr != NULL) {
       fprintf(stderr, "SQL error: %s\n", zErr);
@@ -441,12 +440,12 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
   for(int i=0; i < nrows; i++) {
     char* name   = result[(i+1)*ncols + 0];
     char* data   = result[(i+1)*ncols + 1];
-    char* cat    = result[(i+1)*ncols + 2];
+    // char* cat    = result[(i+1)*ncols + 2];
     char* style  = result[(i+1)*ncols + 3];
     char* author = result[(i+1)*ncols + 4];
     char* hr_c   = result[(i+1)*ncols + 5];
     char* dr_c   = result[(i+1)*ncols + 6];
-  
+
     new_patt = new pattern_t;
     new_patt->name = strdup(name);
     new_patt->data = strdup(data);
@@ -462,7 +461,7 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
     new_patt->index = i;
     new_patt->pattern_count = nrows;
     //fixme: add pointer to category
-    
+
     if (!first_patt) {
       first_patt = new_patt;
       cur_patt = new_patt;
@@ -472,7 +471,7 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
       cur_patt = new_patt;
     }
   }
-  
+
   sqlite3_free_table(result);
   sqlite3_free(zErr);
 
@@ -482,8 +481,6 @@ pattern_t* JMPatterns::searchQuery(const char* query) {
 
 void JMPatterns::freeSearchResult(pattern_t* patt) {
 	struct pattern_t *tmppatt = NULL;
-	struct pattern_group_t *group = NULL;
-	struct pattern_group_t *tmpgroup = NULL;
 
 	while (patt) {
 		if(patt->name != NULL) delete patt->name;

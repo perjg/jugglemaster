@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Local test data
+jugglemaster.net.zip

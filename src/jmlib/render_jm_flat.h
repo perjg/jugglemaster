@@ -17,7 +17,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
  * Modified BSD License for more details.
- */ 
+ */
 
 #ifndef OGL_RENDERER__HDR
 #define OGL_RENDERER__HDR
@@ -38,22 +38,12 @@
 #include "../jmwin/src/stdafx.h"
 #endif
 
-//fixme: add other applicable platforms here
-#ifdef __APPLE__
-#  ifdef __IPHONE__
-#    include <OpenGLES/EAGL.h>
-#    include <OpenGLES/ES1/gl.h>
-#    include <OpenGLES/ES1/glext.h>
-#    define OPENGL_ES_SUPPORT
-#  else
-#    include <OpenGL/gl.h>
-#    include <OpenGL/glu.h>
-#    include <OpenGL/glext.h>
-#  endif
-#else
-#  include <gl/gl.h>
-#  include <gl/glu.h>
-#  include <gl/glaux.h>
+// OpenGL headers
+#include "jugglesaver/gl_includes.h"
+
+#ifdef USE_OPENGL_ES
+#include "jugglesaver/shader_manager.h"
+#include "jugglesaver/matrix_stack.h"
 #endif
 
 #include <math.h>
@@ -61,6 +51,16 @@
 class JMFlatOpenGL {
 public:
 private:
+#ifdef USE_OPENGL_ES
+  // ES 3.0 rendering infrastructure
+  ShaderProgram* flatShader;
+  ShaderProgram* lineShader;
+  GLuint vao;
+  GLuint vbo;
+  MatrixStack projectionMatrix;
+  MatrixStack modelViewMatrix;
+  float currentColor[4];
+#endif
 
   struct GLBall {
     float gx, gy, gz;
@@ -109,6 +109,7 @@ private:
   void drawBall(float radius);
 public:
   JMFlatOpenGL(JMLib* jmlib_);
+  ~JMFlatOpenGL();
 
   void initialize(int width, int height);
   void resize(int width, int height);

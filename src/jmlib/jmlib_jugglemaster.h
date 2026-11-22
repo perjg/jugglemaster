@@ -17,7 +17,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
  * Modified BSD License for more details.
- */ 
+ */
 
 #ifndef JMLIB_JUGGLEMASTER_H
 #define JMLIB_JUGGLEMASTER_H
@@ -62,7 +62,7 @@ private:
   JML_CHAR pattname[LMAX]; // The name of the current pattern
   JML_INT8 steps[LMAX]; // used to print the site on screen
   JML_CHAR stylename[JML_MAX_NAMELEN]; // The name of the current style
-  static JML_CHAR *possible_styles[]; // Contains list of all possible styles
+  static const JML_CHAR *possible_styles[]; // Contains list of all possible styles
 
   // Scaling
   JML_INT32 scalingMethod;
@@ -101,11 +101,11 @@ public:
   virtual void shutdown();
 
   virtual engine_t getType() { return JUGGLING_ENGINE_JUGGLEMASTER; }
-  
-  virtual JML_BOOL setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
-  virtual JML_BOOL setPattern(JML_CHAR* site) { return setPattern(site, site); }
-  virtual JML_BOOL setStyle(JML_CHAR* name, JML_UINT8 length, JML_INT8* data, JML_INT32 offset = 0);
-  virtual JML_BOOL setStyle(JML_CHAR* name);
+
+  virtual JML_BOOL setPattern(const JML_CHAR* name, const JML_CHAR* site, JML_FLOAT hr = HR_DEF, JML_FLOAT dr = DR_DEF);
+  virtual JML_BOOL setPattern(const JML_CHAR* site) { return setPattern(site, site); }
+  virtual JML_BOOL setStyle(const JML_CHAR* name, JML_UINT8 length, const JML_INT8* data, JML_INT32 offset = 0);
+  virtual JML_BOOL setStyle(const JML_CHAR* name);
   virtual JML_CHAR **getStyles(void);
   virtual JML_INT32 numStyles();
   virtual void setPatternDefault(void);
@@ -117,7 +117,7 @@ public:
   virtual JML_FLOAT getDR();
 
   virtual JML_INT32 numBalls(void);
-  
+
   virtual void setScalingMethod(JML_INT32 scalingMethod);
 
   virtual void startJuggle(void);
@@ -133,9 +133,9 @@ public:
   virtual void     setWindowSizeDefault() { setWindowSize(480, 400); }
   virtual void setMirror(JML_BOOL mir = true);
 
-  virtual JML_CHAR* getSite(void) { return siteswap; }
-  virtual JML_CHAR* getPattName(void) { return pattname; }
-  virtual JML_CHAR* getStyle(void) { return stylename; }
+  virtual const JML_CHAR* getSite(void) { return siteswap; }
+  virtual const JML_CHAR* getPattName(void) { return pattname; }
+  virtual const JML_CHAR* getStyle(void) { return stylename; }
 
   virtual JML_INT32 getImageWidth();
   virtual JML_INT32 getImageHeight();
@@ -163,10 +163,10 @@ public:
   virtual JML_INT32 getiterations(void) {
     return (dpm); /* FIXME */
   }
-  
+
   virtual JML_INT32 getBallRadius(void);
 	virtual JML_BOOL isValidPattern(const char* patt);
-  
+
 #ifdef JUGGLEMASTER_OPENGL_SUPPORT
   virtual void setRenderingMode(rendering_t mode);
   virtual rendering_t getRenderingMode();

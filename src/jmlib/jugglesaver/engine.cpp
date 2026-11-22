@@ -1,5 +1,9 @@
 /* Juggler3D, Copyright (c) 2005-2008 Brian Apps <brian@jugglesaver.co.uk>
  *
+ * JMLib - Portable JuggleMaster Library
+ * Version 3.0
+ * Copyright (C) Per Johan Groland 2025-2026
+ *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
  * the above copyright notice appear in all copies and that both that copyright
@@ -13,7 +17,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
- 
+
 /*****************************************************************************
  *
  * Engine
@@ -27,18 +31,18 @@ extern "C" {
  * While in the air, the motion is governed by a standard parabolic trajectory.
  * The only minor complication is that the engine has no fixed concept of
  * gravity, instead it using a term called Alpha that varies according to the
- * pattern (see SetHeightAndAlpha). 
+ * pattern (see SetHeightAndAlpha).
  *
  * The motion while an object is carried comes from fitting a spline through the
  * catch and throw points and maintaining the catch and throw velocities at
  * each end.  In the simplest case this boils down to cubic Bezier spline.  The
- * only wrinkle occurs when a ball is being carried for a long time.  The simple 
+ * only wrinkle occurs when a ball is being carried for a long time.  The simple
  * cubic spline maths produces a curve that goes miles away -- here we do a
  * bit of reparameterisation so things stay within sensible bounds.
  * (On a related note, this scheme is _much_ simpler than the Juggle Saver
  * one.  Juggle Saver achieves 2nd order continuity and much care is taken
  * to avoid spline ringing.)
- * 
+ *
  * The motion of the hands is identical to the ball carrying code. It uses two
  * splines: one while an object is being carried; and another when it moves from
  * the previous throw to the next catch.
@@ -46,7 +50,7 @@ extern "C" {
 
 /* While a ball is thrown it twists slighty about an axis, this routine gives
  * the total about of twist for a given ball throw. */
- 
+
 float GetBallTwistAmount(const THROW_INFO* pThrow)
 {
     if (pThrow->FromPos.x > pThrow->ToPos.x)
@@ -86,7 +90,7 @@ POS InterpolatePosition(
 {
     POS p;
     float a, b, c, d, tt, tc;
-    
+
     /* The interpolation is based on a simple cubic that achieves 1st order
      * continuity at the end points.  However the spline can become too long if
      * the TLen parameter is large.  In this case we cap the curve's length (fix
@@ -94,14 +98,14 @@ POS InterpolatePosition(
      * conditions. */
 
     tc = CARRY_TIME;
-    
+
     if (TLen > tc)
     {
         /* The reparameterisation tt(t) gives:
          *  tt(0) = 0, tt(TLen) = tc, tt'(0) = 1, tt'(TLen) = 1
          * and means we can set t = tt(t), TLen = tc and then fall through
          * to use the normal cubic spline fit.
-         *    
+         *
          * The reparameterisation is based on two piecewise quadratics, one
          * that goes from t = 0 to t = TLen / 2 and the other, mirrored in
          * tt and t that goes from t = TLen / 2 to t = TLen.
@@ -117,17 +121,17 @@ POS InterpolatePosition(
          *   tt = (-B + (B ^ 2 + 4At) ^ 0.5) / 2A
          * or
          *   tt = ((1 + 4At) ^ 0.5 - 1) / 2A */
-        
+
         float A = 2.0f * (TLen - tc) / (tc * tc);
-        
+
         if (t > TLen / 2.0f)
             t = tc - (sqrtf(1.0f + 4.0f * A * (TLen - t)) - 1.0f) / (2.0f * A);
         else
             t = (sqrtf(1.0f + 4.0f * A * t) - 1.0f) / (2.0f * A);
-        
+
         TLen = tc;
     }
-    
+
     /* The cubic spline takes the form:
      *   P(t) = p0 * a(t) + v0 * b(t) + p1 * c(t) + v1 * d(t)
      * where p0 is the start point, v0 the start velocity, p1 the end point and
@@ -141,9 +145,9 @@ POS InterpolatePosition(
      *
      * statisfy the boundary conditions:
      *    P(0) = p0, P(TLen) = p1, P'(0) = v0 and P'(TLen) = v1  */
-    
+
     tt = t / TLen;
-    
+
     a = tt * tt * (2.0f * tt - 3.0f) + 1.0f;
     b = t * tt * (tt - 2.0f) + t;
     c = tt * tt * (3.0f - 2.0f * tt);
@@ -153,9 +157,9 @@ POS InterpolatePosition(
     p.y = a * pP0->y + b * pV0->y + c * pP1->y + d * pV1->y;
     p.z = a * pP0->z + b * pV0->z + c * pP1->z + d * pV1->z;
 
-    p.Rot = a * NormaliseAngle(pP0->Rot) + b * pV0->Rot + 
+    p.Rot = a * NormaliseAngle(pP0->Rot) + b * pV0->Rot +
         c * NormaliseAngle(pP1->Rot) + d * pV1->Rot;
-    p.Elev = a * NormaliseAngle(pP0->Elev) + b * pV0->Elev + 
+    p.Elev = a * NormaliseAngle(pP0->Elev) + b * pV0->Elev +
         c * NormaliseAngle(pP1->Elev) + d * pV1->Elev;
 
     return p;
@@ -176,14 +180,14 @@ POS InterpolateCarry(
 void GetHandPosition(
     PATTERN_INFO* pPattern, int RightHand, float Time, POS* pPos)
 {
-    OBJECT_POSITION* pObj = 
+    OBJECT_POSITION* pObj =
         RightHand == 0 ? &pPattern->LeftHand : &pPattern->RightHand;
     THROW_INFO* pLastThrow;
-    
+
     /* Upon entry, the throw information for the relevant hand may be out of
      * sync.  Therefore we advance through the pattern if required. */
 
-    while (pPattern->pThrowInfo[pObj->ThrowIndex].NextForHand + pObj->TimeOffset 
+    while (pPattern->pThrowInfo[pObj->ThrowIndex].NextForHand + pObj->TimeOffset
         <= (int) Time)
     {
         int w = pPattern->pThrowInfo[pObj->ThrowIndex].NextForHand;
@@ -207,24 +211,24 @@ void GetHandPosition(
         /* The hand is either moving to catch the next object or carrying the
          * next object to its next throw position.  The way THROW_INFO is
          * structured means the relevant information for the object we're going
-         * to catch is held at the point at which it was thrown 
+         * to catch is held at the point at which it was thrown
          * (pNextThrownFrom).  We can't go straight for it and instead have to
          * look at the object we've about to throw next and work out where it
          * came from. */
-        
+
         THROW_INFO* pNextThrow = &pPattern->pThrowInfo[
             (pObj->ThrowIndex + pLastThrow->NextForHand) % pPattern->ThrowLen];
-        
-        THROW_INFO* pNextThrownFrom = 
+
+        THROW_INFO* pNextThrownFrom =
             &pPattern->pThrowInfo[pNextThrow->PrevThrow];
-        
+
         /* tc is a measure of how long the object we're due to catch is being
          * carried for.  We use this to work out if we've actually caught it at
          * this moment in time. */
-        
-        float tc = CARRY_TIME + 
+
+        float tc = CARRY_TIME +
             pNextThrownFrom->TotalTime - pNextThrownFrom->TimeInAir;
-        
+
         Time -= pObj->TimeOffset;
 
         if (Time > pLastThrow->NextForHand - tc)
@@ -237,7 +241,7 @@ void GetHandPosition(
         {
             /* going for next catch */
             *pPos = InterpolatePosition(
-                &pLastThrow->FromPos, &pLastThrow->FromVelocity, 
+                &pLastThrow->FromPos, &pLastThrow->FromVelocity,
                 &pNextThrownFrom->ToPos, &pNextThrownFrom->ToVelocity,
                 pLastThrow->NextForHand - tc, Time);
         }
@@ -275,7 +279,7 @@ void GetObjectPosition(
 {
     OBJECT_POSITION* pObj = &pPattern->pObjectInfo[Obj];
     THROW_INFO* pThrow;
-    
+
     /* Move through the pattern, if required, such that pThrow corresponds to
      * the current throw for this object. */
 
@@ -284,9 +288,9 @@ void GetObjectPosition(
     {
         int w = pPattern->pThrowInfo[pObj->ThrowIndex].TotalTime;
         pObj->TimeOffset += w;
-        pObj->TotalTwist = NormaliseAngle(pObj->TotalTwist + 
+        pObj->TotalTwist = NormaliseAngle(pObj->TotalTwist +
             GetBallTwistAmount(&pPattern->pThrowInfo[pObj->ThrowIndex]));
-        
+
         pObj->ThrowIndex = (pObj->ThrowIndex + w) % pPattern->ThrowLen;
     }
 
@@ -309,16 +313,16 @@ void GetObjectPosition(
             float t, b;
 
             t = Time / tc;
-            
+
             OffsetHandlePosition(&pThrow->FromPos, HandleLen, &From);
             OffsetHandlePosition(&pThrow->ToPos, HandleLen, &To);
 
             b = (To.y - From.y) / tc + pPattern->Alpha * tc;
-            
+
             pPos->x = (1.0f - t) * From.x + t * To.x;
             pPos->z = (1.0f - t) * From.z + t * To.z;
             pPos->y = -pPattern->Alpha * Time * Time + b * Time + From.y;
-            
+
             if (pObj->ObjectType == OBJECT_BALL)
                 pPos->Rot = pObj->TotalTwist + t * BallTwist;
             else
@@ -394,13 +398,13 @@ void GetObjectPosition(
  * Basically we pick a height we'd like to see the biggest throw reach and then
  * adjust Alpha to meet this. */
 
-void SetHeightAndAlpha(PATTERN_INFO* pPattern, 
+void SetHeightAndAlpha(PATTERN_INFO* pPattern,
     const int* Site, const EXT_SITE_INFO* pExtInfo, int Len)
 {
     float H;
     int MaxW = 5;
     int i;
-    
+
     if (Site != NULL)
     {
         for (i = 0; i < Len; i++)
@@ -411,7 +415,7 @@ void SetHeightAndAlpha(PATTERN_INFO* pPattern,
         for (i = 0; i < Len; i++)
             MaxW = max(MaxW, pExtInfo[i].Weight);
     }
-    
+
     /* H is the ideal max height we'd like our objects to reach.  The formula
      * was developed by trial and error and was simply stolen from Juggle Saver.
      * Alpha is then calculated from the classic displacement formula:
@@ -421,7 +425,7 @@ void SetHeightAndAlpha(PATTERN_INFO* pPattern,
      * Finally we determine the proper height the max throw reaches since this
      * may not be H because capping may be applied (e.g. for max weights less
      * than 5). */
-    
+
     H = 8.0f * powf(MaxW / 2.0f, 0.8f) + 5.0f;
     pPattern->Alpha = (2.0f * H) / powf(max(5, MaxW) - CARRY_TIME, 2.0f);
     pPattern->Height = pPattern->Alpha * powf((MaxW - CARRY_TIME) * 0.5f, 2);
@@ -474,7 +478,7 @@ void GetDefaultToPosition(unsigned char Side, int Weight, POS* pPos)
     pPos->y = -0.5f;
 
     pPos->Rot = (Side ? -35.0f : 35.0f) * (Weight % 2 == 0 ? -1.0f : 1.0f);
-    
+
     if (Weight < 2)
         pPos->Elev = -30.0f;
 
@@ -490,14 +494,14 @@ void GetDefaultToPosition(unsigned char Side, int Weight, POS* pPos)
 
 /* Update the members of PATTERN_INFO for a given juggling pattern.  The pattern
  * can come from an ordinary siteswap (Site != NULL) or from a Juggle Saver
- * compatible pattern that contains, position and object info etc. 
+ * compatible pattern that contains, position and object info etc.
  * We assume that patterns are valid and have at least one object (a site of
  * zeros is invalid).  The ones we generate randomly are safe. */
 
 void InitPatternInfo(PATTERN_INFO* pPattern,
     const int* Site, const EXT_SITE_INFO* pExtInfo, int Len)
 {
-    /* Double up on the length of the site if it's of an odd length. 
+    /* Double up on the length of the site if it's of an odd length.
      * This way we can store position information: even indices are on one
      * side and odds are on the other. */
     int InfoLen = Len % 2 == 1 ? Len * 2 : Len;
@@ -505,21 +509,21 @@ void InitPatternInfo(PATTERN_INFO* pPattern,
     THROW_INFO* pInfo = (THROW_INFO*) calloc(InfoLen, sizeof(THROW_INFO));
     int Objects = 0;
     unsigned char* pUsed;
-    
+
     pPattern->MaxWeight = 0;
     pPattern->ThrowLen = InfoLen;
     pPattern->pThrowInfo = pInfo;
-    
+
     SetHeightAndAlpha(pPattern, Site, pExtInfo, Len);
 
     /* First pass through we assign the things we know about for sure just by
      * looking at the throw weight at this position.  This includes TimeInAir;
      * the throw and catch positions; and throw and catch velocities.
      * Other information, like the total time for the throw (i.e. when the
-     * object is thrown again) relies on how the rest of the pattern is 
+     * object is thrown again) relies on how the rest of the pattern is
      * structured and we defer this task for successive passes and just make
      * guesses at this stage. */
-    
+
     for (i = 0; i < InfoLen; i++)
     {
         float t1;
@@ -543,7 +547,7 @@ void InitPatternInfo(PATTERN_INFO* pPattern,
 
         /* calculate the velocity the object is moving at the start and end
          * points -- this information is used to interpolate the hand position
-         * and to determine how the object is moved while it's carried to the 
+         * and to determine how the object is moved while it's carried to the
          * next throw position.
          *
          * The throw motion is governed by a parabola of the form:
@@ -558,7 +562,7 @@ void InitPatternInfo(PATTERN_INFO* pPattern,
          * the throw weight minus the time spent carrying the object.  Then
          * perform the relevant substitutions into the above.
          * (note: y'(t) = y'(0) - 2.0 * alpha * t)
-         * 
+         *
          * The velocity in the x direction is constant and can be simply
          * obtained from:
          *   x' = (x1 - x0) / t1
@@ -567,13 +571,13 @@ void InitPatternInfo(PATTERN_INFO* pPattern,
 
         t1 = w - CARRY_TIME;
 
-        pInfo[i].FromVelocity.y = pPattern->Alpha * t1 + 
+        pInfo[i].FromVelocity.y = pPattern->Alpha * t1 +
             (pInfo[i].ToPos.y - pInfo[i].FromPos.y) / t1;
-        pInfo[i].ToVelocity.y = 
+        pInfo[i].ToVelocity.y =
             pInfo[i].FromVelocity.y - 2.0f * pPattern->Alpha * t1;
-        pInfo[i].FromVelocity.x = pInfo[i].ToVelocity.x = 
+        pInfo[i].FromVelocity.x = pInfo[i].ToVelocity.x =
             (pInfo[i].ToPos.x - pInfo[i].FromPos.x) / t1;
-        pInfo[i].FromVelocity.z = pInfo[i].ToVelocity.z = 
+        pInfo[i].FromVelocity.z = pInfo[i].ToVelocity.z =
             (pInfo[i].ToPos.z - pInfo[i].FromPos.z) / t1;
         pInfo[i].FromVelocity.Rot = pInfo[i].ToVelocity.Rot =
             (pInfo[i].ToPos.Rot - pInfo[i].FromPos.Rot) / t1;
@@ -636,7 +640,7 @@ void InitPatternInfo(PATTERN_INFO* pPattern,
              * over these until we reach the point where a ball is actually
              * thrown. */
             int Wait = 2;
-            while (pInfo[(i + Wait) % InfoLen].TimeInAir == 2 || 
+            while (pInfo[(i + Wait) % InfoLen].TimeInAir == 2 ||
                 pInfo[(i + Wait) % InfoLen].TimeInAir == 0)
             {
                 Wait += 2;
@@ -646,7 +650,7 @@ void InitPatternInfo(PATTERN_INFO* pPattern,
         else
         {
             /* Be careful to ensure the current weight isn't one we're trying
-             * to step over; otherwise we could potentially end up in an 
+             * to step over; otherwise we could potentially end up in an
              * infinite loop.  The value we assign may end up being used
              * in patterns with infinite gaps (e.g. 60) or infinite holds
              * (e.g. 62) in both cases, setting a wait of 2 ensures things
@@ -658,7 +662,7 @@ void InitPatternInfo(PATTERN_INFO* pPattern,
     /* Now work out the starting positions for the objects.  To do this we
      * unweave the initial throws so we can pick out the individual threads. */
 
-    pUsed = (unsigned char*) 
+    pUsed = (unsigned char*)
         malloc(sizeof(unsigned char) * pPattern->MaxWeight);
     pPattern->Objects = Objects;
     pPattern->pObjectInfo = (OBJECT_POSITION*) calloc(
@@ -677,7 +681,7 @@ void InitPatternInfo(PATTERN_INFO* pPattern,
             pPattern->pObjectInfo[Objects].ThrowIndex = i % InfoLen;
             pPattern->pObjectInfo[Objects].TotalTwist = 0.0f;
 
-            if (pExtInfo != NULL && 
+            if (pExtInfo != NULL &&
                 pExtInfo[i % Len].ObjectType != OBJECT_DEFAULT)
             {
                 pPattern->pObjectInfo[Objects].ObjectType =
@@ -691,12 +695,12 @@ void InitPatternInfo(PATTERN_INFO* pPattern,
 
         if (w + i < pPattern->MaxWeight)
             pUsed[w + i] = 1;
-        
+
     }
 
     pPattern->LeftHand.TimeOffset = pPattern->LeftHand.ThrowIndex = 0;
     pPattern->RightHand.TimeOffset = pPattern->RightHand.ThrowIndex = 1;
-    
+
     free(pUsed);
 }
 
@@ -716,7 +720,7 @@ void ReleasePatternInfo(PATTERN_INFO* pPattern)
 
 /* Generate a random site swap.  We assume that MaxWeight >= ObjCount and
  * Len >= MaxWeight. */
- 
+
 int* Generate(int Len, int MaxWeight, int ObjCount)
 {
     int* Weight = (int*) calloc(Len, sizeof(int));
@@ -727,7 +731,7 @@ int* Generate(int Len, int MaxWeight, int ObjCount)
 
     for (i = 0; i < Len; i++)
         Weight[i] = Used[i] = -1;
-    
+
     /* Pick out a unique the starting position for each object.  -2 is put in
      * the Used array to signify this is a starting position. */
 
@@ -743,7 +747,7 @@ int* Generate(int Len, int MaxWeight, int ObjCount)
         Used[Options[rand() % nOpts]] = -2;
         ObjCount--;
     }
-    
+
     /* Now work our way through the pattern moving throws into an available
      * landing positions. */
     for (i = 0; i < Len; i++)
@@ -756,7 +760,7 @@ int* Generate(int Len, int MaxWeight, int ObjCount)
         }
         else
         {
-            /* Work out the possible places where a throw can land and pick a 
+            /* Work out the possible places where a throw can land and pick a
              * weight at random. */
             int w;
             nOpts = 0;
@@ -766,17 +770,17 @@ int* Generate(int Len, int MaxWeight, int ObjCount)
                 if (Used[(i + j) % Len] == -1)
                     Options[nOpts++] = j;
             }
-            
+
             w = Options[rand() % nOpts];
             Weight[i] = w;
-            
+
             /* For starting throws make position available for a throw to land.
              * Because Len >= MaxWeight these positions will only be filled when
              * a throw wraps around the end of the site swap and therefore we
              * can guarantee the all the object threads will be tied up. */
             if (Used[i] == -2)
                 Used[i] = -1;
-            
+
             Used[(i + w) % Len] = 1;
         }
     }
@@ -809,7 +813,7 @@ unsigned char ParsePositionText(const char** ppch, POS* pPos, int min, int max)
     float* Nums[4];
     int i;
     int counter = 0;
-    
+
     Nums[0] = &pPos->x;
     Nums[1] = &pPos->y;
     Nums[2] = &pPos->Rot;
@@ -818,9 +822,9 @@ unsigned char ParsePositionText(const char** ppch, POS* pPos, int min, int max)
 
     while (*pch == ' ')
         pch++;
-    
+
     OK = *pch == '(';
-    
+
     if (OK)
         pch++;
 
@@ -856,7 +860,7 @@ unsigned char ParsePositionText(const char** ppch, POS* pPos, int min, int max)
     if (OK)
     {
         while (*pch == ' ')
-            pch++;        
+            pch++;
         if (*pch == ')')
             pch++;
         else
@@ -947,7 +951,7 @@ EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen)
                     OK = 0;
             }
         }
-        
+
         int HasFromPosition = 0;
 
         /* Parse from position */

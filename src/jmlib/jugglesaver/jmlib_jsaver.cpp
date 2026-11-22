@@ -1,7 +1,7 @@
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.1
- * Copyright (c) Per Johan Groland 2000-2008, Gary Briggs 2003
+ * Version 3.0
+ * Copyright (c) Per Johan Groland 2000-2008, 2025-2026, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
@@ -17,7 +17,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
  * Modified BSD License for more details.
- */ 
+ */
 
 #ifdef JUGGLESAVER_SUPPORT
 
@@ -27,22 +27,22 @@
 #include <time.h>
 #include "gltrackball.h"
 
-JML_CHAR *JuggleSaver::possible_styles[] = {
+const JML_CHAR *JuggleSaver::possible_styles[] = {
 	"JuggleSaver",
 };
 
 // Constructor / Destructor
-JuggleSaver::JuggleSaver()  : JuggleSpeed(3.0f), TranslateSpeed(0.0f), SpinSpeed(20.0f),
-  initialized(false), is_juggling(false), pattern(NULL), siteswap(NULL), pattname(NULL),
-  width_(480), height_(400), trackball(NULL), spin(TRUE), SavedSpinSpeed(20.0f),
-  SavedTranslateSpeed(0.0f) {
+JuggleSaver::JuggleSaver()  : initialized(false), is_juggling(false), width_(480), height_(400),
+  trackball(NULL), SpinSpeed(0.0f), TranslateSpeed(0.0f), SavedSpinSpeed(20.0f),
+  SavedTranslateSpeed(0.0f), spin(FALSE), JuggleSpeed(JS_SPEED_DEF), pattern(NULL), siteswap(NULL),
+  pattname(NULL) {
   // NOTE:
   // initialize cannot be called from the constructor, because it requires an OpenGL
   // context. It must be called manually after creating the OpenGL context.
-  
-  CurrentFrameRate = 1.0f;
-  FramesSinceSync = 0;
-  LastSyncTime = 0;
+
+  fixedFrameRate = 0.0f;
+  lastFrameTime = 0;
+  haveLastFrameTime = FALSE;
 }
 
 JuggleSaver::~JuggleSaver() {
@@ -54,7 +54,7 @@ JuggleSaver::~JuggleSaver() {
 
 void JuggleSaver::initialize() {
   if (initialized) return;
-  
+
   setWindowSize(width_, height_);
   InitGLSettings(&state, FALSE);
 	state.trackball = gltrackball_init();
@@ -83,15 +83,16 @@ void JuggleSaver::shutdown() {
 
 JML_BOOL JuggleSaver::applyPattern() {
   if (siteswap == NULL) setPatternDefault();
-  SetPattern(&state, siteswap);
+  // Use full JuggleSaver pattern (with object types) when available
+  SetPattern(&state, pattern ? pattern : siteswap);
 	return 1;
 }
-  
-JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
+
+JML_BOOL JuggleSaver::setPattern(const JML_CHAR* name, const JML_CHAR* site, JML_FLOAT hr, JML_FLOAT dr) {
   if (name == NULL || site == NULL) return false;
 
-  if (!JSValidator::validateJSPattern(site)) {
-    error("Invalid pattern");
+  if (!JSValidator::validateJSPattern(const_cast<JML_CHAR*>(site))) {
+    error(const_cast<JML_CHAR*>("Invalid pattern"));
     return false;
   }
 
@@ -109,10 +110,14 @@ JML_BOOL JuggleSaver::setPattern(JML_CHAR* name, JML_CHAR* site, JML_FLOAT hr, J
   siteswap = new JML_CHAR[strlen(s)+1];
   strcpy(siteswap, s);
 	free(s);
-  
+
 	if (initialized) {
+		// Recenter for the new pattern but keep the auto-rotate preference
+		// (resetCamera forces it on)
+		JML_BOOL prevSpin = spin;
 		resetCamera();
-		SetPattern(&state, site);
+		setAutoRotate(prevSpin);
+		SetPattern(&state, const_cast<JML_CHAR*>(site));
 	}
 
 	return true;
@@ -158,59 +163,58 @@ JML_INT32 JuggleSaver::doJuggle(void) {
   if (!initialized) return 0;
 
   if (!is_juggling) {
-    FramesSinceSync = 0;
+    // Restart timing on resume so the paused span is not stepped over
+    haveLastFrameTime = FALSE;
     return 0;
   }
 
-  /* While drawing, keep track of the rendering speed so we can adjust the
-  * animation speed so things appear consistent.  The basis of the this
-  * code comes from the frame rate counter (fps.c) but has been modified
-  * so that it reports the initial frame rate earlier (after 0.02 secs
-  * instead of 1 sec).
-  */
-  if (FramesSinceSync >=  1 * (unsigned int) CurrentFrameRate) {
+  float dt;
+  if (fixedFrameRate > 0) {
+    // Pinned clock: each frame advances exactly 1/fps (deterministic tests)
+    dt = 1.0f / fixedFrameRate;
+  }
+  else {
     struct timeval tvnow;
     unsigned now;
-            
+
     # ifdef GETTIMEOFDAY_TWO_ARGS
       struct timezone tzp;
       gettimeofday(&tvnow, &tzp);
     # else
             gettimeofday(&tvnow);
     # endif
-        
+
     now = (unsigned) (tvnow.tv_sec * 1000000 + tvnow.tv_usec);
 
-    if (FramesSinceSync == 0) {
-      LastSyncTime = now;
+    if (!haveLastFrameTime) {
+      dt = 0.0f;
+      haveLastFrameTime = TRUE;
     }
     else {
-      unsigned Delta = now - LastSyncTime;
-      if (Delta > 20000) {
-        LastSyncTime = now;
-        CurrentFrameRate = (FramesSinceSync * 1.0e6f) / Delta;
-        FramesSinceSync = 0;
-      }
+      dt = (now - lastFrameTime) * 1.0e-6f;
+      // Clamp so stalls (background tab, debugger) don't cause catch-up bursts
+      if (dt > 0.1f) dt = 0.1f;
     }
+    lastFrameTime = now;
   }
-    
-  FramesSinceSync++;
-    
-  //if (CurrentFrameRate > 0.001f /*1.0e-6f*/) {
-  if (CurrentFrameRate > 1.0e-6f) {
-    state.Time += JuggleSpeed / CurrentFrameRate;
-		state.SpinAngle += SpinSpeed / CurrentFrameRate;
-		state.TranslateAngle += TranslateSpeed / CurrentFrameRate;
-  }
-    
+
+  state.Time += JuggleSpeed * dt;
+  state.SpinAngle += SpinSpeed * dt;
+  state.TranslateAngle += TranslateSpeed * dt;
+
 	return 1;
+}
+
+void JuggleSaver::setFixedFrameRate(float fps) {
+  fixedFrameRate = fps;
+  // Wall-clock stepping restarts cleanly when unpinned
+  haveLastFrameTime = FALSE;
 }
 
 JML_BOOL JuggleSaver::setWindowSize(JML_INT32 width, JML_INT32 height) {
   width_ = width;
   height_ = height;
   if (initialized) ResizeGL(&state, width_, height_);
-  FramesSinceSync = 0;
   return TRUE;
 }
 
@@ -231,7 +235,7 @@ void JuggleSaver::speedDown(void) {
 }
 
 void JuggleSaver::speedReset(void) {
-  JuggleSpeed = 2.2f;
+  JuggleSpeed = JS_SPEED_DEF;
 }
 
 void JuggleSaver::setSpeed(float s) {
@@ -251,7 +255,7 @@ JML_INT32 JuggleSaver::getBallRadius(void) {
 }
 
 JML_CHAR **JuggleSaver::getStyles(void) {
-  return possible_styles;
+  return const_cast<JML_CHAR**>(possible_styles);
 }
 
 JML_INT32 JuggleSaver::numStyles(void) {
@@ -275,15 +279,37 @@ void JuggleSaver::trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal) {
 	gltrackball_mousewheel(trackball, 4, percent, horizontal);
 }
 
+void JuggleSaver::orbitCamera(JML_FLOAT deltaNormX, JML_FLOAT deltaNormY) {
+    const float sensitivity = 180.0f;
+    state.SpinAngle += deltaNormX * sensitivity;
+    state.orbitElevation += deltaNormY * sensitivity;
+    if (state.orbitElevation > 89.0f)  state.orbitElevation = 89.0f;
+    if (state.orbitElevation < -89.0f) state.orbitElevation = -89.0f;
+}
+
 void JuggleSaver::resetCamera() {
 	gltrackball_reset(trackball);
 	ResetZoom(&state);
+  // Reset rotation angles to initial state (0.0f)
+  state.SpinAngle = 0.0f;
+  state.TranslateAngle = 0.0f;
+  state.orbitElevation = 0.0f;
+  // Restore auto-rotate to initial ON state
+  spin = TRUE;
   SpinSpeed = SavedSpinSpeed;
   TranslateSpeed = SavedTranslateSpeed;
 }
 
 void JuggleSaver::zoom(float zoom) {
 	Zoom(&state, zoom);
+}
+
+void JuggleSaver::resetZoom() {
+	ResetZoom(&state);
+}
+
+float JuggleSaver::getZoom() {
+	return GetCameraExtraZoom();
 }
 
 void JuggleSaver::move(float deltaX, float deltaY) {

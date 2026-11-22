@@ -1,7 +1,7 @@
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.1
- * Copyright (c) Per Johan Groland 2000-2008, Gary Briggs 2003
+ * Version 3.0
+ * Copyright (c) Per Johan Groland 2000-2008, 2025-2026, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
@@ -17,7 +17,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
  * Modified BSD License for more details.
- */ 
+ */
 
 #ifndef JS_VALIDATOR__HDR
 #define JS_VALIDATOR__HDR
@@ -31,7 +31,7 @@ class JSValidator {
   static int siteDigit(char s);
   static char siteChar(int c);
   static int getBallCount();
-  
+
   // Validate a Vanilla siteswap
   static bool validateVSS(char* site);
   // validate a JuggleSaver pattern

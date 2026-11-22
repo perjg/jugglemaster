@@ -6,7 +6,7 @@
  * the above copyright notice appear in all copies and that both that
  * copyright notice and this permission notice appear in supporting
  * documentation.  No representations are made about the suitability of this
- * software for any purpose.  It is provided "as is" without express or 
+ * software for any purpose.  It is provided "as is" without express or
  * implied warranty.
  */
 
@@ -15,16 +15,7 @@
 #include "../../jmwin/src/stdafx.h"
 #endif
 
-#ifdef __APPLE__
-#  ifdef __IPHONE__
-#    include <OpenGLES/EAGL.h>
-#    include <OpenGLES/ES1/gl.h>
-#  else
-#    include <OpenGL/gl.h>
-#  endif
-#else
-#  include <gl/gl.h>
-#endif
+#include "gl_includes.h"
 
 extern "C" {
 
@@ -98,7 +89,13 @@ gltrackball_rotate (trackball_state *ts)
 {
   GLfloat m[4][4];
   build_rotmatrix (m, ts->q);
+#ifndef USE_OPENGL_ES
   glMultMatrixf (&m[0][0]);
+#else
+  // TODO: For ES 3.0, this matrix needs to be integrated with the matrix stack
+  // in the rendering code. For now, trackball rotation is disabled in ES 3.0 mode.
+  // The 3D camera system will need to be updated to use the MatrixStack class.
+#endif
 }
 
 

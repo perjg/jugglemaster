@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JuggleMaster WebAssembly</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #00d9ff;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        #info {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        #pattern-info {
+            font-size: 1.2em;
+            color: #00d9ff;
+            font-weight: 500;
+        }
+
+        #canvas-container {
+            position: relative;
+            display: inline-block;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #siteswap-display {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #e0e0e0;
+            z-index: 100;
+            pointer-events: none;
+            display: none;
+            text-align: center;
+        }
+
+        #siteswap-display .site-active {
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .canvas-and-controls {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .controls-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .camera-controls {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            min-width: 160px;
+        }
+
+        .camera-controls h3 {
+            color: #00d9ff;
+            font-size: 1em;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .camera-controls button {
+            width: 100%;
+            padding: 8px 12px;
+            margin: 4px 0;
+            border: 1px solid rgba(0, 217, 255, 0.5);
+            background: rgba(0, 217, 255, 0.1);
+            color: #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+
+        .camera-controls button:hover {
+            background: rgba(0, 217, 255, 0.2);
+            transform: translateX(2px);
+        }
+
+        .camera-controls button.active {
+            background: rgba(0, 217, 255, 0.3);
+            border-color: rgba(0, 217, 255, 0.8);
+        }
+
+        .camera-controls .divider {
+            height: 1px;
+            background: rgba(0, 217, 255, 0.2);
+            margin: 10px 0;
+        }
+
+        canvas {
+            display: block;
+            background: #000;
+            border: 2px solid rgba(0, 217, 255, 0.5);
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            color: #00d9ff;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 217, 255, 0.1);
+            border-top: 4px solid #00d9ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .examples {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .examples h3 {
+            color: #00d9ff;
+            margin-bottom: 15px;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .pattern-column h4 {
+            color: #00d9ff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .examples ul {
+            list-style: none;
+        }
+
+        .examples li {
+            margin: 8px 0;
+        }
+
+        .examples a {
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 8px 12px;
+            display: inline-block;
+            background: rgba(0, 217, 255, 0.1);
+            border-radius: 5px;
+            transition: all 0.3s;
+            width: 100%;
+            text-align: left;
+        }
+
+        .examples a:hover {
+            background: rgba(0, 217, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 768px) {
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🤹 JuggleMaster WebAssembly</h1>
+        <div class="subtitle">OpenGL ES 3.0 / WebGL 2.0 Demo</div>
+    </header>
+
+    <div id="info">
+        <div id="pattern-info">Loading...</div>
+        <div style="margin-top:10px">
+            <button id="toggle-mode" style="padding:6px 12px;border:1px solid rgba(0, 217, 255, 0.5);background: rgba(0, 217, 255, 0.1);color:#e0e0e0;border-radius:6px;cursor:pointer">Switch to 3D</button>
+            <button id="toggle-siteswap" style="padding:6px 12px;border:1px solid rgba(0, 217, 255, 0.5);background: rgba(0, 217, 255, 0.1);color:#e0e0e0;border-radius:6px;cursor:pointer;margin-left:10px">Hide Site</button>
+        </div>
+    </div>
+
+    <div class="canvas-and-controls">
+        <div id="canvas-container">
+            <div id="siteswap-display"></div>
+            <canvas id="canvas" width="800" height="600"></canvas>
+            <div id="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <div class="controls-column">
+            <div class="camera-controls">
+                <h3>Camera</h3>
+                <button id="btn-front">Front</button>
+                <button id="btn-left">Side (Left)</button>
+                <button id="btn-back">Back</button>
+                <button id="btn-right">Side (Right)</button>
+                <div class="divider"></div>
+                <button id="btn-autorotate">Auto Rotate: OFF</button>
+            </div>
+
+            <div class="camera-controls">
+                <h3>Object</h3>
+                <button id="btn-object-default">Default</button>
+                <button id="btn-object-balls">Balls</button>
+                <button id="btn-object-clubs">Clubs</button>
+                <button id="btn-object-rings">Rings</button>
+                <button id="btn-object-mixed">Mixed</button>
+                <button id="btn-object-random">Random</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="examples">
+        <h3>Try These Patterns:</h3>
+        <div class="examples-grid">
+            <div class="pattern-column">
+                <h4>JuggleMaster</h4>
+                <ul>
+                    <li><a href="?pattern=3&name=3%20Cascade&style=Normal">3 Cascade</a></li>
+                    <li><a href="?pattern=4&name=4%20Fountain&style=Normal">4 Fountain</a></li>
+                    <li><a href="?pattern=5&name=5%20Cascade&style=Normal">5 Cascade</a></li>
+                    <li><a href="?pattern=%286%2C6%29&name=Synchronous%206-ball&style=Normal">(6,6) - Synchronous 6-ball</a></li>
+                    <li><a href="?pattern=441&name=Mills%20Mess&style=Mills%20Mess">Mills Mess</a></li>
+                    <li><a href="?pattern=%282x%2C4%29%284%2C2x%29&name=Box&style=Box">(2x,4)(4,2x) - Box</a></li>
+                    <li><a href="?pattern=531&name=531&style=Normal">531</a></li>
+                    <li><a href="?pattern=%5B54%5D%5B22%5D2&name=5%20ball%20multiplex&style=Normal">[54][22]2 - 5 ball multiplex</a></li>
+                    <li><a href="?pattern=97531&name=97531&style=Reverse">97531 (Reverse)</a></li>
+                </ul>
+            </div>
+            <div class="pattern-column">
+                <h4>JuggleSaver</h4>
+                <ul>
+                    <li><a href="?pattern=5r&name=5r&style=JuggleSaver">5r - 5 rings</a></li>
+                    <li><a href="?pattern=5b&name=5b&style=JuggleSaver">5b - 5 balls</a></li>
+                    <li><a href="?pattern=5c&name=5c&style=JuggleSaver">5c - 5 clubs</a></li>
+                    <li><a href="?pattern=6c3b3r&name=6c3b3r&style=JuggleSaver">6c3b3r - Mixed objects</a></li>
+                    <li><a href="#"
+                           data-pattern="5r@(-2.6,0,-90)>(0.5,0,90) 3r@(0.3,0.5,90)>(-0.3,0.5,-90) 4r@(-1.4,0,-90)>(-1.8,0,-90) 5r@(2.6,0,90)>(-0.5,0,-90)  3r@(-0.3,0.5,-90)>(0.3,0.5,90) 4r@(1.4,0,90)>(1.8,0,90)"
+                           data-name="4 ring face-on 534"
+                           data-style="JuggleSaver">4 ring face-on 534</a></li>
+                    <li><a href="#"
+                           data-pattern="5c@(-3.5,0.5,-90,20)>(1,0.5,90,0)*3 3c@(2,0,-90,0)>(-2,0,90,30)*2 4c@(-2.5,0,-90,0)>(-2.5,0,-90,0)*2 5c@(3.5,0.5,90,20)>(-1,0.5,-90,0)*3  3c@(-2,0,90,0)>(2,0,-90,30)*2 4c@(2.5,0,90,0)>(2.5,0,90,0)*2"
+                           data-name="Sidespin 534"
+                           data-style="JuggleSaver">Sidespin 534</a></li>
+                    <li><a href="#"
+                           data-pattern="5c@(2,1.9,10)>(-1,1,10) 5c@(2,1.8,10)>(-0.5,1.6,10)/(5,-1)  5c@(1.6,0.2,10)>(0,-1,10)/(9,-2) 5c@(-2,1.9,-10)>(1,1,-10) 5c@(-2,1.8,-10)>(0.5,1.6,-10)/(-5,-1) 5@(-1.6,0.2,-10)>(0,-1,-10)/(-9,-2)"
+                           data-name="5 club Mills Mess"
+                           data-style="JuggleSaver">5 club Mills Mess</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>JuggleMaster © 1995-2025 Per Johan Groland</p>
+        <p>WebAssembly port validates OpenGL ES 3.0 rendering</p>
+    </footer>
+
+    <script>
+        console.log("=== JavaScript is executing ===");
+
+        // Parse URL query parameters
+        const params = new URLSearchParams(window.location.search);
+        const pattern = params.get('pattern') || '3';
+        const patternName = params.get('name') || '3 Cascade';
+        const style = params.get('style') || 'Normal';
+        const mode = (params.get('mode') || '').toLowerCase(); // '', '2d', '3d', '1'
+        const debug = (params.get('debug') || '').toLowerCase(); // '', 'nospec', 'solid', 'all'
+        const objectTypeParam = params.get('object');
+        let objectType = 0; // Default
+        if (objectTypeParam !== null) {
+            const objTypeNum = parseInt(objectTypeParam, 10);
+            if (!isNaN(objTypeNum) && objTypeNum >= 0 && objTypeNum <= 5) {
+                objectType = objTypeNum;
+            }
+        }
+
+        document.getElementById('pattern-info').textContent =
+            `Pattern: ${patternName} (${pattern}) | Style: ${style}`;
+
+        // Get canvas
+        const canvas = document.getElementById('canvas');
+
+        // Emscripten module configuration
+        console.log("Creating Module configuration...");
+
+
+        var Module = {
+            // Don't set canvas - we create context manually
+
+            preRun: [function() {
+                console.log("Module.preRun executing...");
+            }],
+
+            postRun: [function() {
+                console.log("Module.postRun executing...");
+            }],
+
+            onRuntimeInitialized: function() {
+                console.log('✓ JuggleMaster WASM runtime initialized');
+
+                // Hide loading indicator
+                document.getElementById('loading').style.display = 'none';
+
+                // Initialize with canvas size
+                console.log(`Initializing JuggleMaster (${canvas.width}x${canvas.height})`);
+                if (!Module._jm_init(canvas.width, canvas.height)) {
+                    document.getElementById('loading').style.display = 'block';
+                    document.getElementById('loading').textContent =
+                        'Failed to initialize WebGL 2.0. Please use a browser with WebGL 2.0 support.';
+                    return;
+                }
+
+                // Important: trigger a render once to clear the wrapper's first-frame
+                // switch-back behavior (mirrors jmdlx set-up sequence)
+                Module._jm_render();
+
+                // Set pattern from URL parameters
+                console.log(`Setting pattern: ${patternName} (${pattern})`);
+                Module.ccall('jm_set_pattern', null,
+                    ['string', 'string'],
+                    [patternName, pattern]);
+
+                // Track current mode and style for UI toggling
+                let currentMode = 1; // 1 = 2D, 2 = 3D
+                let originalStyle = style;
+
+                // Respect requested mode, but do NOT force style; engine handles switching
+                let effectiveStyle = style;
+                if (mode === '3d' || mode === '1') {
+                    currentMode = 2;
+                } else if (mode === '2d') {
+                    currentMode = 1;
+                }
+
+                console.log(`Setting style: ${effectiveStyle}`);
+                Module.ccall('jm_set_style', null, ['string'], [effectiveStyle]);
+
+                // Set object type from URL parameter if provided
+                if (objectTypeParam !== null) {
+                    console.log(`Setting object type from URL: ${objectType}`);
+                    Module.ccall('jm_set_object_type', null, ['number'], [objectType]);
+                }
+
+                // Set showsite from URL parameter (default to true if not present)
+                const showSiteParam = params.get('showsite');
+                const siteswapVisibleFromUrl = showSiteParam === null ? true : (showSiteParam === '1' || showSiteParam === 'true');
+                Module.ccall('jm_set_show_siteswap', null, ['number'], [siteswapVisibleFromUrl ? 1 : 0]);
+
+                // Apply render mode if provided (1 = 2D, 2 = 3D)
+                if (currentMode === 2) {
+                    console.log('Switching render mode to 3D');
+                    Module.ccall('jm_set_render_mode', null, ['number'], [2]);
+                } else {
+                    console.log('Switching render mode to 2D');
+                    Module.ccall('jm_set_render_mode', null, ['number'], [1]);
+                }
+
+                // Report active engine (0 = JuggleMaster, 1 = JuggleSaver)
+                const engine = Module.ccall('jm_get_engine', 'number', [], []);
+                console.log(`[WASM] Active engine: ${engine === 1 ? 'JuggleSaver' : 'JuggleMaster'}`);
+
+                // Helper to keep URL and example links in sync with mode
+                function modeToString(m) { return m === 2 ? '3d' : '2d'; }
+                function updateUrlModeParam() {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('mode', modeToString(currentMode));
+                    const currentObjType = Module.ccall('jm_get_object_type', 'number', [], []);
+                    url.searchParams.set('object', currentObjType.toString());
+                    const currentShowSite = Module.ccall('jm_get_show_siteswap', 'number', [], []);
+                    url.searchParams.set('showsite', currentShowSite ? '1' : '0');
+                    history.replaceState(null, '', url.toString());
+                }
+                function updateExampleLinks() {
+                    const anchors = document.querySelectorAll('.examples a');
+                    const currentObjType = Module.ccall('jm_get_object_type', 'number', [], []);
+                    anchors.forEach(a => {
+                        const dp = a.getAttribute('data-pattern');
+                        if (dp) {
+                            const dn = a.getAttribute('data-name') || 'Pattern';
+                            const ds = a.getAttribute('data-style') || 'Normal';
+                            const url = new URL(window.location.href);
+                            url.search = '';
+                            url.searchParams.set('pattern', dp);
+                            url.searchParams.set('name', dn);
+                            url.searchParams.set('style', ds);
+                            url.searchParams.set('mode', modeToString(currentMode));
+                            url.searchParams.set('object', currentObjType.toString());
+                            const currentShowSite = Module.ccall('jm_get_show_siteswap', 'number', [], []);
+                            url.searchParams.set('showsite', currentShowSite ? '1' : '0');
+                            a.setAttribute('href', url.toString());
+                        } else {
+                            const url = new URL(a.getAttribute('href'), window.location.href);
+                            url.searchParams.set('mode', modeToString(currentMode));
+                            url.searchParams.set('object', currentObjType.toString());
+                            const currentShowSite = Module.ccall('jm_get_show_siteswap', 'number', [], []);
+                            url.searchParams.set('showsite', currentShowSite ? '1' : '0');
+                            a.setAttribute('href', url.toString());
+                        }
+                    });
+                }
+                updateUrlModeParam();
+                updateExampleLinks();
+
+                // Optional debug: disable specular and/or force solid color balls
+                const noSpec = (debug.includes('nospec') || debug === 'all') ? 1 : 0;
+                const solid = (debug.includes('solid') || debug === 'all') ? 1 : 0;
+                if (noSpec || solid) {
+                    Module.ccall('jm_set_render_debug', null, ['number','number'], [noSpec, solid]);
+                }
+
+                // Toggle button wiring
+                const btn = document.getElementById('toggle-mode');
+                const info = document.getElementById('pattern-info');
+                function refreshButton() {
+                    btn.textContent = currentMode === 1 ? 'Switch to 3D' : 'Switch to 2D';
+                    const suffix = currentMode === 1 ? ' | Mode: 2D' : ' | Mode: 3D';
+                    info.textContent = `Pattern: ${patternName} (${pattern}) | Style: ${effectiveStyle}` + suffix;
+                }
+                refreshButton();
+
+                btn.addEventListener('click', () => {
+                    if (currentMode === 1) {
+                        // Switch to 3D: keep current style; wrapper selects engine
+                        Module.ccall('jm_set_render_mode', null, ['number'], [2]);
+                        currentMode = 2;
+                    } else {
+                        // Switch to 2D: restore original style
+                        Module.ccall('jm_set_render_mode', null, ['number'], [1]);
+                        currentMode = 1;
+                        effectiveStyle = originalStyle;
+                    }
+                    updateUrlModeParam();
+                    updateExampleLinks();
+                    refreshButton();
+                });
+
+                const btnSiteswap = document.getElementById('toggle-siteswap');
+                // Initialize from WASM state (which was set from query string during initialization above)
+                let siteswapVisible = Module.ccall('jm_get_show_siteswap', 'number', [], []) !== 0;
+
+                function refreshSiteswapButton() {
+                    // Sync with WASM state to ensure consistency
+                    siteswapVisible = Module.ccall('jm_get_show_siteswap', 'number', [], []) !== 0;
+                    btnSiteswap.textContent = siteswapVisible ? 'Hide Site' : 'Show Site';
+                }
+                refreshSiteswapButton();
+
+                btnSiteswap.addEventListener('click', () => {
+                    siteswapVisible = !siteswapVisible;
+                    Module.ccall('jm_set_show_siteswap', null, ['number'], [siteswapVisible ? 1 : 0]);
+                    // Update query string
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('showsite', siteswapVisible ? '1' : '0');
+                    history.replaceState(null, '', url.toString());
+                    refreshSiteswapButton();
+                    // Update example links to preserve showsite setting
+                    updateExampleLinks();
+                    // Force update of siteswap display by clearing cache
+                    lastStart = -1;
+                    lastStop = -1;
+                    updateSiteswapDisplay();
+                });
+
+                const siteswapDisplay = document.getElementById('siteswap-display');
+                let lastStart = -1;
+                let lastStop = -1;
+
+                function updateSiteswapDisplay() {
+                    if (!Module || !Module.ccall) return;
+
+                    const showSiteswap = Module.ccall('jm_get_show_siteswap', 'number', [], []);
+                    if (!showSiteswap) {
+                        siteswapDisplay.style.display = 'none';
+                        return;
+                    }
+
+                    const site = Module.ccall('jm_get_site', 'string', [], []);
+                    if (!site || site.length === 0) {
+                        siteswapDisplay.style.display = 'none';
+                        return;
+                    }
+
+                    const start = Module.ccall('jm_get_sitepos_start', 'number', [], []);
+                    const stop = Module.ccall('jm_get_sitepos_stop', 'number', [], []);
+
+                    // Only update if positions changed (optimization)
+                    // But always update if display was hidden (lastStart == -1 means forced update)
+                    if (lastStart !== -1 && start === lastStart && stop === lastStop && site) {
+                        return;
+                    }
+
+                    lastStart = start;
+                    lastStop = stop;
+
+                    let html = '';
+
+                    if (start > 0) {
+                        html += site.substring(0, start);
+                    }
+
+                    html += '<span class="site-active">' + site.substring(start, stop) + '</span>';
+
+                    if (stop < site.length) {
+                        html += site.substring(stop);
+                    }
+
+                    siteswapDisplay.innerHTML = html;
+                    siteswapDisplay.style.display = 'block';
+                }
+
+                function siteswapUpdateLoop() {
+                    updateSiteswapDisplay();
+                    requestAnimationFrame(siteswapUpdateLoop);
+                }
+
+                siteswapUpdateLoop();
+
+                console.log('✓ JuggleMaster initialized and running');
+
+                // Get version info
+                const version = Module.ccall('jm_get_version', 'string', [], []);
+                console.log(`Version: ${version}`);
+
+                // Camera controls
+                let autoRotateEnabled = false;
+                const btnAutorotate = document.getElementById('btn-autorotate');
+                const btnFront = document.getElementById('btn-front');
+                const btnLeft = document.getElementById('btn-left');
+                const btnBack = document.getElementById('btn-back');
+                const btnRight = document.getElementById('btn-right');
+
+                function updateAutorotateButton() {
+                    btnAutorotate.textContent = autoRotateEnabled ? 'Auto Rotate: ON' : 'Auto Rotate: OFF';
+                    if (autoRotateEnabled) {
+                        btnAutorotate.classList.add('active');
+                    } else {
+                        btnAutorotate.classList.remove('active');
+                    }
+                }
+
+                btnAutorotate.addEventListener('click', () => {
+                    autoRotateEnabled = !autoRotateEnabled;
+                    Module.ccall('jm_set_autorotate', null, ['number'], [autoRotateEnabled ? 1 : 0]);
+                    updateAutorotateButton();
+                });
+
+                function resetCameraAndStopRotate() {
+                    autoRotateEnabled = false;
+                    Module.ccall('jm_set_autorotate', null, ['number'], [0]);
+                    updateAutorotateButton();
+                }
+
+                btnFront.addEventListener('click', () => {
+                    Module.ccall('jm_set_camera_preset', null, ['number'], [0]);
+                    resetCameraAndStopRotate();
+                });
+
+                btnLeft.addEventListener('click', () => {
+                    Module.ccall('jm_set_camera_preset', null, ['number'], [1]);
+                    resetCameraAndStopRotate();
+                });
+
+                btnBack.addEventListener('click', () => {
+                    Module.ccall('jm_set_camera_preset', null, ['number'], [2]);
+                    resetCameraAndStopRotate();
+                });
+
+                btnRight.addEventListener('click', () => {
+                    Module.ccall('jm_set_camera_preset', null, ['number'], [3]);
+                    resetCameraAndStopRotate();
+                });
+
+                // Object type controls
+                const btnObjectDefault = document.getElementById('btn-object-default');
+                const btnObjectBalls = document.getElementById('btn-object-balls');
+                const btnObjectClubs = document.getElementById('btn-object-clubs');
+                const btnObjectRings = document.getElementById('btn-object-rings');
+                const btnObjectMixed = document.getElementById('btn-object-mixed');
+                const btnObjectRandom = document.getElementById('btn-object-random');
+                const objectButtons = [btnObjectDefault, btnObjectBalls, btnObjectClubs, btnObjectRings, btnObjectMixed, btnObjectRandom];
+
+                function updateObjectTypeButtons(activeIndex) {
+                    objectButtons.forEach((btn, index) => {
+                        if (index === activeIndex) {
+                            btn.classList.add('active');
+                        } else {
+                            btn.classList.remove('active');
+                        }
+                    });
+                }
+
+                function setObjectType(type) {
+                    Module.ccall('jm_set_object_type', null, ['number'], [type]);
+                    updateObjectTypeButtons(type);
+                    // Update URL with object type
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('object', type.toString());
+                    history.replaceState(null, '', url.toString());
+                    // Reload pattern to apply object type change
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const currentPattern = urlParams.get('pattern') || pattern;
+                    const currentName = urlParams.get('name') || patternName;
+                    const currentStyle = urlParams.get('style') || style;
+                    if (currentPattern) {
+                        Module.ccall('jm_set_pattern', null, ['string', 'string'], [currentName, currentPattern]);
+                        if (currentStyle) {
+                            Module.ccall('jm_set_style', null, ['string'], [currentStyle]);
+                        }
+                    }
+                }
+
+                btnObjectDefault.addEventListener('click', () => setObjectType(0));
+                btnObjectBalls.addEventListener('click', () => setObjectType(1));
+                btnObjectClubs.addEventListener('click', () => setObjectType(2));
+                btnObjectRings.addEventListener('click', () => setObjectType(3));
+                btnObjectMixed.addEventListener('click', () => setObjectType(4));
+                btnObjectRandom.addEventListener('click', () => setObjectType(5));
+
+                // Initialize object type UI state (after jm_init has been called)
+                const currentObjectType = Module.ccall('jm_get_object_type', 'number', [], []);
+                updateObjectTypeButtons(currentObjectType);
+
+                // Legacy trackball mouse controls
+                let dragging = false;
+                let clickTimer = null;
+                let clickCount = 0;
+
+                function canvasToGL(x, y) {
+                    const rect = canvas.getBoundingClientRect();
+                    const cx = Math.max(0, Math.min(canvas.width, x - rect.left));
+                    const cy = Math.max(0, Math.min(canvas.height, y - rect.top));
+                    // Legacy flips Y: pass height - y
+                    return { x: Math.floor(cx), y: Math.floor(canvas.height - cy) };
+                }
+                canvas.addEventListener('mousedown', (e) => {
+                    dragging = true;
+                    const p = canvasToGL(e.clientX, e.clientY);
+                    Module.ccall('jm_trackball_start', null, ['number','number'], [p.x, p.y]);
+                    e.preventDefault();
+                });
+                window.addEventListener('mousemove', (e) => {
+                    if (!dragging) return;
+                    const p = canvasToGL(e.clientX, e.clientY);
+                    Module.ccall('jm_trackball_move', null, ['number','number'], [p.x, p.y]);
+                    e.preventDefault();
+                });
+                window.addEventListener('mouseup', () => { dragging = false; });
+                canvas.addEventListener('click', (e) => {
+                    // Ignore clicks that were drags
+                    if (dragging) return;
+
+                    // Use a delay to distinguish single-click from double-click
+                    clickCount++;
+                    if (clickTimer) {
+                        clearTimeout(clickTimer);
+                        clickTimer = null;
+                    }
+
+                    clickTimer = setTimeout(() => {
+                        // If only one click occurred, toggle auto-rotate
+                        if (clickCount === 1) {
+                            Module.ccall('jm_toggle_autorotate', null, [], []);
+                        }
+                        clickCount = 0;
+                        clickTimer = null;
+                    }, 300); // 300ms delay to detect double-click
+                });
+                canvas.addEventListener('dblclick', (e) => {
+                    // Cancel the pending single-click action
+                    if (clickTimer) {
+                        clearTimeout(clickTimer);
+                        clickTimer = null;
+                    }
+                    clickCount = 0;
+
+                    // Reset camera
+                    Module.ccall('jm_reset_camera', null, [], []);
+                    e.preventDefault();
+                });
+                canvas.addEventListener('wheel', (e) => {
+                    // Convert pixel delta to percent similar to desktop: small steps
+                    const percent = Math.max(-50, Math.min(50, Math.round((e.deltaY > 0 ? 1 : -1) * 10)));
+                    const horizontal = e.shiftKey ? 1 : 0;
+                    Module.ccall('jm_trackball_wheel', null, ['number','number'], [percent, horizontal]);
+                    e.preventDefault();
+                }, { passive: false });
+            },
+
+            print: function(text) {
+                console.log('[WASM]', text);
+            },
+
+            printErr: function(text) {
+                console.error('[WASM ERROR]', text);
+            },
+
+            onAbort: function(what) {
+                console.error('WASM ABORTED:', what);
+            }
+        };
+
+        console.log("Module configuration created, waiting for jmwasm.js to load...");
+    </script>
+    {{{ SCRIPT }}}
+</body>
+</html>

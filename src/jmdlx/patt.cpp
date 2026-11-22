@@ -11,18 +11,23 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the GNU
  * General Public License for more details.
- */ 
+ */
 
 #include "patt.h"
 #include <wx/progdlg.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #ifndef __WXMSW__
     #include <unistd.h>
 #endif
-#include <sys/types.h>
-#include <sys/stat.h>
+#ifdef __APPLE__
+    #include <libgen.h>        // For dirname()
+    #include <mach-o/dyld.h>   // For _NSGetExecutablePath()
+#endif
 
 
-/*PatternLoader::PatternLoader(wxWindow *p, int redownload) : 
+/*PatternLoader::PatternLoader(wxWindow *p, int redownload) :
  {
 	can_use = 0;
 	parent = p;
@@ -48,6 +53,8 @@
 //Refactored constructor
 PatternLoader::PatternLoader(wxWindow *p, const char *filename,
     const char *js_filename, int redownload) :
+				patternfile(NULL),
+				patternfile_js(NULL),
 				parent(p),
 				can_use(0),
 				current_group(NULL),
@@ -55,9 +62,9 @@ PatternLoader::PatternLoader(wxWindow *p, const char *filename,
 				current_pattern(NULL) {
     styles.first = NULL;
     groups.first = NULL;
-    
+
     patternfile = OpenFile(filename, redownload);
-    if (js_filename) patternfile_js = OpenFile(js_filename, redownload);    
+    if (js_filename) patternfile_js = OpenFile(js_filename, redownload);
 
     can_use = ParseFiles();
     CloseFiles();
@@ -71,25 +78,53 @@ int PatternLoader::Usable() {
 FILE* PatternLoader::OpenFile(const char *filename, int redownload) {
 	wxString targetfilename;
 	struct stat buf;
+
+	// Set up target filename in user's home directory
 	targetfilename = wxGetHomeDir();
 	if(targetfilename.Len() > 0) {
 		targetfilename += wxT("/.jugglemaster/");
 		if(!wxDirExists(targetfilename)) {
-			if(!wxMkdir(targetfilename,0755)) {
-				targetfilename = wxT("");
-			}
+			wxMkdir(targetfilename,0755);
 		}
 		targetfilename += wxString(filename,wxConvUTF8);
 	} else {
 		targetfilename = wxString(filename,wxConvUTF8);
 	}
 
+	// Check if file already exists in target location
 	if(stat((const char *)targetfilename.mb_str(wxConvUTF8),&buf) != -1 && !redownload) {
 		return fopen((const char *)(targetfilename.mb_str(wxConvUTF8)),"r");
-	} else if(stat(filename,&buf) != -1 && !redownload) {
-		wxCopyFile(wxString(filename,wxConvUTF8),targetfilename);
-		return fopen((const char *)targetfilename.mb_str(wxConvUTF8),"r");
-	} else {
+	}
+
+	// Try current directory
+	if(stat(filename,&buf) != -1 && !redownload) {
+		if (targetfilename.Len() > 0 && wxCopyFile(wxString(filename,wxConvUTF8),targetfilename)) {
+			return fopen((const char *)targetfilename.mb_str(wxConvUTF8),"r");
+		}
+		// If copy failed, try opening from current directory directly
+		return fopen(filename,"r");
+	}
+
+#ifdef __APPLE__
+	// On macOS app bundles, find Resources directory using native API
+	// This is more reliable than wxStandardPaths during early initialization
+	char executablePath[1024];
+	char executablePathCopy[1024];
+	uint32_t size = sizeof(executablePath);
+	if (_NSGetExecutablePath(executablePath, &size) == 0) {
+		strncpy(executablePathCopy, executablePath, sizeof(executablePathCopy));
+		char *execDir = dirname(executablePathCopy);
+		char resourcePath[2048];
+		snprintf(resourcePath, sizeof(resourcePath), "%s/../Resources/%s", execDir, filename);
+		if(stat(resourcePath, &buf) != -1 && !redownload) {
+			FILE* f = fopen(resourcePath, "r");
+			if (f) return f;
+		}
+	}
+#endif
+
+	// If file not found locally, try to download
+	{
 		wxString fullurl(WEB_PREFIX, wxConvUTF8);
 		wxString proxy;
 		wxString message;
@@ -134,13 +169,19 @@ FILE* PatternLoader::OpenFile(const char *filename, int redownload) {
 #include "sqlite_patterns.h"
 
 int PatternLoader::ParseFiles() {
+  // Check if primary pattern file opened successfully
+  if (!patternfile) {
+    return 0;
+  }
+
   static bool testsql = true;
 
   if (testsql) {
     JMPatterns* p = new JMPatterns();
     p->initializeDatabase(NULL, patternfile, patternfile_js);
-    //rewind(patternfile);
-    //rewind(patternfile_js);
+    // Rewind files after database initialization so they can be read again
+    rewind(patternfile);
+    if (patternfile_js) rewind(patternfile_js);
     testsql = false;
   }
 
@@ -164,9 +205,9 @@ void PatternLoader::PrintStyles() {
 	current_style = FirstStyle(&styles);
 	while(current_style) {
 		int i;
-		printf((const char*)_T(" Style Name: %s\n"),Style_GetName(current_style));
-		printf((const char*)_T("  Length: %i\n"),Style_GetLength(current_style));
-		printf((const char *)_T("  Data:\n"));
+		printf(" Style Name: %s\n",Style_GetName(current_style));
+		printf("  Length: %i\n",Style_GetLength(current_style));
+		printf("  Data:\n");
 		for(i=0;i<(int)Style_GetLength(current_style);i++) {
 			if((i%4) == 0) {
 				printf("   {");
@@ -188,18 +229,18 @@ void PatternLoader::PrintStyles() {
 
 void PatternLoader::PrintSections() {
 	current_group = FirstGroup(&groups);
-	printf((const char*)_T("Group Data\n"));
+	printf("Group Data\n");
 	while(current_group) {
-		printf((const char*)_T(" Group Name: %s\n"),Group_GetName(current_group));
+		printf(" Group Name: %s\n",Group_GetName(current_group));
 
 		current_pattern = Group_GetPatterns(current_group);
 		while(current_pattern) {
-			printf((const char*)_T("  Pattern Name: %s\n"),Patt_GetName(current_pattern));
-			printf((const char*)_T("   Style: %s\n"),Patt_GetStyle(current_pattern));
-			printf((const char*)_T("   Data: %s\n"),Patt_GetData(current_pattern));
-			printf((const char*)_T("   Height Ratio: %1.2f\n"),Patt_GetHR(current_pattern));
-			printf((const char*)_T("   Dwell Ratio: %1.2f\n"),Patt_GetDR(current_pattern));
-			printf((const char*)_T("   Author: %s\n"),Patt_GetAuthor(current_pattern));
+			printf("  Pattern Name: %s\n",Patt_GetName(current_pattern));
+			printf("   Style: %s\n",Patt_GetStyle(current_pattern));
+			printf("   Data: %s\n",Patt_GetData(current_pattern));
+			printf("   Height Ratio: %1.2f\n",Patt_GetHR(current_pattern));
+			printf("   Dwell Ratio: %1.2f\n",Patt_GetDR(current_pattern));
+			printf("   Author: %s\n",Patt_GetAuthor(current_pattern));
 			current_pattern = NextPatt(current_pattern);
 		}
 

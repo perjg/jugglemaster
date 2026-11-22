@@ -11,7 +11,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the GNU
  * General Public License for more details.
- */ 
+ */
 
 #ifndef JMDLX_H
 #define JMDLX_H
@@ -64,6 +64,7 @@ public:
   void setPause();
   void unPause();
   void togglePause();
+  void setInitialPattern(const wxString& siteswap, const wxString& style = wxEmptyString);
 
   wxMenu* optionsMenu;
   wxMenu* fileMenu;
@@ -81,7 +82,6 @@ public:
 private:
   PatternLoader *patterns;
   PatternLoader *semaphores;
-  JML_INT32 current_speed;
 
   void OnAbout(wxCommandEvent &);
   void changeSiteSwap(wxCommandEvent &);
@@ -103,6 +103,7 @@ private:
   void changeAutoRotate(wxCommandEvent &);
   void changeRenderMode(wxCommandEvent &);
   void changeColorballs(wxCommandEvent &);
+  void changeShowSiteswap(wxCommandEvent &);
 #endif
 
   DECLARE_EVENT_TABLE()
@@ -111,11 +112,11 @@ private:
 
 static const wxCmdLineEntryDesc cmdLineDesc[] =
 {
-    { wxCMD_LINE_SWITCH, wxT("h"), _T("help"), _T("help") },
-    { wxCMD_LINE_OPTION, wxT("p"), _T("pattern"), _T("named pattern"), wxCMD_LINE_VAL_STRING},
-    { wxCMD_LINE_OPTION, wxT("s"), _T("style"), _T("style"), wxCMD_LINE_VAL_STRING },
-    { wxCMD_LINE_OPTION, wxT("m"), _T("semaphore"), _T("semaphore"), wxCMD_LINE_VAL_STRING },
-    { wxCMD_LINE_PARAM,  NULL, NULL, _T("siteswap"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL},
+    { wxCMD_LINE_SWITCH, "h", "help", "help" },
+    { wxCMD_LINE_OPTION, "p", "pattern", "named pattern", wxCMD_LINE_VAL_STRING},
+    { wxCMD_LINE_OPTION, "s", "style", "style", wxCMD_LINE_VAL_STRING },
+    { wxCMD_LINE_OPTION, "m", "semaphore", "semaphore", wxCMD_LINE_VAL_STRING },
+    { wxCMD_LINE_PARAM,  NULL, NULL, "siteswap", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL},
     { wxCMD_LINE_NONE }
 };
 
@@ -171,6 +172,7 @@ enum {
 #ifdef OPENGL_SUPPORT
     OPTION_OGL_AUTOROTATE,
     OPTION_OGL_3D_MODE,
+    OPTION_SHOW_SITESWAP,
 #endif
 	SPEED_UP,
 	SPEED_DOWN,

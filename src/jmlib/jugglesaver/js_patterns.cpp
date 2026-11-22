@@ -1,7 +1,7 @@
 /*
  * JMLib - Portable JuggleMaster Library
- * Version 2.1
- * Copyright (c) Per Johan Groland 2000-2008, Gary Briggs 2003
+ * Version 3.0
+ * Copyright (c) Per Johan Groland 2000-2008, 2025-2026, Gary Briggs 2003
  *
  * Based on JuggleMaster Version 1.60
  * Copyright (c) 1995-1996 Ken Matsuoka
@@ -17,7 +17,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the
  * Modified BSD License for more details.
- */ 
+ */
 
 #include "js_patterns.h"
 #include <stdlib.h>
@@ -28,7 +28,7 @@
 static void trim(JML_CHAR* s) {
   while (*s != '\0') {
     if (*s == '\n') *s = '\0';
-    if (*s == '\r') *s = '\0'; 
+    if (*s == '\r') *s = '\0';
     s++;
   }
 }
@@ -38,7 +38,7 @@ struct pattern_group_t* MakeGroup(char* base_group, char* current_group) {
   JML_CHAR js[] = " (JuggleSaver)";
 
   pattern_group_t* g = new pattern_group_t;
-  
+
   if (strcmp(base_group, current_group) == 0) {
     g->name = new JML_CHAR[ strlen(current_group) + strlen(js) + 1];
     strcpy(g->name, current_group);
@@ -56,13 +56,13 @@ struct pattern_group_t* MakeGroup(char* base_group, char* current_group) {
 
   //base_group[0] = 0;
   current_group[0] = 0;
-  
+
   return g;
 }
 
 struct pattern_t* MakePattern(char* name, char* author, char* data) {
   pattern_t* p = new pattern_t;
-  
+
   p->style = strdup("JuggleSaver");
   p->name  = strdup(name);
   p->author = strdup(author);
@@ -78,19 +78,19 @@ struct pattern_t* MakePattern(char* name, char* author, char* data) {
   p->pd = 0;
   p->mr = 0;
   p->next = NULL;
-  
+
   return p;
 }
 
 int ParseJSPatterns(FILE *input, struct groups_t *groups) {
 	char buf[1024];
-  
+
   char base_group[256];
 	char current_group[256];
 	char pattern_name[256];
 	char pattern_data[1024];
 	char pattern_author[256];
-  
+
   memset(base_group, 0, 256);
   memset(current_group, 0, 256);
   memset(pattern_name, 0, 256);
@@ -106,12 +106,11 @@ int ParseJSPatterns(FILE *input, struct groups_t *groups) {
 		return 0;
 	}
 
-  int line = 0;
   char* cur;
   char* cur_name = pattern_name;
   char* cur_data = pattern_data;
   char* cur_author = pattern_author;
-  
+
   bool skip_header = true;
   bool read_name = false;
   bool read_author = false;
@@ -119,7 +118,6 @@ int ParseJSPatterns(FILE *input, struct groups_t *groups) {
 
 	while(!feof(input)) {
 		fgets(buf, 1023, input);
-    line++;
     cur = buf;
 
     // skip header
@@ -133,7 +131,7 @@ int ParseJSPatterns(FILE *input, struct groups_t *groups) {
     // comments / category name
     if (*cur == '$') {
       cur+=2;
-      
+
       // fixme: save general genre and concatenate
       if (strncmp(cur, "----------", 10) != 0 /*&& cur[0] != '('*/) { // skip $ ------... and $ (XX objects) lines
         if (cur[0] == '(') {
@@ -149,26 +147,26 @@ int ParseJSPatterns(FILE *input, struct groups_t *groups) {
     //  while (*cur != 0 && *cur != 10 && *cur != 13) {
     else {
       if (read_pattern && *pattern_data != '\0') *cur_data++ = ' '; // insert space delimiter for patterns that continue from previous line
-    
+
       while (*cur != '\0') {
         if (*cur == '"' && read_name) { // finish reading name, start reading pattern
           *cur_name++ = 0;
           cur_name = pattern_name;
-          
+
           cur++; // skip "
           while (*cur == ' ') cur++; // skip whitespace
-          
+
           read_name = false;
           read_pattern = true;
         }
         else if (*cur == '"') { // start reading name
           read_name = true;
-          read_pattern = false; 
+          read_pattern = false;
           cur++; // skip "
-          
+
           // add current category
           struct pattern_group_t* g = MakeGroup(base_group, current_group);
-          
+
           if (g) {
             if (!group) {
               group = g;
@@ -181,7 +179,7 @@ int ParseJSPatterns(FILE *input, struct groups_t *groups) {
             }
             patt = NULL;
           }
-                    
+
           continue;
         }
         else if (*cur == '(' && read_name) { // start reading author (optional)
@@ -202,7 +200,7 @@ int ParseJSPatterns(FILE *input, struct groups_t *groups) {
 
           // add current data
           struct pattern_t* p = MakePattern(cur_name, cur_author, cur_data);
-          
+
           if (!patt) {
             patt = p;
             newpatt = p;
@@ -213,24 +211,24 @@ int ParseJSPatterns(FILE *input, struct groups_t *groups) {
             newpatt = p;
           }
         }
-        
-        if (read_name && !read_author && cur != '\0') {
+
+        if (read_name && !read_author && *cur != '\0') {
           *cur_name++ = *cur;
         }
 
         if (read_author && *cur != '\0') {
           *cur_author++ = *cur;
         }
-        
+
         if (read_pattern && *cur != '\0') {
           *cur_data++ = *cur;
         }
-                
+
         cur++;
       }
     }
   }
-  
+
   return 1;
 }
 

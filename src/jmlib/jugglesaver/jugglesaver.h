@@ -1,5 +1,9 @@
 /* Juggler3D, Copyright (c) 2005-2008 Brian Apps <brian@jugglesaver.co.uk>
  *
+ * JMLib - Portable JuggleMaster Library
+ * Version 3.0
+ * Copyright (C) Per Johan Groland 2025-2026
+ *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
  * the above copyright notice appear in all copies and that both that copyright
@@ -16,24 +20,8 @@
 #include "../../jmwin/src/stdafx.h"
 #endif
 
-//fixme: add other applicable platforms here
-#ifdef __APPLE__
-#  ifdef __IPHONE__
-#    include <OpenGLES/EAGL.h>
-#    include <OpenGLES/ES1/gl.h>
-#    include <OpenGLES/ES1/glext.h>
-#    define OPENGL_ES_SUPPORT
-#  else
-#    include <OpenGL/gl.h>
-#    include <OpenGL/glu.h>
-#    include <OpenGL/glext.h>
-#  endif
-#else
-#  include <gl/gl.h>
-#  include <gl/glu.h>
-#  include <gl/glaux.h>
-#endif
-
+// OpenGL headers
+#include "gl_includes.h"
 #include "gltrackball.h"
 
 #include <stdlib.h>
@@ -82,7 +70,7 @@ extern "C" {
  * The code is broadly split into the following parts:
  *
  * In engine.cpp:
- *  - Engine.  The process of determining the position of the juggler and 
+ *  - Engine.  The process of determining the position of the juggler and
  *        objects being juggled at an arbitrary point in time.  This is
  *        independent from any drawing code.
  *  - Sites.  The process of creating a random site swap pattern or parsing
@@ -91,7 +79,7 @@ extern "C" {
  *         http://www.jugglingdb.com/
  * In render.c--
  *  - Rendering.  OpenGL drawing code that animates the juggler.
- *  
+ *
  *****************************************************************************/
 
 
@@ -106,7 +94,7 @@ extern "C" {
  * elevation are specified in degrees.  These angles are not normalised so that
  * it is possible to specify how the object spins and rotates as it is thrown
  * from the 'From' position to the 'To' position.
- * 
+ *
  * Because this is the position of the hand some translation is required with
  * rings and clubs to get the centre of rotation position.
  */
@@ -126,7 +114,7 @@ typedef struct
  * object and the hands are at a given time.  The information is specified in
  * terms of throws, and positions where throws aren't present (0's and 2's) are
  * simply ignored.
- * 
+ *
  * TotalTime - The count of beats before this object is thrown again.  Typically
  *    this is the same as the weight of the throw but where an object is held it
  *    is longer.  e.g. the first throw of the site 64242.7. will be 10, 6 for
@@ -165,13 +153,14 @@ typedef struct
  *     throw.
  * ObjectType - One of the OBJECT_XX defines.
  * TotalTwist - Only relevant for OBJECT_BALL, this is the total amount the ball
- *     has twisted while in the air.  When segmented balls are drawn you see a 
- *     spinning effect similar to what happens when you juggle beanbags. 
+ *     has twisted while in the air.  When segmented balls are drawn you see a
+ *     spinning effect similar to what happens when you juggle beanbags.
  */
 #define OBJECT_DEFAULT 0
 #define OBJECT_BALL 1
 #define OBJECT_CLUB 2
 #define OBJECT_RING 3
+#define OBJECT_FISH 5
 
 typedef struct
 {
@@ -182,14 +171,14 @@ typedef struct
 } OBJECT_POSITION;
 
 
-/* PATTERN_INFO is the main structure that holds the information about a 
- * juggling pattern. 
+/* PATTERN_INFO is the main structure that holds the information about a
+ * juggling pattern.
  *
  * pThrowInfo is an array of ThrowLen elements that describes each throw in the
  *     pattern.
  * pObjectInfo gives the current position of all objects at a given instant.
  *     These values are updated as the pattern is animated.
- * LeftHand and RightHand describe the current positions of each of the 
+ * LeftHand and RightHand describe the current positions of each of the
  *     juggler's hands.
  * MaxWeight is the maximum weight of the all throws in pThrowInfo.
  * Height and Alpha are parameters that describe how objects fall under the
@@ -199,13 +188,13 @@ typedef struct
 {
     THROW_INFO* pThrowInfo;
     int ThrowLen;
-    
+
     OBJECT_POSITION* pObjectInfo;
     int Objects;
 
     OBJECT_POSITION LeftHand;
     OBJECT_POSITION RightHand;
-    
+
     int MaxWeight;
 
     float Height;
@@ -255,18 +244,19 @@ typedef struct
     float CameraElev;
     float AspectRatio;
     int DLStart;
-    
+
     float Time;
     float TranslateAngle;
     float SpinAngle;
-    
+    float orbitElevation;
+
     trackball_state *trackball;
     int button_down_p;
 
 } RENDER_STATE;
 
 /* JUGGLEMASTER_JUGGLER is used to keep coordinates for rendering the juggler
- * JuggleMaster style 
+ * JuggleMaster style
  */
 typedef struct
 {
@@ -312,7 +302,7 @@ void Zoom(RENDER_STATE* pState, float zoom);
 void ResetZoom(RENDER_STATE* pState);
 void MoveCamera(RENDER_STATE* pState, float deltaX_, float deltaY_);
 void DrawGLScene(RENDER_STATE* pState);
-void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* pState);
+void JMDrawGLScene(JUGGLEMASTER_RENDER_STATE* jmState, RENDER_STATE* jsState);
 
 // render.cpp -> move to engine.cpp?
 void SetPattern(RENDER_STATE* pState, char* pattern);
@@ -320,6 +310,7 @@ void UpdatePattern(RENDER_STATE* pState, int MinBalls, int MaxBalls, int MinHeig
 
 // JuggleMaster needs extra zoom for the camera
 void SetCameraExtraZoom(float f);
+float GetCameraExtraZoom(void);
 
 #ifdef __cplusplus
 }

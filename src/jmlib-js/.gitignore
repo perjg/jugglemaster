@@ -18,3 +18,5 @@ node_modules/
 .idea
 *.sublime-*
 .settings
+
+.o

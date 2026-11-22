@@ -11,7 +11,7 @@
  * WITHOUT  ANY  WARRANTY;  without   even  the  implied  warranty  of
  * MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.   See the GNU
  * General Public License for more details.
- */ 
+ */
 
 #include "jmdlx.h"
 #include <wx/dcbuffer.h>    //wxBufferedDC
@@ -24,8 +24,8 @@ bool JMApp::OnInit() {
   // Create main window frame
   int windowx,windowy;
 
-  windowx = min(480,wxGetDisplaySize().x);
-  windowy = min(400,wxGetDisplaySize().y);
+  windowx = min(800, wxGetDisplaySize().x);
+  windowy = min(600, wxGetDisplaySize().y);
 
   jmlib = JMLib::alloc();
   //jmlib = JMLib::alloc_JuggleMaster();
@@ -37,35 +37,31 @@ bool JMApp::OnInit() {
   jmlib->startJuggle();
 
   wxCmdLineParser cmdline(cmdLineDesc, argc, argv);
-  cmdline.SetLogo(_T("JuggleMaster Deluxe"));
-  
+  cmdline.SetLogo("JuggleMaster Deluxe");
+
   if(cmdline.Parse() == -1) {
 	exit(0);
   }
   wxString initialsiteswap,initialstyle,named_pattern,semaphore;
 
-  if(cmdline.Found(_T("help"))) {
+  if(cmdline.Found("help")) {
 	cmdline.Usage();
-	printf((const char*)_T("\n Style can be anything in the \"Change Style\" menu, eg \"Mills Mess\"\n"));
+	printf("\n Style can be anything in the \"Change Style\" menu, eg \"Mills Mess\"\n");
 	exit(0);
   }
-  if(cmdline.Found(_T("style"),&initialstyle)) {
-	jmlib->setStyle((JML_CHAR *)(const char *)initialstyle.mb_str(wxConvUTF8));
+  if(cmdline.Found("style",&initialstyle)) {
+	// Style will be set after frame is created
   }
-  if(cmdline.Found(_T("pattern"),&named_pattern)) {
+  if(cmdline.Found("pattern",&named_pattern)) {
 	/* FIXME */
-	printf((const char*)_T("Named Pattern: %s\n"),(const char *)named_pattern.mb_str(wxConvUTF8));
+	printf("Named Pattern: %s\n",(const char *)named_pattern.mb_str(wxConvUTF8));
   }
-  if(cmdline.Found(_T("semaphore"),&semaphore)) {
+  if(cmdline.Found("semaphore",&semaphore)) {
 	/* FIXME */
-	printf((const char*)_T("Semaphore Requested: %s\n"),(const char *)semaphore.mb_str(wxConvUTF8));
+	printf("Semaphore Requested: %s\n",(const char *)semaphore.mb_str(wxConvUTF8));
   }
   if (cmdline.GetParamCount() > 0) {
     initialsiteswap = cmdline.GetParam(0);
-    if(!initialsiteswap.IsEmpty()) {
-  		jmlib->setPattern((JML_CHAR *)(const char *)initialsiteswap.mb_str(wxConvUTF8),
-				(JML_CHAR *)(const char *)initialsiteswap.mb_str(wxConvUTF8),HR_DEF, DR_DEF);
-    }
   }
 
 	frame = new JMFrame(NULL, -1, _T("JuggleMaster Deluxe"),
@@ -73,6 +69,17 @@ bool JMApp::OnInit() {
 
 	// Show the frame
 	frame->Show(true);
+
+	// Set initial pattern and style after frame is shown and OpenGL is initialized
+	// If no style was specified, use default style
+	if(!initialsiteswap.IsEmpty()) {
+		wxString styleToUse = initialstyle.IsEmpty() ? wxString("Normal") : initialstyle;
+		frame->setInitialPattern(initialsiteswap, styleToUse);
+	}
+	else if(!initialstyle.IsEmpty()) {
+		// Style specified but no pattern - just set the style
+		frame->setInitialPattern(wxEmptyString, initialstyle);
+	}
 
 	return true;
 }
@@ -102,6 +109,7 @@ BEGIN_EVENT_TABLE(JMFrame, wxFrame)
     EVT_MENU(OPTION_OGL_AUTOROTATE, JMFrame::changeAutoRotate)
     EVT_MENU(OPTION_OGL_3D_MODE, JMFrame::changeRenderMode)
     EVT_MENU(OPTION_COLORBALLS, JMFrame::changeColorballs)
+    EVT_MENU(OPTION_SHOW_SITESWAP, JMFrame::changeShowSiteswap)
 #endif
 END_EVENT_TABLE()
 
@@ -137,9 +145,17 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 #ifdef OPENGL_SUPPORT
   optionsMenu->AppendCheckItem(OPTION_OGL_AUTOROTATE, _T("&Rotate Automatically"));
   optionsMenu->AppendCheckItem(OPTION_OGL_3D_MODE, _T("3&D Mode"));
+  optionsMenu->AppendCheckItem(OPTION_SHOW_SITESWAP, _T("Show &Siteswap"));
 
   optionsMenu->Check(OPTION_OGL_AUTOROTATE, TRUE);
+  optionsMenu->Check(OPTION_SHOW_SITESWAP, TRUE);
+#ifdef USE_OPENGL_ES
+  // ES 3.0: Start in 2D mode (3D not yet implemented)
+  optionsMenu->Check(OPTION_OGL_3D_MODE, FALSE);
+#else
+  // Desktop OpenGL: Start in 3D mode (default behavior)
   optionsMenu->Check(OPTION_OGL_3D_MODE, TRUE);
+#endif
 #endif
 
   speedMenu->Append(SPEED_UP,_T("&Up"));
@@ -165,6 +181,8 @@ JMFrame::JMFrame(wxWindow* parent, wxWindowID id, const wxString& title,
 #ifdef OPENGL_SUPPORT
   if (OpenGLSupported()) {
     glCanvas = new JMOpenGLCanvas(this, jmlib);
+    // Initialize OpenGL rendering mode now that canvas and context are created
+    glCanvas->initializeGL();
     timer = new JMTimer(NULL, glCanvas, jmlib);
   }
   else {
@@ -233,12 +251,37 @@ void JMFrame::changeSiteSwapRandom(wxCommandEvent& WXUNUSED(event)) {
   new RandomSiteSwap(this,jmlib);
 }
 void JMFrame::setSiteSwap(wxString *newsite) {
-  jmlib->setPattern((JML_CHAR *)(const char *)*newsite->mb_str(wxConvUTF8),
-		(JML_CHAR *)(const char *)*newsite->mb_str(wxConvUTF8),HR_DEF, DR_DEF);
+  jmlib->setPattern((JML_CHAR *)newsite->mb_str(wxConvUTF8).data(),
+		(JML_CHAR *)newsite->mb_str(wxConvUTF8).data(),HR_DEF, DR_DEF);
 }
 
 void JMFrame::setStyle(wxString *newstyle) {
-  jmlib->setStyle((JML_CHAR *)(const char *)*newstyle->mb_str(wxConvUTF8));
+  jmlib->setStyle((JML_CHAR *)newstyle->mb_str(wxConvUTF8).data());
+}
+
+void JMFrame::setInitialPattern(const wxString& siteswap, const wxString& style) {
+  // This is called after the frame is shown and OpenGL is initialized
+  // Safe to call setStyle/setPattern which may call resetCamera
+  // Follow the same pattern as AdvancedSiteSwap::ApplySettings()
+
+  jmlib->stopJuggle();
+
+  // Trigger a render to clear the "firstFrame" flag in JMLibWrapper
+  // which would otherwise force a switch from JuggleSaver to JuggleMaster
+  jmlib->render();
+
+  // Set pattern first if provided
+  if (!siteswap.IsEmpty()) {
+    jmlib->setPattern((JML_CHAR *)siteswap.mb_str(wxConvUTF8).data(),
+		  (JML_CHAR *)siteswap.mb_str(wxConvUTF8).data(), HR_DEF, DR_DEF);
+  }
+
+  // Then set style after pattern
+  if (!style.IsEmpty()) {
+    jmlib->setStyle((JML_CHAR *)style.mb_str(wxConvUTF8).data());
+  }
+
+  jmlib->startJuggle();
 }
 
 void JMFrame::changeSiteSwap(wxCommandEvent& WXUNUSED(event))
@@ -310,6 +353,7 @@ void JMFrame::changeAutoRotate(wxCommandEvent& WXUNUSED(event)) {
 
 #ifdef OPENGL_SUPPORT
 void JMFrame::changeRenderMode(wxCommandEvent& WXUNUSED(event)) {
+  // Toggle render mode without warnings. ES builds now have a minimal 3D path.
   if (optionsMenu->IsChecked(OPTION_OGL_3D_MODE))
     glCanvas->setRenderMode3D();
   else
@@ -320,6 +364,12 @@ void JMFrame::changeRenderMode(wxCommandEvent& WXUNUSED(event)) {
 #ifdef OPENGL_SUPPORT
 void JMFrame::changeColorballs(wxCommandEvent& WXUNUSED(event)) {
   glCanvas->ballColors(optionsMenu->IsChecked(OPTION_COLORBALLS));
+}
+
+void JMFrame::changeShowSiteswap(wxCommandEvent& WXUNUSED(event)) {
+  if (glCanvas) {
+    glCanvas->setShowSiteswap(optionsMenu->IsChecked(OPTION_SHOW_SITESWAP));
+  }
 }
 #endif
 
@@ -353,13 +403,13 @@ void JMFrame::ErrorCallBack(void *aUData, JML_CHAR *aErrMsg) {
 
 BEGIN_EVENT_TABLE(JMCanvas, wxScrolledWindow)
   EVT_PAINT(JMCanvas::OnPaint)
-  EVT_ERASE_BACKGROUND(JMCanvas::OnEraseBackground) 
+  EVT_ERASE_BACKGROUND(JMCanvas::OnEraseBackground)
   EVT_SIZE(JMCanvas::OnSize)
   EVT_LEFT_DOWN(JMCanvas::OnLMouseDown)
 END_EVENT_TABLE()
 
 
-JMCanvas::JMCanvas(JMFrame *p, JMLib *j) : 
+JMCanvas::JMCanvas(JMFrame *p, JMLib *j) :
   wxScrolledWindow( p, -1, wxDefaultPosition,
 		wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE ) {
 	jmlib = j;
@@ -383,7 +433,7 @@ JMCanvas::~JMCanvas() {
     Refactor to use wxBufferedPaintDC
 */
 void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
-  
+
   //wxMemoryDC dc;
   int i;
   // wxPaintDC dc(this);
@@ -435,7 +485,7 @@ void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
   }
 
   // Draw pattern info on screen
-  int start = (int)jmlib->getSiteposStart(); 
+  int start = (int)jmlib->getSiteposStart();
   int stop  = (int)jmlib->getSiteposStop();
   int diff = stop - start;
   wxCoord x = 10;
@@ -471,7 +521,7 @@ void JMCanvas::OnPaint(wxPaintEvent &WXUNUSED(event)) {
 
   // More pattern information
   wxString balltext;
-  wxString stylestr(jmlib->getStyle(),wxConvUTF8); 
+  wxString stylestr(jmlib->getStyle(),wxConvUTF8);
   balltext.Printf(_T("    Style: %s    Balls: %i"), stylestr.c_str(), jmlib->numBalls());
   dc.DrawText(balltext, x, y);
 
@@ -489,8 +539,8 @@ void JMCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {
 void JMCanvas::OnSize(wxSizeEvent &event) {
 	jmlib->setWindowSize((JML_INT32)event.GetSize().x,(JML_INT32)event.GetSize().y);
 	if(backBuffer) {
-		backBuffer->SetWidth(event.GetSize().x);
-		backBuffer->SetHeight(event.GetSize().y);
+		delete backBuffer;
+		backBuffer = new wxBitmap(event.GetSize().x, event.GetSize().y);
 	}
 	event.Skip();
 }
@@ -520,12 +570,15 @@ JMTimer::JMTimer(JMCanvas *c, JMLib *j) : wxTimer() {
 
 void JMTimer::Notify() {
   jmlib->doJuggle();
-  if (canvas)   canvas->Refresh();
+  if (canvas)   {
+    canvas->Refresh();
+  }
 #ifdef OPENGL_SUPPORT
-  if (glCanvas) glCanvas->Refresh();
+  if (glCanvas) {
+    // For OpenGL, render directly without going through paint events
+    glCanvas->renderNow();
+  }
 #endif
-  wxWakeUpIdle();
-  wxYieldIfNeeded();
 }
 
 int JMTimer::SpeedUp() {

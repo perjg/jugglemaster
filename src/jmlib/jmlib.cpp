@@ -349,7 +349,7 @@ JML_BOOL JuggleMaster::setPattern(const JML_CHAR* name, const JML_CHAR* site, JM
   }
 
   /* zero */
-  memset(siteswap, 0, JML_MAX_SITELEN);
+  memset(siteswap, 0, sizeof(siteswap));
 
   /* Copy the siteswap */
   strcpy(siteswap, site);
@@ -412,11 +412,6 @@ JML_BOOL JuggleMaster::setPattern(const JML_CHAR* name, const JML_CHAR* site, JM
 
 JML_BOOL JuggleMaster::setStyle(const JML_CHAR* name, JML_UINT8 length,
                      const JML_INT8* data, JML_INT32 offset) {
-  if (strlen((char*)data) > JML_MAX_STYLELEN) {
-    error(const_cast<JML_CHAR*>("Style too large"));
-    return false;
-  }
-
   if (strlen(name) > JML_MAX_NAMELEN) {
     error(const_cast<JML_CHAR*>("Style name too long"));
     return false;

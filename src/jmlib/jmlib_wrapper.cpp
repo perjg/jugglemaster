@@ -417,6 +417,9 @@ JML_BOOL JMLibWrapper::setStyle(const JML_CHAR* name, JML_UINT8 length, const JM
 }
 
 JML_BOOL JMLibWrapper::setStyle(const JML_CHAR* name) {
+  if (strcmp(name, "JuggleSaver") == 0 && active->getType() == JUGGLING_ENGINE_JUGGLESAVER)
+    return TRUE;
+
   // if style is set to JuggleSaver, switch to JuggleSaver mode iff the current
   // pattern is a valid JS pattern.
   if (strcmp(name, "JuggleSaver") == 0 &&
@@ -719,8 +722,8 @@ float JMLibWrapper::speed(void) {
   return JuggleSpeed;
 }
 
-JML_CHAR  JMLibWrapper::getSiteposStart(void) { return active->getSiteposStart(); }
-JML_CHAR  JMLibWrapper::getSiteposStop(void)  { return active->getSiteposStop();  }
+JML_INT32 JMLibWrapper::getSiteposStart(void) { return active->getSiteposStart(); }
+JML_INT32 JMLibWrapper::getSiteposStop(void)  { return active->getSiteposStop();  }
 JML_INT32 JMLibWrapper::getSiteposLen(void)   { return active->getSiteposLen();   }
 JML_INT32 JMLibWrapper::getBallRadius(void)   { return active->getBallRadius();   }
 

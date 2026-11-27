@@ -1,0 +1,4 @@
+module CJMLib {
+  header "../../../jmlib/jm_capi.h"
+  export *
+}

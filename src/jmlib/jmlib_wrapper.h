@@ -138,8 +138,8 @@ public:
   virtual void setSpeed(float s);
   virtual float speed(void);
 
-  virtual JML_CHAR  getSiteposStart(void);
-  virtual JML_CHAR  getSiteposStop(void);
+  virtual JML_INT32 getSiteposStart(void);
+  virtual JML_INT32 getSiteposStop(void);
   virtual JML_INT32 getSiteposLen(void);
   virtual JML_INT32 getBallRadius(void);
 	virtual JML_BOOL isValidPattern(const char* patt);

@@ -58,10 +58,10 @@ private:
   JML_INT32 high0[BMAX+1];
   JML_FLOAT high[BMAX+1];
   JML_INT32 kw0;       // XR/KW [m]
-  JML_CHAR siteswap[JML_MAX_SITELEN]; // The current siteswap
+  JML_CHAR siteswap[JML_MAX_SITELEN + 1]; // The current siteswap
   JML_CHAR pattname[LMAX]; // The name of the current pattern
   JML_INT8 steps[LMAX]; // used to print the site on screen
-  JML_CHAR stylename[JML_MAX_NAMELEN]; // The name of the current style
+  JML_CHAR stylename[JML_MAX_NAMELEN + 1]; // The name of the current style
   static const JML_CHAR *possible_styles[]; // Contains list of all possible styles
 
   // Scaling
@@ -146,12 +146,12 @@ public:
   virtual void setSpeed(float s);
   virtual float speed(void);
 
-  virtual JML_CHAR getSiteposStart(void) {
+  virtual JML_INT32 getSiteposStart(void) {
     if (syn && time_period % 2 == 1) return steps[time_period-1];
     return steps[time_period];
   }
 
-  virtual JML_CHAR getSiteposStop(void) {
+  virtual JML_INT32 getSiteposStop(void) {
     if (syn && time_period % 2 == 0) return steps[time_period+2];
     return steps[time_period+1];
   }

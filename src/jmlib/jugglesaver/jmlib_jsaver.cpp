@@ -248,6 +248,23 @@ float JuggleSaver::speed(void) {
   return JuggleSpeed;
 }
 
+// One siteswap character per beat; the throw at beat i leaves the hand at Time == i
+JML_INT32 JuggleSaver::getSiteposStart(void) {
+  if (siteswap == NULL || state.pPattern == NULL) return 0;
+  size_t len = strlen(siteswap);
+  if (len == 0) return 0;
+  return (JML_INT32)((size_t)state.Time % len);
+}
+
+JML_INT32 JuggleSaver::getSiteposStop(void) {
+  if (siteswap == NULL || state.pPattern == NULL || siteswap[0] == '\0') return 0;
+  return getSiteposStart() + 1;
+}
+
+JML_INT32 JuggleSaver::getSiteposLen(void) {
+  return getSiteposStop() - getSiteposStart();
+}
+
 // Returns dummy valiue
 // BallRad is used internally for ball radius. This is a float value
 JML_INT32 JuggleSaver::getBallRadius(void) {

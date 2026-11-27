@@ -272,8 +272,8 @@ public:
 
   /** Gets the position of the active throw.
    * Use these functions to implement highlighting of the current throw */
-  virtual JML_CHAR  getSiteposStart(void) = 0;
-  virtual JML_CHAR  getSiteposStop(void) = 0;
+  virtual JML_INT32 getSiteposStart(void) = 0;
+  virtual JML_INT32 getSiteposStop(void) = 0;
   virtual JML_INT32 getSiteposLen(void) = 0;
 
   /** Gets ball radius */

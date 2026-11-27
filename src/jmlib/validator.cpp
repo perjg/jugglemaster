@@ -188,8 +188,11 @@ bool JMSiteValidator::validateSiteSyntax(JML_CHAR* site) {
   return scanSite(site);
 }
 
+// Bounds validateSSS's 1024-byte expansion buffer; the engine only juggles JML_MAX_SITELEN (56) anyway
+static const size_t MAX_VALIDATED_SITE_LENGTH = 256;
+
 bool JMSiteValidator::validateSite(JML_CHAR* site) {
-  if (site == 0 || *site == 0)
+  if (site == 0 || *site == 0 || strlen(site) > MAX_VALIDATED_SITE_LENGTH)
     return false;
 
   if (validateSiteSyntax(site)) {
@@ -250,6 +253,9 @@ bool JMSiteValidator::validateVSS(JML_CHAR* site) {
 bool JMSiteValidator::validateSSS(JML_CHAR* site) {
   //char* MSS = new char(len+1); will crash! why?
   JML_CHAR MSS[1024];
+
+  if (strlen(site) > MAX_VALIDATED_SITE_LENGTH)
+    return false;
 
   if (transSyncMSS(MSS, site)) {
     bool ret = validateMSS(MSS);

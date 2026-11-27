@@ -28,6 +28,20 @@
 
 float v_arr[2200];
 
+#ifndef USE_OPENGL_ES
+// The 3D shader renderer leaves its program, VBO and generic attributes bound;
+// any of them overrides the client-side arrays of the fixed-function 2D path
+static void resetFixedFunctionState() {
+#ifdef USE_SHADER_RENDERING
+  glUseProgram(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  GLint maxAttribs = 0;
+  glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxAttribs);
+  for (GLint a = 0; a < maxAttribs; a++) glDisableVertexAttribArray(a);
+#endif
+}
+#endif
+
 void JMFlatOpenGL::doCoordTransform(bool flipY, bool centerOrigin) {
   arm*  jmlib_ap    = &(jmlib->ap);
   ball* jmlib_rhand = &(jmlib->rhand);
@@ -166,27 +180,32 @@ void JMFlatOpenGL::initializeFlatRenderMode() {
 	zoomFactorY_JS = 50.0f;
 
 #ifdef USE_OPENGL_ES
-  // Initialize shaders and VBO for ES 3.0 / WebGL 2.0
-  flatShader = new ShaderProgram();
-  lineShader = new ShaderProgram();
-
-  if(!flatShader->loadFromStrings(flatColorVertexShader, flatColorFragmentShader)) {
-    fprintf(stderr, "ERROR: Failed to load flat color shader\n");
-    delete flatShader;
-    flatShader = nullptr;
+  // Initialize shaders and VBO for ES 3.0 / WebGL 2.0, once per renderer (re-entered on every switch to 2D)
+  if (!flatShader) {
+    flatShader = new ShaderProgram();
+    if(!flatShader->loadFromStrings(flatColorVertexShader, flatColorFragmentShader)) {
+      fprintf(stderr, "ERROR: Failed to load flat color shader\n");
+      delete flatShader;
+      flatShader = nullptr;
+    }
   }
 
-  if(!lineShader->loadFromStrings(lineVertexShader, lineFragmentShader)) {
-    fprintf(stderr, "ERROR: Failed to load line shader\n");
-    delete lineShader;
-    lineShader = nullptr;
+  if (!lineShader) {
+    lineShader = new ShaderProgram();
+    if(!lineShader->loadFromStrings(lineVertexShader, lineFragmentShader)) {
+      fprintf(stderr, "ERROR: Failed to load line shader\n");
+      delete lineShader;
+      lineShader = nullptr;
+    }
   }
 
   // Create dynamic VBO (VAO not needed for GLSL 1.20 / OpenGL 2.1)
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(v_arr), nullptr, GL_DYNAMIC_DRAW);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  if (!vbo) {
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(v_arr), nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+  }
 
   modelViewMatrix.loadIdentity();
   currentColor[0] = 1.0f;
@@ -241,6 +260,7 @@ void JMFlatOpenGL::drawFlat() {
   currentColor[3] = 1.0f;
 #else
   // Desktop OpenGL fixed pipeline
+  resetFixedFunctionState();
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(-width/2, width/2, height/2, -height/2, -10.0f, 10.0f);
@@ -522,6 +542,7 @@ void JMFlatOpenGL::renderJS(RENDER_STATE* pState) {
   currentColor[2] = 1.0f;
   currentColor[3] = 1.0f;
 #else
+  resetFixedFunctionState();
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(-width/2, width/2, -height/2, height/2, -10.0f, 10.0f);

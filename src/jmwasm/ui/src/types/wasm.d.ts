@@ -14,15 +14,21 @@ interface EmscriptenModule {
     argTypes: string[]
   ) => (...args: unknown[]) => unknown;
 
-  // Exported functions from jmwasm.cpp
+  // Exported functions from jmwasm.cpp and src/jmlib/jm_capi.h
   _jm_init: (width: number, height: number) => number;
   // Raw exports marshal no strings: string-taking/returning functions operate
   // on wasm heap pointers (numbers). Use ccall for string arguments/returns.
-  _jm_set_pattern: (namePtr: number, sitePtr: number) => void;
+  _jm_set_pattern: (namePtr: number, sitePtr: number) => number;
   _jm_set_style: (stylePtr: number) => void;
   _jm_set_speed: (speed: number) => void;
   _jm_get_speed: () => number;
   _jm_render: () => void;
+  _jm_frame: () => void;
+  _jm_draw: () => void;
+  _jm_set_paused: (paused: number) => void;
+  _jm_get_paused: () => number;
+  _jm_get_pattern_name: () => number;
+  _jm_get_style: () => number;
   _jm_resize: (width: number, height: number) => void;
   _jm_get_version: () => number;
   _jm_get_engine: () => number;

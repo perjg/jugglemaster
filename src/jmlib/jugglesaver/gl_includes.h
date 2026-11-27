@@ -18,8 +18,13 @@
 #define GL_INCLUDES_H
 
 #ifdef USE_OPENGL_ES
-  // OpenGL ES 3.0 (for iOS, WebAssembly)
-  #include <GLES3/gl3.h>
+  // OpenGL ES 3.0 (for iOS, tvOS, WebAssembly)
+  #ifdef __APPLE__
+    #include <OpenGLES/ES3/gl.h>
+    #include <OpenGLES/ES3/glext.h>
+  #else
+    #include <GLES3/gl3.h>
+  #endif
   #define USING_OPENGL_ES_3
 #elif defined(USE_SHADER_RENDERING)
     // Desktop OpenGL with shaders

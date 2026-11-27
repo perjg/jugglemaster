@@ -1,0 +1,20 @@
+{
+  "info": {
+    "author": "xcode",
+    "version": 1
+  },
+  "layers": [
+    {
+      "filename": "Green.imagestacklayer"
+    },
+    {
+      "filename": "Blue.imagestacklayer"
+    },
+    {
+      "filename": "Red.imagestacklayer"
+    },
+    {
+      "filename": "Back.imagestacklayer"
+    }
+  ]
+}

@@ -834,7 +834,11 @@ unsigned char ParsePositionText(const char** ppch, POS* pPos, int min, int max)
         while (*pch == ' ')
             pch++;
         while (*pch != ',' && *pch != '\0' && *pch != ')' && *pch != ' ')
+        {
+            if (pOut == szTemp + sizeof(szTemp) - 1)
+                return 0; // a number longer than any position
             *pOut++ = *pch++;
+        }
         *pOut = '\0';
 
         if (szTemp[0] != '\0')

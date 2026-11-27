@@ -1,0 +1,239 @@
+name: JuggleMaster
+
+options:
+  bundleIdPrefix: net.jugglemaster
+  deploymentTarget:
+    iOS: "18.0"
+    tvOS: "18.0"
+    macOS: "15.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+  developmentLanguage: en
+
+packages:
+  JMKit:
+    path: JMKit
+
+settings:
+  base:
+    DEVELOPMENT_TEAM: 637V48V963
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_VERSION: "6.0"
+    CLANG_CXX_LANGUAGE_STANDARD: c++17
+    MARKETING_VERSION: "3.0"
+    CURRENT_PROJECT_VERSION: "1"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    # CJMLib is an internal import of JugglerKit, but clients' module scans still resolve it
+    SWIFT_INCLUDE_PATHS: $(SRCROOT)/JugglerKit/CJMLib
+
+targets:
+  # jmlib C++ core: the jmwasm source list plus the shared C API
+  JMLib:
+    type: library.static
+    supportedDestinations: [iOS, tvOS, macOS]
+    sources:
+      - path: ../jmlib
+        includes:
+          - jm_capi.cpp
+          - jmlib.cpp
+          - jmlib_wrapper.cpp
+          - render_jm_flat.cpp
+          - util.cpp
+          - validator.cpp
+          - prefs.cpp
+          - jugglesaver/engine.cpp
+          - jugglesaver/shader_manager.cpp
+          - jugglesaver/jmlib_jsaver.cpp
+          - jugglesaver/js_validator.cpp
+          - jugglesaver/render_shader.cpp
+          - jugglesaver/render_common.cpp
+          - jugglesaver/gltrackball.cpp
+          - jugglesaver/trackball.cpp
+        createIntermediateGroups: false
+    settings:
+      base:
+        PRODUCT_NAME: JMLib
+        HEADER_SEARCH_PATHS: $(SRCROOT)/../jmlib
+        OTHER_CFLAGS: -fsigned-char
+        JM_DEFINES: JUGGLESAVER_SUPPORT USE_SHADER_RENDERING
+        GCC_PREPROCESSOR_DEFINITIONS: $(JM_DEFINES) GL_SILENCE_DEPRECATION
+        GCC_PREPROCESSOR_DEFINITIONS[sdk=iphone*]: $(JM_DEFINES) USE_OPENGL_ES GLES_SILENCE_DEPRECATION
+        GCC_PREPROCESSOR_DEFINITIONS[sdk=appletv*]: $(JM_DEFINES) USE_OPENGL_ES GLES_SILENCE_DEPRECATION
+        SKIP_INSTALL: YES
+
+  # Swift bridge to the engine, GL hosting and shared SwiftUI views
+  JugglerKit:
+    type: framework
+    supportedDestinations: [iOS, tvOS, macOS]
+    sources:
+      - path: JugglerKit/Sources
+      - path: JugglerKit/Resources
+        buildPhase: resources
+    dependencies:
+      - target: JMLib
+        link: true
+      - package: JMKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: net.jugglemaster.JugglerKit
+        GENERATE_INFOPLIST_FILE: YES
+        OTHER_SWIFT_FLAGS: -Xcc -DGL_SILENCE_DEPRECATION -Xcc -DGLES_SILENCE_DEPRECATION
+        SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+        OTHER_LDFLAGS: -lc++ -framework OpenGL
+        OTHER_LDFLAGS[sdk=iphone*]: -lc++ -framework OpenGLES
+        OTHER_LDFLAGS[sdk=appletv*]: -lc++ -framework OpenGLES
+        SKIP_INSTALL: YES
+
+  JugglerKitTests:
+    type: bundle.unit-test
+    supportedDestinations: [iOS, tvOS, macOS]
+    sources:
+      - path: JugglerKit/Tests
+      - path: ../../tests/visual/snapshots/visual.spec.ts-snapshots
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - target: JugglerKit
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        OTHER_SWIFT_FLAGS: -Xcc -DGL_SILENCE_DEPRECATION -Xcc -DGLES_SILENCE_DEPRECATION
+        SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+
+  # iPhone, iPad and Mac
+  JuggleMaster:
+    type: application
+    supportedDestinations: [iOS, macOS]
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleURLTypes:
+          - CFBundleURLName: net.jugglemaster.JuggleMaster
+            CFBundleURLSchemes: [jugglemaster]
+        # One scene: the engine and its GL state are process-wide
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    sources:
+      - path: App
+      - path: Resources/PrivacyInfo.xcprivacy
+        buildPhase: resources
+      - path: Resources/InfoPlist.xcstrings
+        buildPhase: resources
+      - path: ../../data/patterns.jm
+        buildPhase: resources
+      - path: ../../data/moresites.txt
+        buildPhase: resources
+    dependencies:
+      - target: JugglerKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: net.jugglemaster.JuggleMaster
+        PRODUCT_NAME: JuggleMaster
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: JuggleMaster
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.entertainment
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+        LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]: $(inherited) @executable_path/../Frameworks
+        ENABLE_APP_SANDBOX: YES
+        SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+
+  # Apple TV
+  JuggleMasterTV:
+    type: application
+    supportedDestinations: [tvOS]
+    sources:
+      - path: TV
+      - path: Resources/PrivacyInfo.xcprivacy
+        buildPhase: resources
+      - path: Resources/InfoPlist.xcstrings
+        buildPhase: resources
+      - path: ../../data/patterns.jm
+        buildPhase: resources
+      - path: ../../data/moresites.txt
+        buildPhase: resources
+    dependencies:
+      - target: JugglerKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: net.jugglemaster.JuggleMaster
+        PRODUCT_NAME: JuggleMaster
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: JuggleMaster
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: App Icon & Top Shelf Image
+        SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+
+  JuggleMasterTVUITests:
+    type: bundle.ui-testing
+    supportedDestinations: [tvOS]
+    sources:
+      - path: TVUITests
+    dependencies:
+      - target: JuggleMasterTV
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: JuggleMasterTV
+        SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+
+  JuggleMasterUITests:
+    type: bundle.ui-testing
+    supportedDestinations: [iOS]
+    sources:
+      - path: AppUITests
+    dependencies:
+      - target: JuggleMaster
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: JuggleMaster
+        SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+
+  JuggleMasterMacUITests:
+    type: bundle.ui-testing
+    supportedDestinations: [macOS]
+    sources:
+      - path: MacUITests
+    dependencies:
+      - target: JuggleMaster
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: JuggleMaster
+        SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+
+schemes:
+  JugglerKit:
+    build:
+      targets:
+        JugglerKit: all
+    test:
+      targets:
+        - JugglerKitTests
+  JuggleMaster:
+    build:
+      targets:
+        JuggleMaster: all
+    test:
+      targets:
+        - JugglerKitTests
+        - JuggleMasterUITests
+  JuggleMasterMac:
+    build:
+      targets:
+        JuggleMaster: all
+    test:
+      targets:
+        - JuggleMasterMacUITests
+  JuggleMasterTV:
+    build:
+      targets:
+        JuggleMasterTV: all
+    test:
+      targets:
+        - JugglerKitTests
+        - JuggleMasterTVUITests

@@ -8,27 +8,49 @@ public let overlayBackground = Color.black.opacity(0.45)
 /// The highlighted throw in the siteswap overlay (web: #ff4444).
 public let activeThrowColor = Color(red: 1, green: 0x44 / 255, blue: 0x44 / 255)
 
-/// The current siteswap with the throw being animated in red.
+/// The current siteswap with the throw being animated in red; passing patterns written per juggler get a row
+/// per juggler, labelled A, B, … in the juggler's colour.
 public struct SiteswapOverlay: View {
-    let display: SiteswapDisplay
+    let rows: [SiteswapDisplay]
     let fontSize: CGFloat
 
-    public init(display: SiteswapDisplay, fontSize: CGFloat = 16) {
-        self.display = display
+    public init(rows: [SiteswapDisplay], fontSize: CGFloat = 16) {
+        self.rows = rows
         self.fontSize = fontSize
     }
 
     public var body: some View {
-        if !display.site.isEmpty {
-            (Text(display.before) + Text(display.active).foregroundStyle(activeThrowColor) + Text(display.after))
-                .font(.system(size: fontSize, design: .monospaced))
-                .foregroundStyle(.white)
-                .padding(.horizontal, fontSize * 0.75)
-                .padding(.vertical, fontSize * 0.25)
-                .background(overlayBackground, in: RoundedRectangle(cornerRadius: 4))
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(display.site)
+        if let first = rows.first, !first.site.isEmpty {
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(rows.indices, id: \.self) { index in
+                    text(for: rows[index])
+                }
+            }
+            .font(.system(size: fontSize, design: .monospaced))
+            .foregroundStyle(.white)
+            .padding(.horizontal, fontSize * 0.75)
+            .padding(.vertical, fontSize * 0.25)
+            .background(overlayBackground, in: RoundedRectangle(cornerRadius: 4))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(rows.map(\.site).joined(separator: "\n"))
         }
+    }
+
+    private func text(for row: SiteswapDisplay) -> Text {
+        let line = Text(row.before) + Text(row.active).foregroundStyle(activeThrowColor) + Text(row.after)
+        guard let juggler = row.juggler, let scalar = UnicodeScalar(65 + juggler) else { return line }
+        let label = Text(verbatim: String(Character(scalar)) + " ").bold()
+            .foregroundStyle(Color(rgb: row.color ?? 0xFFFFFF))
+        return label + line
+    }
+}
+
+extension Color {
+    /// A colour from 0xRRGGBB.
+    init(rgb: Int) {
+        self.init(
+            red: Double((rgb >> 16) & 0xFF) / 255, green: Double((rgb >> 8) & 0xFF) / 255,
+            blue: Double(rgb & 0xFF) / 255)
     }
 }
 
@@ -42,7 +64,7 @@ public struct CameraPresetsBar: View {
 
     public var body: some View {
         HStack(spacing: 2) {
-            ForEach(CameraPreset.displayOrder, id: \.self) { preset in
+            ForEach(model.cameraPresets, id: \.self) { preset in
                 Button(preset.title) { model.setCameraPreset(preset) }
                     .font(.system(size: 12, design: .monospaced))
                     .padding(.horizontal, 8)
@@ -210,5 +232,55 @@ public struct ShareQRCode: View {
         filter.correctionLevel = "M"
         guard let output = filter.outputImage else { return nil }
         return context.createCGImage(output, from: output.extent)
+    }
+}
+
+/// How far apart the jugglers being fed stand: a slider, or minus/plus buttons on tvOS, which has none.
+public struct FeedWidthControl: View {
+    @Bindable var model: JugglerModel
+
+    public init(model: JugglerModel) {
+        self.model = model
+    }
+
+    public var body: some View {
+        #if os(tvOS)
+        HStack(spacing: 16) {
+            Text(jmLocalized("menu.feedWidth"))
+            Spacer()
+            Button {
+                model.feedWidth = max(0, model.feedWidth - 1)
+            } label: {
+                Image(systemName: "minus")
+            }
+            .disabled(model.feedWidth == 0)
+            .accessibilityLabel("\(jmLocalized("menu.feedWidth")) −")
+            .accessibilityIdentifier("feedNarrower")
+            Text(model.feedWidthTitle(model.feedWidth))
+                .monospacedDigit()
+                .frame(minWidth: 110)
+                .accessibilityIdentifier("feedWidthValue")
+            Button {
+                model.feedWidth = min(AppState.widestFeed, model.feedWidth + 1)
+            } label: {
+                Image(systemName: "plus")
+            }
+            .disabled(model.feedWidth == AppState.widestFeed)
+            .accessibilityLabel("\(jmLocalized("menu.feedWidth")) +")
+            .accessibilityIdentifier("feedWider")
+        }
+        #else
+        VStack(alignment: .leading) {
+            LabeledContent(jmLocalized("menu.feedWidth")) {
+                Text(model.feedWidthTitle(model.feedWidth)).monospacedDigit()
+            }
+            Slider(
+                value: Binding(get: { Double(model.feedWidth) }, set: { model.feedWidth = Int($0.rounded()) }),
+                in: 0...Double(AppState.widestFeed), step: 1
+            )
+            .accessibilityLabel(jmLocalized("menu.feedWidth"))
+            .accessibilityIdentifier("feedWidth")
+        }
+        #endif
     }
 }

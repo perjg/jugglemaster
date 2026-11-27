@@ -62,7 +62,7 @@ struct TVRootView: View {
             JugglerView(model: model)
                 .overlay(alignment: .top) {
                     if model.showSiteswap {
-                        SiteswapOverlay(display: model.siteswap, fontSize: 38)
+                        SiteswapOverlay(rows: model.siteswap, fontSize: 38)
                             .padding(.top, safeArea.top)
                             .accessibilityIdentifier("siteswapOverlay")
                     }
@@ -164,7 +164,7 @@ struct TVRootView: View {
     }
 
     private func handleArrow(_ type: UIPress.PressType) {
-        let presets = CameraPreset.displayOrder
+        let presets = model.cameraPresets
         let index = presets.firstIndex(of: model.cameraPreset ?? .front) ?? 0
         switch type {
         case .leftArrow:

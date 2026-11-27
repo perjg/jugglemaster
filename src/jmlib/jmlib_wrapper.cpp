@@ -387,9 +387,12 @@ JML_BOOL JMLibWrapper::setPattern(const JML_CHAR* name, const JML_CHAR* site, JM
     SetCameraExtraZoom(0);
     js->setPattern(site);
 
-    char* s = GetCurrentSite();
-    jm->setPattern(s);
-		free(s);
+    // A passing or sync site would be a different pattern for JuggleMaster
+    if (JSValidator::isPlainSolo(site)) {
+      char* s = GetCurrentSite();
+      jm->setPattern(s);
+      free(s);
+    }
 
     // Apply object type override for JuggleSaver patterns
     // Note: setPattern() only calls SetPattern() if initialized is true
@@ -493,6 +496,18 @@ JML_FLOAT JMLibWrapper::getDR() {
 
 JML_INT32 JMLibWrapper::numBalls(void) {
   return active->numBalls();
+}
+
+JML_INT32 JMLibWrapper::numJugglers(void) {
+  return active->numJugglers();
+}
+
+JML_BOOL JMLibWrapper::isFeed(void) {
+  return active->isFeed();
+}
+
+void JMLibWrapper::setFeedWidth(JML_INT32 width) {
+  js->setFeedWidth(width);
 }
 
 void JMLibWrapper::startJuggle(void) {
@@ -773,6 +788,10 @@ void JMLibWrapper::setCameraAngle(JML_FLOAT spinAngle, JML_FLOAT translateAngle,
   SpinSpeed = 0.0f;
   TranslateSpeed = 0.0f;
   js->setAutoRotate(false);
+}
+
+void JMLibWrapper::setCameraOffset(JML_FLOAT deltaX, JML_FLOAT deltaY) {
+  js->setCameraOffset(deltaX, deltaY);
 }
 
 void JMLibWrapper::zoom(float zoom) {

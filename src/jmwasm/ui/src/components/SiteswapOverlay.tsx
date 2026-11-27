@@ -1,16 +1,12 @@
+import type { SiteswapRow } from '../hooks/useSiteswapInfo';
+
 interface SiteswapOverlayProps {
-  site: string;
-  start: number;
-  stop: number;
+  rows: SiteswapRow[];
   visible: boolean;
 }
 
-export const SiteswapOverlay = ({ site, start, stop, visible }: SiteswapOverlayProps) => {
-  if (!visible || !site) return null;
-
-  const before = site.slice(0, start);
-  const active = site.slice(start, stop);
-  const after = site.slice(stop);
+export const SiteswapOverlay = ({ rows, visible }: SiteswapOverlayProps) => {
+  if (!visible || rows.length === 0 || !rows[0].site) return null;
 
   return (
     <div
@@ -35,9 +31,14 @@ export const SiteswapOverlay = ({ site, start, stop, visible }: SiteswapOverlayP
           lineHeight: 1.4,
         }}
       >
-        <span style={{ color: 'white' }}>{before}</span>
-        <span style={{ color: '#ff4444' }}>{active}</span>
-        <span style={{ color: 'white' }}>{after}</span>
+        {rows.map(({ site, start, stop, color }, i) => (
+          <div key={i}>
+            {color && <span style={{ color, fontWeight: 'bold' }}>{String.fromCharCode(65 + i)} </span>}
+            <span style={{ color: 'white' }}>{site.slice(0, start)}</span>
+            <span style={{ color: '#ff4444' }}>{site.slice(start, stop)}</span>
+            <span style={{ color: 'white' }}>{site.slice(stop)}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

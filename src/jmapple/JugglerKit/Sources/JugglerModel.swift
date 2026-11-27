@@ -13,6 +13,9 @@ public struct SiteswapValidation: Equatable, Sendable {
 public struct SiteswapDisplay: Equatable, Sendable {
     public var site = ""
     public var range = 0..<0
+    /// For passing patterns written per juggler: whose row this is, and that juggler's body colour (0xRRGGBB).
+    public var juggler: Int?
+    public var color: Int?
 
     public var before: Substring { site.prefix(range.lowerBound) }
     public var active: Substring { site.dropFirst(range.lowerBound).prefix(range.count) }
@@ -42,13 +45,43 @@ public final class JugglerModel {
     public private(set) var autoRotate = false
     public private(set) var isPaused = false
     public private(set) var zoom: Float = 0
-    public private(set) var siteswap = SiteswapDisplay()
+    /// One row, or one per juggler for passing patterns written per juggler (`4.5p 3 3`).
+    public private(set) var siteswap = [SiteswapDisplay]()
     /// The last camera preset chosen, nil once the camera was orbited.
     public private(set) var cameraPreset: CameraPreset? = .front
     public var showSiteswap = false {
         didSet {
             guard showSiteswap != oldValue else { return }
             state.showSiteswap = showSiteswap
+            persist()
+        }
+    }
+    /// Jugglers passing the current pattern; 1 for solo patterns.
+    public private(set) var jugglerCount = 1
+    /// A feed width as shown, e.g. "1.6 m".
+    public func feedWidthTitle(_ width: Int) -> String {
+        engine.feedWidthMetres(width).formatted(.number.precision(.fractionLength(1))) + " m"
+    }
+
+    /// The camera presets offered for the current pattern.
+    public var cameraPresets: [CameraPreset] { CameraPreset.displayOrder(jugglers: jugglerCount) }
+    /// Whether the current pattern is a feed (one juggler passing to several).
+    public private(set) var isFeed = false
+    /// How far apart the jugglers being fed stand, 0 (narrowest) to `AppState.widestFeed`.
+    public var feedWidth = AppState.defaultFeedWidth {
+        didSet {
+            guard feedWidth != oldValue else { return }
+            state.feedWidth = feedWidth
+            engine.feedWidth = feedWidth
+            persist()
+        }
+    }
+    /// Whether several jugglers get different body colours.
+    public var colorJugglers = true {
+        didSet {
+            guard colorJugglers != oldValue else { return }
+            state.colorJugglers = colorJugglers
+            engine.colorsJugglers = colorJugglers
             persist()
         }
     }
@@ -90,6 +123,8 @@ public final class JugglerModel {
         speed = state.speed
         autoRotate = state.autoRotate
         showSiteswap = state.showSiteswap
+        colorJugglers = state.colorJugglers
+        feedWidth = state.feedWidth
     }
 
     // MARK: Engine lifecycle
@@ -115,6 +150,8 @@ public final class JugglerModel {
     private func applyToEngine() {
         cameraPreset = .front
         engine.objectType = objectType
+        engine.colorsJugglers = colorJugglers
+        engine.feedWidth = feedWidth
         if !engine.setPattern(name: state.name, site: state.pattern) {
             let defaults = AppState()
             state.pattern = defaults.pattern
@@ -136,12 +173,14 @@ public final class JugglerModel {
 
     /// Polls what changes while animating; publishes only on change.
     public func frameDidRender() {
-        setIfChanged(\.siteswap, SiteswapDisplay(site: engine.site, range: engine.siteRange))
+        setIfChanged(\.siteswap, engine.siteRows)
         setIfChanged(\.zoom, engine.zoom)
     }
 
     private func syncFromEngine() {
         setIfChanged(\.actualEngine, engine.engineType)
+        setIfChanged(\.jugglerCount, engine.jugglerCount)
+        setIfChanged(\.isFeed, engine.isFeed)
         setIfChanged(\.autoRotate, engine.autoRotate)
         setIfChanged(\.isPaused, engine.isPaused)
         frameDidRender()

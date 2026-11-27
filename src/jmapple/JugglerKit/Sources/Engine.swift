@@ -24,6 +24,8 @@ public enum CameraPreset: Int32, Sendable, CaseIterable {
     case back = 2
     case right = 3
     case high = 4
+    /// Straight down, for passing patterns.
+    case top = 5
 }
 
 /// Swift face of `jm_capi.h`. Every call makes `GLContext.shared` current
@@ -91,12 +93,51 @@ public final class Engine {
     public func isValidJuggleMasterPattern(_ pattern: String) -> Bool { jm_is_valid_jm_pattern(pattern) == 1 }
     public func isValidJuggleSaverPattern(_ pattern: String) -> Bool { jm_is_valid_js_pattern(pattern) == 1 }
 
+    /// Jugglers passing the current pattern (`J2:966`); 1 for solo patterns.
+    public var jugglerCount: Int { Int(jm_get_juggler_count()) }
+
+    /// Whether the current pattern is a feed (one juggler passing to several).
+    public var isFeed: Bool { jm_get_is_feed() == 1 }
+
+    /// How far apart the jugglers being fed stand: 0 (narrowest) to `feedWidths - 1` (widest, the default).
+    public var feedWidth: Int {
+        get { Int(jm_get_feed_width()) }
+        set { gl { jm_set_feed_width(Int32(newValue)) } }
+    }
+    public var feedWidths: Int { Int(jm_get_feed_width_count()) }
+
+    /// That distance in metres.
+    public func feedWidthMetres(_ width: Int) -> Double { Double(jm_get_feed_width_metres(Int32(width))) }
+
+    /// Whether several jugglers get different body colours.
+    public var colorsJugglers: Bool {
+        get { jm_get_juggler_colors() == 1 }
+        set { gl { jm_set_juggler_colors(newValue ? 1 : 0) } }
+    }
+
     public var site: String { String(cString: jm_get_site()) }
     /// Always inside `site`, whatever the engine reports.
     public var siteRange: Range<Int> {
-        let count = site.count
-        let start = min(max(0, Int(jm_get_sitepos_start())), count)
-        return start..<min(max(start, Int(jm_get_sitepos_stop())), count)
+        Self.clamped(Int(jm_get_sitepos_start()), Int(jm_get_sitepos_stop()), to: site.count)
+    }
+
+    /// The siteswap display: `site` with `siteRange`, or one row per juggler for passing patterns written
+    /// per juggler.
+    public var siteRows: [SiteswapDisplay] {
+        let count = Int(jm_get_site_rows())
+        guard count > 1 else { return [SiteswapDisplay(site: site, range: siteRange)] }
+        return (0..<Int32(count)).map { row in
+            let text = String(cString: jm_get_row_site(row))
+            let range = Self.clamped(
+                Int(jm_get_row_sitepos_start(row)), Int(jm_get_row_sitepos_stop(row)), to: text.count)
+            return SiteswapDisplay(
+                site: text, range: range, juggler: Int(row), color: Int(jm_get_juggler_color(row)))
+        }
+    }
+
+    private static func clamped(_ start: Int, _ stop: Int, to count: Int) -> Range<Int> {
+        let start = min(max(0, start), count)
+        return start..<min(max(start, stop), count)
     }
 
     // MARK: Rendering

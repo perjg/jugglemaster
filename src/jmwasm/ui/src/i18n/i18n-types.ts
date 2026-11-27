@@ -174,6 +174,14 @@ type RootTranslation = {
 		 */
 		showSiteswap: string
 		/**
+		 * C​o​l​o​r​-​c​o​d​e​d​ ​j​u​g​g​l​e​r​s
+		 */
+		colorJugglers: string
+		/**
+		 * F​e​e​d​ ​w​i​d​t​h
+		 */
+		feedWidth: string
+		/**
 		 * S​p​e​e​d
 		 */
 		speed: string
@@ -219,6 +227,32 @@ type RootTranslation = {
 		 * S​c​a​n​ ​t​o​ ​o​p​e​n​ ​o​n​ ​a​n​o​t​h​e​r​ ​d​e​v​i​c​e
 		 */
 		scanHint: string
+	}
+	camera: {
+		/**
+		 * L​e​f​t
+		 */
+		left: string
+		/**
+		 * B​a​c​k
+		 */
+		back: string
+		/**
+		 * F​r​o​n​t
+		 */
+		front: string
+		/**
+		 * H​i​g​h
+		 */
+		high: string
+		/**
+		 * R​i​g​h​t
+		 */
+		right: string
+		/**
+		 * T​o​p
+		 */
+		top: string
 	}
 	zoom: {
 		/**
@@ -393,6 +427,14 @@ export type TranslationFunctions = {
 		 */
 		showSiteswap: () => LocalizedString
 		/**
+		 * Color-coded jugglers
+		 */
+		colorJugglers: () => LocalizedString
+		/**
+		 * Feed width
+		 */
+		feedWidth: () => LocalizedString
+		/**
 		 * Speed
 		 */
 		speed: () => LocalizedString
@@ -438,6 +480,32 @@ export type TranslationFunctions = {
 		 * Scan to open on another device
 		 */
 		scanHint: () => LocalizedString
+	}
+	camera: {
+		/**
+		 * Left
+		 */
+		left: () => LocalizedString
+		/**
+		 * Back
+		 */
+		back: () => LocalizedString
+		/**
+		 * Front
+		 */
+		front: () => LocalizedString
+		/**
+		 * High
+		 */
+		high: () => LocalizedString
+		/**
+		 * Right
+		 */
+		right: () => LocalizedString
+		/**
+		 * Top
+		 */
+		top: () => LocalizedString
 	}
 	zoom: {
 		/**

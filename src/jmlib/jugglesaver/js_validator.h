@@ -36,6 +36,10 @@ class JSValidator {
   static bool validateVSS(char* site);
   // validate a JuggleSaver pattern
   static bool validateJSPattern(char* patt);
+  // Jugglers sharing the pattern (J<n>: prefix), 0 if it does not parse
+  static int jugglerCount(const char* patt);
+  // Whether the pattern is a plain solo site (no passing, no hands throwing together)
+  static bool isPlainSolo(const char* patt);
   // check if a pattern is JuggleSaver only
   static bool isJSOnly(char* patt);
 };

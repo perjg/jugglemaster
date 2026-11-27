@@ -19,7 +19,7 @@ JMLIB = os.path.normpath(os.path.join(ROOT, "..", "jmlib"))
 JMLIB_SOURCES = [
     "jmlib.cpp", "jmlib_wrapper.cpp", "jm_capi.cpp", "render_jm_flat.cpp", "util.cpp", "validator.cpp",
     "prefs.cpp", "jugglesaver/engine.cpp", "jugglesaver/shader_manager.cpp", "jugglesaver/jmlib_jsaver.cpp",
-    "jugglesaver/js_validator.cpp", "jugglesaver/render_common.cpp", "jugglesaver/gltrackball.cpp",
+    "jugglesaver/js_validator.cpp", "jugglesaver/js_passing.cpp", "jugglesaver/render_common.cpp", "jugglesaver/gltrackball.cpp",
     "jugglesaver/trackball.cpp",
 ]
 

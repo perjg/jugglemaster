@@ -41,6 +41,8 @@ const no = {
 		filterAll: 'Alle',
 		filterJm: 'JM',
 		filterJs: 'JS',
+		colorJugglers: 'Fargekodede sjonglører',
+		feedWidth: 'Bredde på feed',
 		showSiteswap: 'Vis siteswap',
 		speed: 'Hastighet',
 		objects: 'Objekter',
@@ -55,6 +57,14 @@ const no = {
 		copyLink: 'Kopier lenke',
 		copied: 'Kopiert!',
 		scanHint: 'Skann for å åpne på en annen enhet',
+	},
+	camera: {
+		left: 'Venstre',
+		back: 'Bak',
+		front: 'Foran',
+		high: 'Høy',
+		right: 'Høyre',
+		top: 'Ovenfra',
 	},
 	zoom: {
 		zoomIn: 'Zoom inn',

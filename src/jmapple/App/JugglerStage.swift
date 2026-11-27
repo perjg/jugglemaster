@@ -17,7 +17,7 @@ struct JugglerStage: View {
             }
             .overlay(alignment: .top) {
                 if model.showSiteswap {
-                    SiteswapOverlay(display: model.siteswap)
+                    SiteswapOverlay(rows: model.siteswap)
                         .padding(.top, 12)
                         .allowsHitTesting(false)
                         .accessibilityIdentifier("siteswapOverlay")

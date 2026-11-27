@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { cn } from '../lib/utils';
+import { useI18nContext } from '../i18n/i18n-react';
 
 interface CameraPresetsProps {
   module: typeof Module | null;
@@ -7,14 +9,35 @@ interface CameraPresetsProps {
 }
 
 const PRESETS = [
-  { label: 'Left',  index: 1 },
-  { label: 'Back',  index: 2 },
-  { label: 'Front', index: 0 },
-  { label: 'High',  index: 4 },
-  { label: 'Right', index: 3 },
+  { key: 'left',  index: 1 },
+  { key: 'back',  index: 2 },
+  { key: 'front', index: 0 },
+  { key: 'high',  index: 4 },
+  { key: 'right', index: 3 },
 ] as const;
 
+// Straight down: only offered while several jugglers pass
+const TOP = { key: 'top', index: 5 } as const;
+
+const useJugglerCount = (module: typeof Module | null, isLoaded: boolean) => {
+  const [count, setCount] = useState(1);
+  useEffect(() => {
+    if (!module || !isLoaded) return;
+    let frame = 0;
+    const poll = () => {
+      const next = module._jm_get_juggler_count();
+      setCount(prev => (prev === next ? prev : next));
+      frame = requestAnimationFrame(poll);
+    };
+    frame = requestAnimationFrame(poll);
+    return () => { cancelAnimationFrame(frame); };
+  }, [module, isLoaded]);
+  return count;
+};
+
 export const CameraPresets = ({ module, isLoaded, onAutoRotateChange }: CameraPresetsProps) => {
+  const { LL } = useI18nContext();
+  const presets = useJugglerCount(module, isLoaded) > 1 ? [...PRESETS, TOP] : PRESETS;
   const handlePreset = (index: number) => {
     if (!module || !isLoaded) return;
     module._jm_set_camera_preset(index);
@@ -40,9 +63,9 @@ export const CameraPresets = ({ module, isLoaded, onAutoRotateChange }: CameraPr
         }}
         onPointerDown={(e) => { e.stopPropagation(); }}
       >
-        {PRESETS.map(({ label, index }) => (
+        {presets.map(({ key, index }) => (
           <button
-            key={label}
+            key={key}
             onClick={() => { handlePreset(index); }}
             disabled={!isLoaded}
             style={{
@@ -62,7 +85,7 @@ export const CameraPresets = ({ module, isLoaded, onAutoRotateChange }: CameraPr
               (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent';
             }}
           >
-            {label}
+            {LL.camera[key]()}
           </button>
         ))}
       </div>

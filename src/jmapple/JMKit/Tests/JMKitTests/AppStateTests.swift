@@ -28,6 +28,29 @@ struct AppStateTests {
                 + "&lib=1&cat=js-bounce&object=club&speed=2.5")
     }
 
+    @Test func jugglerColoursAreOnUnlessTurnedOff() {
+        #expect(AppState(query: "pattern=J2%3A966").colorJugglers)
+        #expect(!AppState(query: "pattern=J2%3A966&jcolors=0").colorJugglers)
+        var state = AppState()
+        state.pattern = "4.5p 3 3"
+        #expect(state.query == "pattern=4.5p+3+3")
+        state.colorJugglers = false
+        #expect(state.query == "pattern=4.5p+3+3&jcolors=0")
+        #expect(!AppState(query: state.query).colorJugglers)
+    }
+
+    @Test func feedWidthsAreSharedAndRead() {
+        var state = AppState()
+        #expect(state.query.isEmpty)
+        state.feedWidth = 2
+        #expect(state.query == "feed=2")
+        #expect(AppState(query: "feed=2").feedWidth == 2)
+        #expect(AppState(query: "feed=9").feedWidth == AppState.defaultFeedWidth)
+        #expect(AppState(query: "").feedWidth == AppState.defaultFeedWidth)
+        state.feedWidth = AppState.defaultFeedWidth
+        #expect(state.query.isEmpty)
+    }
+
     @Test func nameEqualToPatternIsOmitted() {
         var state = AppState()
         state.pattern = "531"

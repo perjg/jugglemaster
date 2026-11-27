@@ -32,6 +32,10 @@ test.describe('Visual Regression Tests', () => {
     { name: 'js-pattern-7c', engine: 1, fn: () => setPattern('7c@(-2,0,-20)>(1.2,0,-5)7c@(2,0,20)>(-1.2,0,5)') },
     { name: 'js-pattern-3r', engine: 1, fn: () => setPattern('3r@(-2.5,3,-90,80)>(2,1,90,30) 3r@(2.5,3,90,80)>(-2,1,-90,30)') },
     { name: 'js-pattern-3b-style', engine: 1, fn: () => { setPattern('3b'); setStyle('JuggleSaver'); } },
+    { name: 'js-passing-966', engine: 1, fn: () => setPattern('J2:9b6b6b') },
+    { name: 'js-passing-7c', engine: 1, fn: () => setPattern('J2:7c') },
+    { name: 'js-passing-sync', engine: 1, fn: () => setPattern('<3pc 3c 3c 3c|3pc 3c 3c 3c>') },
+    { name: 'js-passing-feed', engine: 1, fn: () => setPattern('<3p2c 3p3c|3p1c 3c|3c 3p1c>') },
   ];
 
   for (const { name, engine, fn } of testCases) {

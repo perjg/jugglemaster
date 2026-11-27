@@ -142,6 +142,9 @@ typedef struct
     POS ToVelocity;
 
     int NextForHand;
+
+    int IsPass;       /* thrown to another juggler */
+    float TwistSign;  /* ball twist direction when there are several jugglers */
 } THROW_INFO;
 
 
@@ -171,6 +174,39 @@ typedef struct
 } OBJECT_POSITION;
 
 
+/* Passing: J jugglers share one interleaved site.  Slot s is thrown by hand
+ * h = s mod 2J, which belongs to juggler h mod J on side h / J (side 0 is the
+ * juggler's right hand, drawn at -x).  Times are in slots, so a juggler throws
+ * every 2J slots and a throw of value t is a self when t mod J == 0.  With
+ * J = 1 this is the plain siteswap. */
+#define JS_MAX_JUGGLERS 8
+#define JS_MAX_HANDS (2 * JS_MAX_JUGGLERS)
+
+/* How several jugglers (or one juggler's hands) share a site: a slot thrown by
+ * hand h is thrown HandShift[h] slots later than its index, so hands can throw
+ * at the same moment; Index[j] is how far juggler j's throws are re-indexed
+ * (slot (k + Index[j]) * J + j holds its throw k). */
+#define FORMATION_AUTO 0  /* facing pair, or a circle for three or more */
+#define FORMATION_FEED 1  /* one juggler facing a line of the others */
+
+typedef struct
+{
+    int Jugglers;
+    int HandShift[JS_MAX_HANDS];
+    int Index[JS_MAX_JUGGLERS];
+    int Formation;
+    int Feeder;  /* FORMATION_FEED: who feeds */
+} PASSING_LAYOUT;
+
+/* Where a juggler stands; Facing is the yaw in degrees (0 faces +z). */
+typedef struct
+{
+    float x;
+    float z;
+    float Facing;
+} JUGGLER_PLACEMENT;
+
+
 /* PATTERN_INFO is the main structure that holds the information about a
  * juggling pattern.
  *
@@ -178,8 +214,10 @@ typedef struct
  *     pattern.
  * pObjectInfo gives the current position of all objects at a given instant.
  *     These values are updated as the pattern is animated.
- * LeftHand and RightHand describe the current positions of each of the
- *     juggler's hands.
+ * Hands describes the current position of each hand (2 * Jugglers of them).
+ * Throw and catch positions in pThrowInfo are in world space; Placement maps
+ *     each juggler's own frame into it.
+ * CarryTime is CARRY_TIME in slots.
  * MaxWeight is the maximum weight of the all throws in pThrowInfo.
  * Height and Alpha are parameters that describe how objects fall under the
  *     influence of gravity.  See SetHeightAndAlpha() for the gory details.
@@ -192,8 +230,12 @@ typedef struct
     OBJECT_POSITION* pObjectInfo;
     int Objects;
 
-    OBJECT_POSITION LeftHand;
-    OBJECT_POSITION RightHand;
+    OBJECT_POSITION Hands[JS_MAX_HANDS];
+    int Jugglers;
+    float CarryTime;
+    int HandShift[JS_MAX_HANDS];
+    int Formation;
+    JUGGLER_PLACEMENT Placement[JS_MAX_JUGGLERS];
 
     int MaxWeight;
 
@@ -221,6 +263,8 @@ typedef struct
     float SnatchX;
     float SnatchY;
     int Spins;
+    unsigned char FromFields;  /* which of x, y, Rot, Elev (bits 0-3) the pattern gave */
+    unsigned char ToFields;
 } EXT_SITE_INFO;
 
 
@@ -287,18 +331,31 @@ typedef struct
 
 // engine.cpp
 void GetHandPosition(PATTERN_INFO* pPattern, int RightHand, float Time, POS* pPos);
+void GetHandPositionEx(PATTERN_INFO* pPattern, int Hand, float Time, POS* pPos);
+int JugglerHand(const PATTERN_INFO* pPattern, int Juggler, int Side);
+/* How far apart the jugglers being fed stand: width 0 (narrowest) to
+ * FEED_WIDTHS - 1 (widest); applies to patterns set up afterwards */
+#define FEED_WIDTHS 6
+#define FEED_WIDTH_DEFAULT 3  /* about 1.6 m */
+void SetFeedWidth(int Width);
+int GetFeedWidth(void);
+float FeedWidthMetres(int Width);
+void WorldToJuggler(const PATTERN_INFO* pPattern, int Juggler, const POS* pWorld, POS* pLocal);
 void GetObjectPosition(PATTERN_INFO* pPattern, int Obj, float Time, float HandleLen, POS* pPos);
 void ReleasePatternInfo(PATTERN_INFO* pPattern);
 char* GetCurrentSite();
 EXT_SITE_INFO* ParsePattern(const char* Site, int* pLen);
+EXT_SITE_INFO* ParsePatternEx(const char* Site, int* pLen, PASSING_LAYOUT* pLayout);
 void InitPatternInfo(PATTERN_INFO* pPattern, const int* Site, const EXT_SITE_INFO* pExtInfo, int Len);
+void InitPatternInfoEx(PATTERN_INFO* pPattern, const int* Site, const EXT_SITE_INFO* pExtInfo, int Len,
+    const PASSING_LAYOUT* pLayout);
 int* Generate(int Len, int MaxWeight, int ObjCount);
-void InitPatternInfo(PATTERN_INFO* pPattern, const int* Site, const EXT_SITE_INFO* pExtInfo, int Len);
 
 // render.cpp
 void InitGLSettings(RENDER_STATE* pState, int WireFrame);
 void ResizeGL(RENDER_STATE* pState, int w, int h);
 void Zoom(RENDER_STATE* pState, float zoom);
+void SetCameraOffset(RENDER_STATE* pState, float deltaX_, float deltaY_);
 void ResetZoom(RENDER_STATE* pState);
 void MoveCamera(RENDER_STATE* pState, float deltaX_, float deltaY_);
 void DrawGLScene(RENDER_STATE* pState);

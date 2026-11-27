@@ -31,6 +31,9 @@ public struct AppState: Equatable, Sendable {
     public static let webURL = URL(string: "https://jugglemaster.net/")!
     public static let speedRange = 0.1...10.0
     public static let defaultSpeed = 3.0
+    /// The engine's widest feed (jm_get_feed_width_count() - 1), and the default width (about 1.6 m).
+    public static let widestFeed = 5
+    public static let defaultFeedWidth = 3
 
     public var pattern = "3"
     public var name = "3 Cascade"
@@ -42,6 +45,10 @@ public struct AppState: Equatable, Sendable {
     public var categoryId = ""
     public var object = Object.default
     public var speed = AppState.defaultSpeed
+    /// Several jugglers get different body colours (`jcolors=0` turns it off).
+    public var colorJugglers = true
+    /// How far apart the jugglers in a feed stand, 0 (narrowest) to `widestFeed` (`feed=<width>`).
+    public var feedWidth = AppState.defaultFeedWidth
 
     public init() {}
 
@@ -64,6 +71,10 @@ public struct AppState: Equatable, Sendable {
         {
             self.speed = speed
         }
+        colorJugglers = value("jcolors") != "0"
+        if let raw = value("feed"), let width = Int(raw), (0...Self.widestFeed).contains(width) {
+            feedWidth = width
+        }
     }
 
     /// Reads the query of a web share link or a `jugglemaster://` deep link.
@@ -85,6 +96,8 @@ public struct AppState: Equatable, Sendable {
         if !categoryId.isEmpty { params.append(("cat", categoryId)) }
         if object != .default { params.append(("object", object.rawValue)) }
         if speed != defaults.speed { params.append(("speed", Self.formatNumber(speed))) }
+        if !colorJugglers { params.append(("jcolors", "0")) }
+        if feedWidth != Self.defaultFeedWidth { params.append(("feed", String(feedWidth))) }
         return params.map { "\(Self.formEncode($0.0))=\(Self.formEncode($0.1))" }.joined(separator: "&")
     }
 

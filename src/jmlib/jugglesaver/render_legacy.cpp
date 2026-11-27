@@ -190,6 +190,7 @@ void SetCamera(RENDER_STATE* pState)
     /* now work back from the eye point to get the lookat location */
     cz = 0.0;
     cy = ey - ez * tanf(ElevRad);
+    FitFormationInView(pPattern, FOV, pState->AspectRatio, cy, &ey, &ez);
 
     /* use the distance from the eye to the scene centre to get a measure
      * of what the far clipping should be.  We then add on a bit more to be
@@ -251,6 +252,12 @@ void Zoom(RENDER_STATE* pState, float zoom) {
 
 void ResetZoom(RENDER_STATE* pState) {
     SetCameraExtraZoom(resetZoom);
+    SetCamera(pState);
+}
+
+void SetCameraOffset(RENDER_STATE* pState, float deltaX_, float deltaY_) {
+    deltaX = deltaX_;
+    deltaY = deltaY_;
     SetCamera(pState);
 }
 
@@ -885,19 +892,23 @@ void DrawForearm()
  * elbow out by 20 degrees from the lowest position gives a reasonably looking
  * orientation. */
 
-void DrawArm(RENDER_STATE* pState, float TimePos, int Left)
+void DrawArm(RENDER_STATE* pState, float TimePos, int Juggler, int Left)
 {
     POS Pos;
-    float x, y, len, len2, ang, ang2;
+    float x, y, dz, len, len2, ang, ang2;
+    PATTERN_INFO* pPattern = pState->pPattern;
 
-    GetHandPosition(pState->pPattern, Left, TimePos, &Pos);
+    GetHandPositionEx(pPattern, JugglerHand(pPattern, Juggler, Left), TimePos, &Pos);
+    if (pPattern->Jugglers > 1)
+        WorldToJuggler(pPattern, Juggler, &Pos, &Pos);
 
     x = Pos.x + (Left ? -ShoulderPos[0] : ShoulderPos[0]);
     y = Pos.y - ShoulderPos[1];
+    dz = ShoulderPos[2] + Pos.z;
 
 
-    len = sqrtf(x * x + y * y + ShoulderPos[2] * ShoulderPos[2]);
-    len2 = sqrtf(x * x + ShoulderPos[2] * ShoulderPos[2]);
+    len = sqrtf(x * x + y * y + dz * dz);
+    len2 = sqrtf(x * x + dz * dz);
 
     ang = (float) CosineRule(UArmLen, len, LArmLen);
     ang2 = (float) CosineRule(UArmLen, LArmLen, len);
@@ -1022,10 +1033,22 @@ void DrawGLScene(RENDER_STATE* pState)
         glPopMatrix();
     }
 
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, BodyCol);
-    glCallList(DL_TORSO + pState->DLStart);
-    DrawArm(pState, Time, 1);
-    DrawArm(pState, Time, 0);
+    /* Each juggler is drawn in its own frame (the world frame for one juggler) */
+    for (i = 0; i < pPattern->Jugglers; i++)
+    {
+        glPushMatrix();
+        if (pPattern->Jugglers > 1)
+        {
+            glTranslatef(pPattern->Placement[i].x, 0.0f, pPattern->Placement[i].z);
+            glRotatef(pPattern->Placement[i].Facing, 0.0f, 1.0f, 0.0f);
+        }
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE,
+            JugglerBodyColour(pPattern->Jugglers, i));
+        glCallList(DL_TORSO + pState->DLStart);
+        DrawArm(pState, Time, i, 1);
+        DrawArm(pState, Time, i, 0);
+        glPopMatrix();
+    }
 }
 
 
@@ -1042,8 +1065,9 @@ void SetPattern(RENDER_STATE* pState, char* pattern) {
     pState->pPattern = (PATTERN_INFO*) malloc(sizeof(PATTERN_INFO));
 
     int ExtSiteLen;
-    EXT_SITE_INFO* pExtInfo = ParsePattern(pattern, &ExtSiteLen);
-    InitPatternInfo(pState->pPattern, NULL, pExtInfo, ExtSiteLen);
+    PASSING_LAYOUT Layout;
+    EXT_SITE_INFO* pExtInfo = ParsePatternEx(pattern, &ExtSiteLen, &Layout);
+    InitPatternInfoEx(pState->pPattern, NULL, pExtInfo, ExtSiteLen, &Layout);
 
     /*
     // Post-process: ensure deterministic object types for any OBJECT_DEFAULT

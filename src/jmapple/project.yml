@@ -45,6 +45,7 @@ targets:
           - jugglesaver/shader_manager.cpp
           - jugglesaver/jmlib_jsaver.cpp
           - jugglesaver/js_validator.cpp
+          - jugglesaver/js_passing.cpp
           - jugglesaver/render_shader.cpp
           - jugglesaver/render_common.cpp
           - jugglesaver/gltrackball.cpp

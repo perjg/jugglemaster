@@ -868,3 +868,66 @@ $ (5 entries)
 
 "Saturn Trick (Greg Kennedy)"
 3r@(-1,2,0,0)>(1,2,0,0) 3b@(3,0)>(-1,0) 3b@(-3,3.7)>(1,3) 3r@(1,2,0,0)>(-1,2,0,0) 3b@(-3,0.4)>(1,0) 3b@(3,3)>(-2,2);
+
+
+$ Passing
+$ ----------
+$ (33 entries)
+
+"6-club 4-count" <3pc 3c 3c 3c|3pc 3c 3c 3c>;
+"6-club 3-count" <3pc 3c 3c|3pc 3c 3c>;
+"6-club 2-count" <3pc 3c|3pc 3c>;
+"Two cascades side by side" J2:6;
+"6 clubs, every throw a pass" <3pc|3pc>;
+"6-club 4-count, self double" <3pc 4c 2c 3c|3pc 4c 2c 3c>;
+"6-club 4-count, higher self across" <3pc 5c 3c 1c|3pc 5c 3c 1c>;
+"6-club 4-count, triple pass" <5pc 3c 1c 3c|5pc 3c 1c 3c>;
+"7 objects, every throw a pass, four-handed 7" J2:7c;
+"7 objects, every throw a pass, in Prechac" 3.5pc;
+"7-club 3-count, four-handed 966" J2:9c6c6c;
+"7-club 3-count in Prechac" 4.5pc 3c 3c;
+"7 clubs, Prechac 4p 3" 4pc 3c;
+"Why not, four-handed 86277" J2:8c6c2c7c7c;
+"Four-handed 786" J2:7c8c6c;
+"Holy Grail, four-handed 975" J2:9c7c5c;
+"Holy Grail in Prechac" 3.5pc 4.5pc 2.5pc;
+"Chocolate bar" 3pc 3pc 3c 3c;
+"6 clubs, pass, pass, self" <3pc 3pc 3c|3pc 3pc 3c>;
+"Four-handed A6662" J2:Ac6c6c6c2c;
+"Four-handed 5 balls" J2:5b;
+"Three-person feed, feeder passing every beat" <3p2c 3p3c|3p1c 3c|3c 3p1c>;
+"Three-person feed, feeder 2-count" <3p2c 3c 3p3c 3c|3p1c 3c 3c 3c|3c 3c 3p1c 3c>;
+"Three-person feed, feeder 3-count" <3p2c 3c 3c 3p3c 3c 3c|3p1c 3c 3c 3c 3c 3c|3c 3c 3c 3p1c 3c 3c>;
+"Three-person feed, feeder 4-count" <3p2c 3c 3c 3c 3p3c 3c 3c 3c|3p1c 3c 3c 3c 3c 3c 3c 3c|3c 3c 3c 3c 3p1c 3c 3c 3c>;
+"Three jugglers, 8 clubs in a circle" J3:8c;
+"Triangle, every throw a pass" <3p2c 3p3c|3p3c 3p1c|3p1c 3p2c>;
+"Triangle, every other throw a pass" <3p2c 3c 3p3c 3c|3p3c 3c 3p1c 3c|3p1c 3c 3p2c 3c>;
+"Triangle the other way round" <3p3c 3p2c|3p1c 3p3c|3p2c 3p1c>;
+"Three jugglers in a circle, 4-count" <3pc 3c 3c 3c|3pc 3c 3c 3c|3pc 3c 3c 3c>;
+"Four-person feed, feeder passing every beat" <3p2c 3p3c 3p4c|3p1c 3c 3c|3c 3p1c 3c|3c 3c 3p1c>;
+"Four jugglers in a circle" J4:9c;
+"Three jugglers in Prechac" 3.67pc 3c;
+
+
+$ Synchronous
+$ -----------
+$ (18 entries)
+
+"3-ball synchronous shower" (2cx,4cx);
+"Box" (2cx,4c)(4c,2cx);
+"Shuffle" (4cx,2cx);
+"Double box" (4cx,2cx)(4c,2cx)(2cx,4cx)(2cx,4c);
+"4-club synchronous fountain" (4c,4c);
+"4-club box" (4c,2cx)(2cx,4c);
+"4-ball box B" (2cx,8c)(2cx,4c)(8c,2cx)(4c,2cx);
+"4-ball box C" (2cx,6c)(2cx,6c)(6c,2cx)(6c,2cx);
+"Advanced box" (2cx,8c)(2cx,4c)(0,2cx)(8c,2cx)(4c,2cx)(2cx,0);
+"4-ball cross" (4cx,4cx);
+"4-ball synchronous shower" (2cx,6cx);
+"1-up 2-up" (4c,4c)(0,4cx)(4c,4c)(4cx,0);
+"Church windows" (0,4cx)(4cx,4cx)(4cx,0)(4cx,4cx);
+"Hunchback" (0,4cx)(4c,4c)(4cx,0)(4c,4c);
+"5-ball box" (4cx,6c)(6c,4cx);
+"5-ball half shower" (4cx,6cx);
+"6-ball synchronous fountain" (6c,6c);
+"6-ball columns" (6c@(-1.5,0)>(-1.5,0),6c@(1.5,0)>(1.5,0));

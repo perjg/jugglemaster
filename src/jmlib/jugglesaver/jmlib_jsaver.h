@@ -24,6 +24,7 @@
 
 #include "../jmlib.h"
 #include "jugglesaver.h"
+#include "js_passing.h"
 
 // Default JuggleSaver-scale animation speed (also the UI slider default)
 #define JS_SPEED_DEF 3.0f
@@ -49,6 +50,11 @@ private:
   JML_CHAR* pattern;  // The current pattern
   JML_CHAR* siteswap; // The current siteswap
   JML_CHAR* pattname; // The name of the current pattern
+  PASSING_PATTERN* passing;  // the pattern as written, when in a passing or sync notation
+  JML_CHAR* rowText[JS_MAX_JUGGLERS];  // each juggler's part of it
+  JML_CHAR* sharedSite;     // a four-handed site with its J<n>: prefix
+  void clearPassing();
+  const PASSING_TOKEN* currentToken(int row);
   static const JML_CHAR *possible_styles[];
 
   JML_BOOL applyPattern();
@@ -82,6 +88,10 @@ public:
   virtual JML_FLOAT getDR() { return HR_DEF; }
 
   virtual JML_INT32 numBalls(void);
+  virtual JML_INT32 numJugglers(void);
+  virtual JML_BOOL isFeed(void);
+  virtual void setFeedWidth(JML_INT32 width);
+  virtual void setCameraOffset(JML_FLOAT deltaX, JML_FLOAT deltaY) { SetCameraOffset(&state, deltaX, deltaY); }
 
   virtual void setScalingMethod(JML_INT32 scalingMethod) {}
 
@@ -98,7 +108,7 @@ public:
   virtual void     setWindowSizeDefault() { setWindowSize(480, 400); }
   virtual void setMirror(JML_BOOL mir = true) {}
 
-  virtual const JML_CHAR* getSite(void) { return siteswap; }
+  virtual const JML_CHAR* getSite(void);
   virtual const JML_CHAR* getPattName(void) { return pattname; }
   virtual const JML_CHAR* getStyle(void) { return "Normal"; }
 
@@ -114,6 +124,10 @@ public:
   virtual JML_INT32 getSiteposStart(void);
   virtual JML_INT32 getSiteposStop(void);
   virtual JML_INT32 getSiteposLen(void);
+  virtual JML_INT32 numSiteRows(void);
+  virtual const JML_CHAR* getRowSite(JML_INT32 row);
+  virtual JML_INT32 getRowSiteposStart(JML_INT32 row);
+  virtual JML_INT32 getRowSiteposStop(JML_INT32 row);
   virtual JML_INT32 getiterations(void) { return 0; } // fixme
   virtual JML_INT32 getBallRadius(void);
 	virtual JML_BOOL isValidPattern(const char* patt);

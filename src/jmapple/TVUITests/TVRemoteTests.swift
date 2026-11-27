@@ -94,6 +94,11 @@ final class TVRemoteTests: XCTestCase {
         remote.press(.select)
         XCTAssertTrue(element("shareQR").waitForExistence(timeout: 2))
         snapshot("tv-share")
+
+        remote.press(.menu)
+        XCTAssertTrue(element("shareQR").waitForNonExistence(timeout: 2))
+        XCTAssertEqual(app.state, .runningForeground)
+        XCTAssertTrue(element("share").exists)
     }
 
     /// Relaunches with the siteswap overlay on and the controls shown, so tests can read the juggled pattern.

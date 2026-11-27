@@ -18,11 +18,17 @@
 #include "jmlib.h"
 #include "validator.h"
 #include "jugglesaver/js_validator.h"
+#ifdef JUGGLESAVER_SUPPORT
+#include "jugglesaver/render_common.h"
+#endif
 
 #include <string.h>
 #include <string>
 
 static JMLib* jmlib = nullptr;
+
+// How far the top view pans down, so the formation sits in the middle of the screen
+static const float kTopViewOffset = -4.0f;
 static bool paused = false;
 static bool show_siteswap = true;
 // The wrapper hands JuggleSaver the pattern text as its name, so the given name is kept here
@@ -179,6 +185,93 @@ int jm_get_show_siteswap(void) {
   return show_siteswap ? 1 : 0;
 }
 
+int jm_get_juggler_count(void) {
+  if (!jmlib) return 1;
+  return (int)jmlib->numJugglers();
+}
+
+int jm_get_is_feed(void) {
+  if (!jmlib) return 0;
+  return jmlib->isFeed() ? 1 : 0;
+}
+
+void jm_set_feed_width(int width) {
+  if (jmlib) jmlib->setFeedWidth(width);
+#ifdef JUGGLESAVER_SUPPORT
+  else SetFeedWidth(width);
+#endif
+}
+
+int jm_get_feed_width(void) {
+#ifdef JUGGLESAVER_SUPPORT
+  return GetFeedWidth();
+#else
+  return 0;
+#endif
+}
+
+int jm_get_feed_width_count(void) {
+#ifdef JUGGLESAVER_SUPPORT
+  return FEED_WIDTHS;
+#else
+  return 1;
+#endif
+}
+
+float jm_get_feed_width_metres(int width) {
+#ifdef JUGGLESAVER_SUPPORT
+  return FeedWidthMetres(width);
+#else
+  return 0.0f;
+#endif
+}
+
+void jm_set_juggler_colors(int on) {
+#ifdef JUGGLESAVER_SUPPORT
+  SetColourJugglers(on);
+#endif
+}
+
+int jm_get_juggler_colors(void) {
+#ifdef JUGGLESAVER_SUPPORT
+  return GetColourJugglers();
+#else
+  return 0;
+#endif
+}
+
+int jm_get_juggler_color(int juggler) {
+#ifdef JUGGLESAVER_SUPPORT
+  const float* c = JugglerBodyColour(jm_get_juggler_count(), juggler);
+  int rgb = 0;
+  for (int i = 0; i < 3; i++) rgb = (rgb << 8) | (int)(c[i] * 255.0f + 0.5f);
+  return rgb;
+#else
+  return 0x999973;
+#endif
+}
+
+int jm_get_site_rows(void) {
+  if (!jmlib) return 1;
+  return (int)jmlib->numSiteRows();
+}
+
+const char* jm_get_row_site(int row) {
+  if (!jmlib) return "";
+  const char* site = jmlib->getRowSite(row);
+  return site ? site : "";
+}
+
+int jm_get_row_sitepos_start(int row) {
+  if (!jmlib) return 0;
+  return (int)jmlib->getRowSiteposStart(row);
+}
+
+int jm_get_row_sitepos_stop(int row) {
+  if (!jmlib) return 0;
+  return (int)jmlib->getRowSiteposStop(row);
+}
+
 void jm_set_render_mode(int mode) {
   if (jmlib) jmlib->setRenderingMode((rendering_t)mode);
 }
@@ -236,11 +329,18 @@ void jm_set_camera_angle(float angle) {
 void jm_set_camera_preset(int preset) {
   if (!jmlib) return;
 
+  // Only the top view pans: it looks down at the hands, which the side views
+  // frame low on the screen
+  jmlib->setCameraOffset(0.0f, 0.0f);
   switch (preset) {
     case JM_CAMERA_LEFT:  jmlib->setCameraAngle(90.0f);  break;
     case JM_CAMERA_BACK:  jmlib->setCameraAngle(180.0f); break;
     case JM_CAMERA_RIGHT: jmlib->setCameraAngle(270.0f); break;
     case JM_CAMERA_HIGH:  jmlib->setCameraAngle(0.0f, 0.0f, 40.0f); break;
+    case JM_CAMERA_TOP:
+      jmlib->setCameraAngle(0.0f, 0.0f, 90.0f);
+      jmlib->setCameraOffset(0.0f, kTopViewOffset);
+      break;
     default:              jmlib->setCameraAngle(0.0f);   break;
   }
 }

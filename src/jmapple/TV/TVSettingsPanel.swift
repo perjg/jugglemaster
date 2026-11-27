@@ -36,6 +36,15 @@ struct TVSettingsPanel: View {
                 Toggle(jmLocalized("menu.showSiteswap"), isOn: $model.showSiteswap)
                     .accessibilityIdentifier("showSiteswap")
 
+                if model.jugglerCount > 1 {
+                    Toggle(jmLocalized("menu.colorJugglers"), isOn: $model.colorJugglers)
+                        .accessibilityIdentifier("colorJugglers")
+                }
+
+                if model.isFeed {
+                    FeedWidthControl(model: model)
+                }
+
                 HStack(spacing: 16) {
                     Text(jmLocalized("menu.speed"))
                     Spacer()
@@ -105,9 +114,12 @@ struct TVSettingsPanel: View {
     }
 }
 
-/// QR code and link to the web app with the current settings.
+/// QR code and link to the web app with the current settings. The panel takes focus itself: with nothing
+/// focused, Back would go to the system and leave the app.
 struct TVSharePanel: View {
     let url: URL
+
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -120,5 +132,9 @@ struct TVSharePanel: View {
                 .foregroundStyle(.secondary)
                 .lineLimit(4)
         }
+        .focusable()
+        .focused($isFocused)
+        .defaultFocus($isFocused, true)
+        .onAppear { isFocused = true }
     }
 }

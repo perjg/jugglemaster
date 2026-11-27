@@ -112,6 +112,9 @@ public:
   virtual JML_FLOAT getDR();
 
   virtual JML_INT32 numBalls(void);
+  virtual JML_INT32 numJugglers(void);
+  virtual JML_BOOL isFeed(void);
+  virtual void setFeedWidth(JML_INT32 width);
 
   virtual void startJuggle(void);
   virtual void stopJuggle(void);
@@ -141,6 +144,10 @@ public:
   virtual JML_INT32 getSiteposStart(void);
   virtual JML_INT32 getSiteposStop(void);
   virtual JML_INT32 getSiteposLen(void);
+  virtual JML_INT32 numSiteRows(void) { return active->numSiteRows(); }
+  virtual const JML_CHAR* getRowSite(JML_INT32 row) { return active->getRowSite(row); }
+  virtual JML_INT32 getRowSiteposStart(JML_INT32 row) { return active->getRowSiteposStart(row); }
+  virtual JML_INT32 getRowSiteposStop(JML_INT32 row) { return active->getRowSiteposStop(row); }
   virtual JML_INT32 getBallRadius(void);
 	virtual JML_BOOL isValidPattern(const char* patt);
 
@@ -150,6 +157,7 @@ public:
 	virtual void trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal = false);
 	virtual void resetCamera();
 	virtual void setCameraAngle(JML_FLOAT spinAngle, JML_FLOAT translateAngle = 0.0f, JML_FLOAT elevation = 0.0f);
+	virtual void setCameraOffset(JML_FLOAT deltaX, JML_FLOAT deltaY);
 	virtual void orbitCamera(JML_FLOAT deltaNormX, JML_FLOAT deltaNormY);
 	virtual void zoom(float zoom);
 	virtual void resetZoom();

@@ -63,7 +63,8 @@ enum {
   JM_CAMERA_LEFT = 1,
   JM_CAMERA_BACK = 2,
   JM_CAMERA_RIGHT = 3,
-  JM_CAMERA_HIGH = 4
+  JM_CAMERA_HIGH = 4,
+  JM_CAMERA_TOP = 5  /* straight down; for passing patterns */
 };
 
 /* jm_capi_init allocates the engine on the first call (3 Cascade, Normal
@@ -107,6 +108,29 @@ JM_API int jm_get_sitepos_start(void);
 JM_API int jm_get_sitepos_stop(void);
 JM_API void jm_set_show_siteswap(int show);
 JM_API int jm_get_show_siteswap(void);
+
+/* Passing: jugglers sharing the current pattern (1 for solo patterns), and
+ * whether several jugglers get different body colours (on by default) */
+JM_API int jm_get_juggler_count(void);
+/* Feeds (one juggler passing to several): how far apart the jugglers being
+ * fed stand, width 0 (narrowest) to jm_get_feed_width_count() - 1 (widest;
+ * 3, about 1.6 m, by default), and that distance in metres */
+JM_API int jm_get_is_feed(void);
+JM_API void jm_set_feed_width(int width);
+JM_API int jm_get_feed_width(void);
+JM_API int jm_get_feed_width_count(void);
+JM_API float jm_get_feed_width_metres(int width);
+JM_API void jm_set_juggler_colors(int on);
+JM_API int jm_get_juggler_colors(void);
+/* Body colour of a juggler as 0xRRGGBB */
+JM_API int jm_get_juggler_color(int juggler);
+
+/* Siteswap display rows: one per juggler for passing patterns written per
+ * juggler ("4.5p 3 3"), otherwise one row equal to jm_get_site */
+JM_API int jm_get_site_rows(void);
+JM_API const char* jm_get_row_site(int row);
+JM_API int jm_get_row_sitepos_start(int row);
+JM_API int jm_get_row_sitepos_stop(int row);
 
 /* Rendering */
 JM_API void jm_set_render_mode(int mode);

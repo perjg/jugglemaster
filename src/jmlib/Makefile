@@ -35,7 +35,7 @@ OBJ=jmlib.o prefs.o util.o validator.o patterns.o randompatt.o sqlite_patterns.o
 
 # JuggleSaver (3D OpenGL) support files
 JUGGLESAVER_OBJ=jmlib_wrapper.o render_jm_flat.o jugglesaver/engine.o jugglesaver/gltrackball.o jugglesaver/jmlib_jsaver.o \
-                jugglesaver/js_patterns.o jugglesaver/js_validator.o \
+                jugglesaver/js_patterns.o jugglesaver/js_validator.o jugglesaver/js_passing.o \
                 jugglesaver/trackball.o jugglesaver/render_common.o
 
 ifeq ($(USE_SHADERS), 1)

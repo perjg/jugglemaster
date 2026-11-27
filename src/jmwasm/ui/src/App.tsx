@@ -14,6 +14,8 @@ function App() {
   const [showSiteswap, setShowSiteswap] = useState(initial.showSiteswap);
   const [autoRotate, setAutoRotate] = useState(initial.autoRotate);
   const [speed, setSpeed] = useState(initial.speed);
+  const [colorJugglers, setColorJugglers] = useState(initial.colorJugglers);
+  const [feedWidth, setFeedWidth] = useState(initial.feedWidth);
 
   const handleShowSiteswapChange = (v: boolean) => {
     setShowSiteswap(v);
@@ -23,6 +25,16 @@ function App() {
   const handleAutoRotateChange = (v: boolean) => {
     setAutoRotate(v);
     setParams({ autoRotate: v });
+  };
+
+  const handleColorJugglersChange = (v: boolean) => {
+    setColorJugglers(v);
+    setParams({ colorJugglers: v });
+  };
+
+  const handleFeedWidthChange = (v: number) => {
+    setFeedWidth(v);
+    setParams({ feedWidth: v });
   };
 
   // URL writes only on commit: browsers throttle history.replaceState, and a
@@ -50,6 +62,10 @@ function App() {
         onShowSiteswapChange={handleShowSiteswapChange}
         autoRotate={autoRotate}
         onAutoRotateChange={handleAutoRotateChange}
+        colorJugglers={colorJugglers}
+        onColorJugglersChange={handleColorJugglersChange}
+        feedWidth={feedWidth}
+        onFeedWidthChange={handleFeedWidthChange}
         speed={speed}
         onSpeedChange={handleSpeedChange}
         onSpeedCommit={handleSpeedCommit}
@@ -79,6 +95,8 @@ function App() {
           initialAutoRotate={initial.autoRotate}
           initialObjectType={canvasInit.initialObjectType}
           initialSpeed={canvasInit.initialSpeed}
+          initialColorJugglers={canvasInit.initialColorJugglers}
+          initialFeedWidth={canvasInit.initialFeedWidth}
           onBeforeShare={handleBeforeShare}
         />
       </div>

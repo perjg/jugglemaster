@@ -41,8 +41,11 @@ final class RemoteInputView: UIView {
     var isActive = true {
         didSet {
             guard isActive != oldValue else { return }
-            setNeedsFocusUpdate()
-            updateFocusIfNeeded()
+            // Ask from the top of the window: an update scoped to this view finds nothing else to focus
+            // when it stops accepting focus, and focus would stay here with the controls unreachable.
+            let environment: UIFocusEnvironment = window?.rootViewController ?? self
+            environment.setNeedsFocusUpdate()
+            environment.updateFocusIfNeeded()
         }
     }
 

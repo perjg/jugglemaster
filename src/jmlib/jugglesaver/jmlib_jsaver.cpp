@@ -35,7 +35,8 @@ const JML_CHAR *JuggleSaver::possible_styles[] = {
 JuggleSaver::JuggleSaver()  : initialized(false), is_juggling(false), width_(480), height_(400),
   trackball(NULL), SpinSpeed(0.0f), TranslateSpeed(0.0f), SavedSpinSpeed(20.0f),
   SavedTranslateSpeed(0.0f), spin(FALSE), JuggleSpeed(JS_SPEED_DEF), pattern(NULL), siteswap(NULL),
-  pattname(NULL) {
+  pattname(NULL), passing(NULL), sharedSite(NULL) {
+  memset(rowText, 0, sizeof(rowText));
   // NOTE:
   // initialize cannot be called from the constructor, because it requires an OpenGL
   // context. It must be called manually after creating the OpenGL context.
@@ -50,6 +51,18 @@ JuggleSaver::~JuggleSaver() {
   if (pattname != NULL) { delete pattname; }
   if (pattern != NULL) { delete pattern; }
   if (siteswap != NULL) { delete siteswap; }
+  clearPassing();
+}
+
+void JuggleSaver::clearPassing() {
+  free(sharedSite);
+  sharedSite = NULL;
+  for (int j = 0; j < JS_MAX_JUGGLERS; j++) {
+    free(rowText[j]);
+    rowText[j] = NULL;
+  }
+  free(passing);
+  passing = NULL;
 }
 
 void JuggleSaver::initialize() {
@@ -111,6 +124,25 @@ JML_BOOL JuggleSaver::setPattern(const JML_CHAR* name, const JML_CHAR* site, JML
   strcpy(siteswap, s);
 	free(s);
 
+  clearPassing();
+  int jugglers = JSValidator::jugglerCount(site);
+  if (jugglers > 1) {
+    size_t size = strlen(siteswap) + 8;
+    sharedSite = (JML_CHAR*) malloc(size);
+    snprintf(sharedSite, size, "J%d:%s", jugglers, siteswap);
+  }
+  passing = (PASSING_PATTERN*) malloc(sizeof(PASSING_PATTERN));
+  if (ParsePassing(site, passing) && passing->Jugglers > 0) {
+    for (int j = 0; j < passing->Jugglers; j++) {
+      const PASSING_ROW* row = &passing->Rows[j];
+      rowText[j] = strndup(site + row->TextStart, row->TextStop - row->TextStart);
+    }
+  }
+  else {
+    free(passing);
+    passing = NULL;
+  }
+
 	if (initialized) {
 		// Recenter for the new pattern but keep the auto-rotate preference
 		// (resetCamera forces it on)
@@ -131,6 +163,21 @@ JML_INT32 JuggleSaver::numBalls(void) {
   PATTERN_INFO* pPattern = state.pPattern;
   if (pPattern) return pPattern->Objects;
   return 0;
+}
+
+JML_BOOL JuggleSaver::isFeed(void) {
+  return state.pPattern != NULL && state.pPattern->Formation == FORMATION_FEED;
+}
+
+// Sets the current feed up again so it stands at the new spacing
+void JuggleSaver::setFeedWidth(JML_INT32 width) {
+  if (GetFeedWidth() == width) return;
+  SetFeedWidth(width);
+  if (initialized && isFeed() && pattern != NULL) SetPattern(&state, pattern);
+}
+
+JML_INT32 JuggleSaver::numJugglers(void) {
+  return state.pPattern != NULL ? state.pPattern->Jugglers : 1;
 }
 
 void JuggleSaver::startJuggle(void) {
@@ -198,7 +245,8 @@ JML_INT32 JuggleSaver::doJuggle(void) {
     lastFrameTime = now;
   }
 
-  state.Time += JuggleSpeed * dt;
+  // Time is in slots, J to a juggler's beat, so each juggler keeps the solo tempo
+  state.Time += JuggleSpeed * dt * (state.pPattern != NULL ? state.pPattern->Jugglers : 1);
   state.SpinAngle += SpinSpeed * dt;
   state.TranslateAngle += TranslateSpeed * dt;
 
@@ -248,21 +296,63 @@ float JuggleSaver::speed(void) {
   return JuggleSpeed;
 }
 
+// Patterns in a passing or sync notation show as written; a four-handed site
+// keeps its J<n>: prefix (without object letters), so it reads back the same
+const JML_CHAR* JuggleSaver::getSite(void) {
+  if (passing != NULL) return pattern;
+  if (sharedSite != NULL) return sharedSite;
+  return siteswap;
+}
+
 // One siteswap character per beat; the throw at beat i leaves the hand at Time == i
 JML_INT32 JuggleSaver::getSiteposStart(void) {
+  if (passing != NULL) return passing->Rows[0].TextStart + getRowSiteposStart(0);
   if (siteswap == NULL || state.pPattern == NULL) return 0;
   size_t len = strlen(siteswap);
   if (len == 0) return 0;
-  return (JML_INT32)((size_t)state.Time % len);
+  size_t prefix = sharedSite != NULL ? strlen(sharedSite) - len : 0;
+  return (JML_INT32)(prefix + (size_t)state.Time % len);
 }
 
 JML_INT32 JuggleSaver::getSiteposStop(void) {
+  if (passing != NULL) return passing->Rows[0].TextStart + getRowSiteposStop(0);
   if (siteswap == NULL || state.pPattern == NULL || siteswap[0] == '\0') return 0;
   return getSiteposStart() + 1;
 }
 
 JML_INT32 JuggleSaver::getSiteposLen(void) {
   return getSiteposStop() - getSiteposStart();
+}
+
+JML_INT32 JuggleSaver::numSiteRows(void) {
+  return passing != NULL && passing->Jugglers > 1 ? passing->Jugglers : 1;
+}
+
+const JML_CHAR* JuggleSaver::getRowSite(JML_INT32 row) {
+  if (passing == NULL || row < 0 || row >= passing->Jugglers) return getSite();
+  return rowText[row];
+}
+
+// The throw row's juggler made most recently: its k-th throw is made at time
+// k * J + Offset (in slots)
+const PASSING_TOKEN* JuggleSaver::currentToken(int row) {
+  const PASSING_ROW* r = &passing->Rows[row];
+  int J = passing->Jugglers;
+  int t = (int)state.Time - passing->Offset[row];
+  int k = t >= 0 ? t / J : -((-t + J - 1) / J);
+  return &r->Tokens[((k % r->Count) + r->Count) % r->Count];
+}
+
+JML_INT32 JuggleSaver::getRowSiteposStart(JML_INT32 row) {
+  if (passing == NULL) return getSiteposStart();
+  if (state.pPattern == NULL || row < 0 || row >= passing->Jugglers) return 0;
+  return currentToken(row)->Start;
+}
+
+JML_INT32 JuggleSaver::getRowSiteposStop(JML_INT32 row) {
+  if (passing == NULL) return getSiteposStop();
+  if (state.pPattern == NULL || row < 0 || row >= passing->Jugglers) return 0;
+  return currentToken(row)->Stop;
 }
 
 // Returns dummy valiue

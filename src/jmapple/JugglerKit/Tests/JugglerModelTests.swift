@@ -279,6 +279,33 @@ extension EngineSuites {
             #expect(model.cameraPreset == .front)
         }
 
+        @Test func feedWidthIsOfferedForFeedsAndKept() {
+            let model = makeModel()
+            #expect(!model.isFeed)
+            #expect(model.submitSiteswap("<3p2 3p3|3p1 3|3 3p1>"))
+            #expect(model.isFeed)
+            #expect(engine.feedWidths == AppState.widestFeed + 1)
+            #expect(model.feedWidthTitle(AppState.widestFeed) == "1.8 m")
+            #expect(model.feedWidthTitle(0) == "1.3 m")
+            model.feedWidth = 1
+            #expect(engine.feedWidth == 1)
+            #expect(JugglerModel(storage: storage).feedWidth == 1)
+            #expect(model.submitSiteswap("<3p|3p>"))
+            #expect(!model.isFeed)
+            model.feedWidth = AppState.defaultFeedWidth
+        }
+
+        @Test func topViewIsOfferedForPassingOnly() {
+            let model = makeModel()
+            #expect(!model.cameraPresets.contains(.top))
+            #expect(model.submitSiteswap("<3p 3 3 3|3p 3 3 3>"))
+            #expect(model.cameraPresets.last == .top)
+            model.setCameraPreset(.top)
+            #expect(model.cameraPreset == .top)
+            #expect(model.submitSiteswap("531"))
+            #expect(model.cameraPreset == .front && !model.cameraPresets.contains(.top))
+        }
+
         @Test func recentSiteswapRestoresEnginePreference() {
             let model = makeModel()
             model.applyRecent(RecentSiteswap(site: "3", style: "JuggleSaver"))
@@ -313,6 +340,17 @@ extension EngineSuites {
             #expect(model.autoRotate && model.state.autoRotate)
             model.setCameraPreset(.high)
             #expect(!model.autoRotate && !model.state.autoRotate)
+        }
+
+        @Test func passingPatternsCountJugglersAndKeepTheColourSetting() {
+            let model = makeModel("pattern=J2%3A966&jcolors=0")
+            #expect(model.jugglerCount == 2)
+            #expect(!model.colorJugglers && !engine.colorsJugglers)
+            model.colorJugglers = true
+            #expect(engine.colorsJugglers)
+            #expect(JugglerModel(storage: storage).colorJugglers)
+            #expect(model.submitSiteswap("531"))
+            #expect(model.jugglerCount == 1)
         }
 
         @Test func speedRoundsClampsAndCommits() {
@@ -395,8 +433,8 @@ extension EngineSuites {
             for _ in 0..<90 {
                 engine.frame()
                 model.frameDidRender()
-                ranges.insert(model.siteswap.range.lowerBound)
-                #expect(model.siteswap.site == "97531")
+                ranges.insert(model.siteswap.first?.range.lowerBound ?? -1)
+                #expect(model.siteswap.map(\.site) == ["97531"])
             }
             #expect(ranges.count > 1)
         }

@@ -42,6 +42,8 @@ const en = {
 		filterJm: 'JM',
 		filterJs: 'JS',
 		showSiteswap: 'Show Siteswap',
+		colorJugglers: 'Color-coded jugglers',
+		feedWidth: 'Feed width',
 		speed: 'Speed',
 		objects: 'Objects',
 		objectDefault: 'Default',
@@ -55,6 +57,14 @@ const en = {
 		copyLink: 'Copy link',
 		copied: 'Copied!',
 		scanHint: 'Scan to open on another device',
+	},
+	camera: {
+		left: 'Left',
+		back: 'Back',
+		front: 'Front',
+		high: 'High',
+		right: 'Right',
+		top: 'Top',
 	},
 	zoom: {
 		zoomIn: 'Zoom in',

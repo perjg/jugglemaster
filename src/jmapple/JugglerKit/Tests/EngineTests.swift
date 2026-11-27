@@ -64,6 +64,86 @@ extension EngineSuites {
             #expect(engine.site == "531")
         }
 
+        @Test func passingPatternSelectsJuggleSaverWithTwoJugglers() {
+            #expect(!engine.isValidJuggleMasterPattern("J2:966"))
+            #expect(engine.isValidJuggleSaverPattern("J2:966"))
+            #expect(engine.isValidPattern("J2:966"))
+            #expect(!engine.isValidPattern("J2:965"))
+            #expect(engine.setPattern(name: "3-count", site: "J2:966"))
+            #expect(engine.engineType == .juggleSaver)
+            #expect(engine.jugglerCount == 2)
+            #expect(engine.site == "J2:966")
+            engine.setPattern(name: "531", site: "531")
+            #expect(engine.jugglerCount == 1)
+        }
+
+        @Test func passingPatternStaysOnJuggleSaverWhenAStyleIsChosen() {
+            engine.setPattern(name: "3-count", site: "J2:966")
+            engine.setStyle("Reverse")
+            #expect(engine.engineType == .juggleSaver)
+            #expect(engine.jugglerCount == 2)
+        }
+
+        @Test func prechacPatternShowsOneRowPerJuggler() {
+            #expect(engine.setPattern(name: "3-count", site: "4.5p 3 3"))
+            #expect(engine.jugglerCount == 2)
+            var starts: [Set<Int>] = [[], []]
+            for _ in 0..<240 {
+                engine.frame()
+                let rows = engine.siteRows
+                #expect(rows.map(\.site) == ["4.5p 3 3", "4.5p 3 3"])
+                #expect(rows.map(\.juggler) == [0, 1])
+                for (index, row) in rows.enumerated() { starts[index].insert(row.range.lowerBound) }
+            }
+            // each juggler steps through "4.5p", "3" and "3"
+            #expect(starts == [[0, 5, 7], [0, 5, 7]])
+            let rows = engine.siteRows
+            #expect(rows[0].color != rows[1].color)
+            engine.colorsJugglers = false
+            #expect(engine.siteRows[0].color == engine.siteRows[1].color)
+            engine.colorsJugglers = true
+        }
+
+        @Test func syncPassingShowsEachJugglersBar() {
+            #expect(engine.setPattern(name: "feed", site: "<3p2c 3p3c|3p1c 3c|3c 3p1c>"))
+            #expect(engine.jugglerCount == 3)
+            #expect(engine.siteRows.map(\.site) == ["3p2c 3p3c", "3p1c 3c", "3c 3p1c"])
+            var starts: Set<[Int]> = []
+            for _ in 0..<120 {
+                engine.frame()
+                starts.insert(engine.siteRows.map(\.range.lowerBound))
+            }
+            // everyone throws together: the feeder's first throw with the others' first, and so on
+            #expect(starts == [[0, 0, 0], [5, 5, 3]])
+        }
+
+        @Test func soloSyncShowsThePatternAsWritten() {
+            engine.setPattern(name: "box", site: "(4c,2cx)(2cx,4c)")
+            engine.setStyle("JuggleSaver")
+            #expect(engine.engineType == .juggleSaver)
+            #expect(engine.siteRows.map(\.site) == ["(4c,2cx)(2cx,4c)"])
+            var ranges: Set<Range<Int>> = []
+            for _ in 0..<120 {
+                engine.frame()
+                ranges.insert(engine.siteRange)
+            }
+            #expect(ranges == [0..<8, 8..<16])
+        }
+
+        @Test func soloAndFourHandedPatternsShowOneRow() {
+            engine.setPattern(name: "531", site: "531")
+            #expect(engine.siteRows.count == 1 && engine.siteRows[0].juggler == nil)
+            engine.setPattern(name: "966", site: "J2:966")
+            #expect(engine.siteRows.map(\.site) == ["J2:966"])
+        }
+
+        @Test func jugglerColorsRoundTrip() {
+            engine.colorsJugglers = false
+            #expect(!engine.colorsJugglers)
+            engine.colorsJugglers = true
+            #expect(engine.colorsJugglers)
+        }
+
         @Test func juggleSaverOnlyPatternSelectsJuggleSaver() {
             engine.setPattern(name: "Bounce", site: "3b@(-0.5,0)>(1.5,0) 3b@(0.5,0)>(-1.5,0)")
             #expect(engine.engineType == .juggleSaver)
@@ -99,7 +179,7 @@ extension EngineSuites {
 
         @Test(arguments: [
             ("531", true, true),
-            ("(4,2x)(2x,4)", true, false),
+            ("(4,2x)(2x,4)", true, true),
             ("3b@(-0.5,0)>(1.5,0) 3b@(0.5,0)>(-1.5,0)", false, true),
             ("54", false, false),
             (String(repeating: "3", count: 57), false, true),

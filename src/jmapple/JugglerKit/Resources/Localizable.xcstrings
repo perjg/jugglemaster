@@ -81,6 +81,22 @@
         }
       }
     },
+    "camera.top": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ovenfra"
+          }
+        }
+      }
+    },
     "commands.juggler": {
       "localizations": {
         "en": {
@@ -209,6 +225,22 @@
         }
       }
     },
+    "menu.colorJugglers": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color-coded jugglers"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fargekodede sjonglører"
+          }
+        }
+      }
+    },
     "menu.delete": {
       "localizations": {
         "en": {
@@ -301,6 +333,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Favoritt"
+          }
+        }
+      }
+    },
+    "menu.feedWidth": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feed width"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bredde på feed"
           }
         }
       }

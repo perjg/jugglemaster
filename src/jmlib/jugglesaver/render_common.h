@@ -9,6 +9,8 @@
 #ifndef JM_RENDER_COMMON_H
 #define JM_RENDER_COMMON_H
 
+#include "jugglesaver.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,6 +38,16 @@ extern const float FishHandleCol[4];
 extern const float ShoulderPos[3];
 extern const float UArmLen;
 extern const float LArmLen;
+
+// Body colour of a juggler: BodyCol unless several jugglers are told apart by tint
+const float* JugglerBodyColour(int Jugglers, int Juggler);
+void SetColourJugglers(int on);
+int GetColourJugglers(void);
+
+// Moves the eye (0, ey, ez), looking at (0, cy, 0), back along its line of sight
+// until a formation of several jugglers fits the width; no-op for one juggler
+void FitFormationInView(const PATTERN_INFO* pPattern, float FovDeg, float Aspect, float cy,
+                        float* ey, float* ez);
 
 // Color arrays
 extern const float AltCols[][4];

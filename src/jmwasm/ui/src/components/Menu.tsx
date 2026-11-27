@@ -23,12 +23,19 @@ interface RecentSiteswap {
   favorite?: boolean;
 }
 
+const formatMetres = (metres: number, locale: string) =>
+  `${new Intl.NumberFormat(locale === 'no' ? 'nb' : locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(metres)} m`;
+
 interface MenuProps {
   onOpenChange?: (open: boolean) => void;
   showSiteswap: boolean;
   onShowSiteswapChange: (v: boolean) => void;
   autoRotate: boolean;
   onAutoRotateChange: (v: boolean) => void;
+  colorJugglers: boolean;
+  onColorJugglersChange: (v: boolean) => void;
+  feedWidth: number;
+  onFeedWidthChange: (v: number) => void;
   speed: number;
   onSpeedChange: (v: number) => void;
   onSpeedCommit: (v: number) => void;
@@ -44,8 +51,8 @@ interface MenuProps {
   onModeChange?: (is3D: boolean) => void;
 }
 
-export const Menu = ({ onOpenChange, showSiteswap, onShowSiteswapChange, autoRotate, onAutoRotateChange, speed, onSpeedChange, onSpeedCommit, initialStyle, initialIs3D, initialPatternSite, initialFromLibrary, initialCategoryId, initialObjectType, onObjectTypeChange, onPatternChange, onStyleChange, onModeChange }: MenuProps) => {
-  const { LL } = useI18nContext();
+export const Menu = ({ onOpenChange, showSiteswap, onShowSiteswapChange, autoRotate, onAutoRotateChange, colorJugglers, onColorJugglersChange, feedWidth, onFeedWidthChange, speed, onSpeedChange, onSpeedCommit, initialStyle, initialIs3D, initialPatternSite, initialFromLibrary, initialCategoryId, initialObjectType, onObjectTypeChange, onPatternChange, onStyleChange, onModeChange }: MenuProps) => {
+  const { LL, locale } = useI18nContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -82,6 +89,8 @@ export const Menu = ({ onOpenChange, showSiteswap, onShowSiteswapChange, autoRot
     initialStyle === 'JuggleSaver' ? JugglingEngine.JUGGLESAVER : JugglingEngine.JUGGLEMASTER
   );
   const [actualEngine, setActualEngine] = useState<JugglingEngine>(JugglingEngine.JUGGLEMASTER);
+  const [jugglerCount, setJugglerCount] = useState(1);
+  const [isFeed, setIsFeed] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState<string>(
     initialStyle && initialStyle !== 'JuggleSaver' ? initialStyle : 'Normal'
   );
@@ -107,6 +116,8 @@ export const Menu = ({ onOpenChange, showSiteswap, onShowSiteswapChange, autoRot
   const syncEngineFromModule = () => {
     if (!module || !isLoaded) return;
     setActualEngine(module._jm_get_engine() === 1 ? JugglingEngine.JUGGLESAVER : JugglingEngine.JUGGLEMASTER);
+    setJugglerCount(module._jm_get_juggler_count());
+    setIsFeed(module._jm_get_is_feed() === 1);
   };
 
   // JuggleSaver patterns embed their own object types, so selecting one goes
@@ -153,6 +164,8 @@ export const Menu = ({ onOpenChange, showSiteswap, onShowSiteswapChange, autoRot
       const engineValue = currentEngine === 1 ? JugglingEngine.JUGGLESAVER : JugglingEngine.JUGGLEMASTER;
       setTimeout(() => {
         setActualEngine(engineValue);
+        setJugglerCount(module._jm_get_juggler_count());
+    setIsFeed(module._jm_get_is_feed() === 1);
       }, 0);
     }
   }, [module, isLoaded]);
@@ -212,6 +225,8 @@ export const Menu = ({ onOpenChange, showSiteswap, onShowSiteswapChange, autoRot
     module.ccall('jm_set_style', null, ['string'], [item.style]);
     const engine = module._jm_get_engine() === 1 ? JugglingEngine.JUGGLESAVER : JugglingEngine.JUGGLEMASTER;
     setActualEngine(engine);
+    setJugglerCount(module._jm_get_juggler_count());
+    setIsFeed(module._jm_get_is_feed() === 1);
     if (item.style === 'JuggleSaver') {
       setPreferredEngine(JugglingEngine.JUGGLESAVER);
     } else {
@@ -482,6 +497,56 @@ export const Menu = ({ onOpenChange, showSiteswap, onShowSiteswapChange, autoRot
                 disabled={!isLoaded}
               />
             </div>
+
+            {jugglerCount > 1 && (
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <label htmlFor="colorjugglers" className="text-sm font-medium">
+                    {LL.menu.colorJugglers()}
+                  </label>
+                  <p className="text-xs text-muted-foreground">
+                    {colorJugglers ? LL.menu.on() : LL.menu.off()}
+                  </p>
+                </div>
+                <Switch
+                  id="colorjugglers"
+                  checked={colorJugglers}
+                  onCheckedChange={(checked) => {
+                    module?._jm_set_juggler_colors(checked ? 1 : 0);
+                    onColorJugglersChange(checked);
+                  }}
+                  disabled={!isLoaded}
+                />
+              </div>
+            )}
+
+            {isFeed && module && (
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="feedwidth" className="text-sm font-medium">
+                    {LL.menu.feedWidth()}
+                  </label>
+                  <p className="text-xs text-muted-foreground tabular-nums">
+                    {formatMetres(module._jm_get_feed_width_metres(feedWidth), locale)}
+                  </p>
+                </div>
+                <Slider
+                  id="feedwidth"
+                  min={0}
+                  max={module._jm_get_feed_width_count() - 1}
+                  step={1}
+                  value={[feedWidth]}
+                  onValueChange={(value: number | readonly number[]) => {
+                    const v = typeof value === 'number' ? value : value[0];
+                    if (v === feedWidth) return;
+                    module._jm_set_feed_width(v);
+                    onFeedWidthChange(v);
+                  }}
+                  disabled={!isLoaded}
+                  aria-label={LL.menu.feedWidth()}
+                />
+              </div>
+            )}
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">

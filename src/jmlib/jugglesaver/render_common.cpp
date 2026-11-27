@@ -18,6 +18,51 @@ const float HandleCol[] = {0.45f, 0.45f, 0.45f, 1.0f};
 // Radical Fish club: white knob/handle over a bright single-color body
 const float FishHandleCol[] = {0.92f, 0.92f, 0.92f, 1.0f};
 const float ShoulderPos[3] = {0.95f, 2.1f, 1.7f};
+
+// Juggler 0 keeps BodyCol; the others get muted tints of similar brightness
+static const float JugglerTints[][4] = {
+    {0.6f, 0.6f, 0.45f, 1.0f},
+    {0.42f, 0.52f, 0.68f, 1.0f},
+    {0.66f, 0.44f, 0.42f, 1.0f},
+    {0.44f, 0.6f, 0.44f, 1.0f},
+    {0.6f, 0.48f, 0.66f, 1.0f},
+    {0.44f, 0.6f, 0.6f, 1.0f},
+    {0.7f, 0.54f, 0.34f, 1.0f},
+    {0.55f, 0.55f, 0.55f, 1.0f},
+};
+static int colourJugglers = 1;
+
+const float* JugglerBodyColour(int Jugglers, int Juggler) {
+    if (Jugglers <= 1 || !colourJugglers) return BodyCol;
+    return JugglerTints[Juggler % (int)(sizeof(JugglerTints) / sizeof(JugglerTints[0]))];
+}
+
+void SetColourJugglers(int on) { colourJugglers = on != 0; }
+int GetColourJugglers(void) { return colourJugglers; }
+
+void FitFormationInView(const PATTERN_INFO* pPattern, float FovDeg, float Aspect, float cy,
+                        float* ey, float* ez) {
+    if (pPattern == NULL || pPattern->Jugglers <= 1) return;
+
+    // Arm reach and the arc of the throws beyond a juggler's body
+    const float reach = 4.0f;
+    float halfWidth = 0.0f, nearZ = 0.0f;
+    for (int j = 0; j < pPattern->Jugglers; j++) {
+        halfWidth = max(halfWidth, fabsf(pPattern->Placement[j].x) + reach);
+        nearZ = max(nearZ, pPattern->Placement[j].z + reach);
+    }
+
+    // The height fit already frames a scene 3 deep around the origin; jugglers
+    // nearer the camera than that push the eye back by the difference
+    float tanHalf = tanf(FovDeg * PI / 360.0f) * (Aspect > 0.0f ? Aspect : 1.0f);
+    float dist = sqrtf(*ez * *ez + (*ey - cy) * (*ey - cy));
+    float need = max(halfWidth / tanHalf, dist) + max(0.0f, nearZ - 3.0f);
+    if (need <= dist || dist <= 0.0f) return;
+
+    float k = need / dist;
+    *ey = cy + (*ey - cy) * k;
+    *ez *= k;
+}
 const float UArmLen = 1.9f;
 const float LArmLen = 2.3f;
 

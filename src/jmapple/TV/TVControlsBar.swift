@@ -2,7 +2,7 @@ import JugglerKit
 import SwiftUI
 
 /// Bottom bar shown on click: panels, camera presets (behind the Camera button; the remote's arrows also
-/// step through them), zoom and pause. Auto-rotate lives in Settings and on a long press.
+/// step through them), zoom, auto-rotate and pause.
 struct TVControlsBar: View {
     let model: JugglerModel
     let onSelectPanel: (TVPanel) -> Void
@@ -24,13 +24,15 @@ struct TVControlsBar: View {
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24))
         .focusSection()
         .defaultFocus($focused, "patterns")
+        // Claims focus even if it is still held elsewhere (the remote input) when the bar appears
+        .onAppear { focused = "patterns" }
         .onChange(of: focused) { onInteraction() }
     }
 
     /// Opened from the Camera button; picking a preset closes it again.
     private var presetsRow: some View {
         HStack(spacing: 18) {
-            ForEach(CameraPreset.displayOrder, id: \.self) { preset in
+            ForEach(model.cameraPresets, id: \.self) { preset in
                 Button {
                     model.setCameraPreset(preset)
                     showPresets = false
@@ -74,6 +76,10 @@ struct TVControlsBar: View {
             iconButton("plus.magnifyingglass", jmLocalized("zoom.zoomIn"), id: "zoomIn") { model.zoomIn() }
                 .disabled(!model.canZoomIn)
             iconButton("arrow.counterclockwise", jmLocalized("zoom.zoomReset"), id: "zoomReset") { model.resetZoom() }
+            iconButton(
+                model.autoRotate ? "rotate.3d.fill" : "rotate.3d", jmLocalized("menu.autoRotate"),
+                id: "autoRotateButton"
+            ) { model.toggleAutoRotate() }
             iconButton(
                 model.isPaused ? "play.fill" : "pause.fill",
                 model.isPaused ? jmLocalized("control.play") : jmLocalized("control.pause"), id: "pause"

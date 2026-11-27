@@ -47,7 +47,7 @@ struct JugglerCommands: Commands {
             Button("3D") { model.setRenderMode(.threeD) }
                 .keyboardShortcut("3", modifiers: .command)
             Divider()
-            ForEach(Array(CameraPreset.displayOrder.enumerated()), id: \.element) { index, preset in
+            ForEach(Array(model.cameraPresets.enumerated()), id: \.element) { index, preset in
                 Button(preset.title) { model.setCameraPreset(preset) }
                     .keyboardShortcut(KeyEquivalent(Character("\(index + 1)")), modifiers: [.command, .option])
             }

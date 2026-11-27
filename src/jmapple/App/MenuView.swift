@@ -61,6 +61,13 @@ struct MenuView: View {
                 .accessibilityIdentifier("autoRotate")
             Toggle(jmLocalized("menu.showSiteswap"), isOn: $model.showSiteswap)
                 .accessibilityIdentifier("showSiteswap")
+            if model.jugglerCount > 1 {
+                Toggle(jmLocalized("menu.colorJugglers"), isOn: $model.colorJugglers)
+                    .accessibilityIdentifier("colorJugglers")
+            }
+            if model.isFeed {
+                FeedWidthControl(model: model)
+            }
             VStack(alignment: .leading) {
                 LabeledContent(jmLocalized("menu.speed")) {
                     Text(model.speed, format: .number.precision(.fractionLength(1))).monospacedDigit()

@@ -553,6 +553,11 @@ void JMFlatOpenGL::renderJS(RENDER_STATE* pState) {
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 #endif
 
+	if (pPattern->Jugglers > 1) {
+		renderPassingJS(pState);
+		return;
+	}
+
 	drawArmJS(pState, Time, true);
 	drawArmJS(pState, Time, false);
 
@@ -580,6 +585,58 @@ void JMFlatOpenGL::renderJS(RENDER_STATE* pState) {
 		if (ObjPos.y * zoomFactorY_JS > jmlib->getImageHeight()/4 + jmlib->getImageHeight()/2 - jmlib->getImageHeight()/10)
 			zoomFactorY_JS *= 0.9f;
   }
+}
+
+// Several jugglers: a side view of the whole formation (world x across, y up),
+// each juggler a profile stick figure
+void JMFlatOpenGL::renderPassingJS(RENDER_STATE* pState) {
+	PATTERN_INFO* pPattern = pState->pPattern;
+	float Time = pState->Time;
+	float base = jmlib->getImageHeight() / 4.0f;
+
+	// Arm reach beyond the outermost juggler
+	float halfWidth = 0.0f;
+	for (int j = 0; j < pPattern->Jugglers; j++)
+		halfWidth = max(halfWidth, fabsf(pPattern->Placement[j].x) + 4.0f);
+	float sx = min(zoomFactorX_JS, jmlib->getImageWidth() * 0.48f / halfWidth);
+	// as tall as the highest throw allows: it peaks at Height above the hands,
+	// and the view shows up to 0.65 of the image height above them
+	float highest = 0.0f;
+	for (int s = 0; s < pPattern->ThrowLen; s++)
+		highest = max(highest, pPattern->pThrowInfo[s].FromPos.y);
+	highest += pPattern->Height + 1.0f;
+	float sy = min(sx, jmlib->getImageHeight() * 0.65f / highest);
+	float shoulderY = 2.1f;  // the 3D model's shoulder height
+
+	for (int j = 0; j < pPattern->Jugglers; j++) {
+		// the torso sits 1.7 behind the hands in the juggler's own frame
+		float s = sinf(pPattern->Placement[j].Facing * 3.14159265f / 180.0f);
+		float bx = (pPattern->Placement[j].x - 1.7f * s) * sx;
+		float top = shoulderY * sy - base;
+
+		drawLine(bx, top, bx, top - 3.1f * sy);  // torso down to the hips
+		drawCircle(bx, top + 0.75f * sx, 0.5f * sx);
+
+		for (int side = 0; side < 2; side++) {
+			POS hand;
+			GetHandPositionEx(pPattern, JugglerHand(pPattern, j, side), Time, &hand);
+			float hx = hand.x * sx;
+			float hy = hand.y * sy - base - BallRadius;
+			// elbow below the midpoint, as a bent arm hangs
+			float ex = (bx + hx) / 2.0f;
+			float ey = (top + hy) / 2.0f - 0.6f * sy;
+			drawLine(bx, top, ex, ey);
+			drawLine(ex, ey, hx, hy);
+			drawLine(hx - 0.3f * sx, hy, hx + 0.3f * sx, hy);
+		}
+	}
+
+	for (int i = 0; i < pPattern->Objects; i++) {
+		POS ObjPos;
+		GetObjectPosition(pPattern, i, Time, 0.0f, &ObjPos);
+		if (coloredBalls) setBallColor(i % 6);
+		drawFilledCircle(ObjPos.x * sx, ObjPos.y * sy - base, BallRadius * 2.0f);
+	}
 }
 
 void JMFlatOpenGL::resetJS(const char* site) {

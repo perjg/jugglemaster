@@ -815,6 +815,7 @@ void SetCamera(RENDER_STATE* pState) {
 
     float cz = 0.0f;
     float cy = ey - ez * tanf(ElevRad);
+    FitFormationInView(pPattern, gFovDeg, pState->AspectRatio, cy, &ey, &ez);
 
     // extra zoom adjustments (ported from legacy)
     if (extraZoom > 0) {
@@ -850,6 +851,12 @@ void SetCameraExtraZoom(float f) {
 
 float GetCameraExtraZoom(void) {
     return extraZoom;
+}
+
+void SetCameraOffset(RENDER_STATE* pState, float deltaX_, float deltaY_) {
+    deltaX = deltaX_;
+    deltaY = deltaY_;
+    SetCamera(pState);
 }
 
 void MoveCamera(RENDER_STATE* pState, float deltaX_, float deltaY_) {
@@ -1011,8 +1018,10 @@ void DrawGLScene(RENDER_STATE* pState) {
     const float sY = ShoulderPos[1];
     const float sZ = -ShoulderPos[2];
 
-    // Body coordinate system matches legacy (no rotation needed)
+    // Each juggler is drawn in its own frame (the world frame for one juggler)
     MatrixStack bodyBase; bodyBase.loadIdentity();
+    int juggler = 0;
+    const float* bc = BodyCol;
 
     auto drawTransformed = [&](MatrixStack& base, float sx, float sy, float sz,
                                GLuint vbo, GLuint ibo, GLsizei idx,
@@ -1034,11 +1043,14 @@ void DrawGLScene(RENDER_STATE* pState) {
 
     auto drawArmES = [&](int Left) {
         // Legacy DrawArm convention: Left=1 is the right arm, Left=0 the left
-        POS hand; GetHandPosition(pState->pPattern, Left, Time, &hand);
+        POS hand;
+        GetHandPositionEx(pState->pPattern, JugglerHand(pState->pPattern, juggler, Left), Time, &hand);
+        if (pState->pPattern->Jugglers > 1) WorldToJuggler(pState->pPattern, juggler, &hand, &hand);
         float x = hand.x + (Left ? -sX : sX);
         float y = hand.y - sY;
-        float len = sqrtf(x * x + y * y + ShoulderPos[2] * ShoulderPos[2]);
-        float len2 = sqrtf(x * x + ShoulderPos[2] * ShoulderPos[2]);
+        float dz = ShoulderPos[2] + hand.z;
+        float len = sqrtf(x * x + y * y + dz * dz);
+        float len2 = sqrtf(x * x + dz * dz);
         float ang  = (float) CosineRuleES(UArmLen, len, LArmLen);
         float ang2 = (float) CosineRuleES(UArmLen, LArmLen, len);
         if (ang == 0.0f && ang2 == 0.0f) ang2 = 180.0f;
@@ -1053,69 +1065,79 @@ void DrawGLScene(RENDER_STATE* pState) {
 
         // Shoulder joint: two spheres (base + 90° rotated) like legacy DrawUpperArm
         drawTransformed(base, 0.3f, 0.3f, 0.3f, gSphereVBO, gSphereIBO, gSphereIndexCount,
-                        BodyCol[0], BodyCol[1], BodyCol[2]);
+                        bc[0], bc[1], bc[2]);
         MatrixStack shoulder2 = base; shoulder2.rotate(90.0f, 0.0f, 1.0f, 0.0f);
         drawTransformed(shoulder2, 0.3f, 0.3f, 0.3f, gSphereVBO, gSphereIBO, gSphereIndexCount,
-                        BodyCol[0], BodyCol[1], BodyCol[2]);
+                        bc[0], bc[1], bc[2]);
 
         // Upper arm: cylinder along +Z (unit), scaled to UArmLen with radius 0.3
         drawTransformed(base, 0.3f, 0.3f, UArmLen, gCylVBO, gCylIBO, gCylIndexCount,
-                        BodyCol[0], BodyCol[1], BodyCol[2]);
+                        bc[0], bc[1], bc[2]);
 
         // Elbow joint: two spheres (base + 90° rotated) like legacy DrawUpperArm
         MatrixStack elbow = base; elbow.translate(0.0f, 0.0f, UArmLen);
         drawTransformed(elbow, 0.3f, 0.3f, 0.3f, gSphereVBO, gSphereIBO, gSphereIndexCount,
-                        BodyCol[0], BodyCol[1], BodyCol[2]);
+                        bc[0], bc[1], bc[2]);
         MatrixStack elbow2 = elbow; elbow2.rotate(90.0f, 0.0f, 1.0f, 0.0f);
         drawTransformed(elbow2, 0.3f, 0.3f, 0.3f, gSphereVBO, gSphereIBO, gSphereIndexCount,
-                        BodyCol[0], BodyCol[1], BodyCol[2]);
+                        bc[0], bc[1], bc[2]);
 
         // Forearm: additional rotate then frustum of length LArmLen (0.3 -> 0.15)
         MatrixStack fore = elbow; fore.rotate(ang2 - 180.0f, 1.0f, 0.0f, 0.0f);
         drawTransformed(fore, 0.3f, 0.3f, LArmLen, gFrustumVBO, gFrustumIBO, gFrustumIndexCount,
-                        BodyCol[0], BodyCol[1], BodyCol[2]);
+                        bc[0], bc[1], bc[2]);
         // Wrist disk at end of forearm (like legacy DrawForearm)
         MatrixStack wrist = fore; wrist.translate(0.0f, 0.0f, LArmLen);
         drawTransformed(wrist, 0.15f, 0.15f, 1.0f, gDiskVBO, gDiskIBO, gDiskIndexCount,
-                        BodyCol[0], BodyCol[1], BodyCol[2]);
+                        bc[0], bc[1], bc[2]);
     };
+
+    for (juggler = 0; juggler < pPattern->Jugglers; juggler++) {
+    bodyBase.loadIdentity();
+    if (pPattern->Jugglers > 1) {
+        const JUGGLER_PLACEMENT& place = pPattern->Placement[juggler];
+        bodyBase.translate(place.x, 0.0f, place.z);
+        bodyBase.rotate(place.Facing, 0.0f, 1.0f, 0.0f);
+    }
+    bc = JugglerBodyColour(pPattern->Jugglers, juggler);
 
     // Torso/head: match legacy DrawHead/DrawTorso
     MatrixStack head = bodyBase; head.translate(0.0f, sY + 1.0f, sZ);
     head.rotate(-30.0f, 1.0f, 0.0f, 0.0f);
     // head cylinder
     drawTransformed(head, 0.5f, 0.5f, 0.3f, gCylVBO, gCylIBO, gCylIndexCount,
-                    BodyCol[0], BodyCol[1], BodyCol[2]);
+                    bc[0], bc[1], bc[2]);
     // bottom disk (flip)
     MatrixStack headDisk = head; headDisk.rotate(180.0f, 1.0f, 0.0f, 0.0f);
     drawTransformed(headDisk, 0.5f, 0.5f, 1.0f, gDiskVBO, gDiskIBO, gDiskIndexCount,
-                    BodyCol[0], BodyCol[1], BodyCol[2]);
+                    bc[0], bc[1], bc[2]);
     // top disk
     MatrixStack headTop = head; headTop.translate(0.0f, 0.0f, 0.3f);
     drawTransformed(headTop, 0.5f, 0.5f, 1.0f, gDiskVBO, gDiskIBO, gDiskIndexCount,
-                    BodyCol[0], BodyCol[1], BodyCol[2]);
+                    bc[0], bc[1], bc[2]);
     MatrixStack torso = bodyBase; torso.translate(0.0f, sY - (ShoulderPos[1] + 1.0f), sZ);
     torso.rotate(-90.0f, 1.0f, 0.0f, 0.0f);
     drawTransformed(torso, 0.3f, 0.3f, ShoulderPos[1] + 1.0f, gCylVBO, gCylIBO, gCylIndexCount,
-                    BodyCol[0], BodyCol[1], BodyCol[2]);
+                    bc[0], bc[1], bc[2]);
 
     // Shoulder bar (horizontal across shoulders): fixed rotation to +X, length = 2*sX
     MatrixStack shoulderMs = bodyBase; shoulderMs.translate(-sX, sY, sZ); shoulderMs.rotate(90.0f, 0.0f, 1.0f, 0.0f);
     drawTransformed(shoulderMs,
                     0.3f, 0.3f, sX*2.0f,
                     gCylVBO, gCylIBO, gCylIndexCount,
-                    BodyCol[0], BodyCol[1], BodyCol[2]);
+                    bc[0], bc[1], bc[2]);
     // End caps for shoulder bar
     MatrixStack shoulderCap1 = shoulderMs; shoulderCap1.rotate(180.0f, 1.0f, 0.0f, 0.0f);
     drawTransformed(shoulderCap1, 0.3f, 0.3f, 1.0f, gDiskVBO, gDiskIBO, gDiskIndexCount,
-                    BodyCol[0], BodyCol[1], BodyCol[2]);
+                    bc[0], bc[1], bc[2]);
     MatrixStack shoulderCap2 = shoulderMs; shoulderCap2.translate(0.0f, 0.0f, sX*2.0f);
     drawTransformed(shoulderCap2, 0.3f, 0.3f, 1.0f, gDiskVBO, gDiskIBO, gDiskIndexCount,
-                    BodyCol[0], BodyCol[1], BodyCol[2]);
+                    bc[0], bc[1], bc[2]);
 
     // Arms - match legacy calling convention: DrawArm(pState, Time, 1) then DrawArm(pState, Time, 0)
     drawArmES(1); // Right arm (Left=1)
     drawArmES(0); // Left arm (Left=0)
+    }
 }
 
 void SetPattern(RENDER_STATE* pState, char* pattern) {
@@ -1125,8 +1147,9 @@ void SetPattern(RENDER_STATE* pState, char* pattern) {
     pState->pPattern = (PATTERN_INFO*) malloc(sizeof(PATTERN_INFO));
 
     int ExtSiteLen;
-    EXT_SITE_INFO* pExtInfo = ParsePattern(pattern, &ExtSiteLen);
-    InitPatternInfo(pState->pPattern, NULL, pExtInfo, ExtSiteLen);
+    PASSING_LAYOUT Layout;
+    EXT_SITE_INFO* pExtInfo = ParsePatternEx(pattern, &ExtSiteLen, &Layout);
+    InitPatternInfoEx(pState->pPattern, NULL, pExtInfo, ExtSiteLen, &Layout);
 
     free(pExtInfo);
 

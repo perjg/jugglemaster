@@ -118,6 +118,7 @@ public:
   void renderJS(RENDER_STATE* state);
   void resetJS(const char* site);
   void drawArmJS(RENDER_STATE* pState, float TimePos, bool is_left);
+  void renderPassingJS(RENDER_STATE* pState);
 #endif
 
   void enableAutoRotate()  { autoRotate = true;  }

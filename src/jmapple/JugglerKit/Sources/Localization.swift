@@ -17,6 +17,11 @@ extension CameraPreset {
     /// Left to right as shown in the presets bar (web order).
     public static let displayOrder: [CameraPreset] = [.left, .back, .front, .high, .right]
 
+    /// The presets offered for a pattern with this many jugglers: passing adds the top view.
+    public static func displayOrder(jugglers: Int) -> [CameraPreset] {
+        jugglers > 1 ? displayOrder + [.top] : displayOrder
+    }
+
     public var title: String {
         switch self {
         case .left: jmLocalized("camera.left")
@@ -24,6 +29,7 @@ extension CameraPreset {
         case .front: jmLocalized("camera.front")
         case .high: jmLocalized("camera.high")
         case .right: jmLocalized("camera.right")
+        case .top: jmLocalized("camera.top")
         }
     }
 }

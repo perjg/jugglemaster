@@ -18,14 +18,16 @@ interface CanvasProps {
   initialAutoRotate: boolean;
   initialObjectType: number;
   initialSpeed: number;
+  initialColorJugglers: boolean;
+  initialFeedWidth: number;
   onBeforeShare?: () => void;
 }
 
-export const Canvas = ({ showSiteswap, onAutoRotateChange, initialPattern, initialStyle, initialMode, initialAutoRotate, initialObjectType, initialSpeed, onBeforeShare }: CanvasProps) => {
+export const Canvas = ({ showSiteswap, onAutoRotateChange, initialPattern, initialStyle, initialMode, initialAutoRotate, initialObjectType, initialSpeed, initialColorJugglers, initialFeedWidth, onBeforeShare }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { module, isLoaded, error, init } = useJMWasm();
   const { LL } = useI18nContext();
-  const { site, start, stop } = useSiteswapInfo(module, isLoaded, showSiteswap);
+  const siteswapRows = useSiteswapInfo(module, isLoaded, showSiteswap);
   const orbitRef = useOrbitCamera(module, isLoaded, onAutoRotateChange);
   const [initFailed, setInitFailed] = useState(false);
 
@@ -40,13 +42,15 @@ export const Canvas = ({ showSiteswap, onAutoRotateChange, initialPattern, initi
       }
 
       module._jm_set_object_type(initialObjectType);
+      module._jm_set_feed_width(initialFeedWidth);
       module.ccall('jm_set_pattern', null, ['string', 'string'], [initialPattern.name, initialPattern.site]);
       module.ccall('jm_set_style', null, ['string'], [initialStyle]);
       module._jm_set_render_mode(initialMode);
       module._jm_set_autorotate(initialAutoRotate ? 1 : 0);
       module._jm_set_speed(initialSpeed);
+      module._jm_set_juggler_colors(initialColorJugglers ? 1 : 0);
     }
-  }, [isLoaded, module, init, initialPattern.name, initialPattern.site, initialStyle, initialMode, initialAutoRotate, initialObjectType, initialSpeed]);
+  }, [isLoaded, module, init, initialPattern.name, initialPattern.site, initialStyle, initialMode, initialAutoRotate, initialObjectType, initialSpeed, initialColorJugglers, initialFeedWidth]);
 
   useEffect(() => {
     if (!canvasRef.current || !module || !isLoaded) {
@@ -114,7 +118,7 @@ export const Canvas = ({ showSiteswap, onAutoRotateChange, initialPattern, initi
         height={600}
         style={{ display: 'block', width: '100%', height: '100%' }}
       />
-      <SiteswapOverlay site={site} start={start} stop={stop} visible={showSiteswap} />
+      <SiteswapOverlay rows={siteswapRows} visible={showSiteswap} />
       <CameraPresets module={module} isLoaded={isLoaded} onAutoRotateChange={onAutoRotateChange} />
       <div
         className="fixed sm:absolute right-[10px] bottom-[10px] sm:bottom-auto sm:top-[10px] flex flex-col items-end gap-2"

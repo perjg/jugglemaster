@@ -36,6 +36,10 @@ extension EngineSuites {
             ("js-pattern-7c", "7c@(-2,0,-20)>(1.2,0,-5)7c@(2,0,20)>(-1.2,0,5)", nil, .juggleSaver),
             ("js-pattern-3r", "3r@(-2.5,3,-90,80)>(2,1,90,30) 3r@(2.5,3,90,80)>(-2,1,-90,30)", nil, .juggleSaver),
             ("js-pattern-3b-style", "3b", "JuggleSaver", .juggleSaver),
+            ("js-passing-966", "J2:9b6b6b", nil, .juggleSaver),
+            ("js-passing-7c", "J2:7c", nil, .juggleSaver),
+            ("js-passing-sync", "<3pc 3c 3c 3c|3pc 3c 3c 3c>", nil, .juggleSaver),
+            ("js-passing-feed", "<3p2c 3p3c|3p1c 3c|3c 3p1c>", nil, .juggleSaver),
         ]
 
         /// Every pattern in 3D and 2D.

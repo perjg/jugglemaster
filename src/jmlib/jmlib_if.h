@@ -193,6 +193,13 @@ public:
   /** Get the amount of items in the current pattern */
   virtual JML_INT32 numBalls(void) = 0;
 
+  /** Get the number of jugglers passing the current pattern (JuggleSaver only) */
+  virtual JML_INT32 numJugglers(void) { return 1; }
+
+  /** Whether the current pattern is a feed, and how far apart the jugglers being fed stand (JuggleSaver only) */
+  virtual JML_BOOL isFeed(void) { return FALSE; }
+  virtual void setFeedWidth(JML_INT32 width) {}
+
   /** Set the scaling method to use. JuggleMaster only.
    * SCALING_METHOD_CLASSIC - The default scaling in JuggleMaster. Gives good results in general, but
    *   works poorly for small screen resolutions (below aprox. 320x320). When resizing the screen,
@@ -276,6 +283,13 @@ public:
   virtual JML_INT32 getSiteposStop(void) = 0;
   virtual JML_INT32 getSiteposLen(void) = 0;
 
+  /** A passing pattern written per juggler ("4.5p 3 3") shows one row per
+   * juggler, each with its own active throw; anything else is one row, the site. */
+  virtual JML_INT32 numSiteRows(void) { return 1; }
+  virtual const JML_CHAR* getRowSite(JML_INT32 row) { return getSite(); }
+  virtual JML_INT32 getRowSiteposStart(JML_INT32 row) { return getSiteposStart(); }
+  virtual JML_INT32 getRowSiteposStop(JML_INT32 row) { return getSiteposStop(); }
+
   /** Gets ball radius */
   virtual JML_INT32 getBallRadius(void) = 0;
 
@@ -297,6 +311,8 @@ public:
 	virtual void trackballMousewheel(JML_INT32 percent, JML_BOOL horizontal = false) {}
 	virtual void resetCamera() {}
 	virtual void setCameraAngle(JML_FLOAT spinAngle, JML_FLOAT translateAngle = 0.0f, JML_FLOAT elevation = 0.0f) {}
+	/** Pans the camera to a fixed offset (as move() does relatively) */
+	virtual void setCameraOffset(JML_FLOAT deltaX, JML_FLOAT deltaY) {}
 	virtual void orbitCamera(JML_FLOAT deltaNormX, JML_FLOAT deltaNormY) {}
 	virtual void zoom(float zoom) {}
 	virtual void resetZoom() {}

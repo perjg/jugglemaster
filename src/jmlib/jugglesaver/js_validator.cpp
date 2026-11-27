@@ -97,18 +97,54 @@ bool JSValidator::validateVSS(char* site) {
  */
 bool JSValidator::validateJSPattern(char* patt) {
     int ExtSiteLen;
-    EXT_SITE_INFO* pExtInfo = ParsePattern(patt, &ExtSiteLen);
+    PASSING_LAYOUT Layout;
+    EXT_SITE_INFO* pExtInfo = ParsePatternEx(patt, &ExtSiteLen, &Layout);
     if (pExtInfo == NULL) return false;
-    delete pExtInfo;
+
+    // With several jugglers, or hands throwing together, a throw must outlast
+    // the carry, and a pass must stay in the air at least as long as it is carried
+    int J = Layout.Jugglers, hands = 2 * J;
+    bool shifted = false, ok = true;
+    for (int h = 0; h < hands; h++) shifted = shifted || Layout.HandShift[h] != 0;
+    if (J > 1 || shifted) {
+        float carry = CARRY_TIME * J;
+        int a = ExtSiteLen, b = hands;
+        while (b != 0) { int t = a % b; a = b; b = t; }
+        int period = ExtSiteLen / a * hands;
+        for (int s = 0; s < period; s++) {
+            int w = pExtInfo[s % ExtSiteLen].Weight;
+            if (w == 0) continue;
+            int flight = w + Layout.HandShift[(s + w) % hands] - Layout.HandShift[s % hands];
+            bool pass = (s % hands) % J != ((s + w) % hands) % J;
+            if (flight <= carry || (pass && flight < 2.0f * carry)) ok = false;
+        }
+    }
+    free(pExtInfo);
 
     char* site = GetCurrentSite();
-    if (!JSValidator::validateVSS(site)) {
-        delete site;
-        return false;
-    }
+    ok = ok && JSValidator::validateVSS(site);
+    free(site);
+    return ok;
+}
 
-    delete site;
-    return true;
+bool JSValidator::isPlainSolo(const char* patt) {
+    int ExtSiteLen;
+    PASSING_LAYOUT Layout;
+    EXT_SITE_INFO* pExtInfo = ParsePatternEx(patt, &ExtSiteLen, &Layout);
+    if (pExtInfo == NULL) return false;
+    free(pExtInfo);
+    bool shifted = false;
+    for (int h = 0; h < JS_MAX_HANDS; h++) shifted = shifted || Layout.HandShift[h] != 0;
+    return Layout.Jugglers == 1 && !shifted;
+}
+
+int JSValidator::jugglerCount(const char* patt) {
+    int ExtSiteLen;
+    PASSING_LAYOUT Layout;
+    EXT_SITE_INFO* pExtInfo = ParsePatternEx(patt, &ExtSiteLen, &Layout);
+    if (pExtInfo == NULL) return 0;
+    free(pExtInfo);
+    return Layout.Jugglers;
 }
 
 bool JSValidator::isJSOnly(char* patt) {
